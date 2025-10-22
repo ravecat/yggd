@@ -41,10 +41,12 @@
     }
   ],
   "targetDefaults": {
+    "build": {
+      "cache": true
+    },
     "test": {
-      "dependsOn": [
-        "^build"
-      ]
+      "cache": true,
+      "dependsOn": ["^build"]
     }
   },
   "generators": {
