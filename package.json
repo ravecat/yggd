@@ -1,0 +1,14 @@
+{
+  "name": "yggd",
+  "version": "1.0.0",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "devDependencies": {
+    "nx": "21.6.6"
+  }
+}
