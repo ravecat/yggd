@@ -2,7 +2,5 @@ node_modules/
 
 # Next.js
 .next
-out
-test-output
 
 .nx
