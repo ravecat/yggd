@@ -4,3 +4,4 @@ node_modules/
 .next
 
 .nx
+context_portal/
