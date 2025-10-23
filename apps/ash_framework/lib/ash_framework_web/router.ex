@@ -27,6 +27,16 @@ defmodule AshFrameworkWeb.Router do
     plug :load_from_session
   end
 
+  scope "/api/json" do
+    pipe_through [:api]
+
+    forward "/swaggerui", OpenApiSpex.Plug.SwaggerUI,
+      path: "/api/json/open_api",
+      default_model_expand_depth: 4
+
+    forward "/", AshFrameworkWeb.AshJsonApiRouter
+  end
+
   scope "/rpc", AshFrameworkWeb do
     pipe_through :rpc
 

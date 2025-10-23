@@ -1,5 +1,6 @@
 [
   import_deps: [
+    :ash_json_api,
     :ash_typescript,
     :ash_admin,
     :ash_authentication_phoenix,
