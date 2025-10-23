@@ -3,5 +3,8 @@ node_modules/
 # Next.js
 .next
 
+# TypeScript
+*.tsbuildinfo
+
 .nx
 context_portal/
