@@ -7,7 +7,7 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "mix phx.server",
+        "command": "iex -S mix phx.server",
         "cwd": "apps/ash_framework"
       },
       "dependsOn": ["setup"]

@@ -5,6 +5,9 @@
     "appsDir": "apps",
     "libsDir": "packages"
   },
+  "tui": {
+    "enabled": false
+  },
   "plugins": [
     {
       "plugin": "@nx/js/typescript",
