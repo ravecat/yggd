@@ -1,0 +1,118 @@
+{
+  "name": "ash_framework",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/ash_framework/lib",
+  "projectType": "application",
+  "targets": {
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "mix phx.server",
+        "cwd": "apps/ash_framework"
+      },
+      "dependsOn": ["setup"]
+    },
+    "setup": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "mix deps.get",
+          "mix ash.setup"
+        ],
+        "cwd": "apps/ash_framework",
+        "parallel": false
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "mix compile",
+        "cwd": "apps/ash_framework"
+      },
+      "cache": true,
+      "inputs": [
+        "{projectRoot}/lib/**/*.ex",
+        "{projectRoot}/lib/**/*.exs",
+        "{projectRoot}/mix.exs",
+        "{projectRoot}/config/**/*.exs"
+      ],
+      "outputs": [
+        "{projectRoot}/_build"
+      ]
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "mix test",
+        "cwd": "apps/ash_framework"
+      },
+      "cache": true,
+      "dependsOn": ["build"],
+      "inputs": [
+        "default",
+        "{projectRoot}/test/**/*.exs"
+      ]
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "mix format",
+        "cwd": "apps/ash_framework"
+      }
+    },
+    "format-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "mix format --check-formatted",
+        "cwd": "apps/ash_framework"
+      },
+      "cache": true
+    },
+    "ash-codegen": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "mix ash.codegen",
+        "cwd": "apps/ash_framework"
+      }
+    },
+    "ash-typescript": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "mix ash_typescript.generate",
+        "cwd": "apps/ash_framework"
+      },
+      "outputs": [
+        "{projectRoot}/assets/js/ash_rpc.ts"
+      ]
+    },
+    "db-reset": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "mix ash.reset",
+        "cwd": "apps/ash_framework"
+      }
+    },
+    "db-migrate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "mix ash.migrate",
+        "cwd": "apps/ash_framework"
+      }
+    },
+    "assets-build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "mix assets.build",
+        "cwd": "apps/ash_framework"
+      },
+      "cache": true,
+      "inputs": [
+        "{projectRoot}/assets/**/*"
+      ],
+      "outputs": [
+        "{projectRoot}/priv/static"
+      ]
+    }
+  },
+  "tags": ["backend", "elixir", "phoenix", "ash"]
+}
