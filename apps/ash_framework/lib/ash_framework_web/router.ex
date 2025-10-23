@@ -21,6 +21,19 @@ defmodule AshFrameworkWeb.Router do
     plug :set_actor, :user
   end
 
+  pipeline :rpc do
+    plug :accepts, ["json"]
+    plug :fetch_session
+    plug :load_from_session
+  end
+
+  scope "/rpc", AshFrameworkWeb do
+    pipe_through :rpc
+
+    post "/run", AshTypescriptRpcController, :run
+    post "/validate", AshTypescriptRpcController, :validate
+  end
+
   scope "/", AshFrameworkWeb do
     pipe_through :browser
 
@@ -37,9 +50,8 @@ defmodule AshFrameworkWeb.Router do
       # on_mount {AshFrameworkWeb.LiveUserAuth, :live_no_user}
     end
 
-    post "/rpc/run", AshTypescriptRpcController, :run
-    post "/rpc/validate", AshTypescriptRpcController, :validate
-    get "/ash-typescript", PageController, :index
+    get "/typescript", PageController, :index
+    get "/users", PageController, :users
   end
 
   scope "/", AshFrameworkWeb do

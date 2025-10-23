@@ -4,7 +4,10 @@ defmodule AshFramework.Accounts.User do
     domain: AshFramework.Accounts,
     data_layer: AshPostgres.DataLayer,
     authorizers: [Ash.Policy.Authorizer],
-    extensions: [AshAuthentication]
+    extensions: [
+      AshAuthentication,
+      AshTypescript.Resource
+    ]
 
   authentication do
     add_ons do
@@ -37,6 +40,10 @@ defmodule AshFramework.Accounts.User do
     repo AshFramework.Repo
   end
 
+  typescript do
+    type_name "User"
+  end
+
   actions do
     defaults [:read]
 
@@ -49,7 +56,10 @@ defmodule AshFramework.Accounts.User do
 
     read :get_by_email do
       description "Looks up a user by their email"
-      get_by :email
+      argument :email, :ci_string, allow_nil?: false
+      get? true
+
+      filter expr(email == ^arg(:email))
     end
 
     create :sign_in_with_magic_link do
@@ -83,6 +93,10 @@ defmodule AshFramework.Accounts.User do
 
   policies do
     bypass AshAuthentication.Checks.AshAuthenticationInteraction do
+      authorize_if always()
+    end
+
+    policy action_type(:read) do
       authorize_if always()
     end
   end

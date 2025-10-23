@@ -5,7 +5,11 @@ defmodule AshFrameworkWeb.PageController do
     render(conn, :home)
   end
 
-  def index conn, _params do
+  def index(conn, _params) do
     render(conn, :index)
+  end
+
+  def users(conn, _params) do
+    render(conn, :users)
   end
 end

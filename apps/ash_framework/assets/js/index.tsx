@@ -218,10 +218,13 @@ const fetchUsers = async () => {
   );
 };
 
-const root = createRoot(document.getElementById("app")!);
+const container = document.getElementById("app");
 
-root.render(
-  <React.StrictMode>
-    <AshTypescriptGuide />
-  </React.StrictMode>,
-);
+if (container) {
+  const root = createRoot(container);
+  root.render(
+    <React.StrictMode>
+      <AshTypescriptGuide />
+    </React.StrictMode>,
+  );
+}
