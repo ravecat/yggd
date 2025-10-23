@@ -1,5 +1,5 @@
 defmodule AshFrameworkWeb.AshJsonApiRouter do
   use AshJsonApi.Router,
-    domains: [],
-    open_api: "/open_api"
+    domains: [AshFramework.Accounts],
+    open_api: "/spec"
 end

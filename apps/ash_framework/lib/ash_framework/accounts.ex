@@ -1,5 +1,7 @@
 defmodule AshFramework.Accounts do
-  use Ash.Domain, otp_app: :ash_framework, extensions: [AshAdmin.Domain, AshTypescript.Rpc]
+  use Ash.Domain,
+    otp_app: :ash_framework,
+    extensions: [AshAdmin.Domain, AshJsonApi.Domain, AshTypescript.Rpc]
 
   admin do
     show? true

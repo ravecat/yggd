@@ -6,6 +6,7 @@ defmodule AshFramework.Accounts.User do
     authorizers: [Ash.Policy.Authorizer],
     extensions: [
       AshAuthentication,
+      AshJsonApi.Resource,
       AshTypescript.Resource
     ]
 
@@ -42,6 +43,16 @@ defmodule AshFramework.Accounts.User do
 
   typescript do
     type_name "User"
+  end
+
+  json_api do
+    type "user"
+
+    routes do
+      base "/users"
+      get :read
+      index :read
+    end
   end
 
   actions do
