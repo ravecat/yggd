@@ -1,79 +1,18 @@
-interface Post {
-  id: string;
-  type: string;
-  attributes: {
-    title: string;
-    content: string;
-    author_id: string;
-    created_at?: string;
-    updated_at?: string;
-  };
-  relationships: {
-    author: {
-      data: {
-        id: string;
-        type: string;
-      };
-    };
-  };
-}
-
-interface User {
-  id: string;
-  type: string;
-  attributes: {
-    email: string;
-  };
-}
-
-async function getPosts(): Promise<{
-  posts: Post[];
-  users: Map<string, User>;
-}> {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-
-  try {
-    const response = await fetch(
-      `${apiUrl}/api/posts?page[limit]=10&sort=-created_at`,
-      {
-        headers: {
-          Accept: "application/vnd.api+json",
-          "Content-Type": "application/vnd.api+json",
-        },
-        cache: "no-store",
-      }
-    );
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("API Error:", response.status, errorText);
-      throw new Error(`Failed to fetch posts: ${response.status}`);
-    }
-
-    const jsonApiData = await response.json();
-
-    const users = new Map<string, User>();
-
-    if (jsonApiData.included) {
-      jsonApiData.included.forEach((item: User) => {
-        if (item.type === "user") {
-          users.set(item.id, item);
-        }
-      });
-    }
-
-    return {
-      posts: jsonApiData.data || [],
-      users,
-    };
-  } catch (error) {
-    console.error("Error fetching posts:", error);
-    return { posts: [], users: new Map() };
-  }
-}
+import { getPosts, type User } from "@yggd/shared";
 
 export default async function Index() {
-  const { posts, users } = await getPosts();
+  const jsonApiData = await getPosts();
+  
+  const posts = jsonApiData.data || [];
+  const users = new Map<string, User>();
+
+  if (jsonApiData.included) {
+    jsonApiData.included.forEach((item) => {
+      if (item.type === "user") {
+        users.set(item.id, item as User);
+      }
+    });
+  }
 
   return (
     <div style={{ padding: "2rem", maxWidth: "1200px", margin: "0 auto" }}>
