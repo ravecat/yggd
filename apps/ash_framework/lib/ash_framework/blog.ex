@@ -3,13 +3,13 @@ defmodule AshFramework.Blog do
     otp_app: :ash_framework,
     extensions: [AshAdmin.Domain, AshJsonApi.Domain, AshTypescript.Rpc]
 
-  admin do
-    show? true
-  end
-
   json_api do
     router AshJsonApi.Domain.Router
     show_raised_errors? true
+  end
+
+  admin do
+    show? true
   end
 
   typescript_rpc do

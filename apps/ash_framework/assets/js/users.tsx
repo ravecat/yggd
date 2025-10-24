@@ -148,6 +148,6 @@ if (container) {
   root.render(
     <React.StrictMode>
       <UsersPage />
-    </React.StrictMode>
+    </React.StrictMode>,
   );
 }

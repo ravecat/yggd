@@ -46,11 +46,12 @@ const AshTypescriptGuide = () => {
               </h2>
             </div>
             <p className="text-slate-700 mb-6 text-lg leading-relaxed">
-              Add the AshTypescript.Rpc extension to your domain and configure RPC actions:
+              Add the AshTypescript.Rpc extension to your domain and configure
+              RPC actions:
             </p>
             <pre className="rounded-lg overflow-x-auto text-sm border">
               <code className="language-elixir">
-{`defmodule MyApp.Accounts do
+                {`defmodule MyApp.Accounts do
   use Ash.Domain, extensions: [AshTypescript.Rpc]
 
   typescript_rpc do
@@ -79,21 +80,29 @@ end`}
               </h2>
             </div>
             <p className="text-slate-700 mb-6 text-lg leading-relaxed">
-              When running the dev server, TypeScript types are automatically generated for you:
+              When running the dev server, TypeScript types are automatically
+              generated for you:
             </p>
             <pre className="rounded-lg text-sm border mb-6">
               <code className="language-bash">mix phx.server</code>
             </pre>
             <div className="bg-orange-50 border border-orange-200 rounded-lg p-6 mb-6">
               <p className="text-slate-700 text-lg leading-relaxed">
-                <strong className="text-orange-700">✨ Automatic regeneration:</strong> TypeScript files are automatically regenerated whenever you make changes to your resources or expose new RPC actions. No manual codegen step required during development!
+                <strong className="text-orange-700">
+                  ✨ Automatic regeneration:
+                </strong>{" "}
+                TypeScript files are automatically regenerated whenever you make
+                changes to your resources or expose new RPC actions. No manual
+                codegen step required during development!
               </p>
             </div>
             <p className="text-slate-600 mb-4">
               For production builds or manual generation, you can also run:
             </p>
             <pre className="rounded-lg text-sm border">
-              <code className="language-bash">mix ash_typescript.codegen --output "assets/js/ash_generated.ts"</code>
+              <code className="language-bash">
+                mix ash_typescript.codegen --output "assets/js/ash_generated.ts"
+              </code>
             </pre>
           </section>
 
@@ -111,7 +120,7 @@ end`}
             </p>
             <pre className="rounded-lg overflow-x-auto text-sm border">
               <code className="language-typescript">
-{`import { getByEmail, listUsers, getUser } from "./ash_generated";
+                {`import { getByEmail, listUsers, getUser } from "./ash_generated";
 
 // Use the typed RPC functions
 const findUserByEmail = async (email: string) => {
@@ -161,8 +170,12 @@ const fetchUsers = async () => {
                   <span className="text-orange-600 font-bold text-xl">📚</span>
                 </div>
                 <div>
-                  <h3 className="font-bold text-slate-900 text-lg mb-2 group-hover:text-orange-600 transition-colors">Documentation</h3>
-                  <p className="text-slate-600">Complete API reference and guides on HexDocs</p>
+                  <h3 className="font-bold text-slate-900 text-lg mb-2 group-hover:text-orange-600 transition-colors">
+                    Documentation
+                  </h3>
+                  <p className="text-slate-600">
+                    Complete API reference and guides on HexDocs
+                  </p>
                 </div>
               </a>
 
@@ -176,8 +189,12 @@ const fetchUsers = async () => {
                   <span className="text-orange-600 font-bold text-xl">🔧</span>
                 </div>
                 <div>
-                  <h3 className="font-bold text-slate-900 text-lg mb-2 group-hover:text-orange-600 transition-colors">Source Code</h3>
-                  <p className="text-slate-600">View the source, report issues, and contribute on GitHub</p>
+                  <h3 className="font-bold text-slate-900 text-lg mb-2 group-hover:text-orange-600 transition-colors">
+                    Source Code
+                  </h3>
+                  <p className="text-slate-600">
+                    View the source, report issues, and contribute on GitHub
+                  </p>
                 </div>
               </a>
 
@@ -191,9 +208,15 @@ const fetchUsers = async () => {
                   <span className="text-orange-600 font-bold text-xl">🚀</span>
                 </div>
                 <div>
-                  <h3 className="font-bold text-slate-900 text-lg mb-2 group-hover:text-orange-600 transition-colors">Demo App</h3>
-                  <p className="text-slate-600">See AshTypescript with TanStack Query & Table in action</p>
-                  <p className="text-slate-500 text-sm mt-1">by ChristianAlexander</p>
+                  <h3 className="font-bold text-slate-900 text-lg mb-2 group-hover:text-orange-600 transition-colors">
+                    Demo App
+                  </h3>
+                  <p className="text-slate-600">
+                    See AshTypescript with TanStack Query & Table in action
+                  </p>
+                  <p className="text-slate-500 text-sm mt-1">
+                    by ChristianAlexander
+                  </p>
                 </div>
               </a>
             </div>
@@ -209,7 +232,8 @@ const fetchUsers = async () => {
               Ready to Get Started?
             </h3>
             <p className="text-orange-100 text-lg leading-relaxed max-w-2xl mx-auto">
-              Check your generated RPC functions and start building type-safe interactions between your frontend and Ash resources!
+              Check your generated RPC functions and start building type-safe
+              interactions between your frontend and Ash resources!
             </p>
           </div>
         </div>

@@ -6,11 +6,6 @@ defmodule AshFramework.Accounts.Token do
     authorizers: [Ash.Policy.Authorizer],
     extensions: [AshAuthentication.TokenResource, AshJsonApi.Resource]
 
-  postgres do
-    table "tokens"
-    repo AshFramework.Repo
-  end
-
   json_api do
     type "token"
 
@@ -19,6 +14,11 @@ defmodule AshFramework.Accounts.Token do
       get :read
       index :read
     end
+  end
+
+  postgres do
+    table "tokens"
+    repo AshFramework.Repo
   end
 
   actions do

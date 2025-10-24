@@ -1,0 +1,14 @@
+# Elixir build outputs
+_build
+deps
+
+# Phoenix/Ash outputs
+priv/static
+priv/resource_snapshots
+priv/repo/migrations
+
+# Generated TypeScript RPC client
+assets/js/ash_rpc.ts
+
+# Elixir lock file
+mix.lock

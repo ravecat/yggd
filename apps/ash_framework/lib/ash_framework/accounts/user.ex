@@ -10,6 +10,16 @@ defmodule AshFramework.Accounts.User do
       AshTypescript.Resource
     ]
 
+  json_api do
+    type "user"
+
+    routes do
+      base "/users"
+      get :read
+      index :read
+    end
+  end
+
   authentication do
     add_ons do
       log_out_everywhere do
@@ -43,16 +53,6 @@ defmodule AshFramework.Accounts.User do
 
   typescript do
     type_name "User"
-  end
-
-  json_api do
-    type "user"
-
-    routes do
-      base "/users"
-      get :read
-      index :read
-    end
   end
 
   actions do

@@ -1,0 +1,9 @@
+# Next.js build outputs
+.next
+out
+
+# Dependencies
+node_modules
+
+# Generated files
+*.generated.*

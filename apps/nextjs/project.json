@@ -18,10 +18,22 @@
         "cwd": "apps/nextjs"
       },
       "cache": true,
-      "inputs": [
-        "default",
-        "{workspaceRoot}/tsconfig.base.json"
-      ]
+      "inputs": ["default", "{workspaceRoot}/tsconfig.base.json"]
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prettier --write .",
+        "cwd": "apps/nextjs"
+      }
+    },
+    "format-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prettier --check .",
+        "cwd": "apps/nextjs"
+      },
+      "cache": true
     }
   },
   "tags": []

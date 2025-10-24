@@ -15,10 +15,7 @@
     "setup": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "mix deps.get",
-          "mix ash.setup"
-        ],
+        "commands": ["mix deps.get", "mix ash.setup"],
         "cwd": "apps/ash_framework",
         "parallel": false
       }
@@ -36,9 +33,7 @@
         "{projectRoot}/mix.exs",
         "{projectRoot}/config/**/*.exs"
       ],
-      "outputs": [
-        "{projectRoot}/_build"
-      ]
+      "outputs": ["{projectRoot}/_build"]
     },
     "test": {
       "executor": "nx:run-commands",
@@ -48,23 +43,28 @@
       },
       "cache": true,
       "dependsOn": ["build"],
-      "inputs": [
-        "default",
-        "{projectRoot}/test/**/*.exs"
-      ]
+      "inputs": ["default", "{projectRoot}/test/**/*.exs"]
     },
     "format": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "mix format",
-        "cwd": "apps/ash_framework"
+        "commands": [
+          "mix format",
+          "prettier --write assets"
+        ],
+        "cwd": "apps/ash_framework",
+        "parallel": false
       }
     },
     "format-check": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "mix format --check-formatted",
-        "cwd": "apps/ash_framework"
+        "commands": [
+          "mix format --check-formatted",
+          "prettier --check assets"
+        ],
+        "cwd": "apps/ash_framework",
+        "parallel": false
       },
       "cache": true
     },
@@ -78,12 +78,10 @@
     "ash-typescript": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "mix ash_typescript.generate",
+        "command": "mix ash_typescript.codegen",
         "cwd": "apps/ash_framework"
       },
-      "outputs": [
-        "{projectRoot}/assets/js/ash_rpc.ts"
-      ]
+      "outputs": ["{projectRoot}/assets/js/ash_rpc.ts"]
     },
     "db-reset": {
       "executor": "nx:run-commands",
@@ -114,12 +112,8 @@
         "cwd": "apps/ash_framework"
       },
       "cache": true,
-      "inputs": [
-        "{projectRoot}/assets/**/*"
-      ],
-      "outputs": [
-        "{projectRoot}/priv/static"
-      ]
+      "inputs": ["{projectRoot}/assets/**/*"],
+      "outputs": ["{projectRoot}/priv/static"]
     }
   },
   "tags": ["backend", "elixir", "phoenix", "ash"]
