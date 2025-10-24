@@ -99,6 +99,14 @@
         "cwd": "apps/ash_framework"
       }
     },
+    "seed": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "mix seed.posts",
+        "cwd": "apps/ash_framework"
+      },
+      "dependsOn": ["setup"]
+    },
     "assets-build": {
       "executor": "nx:run-commands",
       "options": {

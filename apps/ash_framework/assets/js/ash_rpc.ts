@@ -13,6 +13,20 @@ export type UserResourceSchema = {
   __primitiveFields: "id" | "email";
   id: UUID;
   email: string;
+  posts: { __type: "Relationship"; __array: true; __resource: PostResourceSchema; };
+};
+
+
+
+// Post Schema
+export type PostResourceSchema = {
+  __type: "Resource";
+  __primitiveFields: "id" | "title" | "content" | "authorId";
+  id: UUID;
+  title: string;
+  content: string;
+  authorId: UUID;
+  author: { __type: "Relationship"; __resource: UserResourceSchema; };
 };
 
 
@@ -41,6 +55,40 @@ export type UserFilterInput = {
   };
 
 
+  posts?: PostFilterInput;
+
+};
+export type PostFilterInput = {
+  and?: Array<PostFilterInput>;
+  or?: Array<PostFilterInput>;
+  not?: Array<PostFilterInput>;
+
+  id?: {
+    eq?: UUID;
+    notEq?: UUID;
+    in?: Array<UUID>;
+  };
+
+  title?: {
+    eq?: string;
+    notEq?: string;
+    in?: Array<string>;
+  };
+
+  content?: {
+    eq?: string;
+    notEq?: string;
+    in?: Array<string>;
+  };
+
+  authorId?: {
+    eq?: UUID;
+    notEq?: UUID;
+    in?: Array<UUID>;
+  };
+
+
+  author?: UserFilterInput;
 
 };
 
@@ -606,6 +654,449 @@ export async function validateListUsers(
   }
 
   return result as ValidateListUsersResult;
+}
+
+
+export type ListPostsFields = UnifiedFieldSelection<PostResourceSchema>[];
+
+
+type InferListPostsResult<
+  Fields extends ListPostsFields,
+  Page extends ListPostsConfig["page"] = undefined
+> = ConditionalPaginatedResultMixed<Page, Array<InferResult<PostResourceSchema, Fields>>, {
+  results: Array<InferResult<PostResourceSchema, Fields>>;
+  hasMore: boolean;
+  limit: number;
+  offset: number;
+  count?: number | null;
+  type: "offset";
+}, {
+  results: Array<InferResult<PostResourceSchema, Fields>>;
+  hasMore: boolean;
+  limit: number;
+  after: string | null;
+  before: string | null;
+  previousPage: string;
+  nextPage: string;
+  count?: number | null;
+  type: "keyset";
+}>;
+
+export type ListPostsConfig = {
+  fields: ListPostsFields;
+  filter?: PostFilterInput;
+  sort?: string;
+  page?: (
+    {
+      limit?: number;
+      offset?: number;
+      count?: boolean;
+    } | {
+      limit?: number;
+      after?: string;
+      before?: string;
+    }
+  );
+  headers?: Record<string, string>;
+  fetchOptions?: RequestInit;
+  customFetch?: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
+};
+
+export type ListPostsResult<Fields extends ListPostsFields, Page extends ListPostsConfig["page"] = undefined> = | { success: true; data: InferListPostsResult<Fields, Page>; }
+| {
+    success: false;
+    errors: Array<{
+      type: string;
+      message: string;
+      fieldPath?: string;
+      details: Record<string, string>;
+    }>;
+  }
+;
+
+export async function listPosts<Fields extends ListPostsFields, Config extends ListPostsConfig>(
+  config: Config & { fields: Fields }
+): Promise<ListPostsResult<Fields, Config["page"]>> {
+  let processedConfig = config;
+
+  const payload = {
+    action: "list_posts",
+    fields: config.fields,
+    ...(config.filter && { filter: config.filter }),
+    ...(config.sort && { sort: config.sort }),
+    ...(config.page && { page: config.page })
+  };
+
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    ...processedConfig.headers,
+    ...config.headers,
+  };
+
+  const fetchFunction = config.customFetch || processedConfig.customFetch || fetch;
+  const fetchOptions: RequestInit = {
+    ...processedConfig.fetchOptions,
+    ...config.fetchOptions,
+    method: "POST",
+    headers,
+    body: JSON.stringify(payload),
+  };
+
+  const response = await fetchFunction("/rpc/run", fetchOptions);
+
+  const result = response.ok ? await response.json() : null;
+
+  
+
+  if (!response.ok) {
+    return {
+      success: false,
+      errors: [{ type: "network", message: response.statusText, details: {} }],
+    };
+  }
+
+  return result as ListPostsResult<Fields, Config["page"]>;
+}
+
+
+export type ValidateListPostsResult =
+  | { success: true }
+  | {
+      success: false;
+      errors: Array<{
+        type: string;
+        message: string;
+        field?: string;
+        fieldPath?: string;
+        details?: Record<string, any>;
+      }>;
+    };
+
+
+export async function validateListPosts(
+  config: {
+  headers?: Record<string, string>;
+  fetchOptions?: RequestInit;
+  customFetch?: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
+}
+): Promise<ValidateListPostsResult> {
+  let processedConfig = config;
+
+  const payload = {
+    action: "list_posts"
+  };
+
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    ...processedConfig.headers,
+    ...config.headers,
+  };
+
+  const fetchFunction = config.customFetch || processedConfig.customFetch || fetch;
+  const fetchOptions: RequestInit = {
+    ...processedConfig.fetchOptions,
+    ...config.fetchOptions,
+    method: "POST",
+    headers,
+    body: JSON.stringify(payload),
+  };
+
+  const response = await fetchFunction("/rpc/validate", fetchOptions);
+
+  const result = response.ok ? await response.json() : null;
+
+  
+
+  if (!response.ok) {
+    return {
+      success: false,
+      errors: [{ type: "network", message: response.statusText, details: {} }],
+    };
+  }
+
+  return result as ValidateListPostsResult;
+}
+
+
+export type CreatePostInput = {
+  title: string;
+  content: string;
+  authorId: UUID;
+};
+
+export type CreatePostValidationErrors = {
+  title?: string[];
+  content?: string[];
+  authorId?: string[];
+};
+
+export type CreatePostFields = UnifiedFieldSelection<PostResourceSchema>[];
+
+type InferCreatePostResult<
+  Fields extends CreatePostFields,
+> = InferResult<PostResourceSchema, Fields>;
+
+export type CreatePostResult<Fields extends CreatePostFields> = | { success: true; data: InferCreatePostResult<Fields>; }
+| {
+    success: false;
+    errors: Array<{
+      type: string;
+      message: string;
+      fieldPath?: string;
+      details: Record<string, string>;
+    }>;
+  }
+;
+
+export async function createPost<Fields extends CreatePostFields>(
+  config: {
+  input: CreatePostInput;
+  fields: Fields;
+  headers?: Record<string, string>;
+  fetchOptions?: RequestInit;
+  customFetch?: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
+}
+): Promise<CreatePostResult<Fields>> {
+  let processedConfig = config;
+
+  const payload = {
+    action: "create_post",
+    input: config.input,
+    fields: config.fields
+  };
+
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    ...processedConfig.headers,
+    ...config.headers,
+  };
+
+  const fetchFunction = config.customFetch || processedConfig.customFetch || fetch;
+  const fetchOptions: RequestInit = {
+    ...processedConfig.fetchOptions,
+    ...config.fetchOptions,
+    method: "POST",
+    headers,
+    body: JSON.stringify(payload),
+  };
+
+  const response = await fetchFunction("/rpc/run", fetchOptions);
+
+  const result = response.ok ? await response.json() : null;
+
+  
+
+  if (!response.ok) {
+    return {
+      success: false,
+      errors: [{ type: "network", message: response.statusText, details: {} }],
+    };
+  }
+
+  return result as CreatePostResult<Fields>;
+}
+
+
+export type ValidateCreatePostResult =
+  | { success: true }
+  | {
+      success: false;
+      errors: Array<{
+        type: string;
+        message: string;
+        field?: string;
+        fieldPath?: string;
+        details?: Record<string, any>;
+      }>;
+    };
+
+
+export async function validateCreatePost(
+  config: {
+  input: CreatePostInput;
+  headers?: Record<string, string>;
+  fetchOptions?: RequestInit;
+  customFetch?: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
+}
+): Promise<ValidateCreatePostResult> {
+  let processedConfig = config;
+
+  const payload = {
+    action: "create_post",
+    input: config.input
+  };
+
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    ...processedConfig.headers,
+    ...config.headers,
+  };
+
+  const fetchFunction = config.customFetch || processedConfig.customFetch || fetch;
+  const fetchOptions: RequestInit = {
+    ...processedConfig.fetchOptions,
+    ...config.fetchOptions,
+    method: "POST",
+    headers,
+    body: JSON.stringify(payload),
+  };
+
+  const response = await fetchFunction("/rpc/validate", fetchOptions);
+
+  const result = response.ok ? await response.json() : null;
+
+  
+
+  if (!response.ok) {
+    return {
+      success: false,
+      errors: [{ type: "network", message: response.statusText, details: {} }],
+    };
+  }
+
+  return result as ValidateCreatePostResult;
+}
+
+
+export type UpdatePostInput = {
+  title: string;
+  content: string;
+};
+
+export type UpdatePostValidationErrors = {
+  title?: string[];
+  content?: string[];
+};
+
+export type UpdatePostFields = UnifiedFieldSelection<PostResourceSchema>[];
+
+type InferUpdatePostResult<
+  Fields extends UpdatePostFields,
+> = InferResult<PostResourceSchema, Fields>;
+
+export type UpdatePostResult<Fields extends UpdatePostFields> = | { success: true; data: InferUpdatePostResult<Fields>; }
+| {
+    success: false;
+    errors: Array<{
+      type: string;
+      message: string;
+      fieldPath?: string;
+      details: Record<string, string>;
+    }>;
+  }
+;
+
+export async function updatePost<Fields extends UpdatePostFields>(
+  config: {
+  primaryKey: UUID;
+  input: UpdatePostInput;
+  fields: Fields;
+  headers?: Record<string, string>;
+  fetchOptions?: RequestInit;
+  customFetch?: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
+}
+): Promise<UpdatePostResult<Fields>> {
+  let processedConfig = config;
+
+  const payload = {
+    action: "update_post",
+    primaryKey: config.primaryKey,
+    input: config.input,
+    fields: config.fields
+  };
+
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    ...processedConfig.headers,
+    ...config.headers,
+  };
+
+  const fetchFunction = config.customFetch || processedConfig.customFetch || fetch;
+  const fetchOptions: RequestInit = {
+    ...processedConfig.fetchOptions,
+    ...config.fetchOptions,
+    method: "POST",
+    headers,
+    body: JSON.stringify(payload),
+  };
+
+  const response = await fetchFunction("/rpc/run", fetchOptions);
+
+  const result = response.ok ? await response.json() : null;
+
+  
+
+  if (!response.ok) {
+    return {
+      success: false,
+      errors: [{ type: "network", message: response.statusText, details: {} }],
+    };
+  }
+
+  return result as UpdatePostResult<Fields>;
+}
+
+
+export type ValidateUpdatePostResult =
+  | { success: true }
+  | {
+      success: false;
+      errors: Array<{
+        type: string;
+        message: string;
+        field?: string;
+        fieldPath?: string;
+        details?: Record<string, any>;
+      }>;
+    };
+
+
+export async function validateUpdatePost(
+  config: {
+  primaryKey: string;
+  input: UpdatePostInput;
+  headers?: Record<string, string>;
+  fetchOptions?: RequestInit;
+  customFetch?: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
+}
+): Promise<ValidateUpdatePostResult> {
+  let processedConfig = config;
+
+  const payload = {
+    action: "update_post",
+    primaryKey: config.primaryKey,
+    input: config.input
+  };
+
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    ...processedConfig.headers,
+    ...config.headers,
+  };
+
+  const fetchFunction = config.customFetch || processedConfig.customFetch || fetch;
+  const fetchOptions: RequestInit = {
+    ...processedConfig.fetchOptions,
+    ...config.fetchOptions,
+    method: "POST",
+    headers,
+    body: JSON.stringify(payload),
+  };
+
+  const response = await fetchFunction("/rpc/validate", fetchOptions);
+
+  const result = response.ok ? await response.json() : null;
+
+  
+
+  if (!response.ok) {
+    return {
+      success: false,
+      errors: [{ type: "network", message: response.statusText, details: {} }],
+    };
+  }
+
+  return result as ValidateUpdatePostResult;
 }
 
 

@@ -121,6 +121,13 @@ defmodule AshFramework.Accounts.User do
     end
   end
 
+  relationships do
+    has_many :posts, AshFramework.Blog.Post do
+      destination_attribute :author_id
+      public? true
+    end
+  end
+
   identities do
     identity :unique_email, [:email]
   end

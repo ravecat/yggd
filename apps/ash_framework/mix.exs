@@ -41,6 +41,7 @@ defmodule AshFramework.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:faker, "~> 0.18", only: [:dev, :test]},
       {:open_api_spex, "~> 3.0"},
       {:ash_json_api, "~> 1.0"},
       {:picosat_elixir, "~> 0.2"},
