@@ -6,6 +6,7 @@
 
 
 export type UUID = string;
+export type UtcDateTimeUsec = string;
 
 // User Schema
 export type UserResourceSchema = {
@@ -21,10 +22,12 @@ export type UserResourceSchema = {
 // Post Schema
 export type PostResourceSchema = {
   __type: "Resource";
-  __primitiveFields: "id" | "title" | "content" | "authorId";
+  __primitiveFields: "id" | "title" | "content" | "createdAt" | "updatedAt" | "authorId";
   id: UUID;
   title: string;
   content: string;
+  createdAt: UtcDateTimeUsec;
+  updatedAt: UtcDateTimeUsec;
   authorId: UUID;
   author: { __type: "Relationship"; __resource: UserResourceSchema; };
 };
@@ -79,6 +82,26 @@ export type PostFilterInput = {
     eq?: string;
     notEq?: string;
     in?: Array<string>;
+  };
+
+  createdAt?: {
+    eq?: UtcDateTimeUsec;
+    notEq?: UtcDateTimeUsec;
+    greaterThan?: UtcDateTimeUsec;
+    greaterThanOrEqual?: UtcDateTimeUsec;
+    lessThan?: UtcDateTimeUsec;
+    lessThanOrEqual?: UtcDateTimeUsec;
+    in?: Array<UtcDateTimeUsec>;
+  };
+
+  updatedAt?: {
+    eq?: UtcDateTimeUsec;
+    notEq?: UtcDateTimeUsec;
+    greaterThan?: UtcDateTimeUsec;
+    greaterThanOrEqual?: UtcDateTimeUsec;
+    lessThan?: UtcDateTimeUsec;
+    lessThanOrEqual?: UtcDateTimeUsec;
+    in?: Array<UtcDateTimeUsec>;
   };
 
   authorId?: {

@@ -71,8 +71,13 @@ defmodule AshFramework.Blog.Post do
       public? true
     end
 
-    create_timestamp :created_at
-    update_timestamp :updated_at
+    create_timestamp :created_at do
+      public? true
+    end
+
+    update_timestamp :updated_at do
+      public? true
+    end
   end
 
   relationships do
