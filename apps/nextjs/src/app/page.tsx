@@ -1,4 +1,4 @@
-import { getPosts, type User } from "@yggd/shared";
+import { getPosts, type User, type Post } from "@yggd/shared";
 
 export default async function Index() {
   const jsonApiData = await getPosts();
@@ -8,7 +8,7 @@ export default async function Index() {
 
   if (jsonApiData.included) {
     jsonApiData.included.forEach((item) => {
-      if (item.type === "user") {
+      if (item.type === "user" && item.id) {
         users.set(item.id, item as User);
       }
     });
@@ -23,33 +23,39 @@ export default async function Index() {
       ) : (
         <div className="flex flex-col gap-8">
           {posts.map((post) => {
-            const author = post.relationships?.author?.data?.id
-              ? users.get(post.relationships.author.data.id)
-              : null;
+            const authorRelation = post.relationships?.author;
+            const authorId =
+              authorRelation &&
+              "data" in authorRelation &&
+              authorRelation.data &&
+              typeof authorRelation.data === "object" &&
+              "id" in authorRelation.data
+                ? authorRelation.data.id
+                : null;
+            const author = authorId ? users.get(authorId) : null;
+
+            const attrs = post.attributes as Post["attributes"];
+            const authorAttrs = author?.attributes as User["attributes"];
 
             return (
               <article
                 key={post.id}
                 className="border border-gray-200 rounded-lg p-6 bg-white shadow-sm hover:shadow-md transition-shadow"
               >
-                <h2 className="text-2xl mb-2 text-gray-900">
-                  {post.attributes.title}
-                </h2>
+                <h2 className="text-2xl mb-2 text-gray-900">{attrs?.title}</h2>
                 <p className="text-gray-600 text-sm mb-4">
-                  By: {author?.attributes.email || "Unknown"}
-                  {post.attributes.created_at && (
-                    <>
-                      {" "}
-                      •{" "}
-                      {new Date(
-                        post.attributes.created_at
-                      ).toLocaleDateString()}
-                    </>
+                  By: {authorAttrs?.email || "Unknown"}
+                  {attrs?.created_at && (
+                    <> • {new Date(attrs.created_at).toLocaleDateString()}</>
                   )}
                 </p>
                 <p className="leading-relaxed text-gray-700">
-                  {post.attributes.content.substring(0, 200)}
-                  {post.attributes.content.length > 200 ? "..." : ""}
+                  {attrs?.content && typeof attrs.content === "string" ? (
+                    <>
+                      {attrs.content.substring(0, 200)}
+                      {attrs.content.length > 200 ? "..." : ""}
+                    </>
+                  ) : null}
                 </p>
               </article>
             );

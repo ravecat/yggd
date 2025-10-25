@@ -1,6 +1,6 @@
-import type { JsonApiResponse, Post } from '../types.js';
+import type { CollectionResourceDoc } from 'jsonapi-typescript';
 
-export async function getPosts(): Promise<JsonApiResponse<Post>> {
+export async function getPosts(): Promise<CollectionResourceDoc> {
   const response = await fetch(
     `${process.env.PUBLIC_API_URL}/api/posts?page[limit]=10&sort=-created_at`,
     {
@@ -15,5 +15,5 @@ export async function getPosts(): Promise<JsonApiResponse<Post>> {
     throw new Error(`Failed to fetch posts: ${response.status}`);
   }
 
-  return response.json() as Promise<JsonApiResponse<Post>>;
+  return response.json() as Promise<CollectionResourceDoc>;
 }
