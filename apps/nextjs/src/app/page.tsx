@@ -2,7 +2,7 @@ import { getPosts, type User } from "@yggd/shared";
 
 export default async function Index() {
   const jsonApiData = await getPosts();
-  
+
   const posts = jsonApiData.data || [];
   const users = new Map<string, User>();
 
@@ -15,17 +15,13 @@ export default async function Index() {
   }
 
   return (
-    <div style={{ padding: "2rem", maxWidth: "1200px", margin: "0 auto" }}>
-      <h1
-        style={{ fontSize: "2.5rem", marginBottom: "2rem", color: "#1a1a1a" }}
-      >
-        Latest Posts
-      </h1>
+    <div className="p-8 max-w-6xl mx-auto">
+      <h1 className="text-4xl mb-8 text-gray-900">Latest Posts</h1>
 
       {posts.length === 0 ? (
-        <p style={{ fontSize: "1.1rem", color: "#666" }}>No posts yet.</p>
+        <p className="text-lg text-gray-600">No posts yet.</p>
       ) : (
-        <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+        <div className="flex flex-col gap-8">
           {posts.map((post) => {
             const author = post.relationships?.author?.data?.id
               ? users.get(post.relationships.author.data.id)
@@ -34,31 +30,12 @@ export default async function Index() {
             return (
               <article
                 key={post.id}
-                style={{
-                  border: "1px solid #e0e0e0",
-                  borderRadius: "8px",
-                  padding: "1.5rem",
-                  backgroundColor: "#fff",
-                  boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
-                  transition: "box-shadow 0.2s",
-                }}
+                className="border border-gray-200 rounded-lg p-6 bg-white shadow-sm hover:shadow-md transition-shadow"
               >
-                <h2
-                  style={{
-                    fontSize: "1.75rem",
-                    marginBottom: "0.5rem",
-                    color: "#1a1a1a",
-                  }}
-                >
+                <h2 className="text-2xl mb-2 text-gray-900">
                   {post.attributes.title}
                 </h2>
-                <p
-                  style={{
-                    color: "#666",
-                    fontSize: "0.9rem",
-                    marginBottom: "1rem",
-                  }}
-                >
+                <p className="text-gray-600 text-sm mb-4">
                   By: {author?.attributes.email || "Unknown"}
                   {post.attributes.created_at && (
                     <>
@@ -70,7 +47,7 @@ export default async function Index() {
                     </>
                   )}
                 </p>
-                <p style={{ lineHeight: "1.6", color: "#333" }}>
+                <p className="leading-relaxed text-gray-700">
                   {post.attributes.content.substring(0, 200)}
                   {post.attributes.content.length > 200 ? "..." : ""}
                 </p>

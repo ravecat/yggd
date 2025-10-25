@@ -8,8 +8,7 @@ export async function getPosts(): Promise<JsonApiResponse<Post>> {
         Accept: "application/vnd.api+json",
         "Content-Type": "application/vnd.api+json",
       },
-      cache: "no-store",
-    }
+    } as RequestInit & { cache?: string }
   );
 
   if (!response.ok) {
