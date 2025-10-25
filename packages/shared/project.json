@@ -1,0 +1,16 @@
+{
+  "name": "@yggd/shared",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/shared/src",
+  "projectType": "library",
+  "targets": {
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --project tsconfig.lib.json --watch",
+        "cwd": "packages/shared"
+      }
+    }
+  },
+  "tags": []
+}
