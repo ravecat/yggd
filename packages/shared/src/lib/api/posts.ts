@@ -1,7 +1,8 @@
+import axios from 'axios';
 import { deserialize } from '../utils/serializer.js';
 
 export async function getPosts() {
-  const response = await fetch(
+  const response = await axios.get(
     `${process.env.PUBLIC_API_URL}/api/posts?page[limit]=10&sort=-created_at`,
     {
       headers: {
@@ -11,11 +12,5 @@ export async function getPosts() {
     }
   );
 
-  if (!response.ok) {
-    throw new Error(`Failed to fetch posts: ${response.status}`);
-  }
-
-  const data = await response.json();
-
-  return deserialize('post', data);
+  return deserialize('post', response.data);
 }
