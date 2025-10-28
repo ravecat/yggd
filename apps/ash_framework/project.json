@@ -83,6 +83,18 @@
       },
       "outputs": ["{projectRoot}/assets/js/ash_rpc.ts"]
     },
+    "codegen:openapi": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "mix openapi.spec.json --spec AshFrameworkWeb.AshJsonApiRouter && mv openapi.json ../../",
+          "mix openapi.spec.yaml --spec AshFrameworkWeb.AshJsonApiRouter && mv openapi.yaml ../../"
+        ],
+        "cwd": "apps/ash_framework",
+        "parallel": true
+      },
+      "outputs": ["{workspaceRoot}/openapi.json", "{workspaceRoot}/openapi.yaml"]
+    },
     "db-reset": {
       "executor": "nx:run-commands",
       "options": {

@@ -1,0 +1,1926 @@
+---
+components:
+  responses:
+    errors:
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/errors'
+      description: General Error
+  schemas:
+    error:
+      additionalProperties: false
+      properties:
+        code:
+          description: An application-specific error code, expressed as a string value.
+          type: string
+          x-struct:
+          x-validate:
+        detail:
+          description: A human-readable explanation specific to this occurrence of the problem.
+          type: string
+          x-struct:
+          x-validate:
+        id:
+          description: A unique identifier for this particular occurrence of the problem.
+          type: string
+          x-struct:
+          x-validate:
+        links:
+          $ref: '#/components/schemas/links'
+        source:
+          properties:
+            parameter:
+              description: A string indicating which query parameter caused the error.
+              type: string
+              x-struct:
+              x-validate:
+            pointer:
+              description: A JSON Pointer [RFC6901] to the associated entity in the request document [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific attribute].
+              type: string
+              x-struct:
+              x-validate:
+          type: object
+          x-struct:
+          x-validate:
+        status:
+          description: The HTTP status code applicable to this problem, expressed as a string value.
+          type: string
+          x-struct:
+          x-validate:
+        title:
+          description: A short, human-readable summary of the problem. It SHOULD NOT change from occurrence to occurrence of the problem, except for purposes of localization.
+          type: string
+          x-struct:
+          x-validate:
+      type: object
+      x-struct:
+      x-validate:
+    errors:
+      items:
+        $ref: '#/components/schemas/error'
+      type: array
+      uniqueItems: true
+      x-struct:
+      x-validate:
+    link:
+      description: "A link MUST be represented as either: a string containing the link's URL or a link object."
+      type: string
+      x-struct:
+      x-validate:
+    links:
+      additionalProperties:
+        $ref: '#/components/schemas/link'
+      type: object
+      x-struct:
+      x-validate:
+    post:
+      additionalProperties: false
+      description: A "Resource object" representing a post
+      properties:
+        attributes:
+          additionalProperties: false
+          description: An attributes object for a post
+          properties:
+            author_id:
+              description: Field included by default.
+              format: uuid
+              type: string
+              x-struct:
+              x-validate:
+            content:
+              description: Field included by default.
+              type: string
+              x-struct:
+              x-validate:
+            created_at:
+              description: Field included by default.
+              x-struct:
+              x-validate:
+            title:
+              description: Field included by default.
+              type: string
+              x-struct:
+              x-validate:
+            updated_at:
+              description: Field included by default.
+              x-struct:
+              x-validate:
+          required:
+            - title
+            - content
+            - created_at
+            - updated_at
+            - author_id
+          type: object
+          x-struct:
+          x-validate:
+        id:
+          type: string
+        relationships:
+          additionalProperties: false
+          description: A relationships object for a post
+          properties:
+            author:
+              properties:
+                data:
+                  additionalProperties: false
+                  description: An identifier for author
+                  nullable: true
+                  properties:
+                    id:
+                      type: string
+                      x-struct:
+                      x-validate:
+                    meta:
+                      additionalProperties: true
+                      type: object
+                      x-struct:
+                      x-validate:
+                    type:
+                      type: string
+                      x-struct:
+                      x-validate:
+                  required:
+                    - type
+                    - id
+                  type: object
+                  x-struct:
+                  x-validate:
+              x-struct:
+              x-validate:
+          type: object
+          x-struct:
+          x-validate:
+        type:
+          type: string
+          x-struct:
+          x-validate:
+      required:
+        - type
+        - id
+      type: object
+      x-struct:
+      x-validate:
+    post-filter:
+      additionalProperties: false
+      description: Filters the query to results matching the given filter object
+      example: ''
+      properties:
+        and:
+          items:
+            $ref: '#/components/schemas/post-filter'
+          type: array
+          uniqueItems: true
+          x-struct:
+          x-validate:
+        author:
+          $ref: '#/components/schemas/user-filter'
+        author_id:
+          $ref: '#/components/schemas/post-filter-author_id'
+        content:
+          $ref: '#/components/schemas/post-filter-content'
+        created_at:
+          $ref: '#/components/schemas/post-filter-created_at'
+        id:
+          $ref: '#/components/schemas/post-filter-id'
+        not:
+          $ref: '#/components/schemas/post-filter'
+        or:
+          items:
+            $ref: '#/components/schemas/post-filter'
+          type: array
+          uniqueItems: true
+          x-struct:
+          x-validate:
+        title:
+          $ref: '#/components/schemas/post-filter-title'
+        updated_at:
+          $ref: '#/components/schemas/post-filter-updated_at'
+      type: deepObject
+      x-struct:
+      x-validate:
+    post-filter-author_id:
+      additionalProperties: false
+      properties:
+        eq:
+          format: uuid
+          type: string
+          x-struct:
+          x-validate:
+        greater_than:
+          format: uuid
+          type: string
+          x-struct:
+          x-validate:
+        greater_than_or_equal:
+          format: uuid
+          type: string
+          x-struct:
+          x-validate:
+        in:
+          items:
+            format: uuid
+            type: string
+            x-struct:
+            x-validate:
+          type: array
+          x-struct:
+          x-validate:
+        is_nil:
+          type: boolean
+          x-struct:
+          x-validate:
+        less_than:
+          format: uuid
+          type: string
+          x-struct:
+          x-validate:
+        less_than_or_equal:
+          format: uuid
+          type: string
+          x-struct:
+          x-validate:
+        not_eq:
+          format: uuid
+          type: string
+          x-struct:
+          x-validate:
+      type: object
+      x-struct:
+      x-validate:
+    post-filter-content:
+      additionalProperties: false
+      properties:
+        contains:
+          type: string
+          x-struct:
+          x-validate:
+        eq:
+          type: string
+          x-struct:
+          x-validate:
+        greater_than:
+          type: string
+          x-struct:
+          x-validate:
+        greater_than_or_equal:
+          type: string
+          x-struct:
+          x-validate:
+        ilike:
+          type: string
+          x-struct:
+          x-validate:
+        in:
+          items:
+            type: string
+            x-struct:
+            x-validate:
+          type: array
+          x-struct:
+          x-validate:
+        is_nil:
+          type: boolean
+          x-struct:
+          x-validate:
+        less_than:
+          type: string
+          x-struct:
+          x-validate:
+        less_than_or_equal:
+          type: string
+          x-struct:
+          x-validate:
+        like:
+          type: string
+          x-struct:
+          x-validate:
+        not_eq:
+          type: string
+          x-struct:
+          x-validate:
+      type: object
+      x-struct:
+      x-validate:
+    post-filter-created_at:
+      additionalProperties: false
+      properties:
+        eq:
+          x-struct:
+          x-validate:
+        greater_than:
+          x-struct:
+          x-validate:
+        greater_than_or_equal:
+          x-struct:
+          x-validate:
+        in:
+          items:
+            x-struct:
+            x-validate:
+          type: array
+          x-struct:
+          x-validate:
+        is_nil:
+          type: boolean
+          x-struct:
+          x-validate:
+        less_than:
+          x-struct:
+          x-validate:
+        less_than_or_equal:
+          x-struct:
+          x-validate:
+        not_eq:
+          x-struct:
+          x-validate:
+      type: object
+      x-struct:
+      x-validate:
+    post-filter-id:
+      additionalProperties: false
+      properties:
+        eq:
+          format: uuid
+          type: string
+          x-struct:
+          x-validate:
+        greater_than:
+          format: uuid
+          type: string
+          x-struct:
+          x-validate:
+        greater_than_or_equal:
+          format: uuid
+          type: string
+          x-struct:
+          x-validate:
+        in:
+          items:
+            format: uuid
+            type: string
+            x-struct:
+            x-validate:
+          type: array
+          x-struct:
+          x-validate:
+        is_nil:
+          type: boolean
+          x-struct:
+          x-validate:
+        less_than:
+          format: uuid
+          type: string
+          x-struct:
+          x-validate:
+        less_than_or_equal:
+          format: uuid
+          type: string
+          x-struct:
+          x-validate:
+        not_eq:
+          format: uuid
+          type: string
+          x-struct:
+          x-validate:
+      type: object
+      x-struct:
+      x-validate:
+    post-filter-title:
+      additionalProperties: false
+      properties:
+        contains:
+          type: string
+          x-struct:
+          x-validate:
+        eq:
+          type: string
+          x-struct:
+          x-validate:
+        greater_than:
+          type: string
+          x-struct:
+          x-validate:
+        greater_than_or_equal:
+          type: string
+          x-struct:
+          x-validate:
+        ilike:
+          type: string
+          x-struct:
+          x-validate:
+        in:
+          items:
+            type: string
+            x-struct:
+            x-validate:
+          type: array
+          x-struct:
+          x-validate:
+        is_nil:
+          type: boolean
+          x-struct:
+          x-validate:
+        less_than:
+          type: string
+          x-struct:
+          x-validate:
+        less_than_or_equal:
+          type: string
+          x-struct:
+          x-validate:
+        like:
+          type: string
+          x-struct:
+          x-validate:
+        not_eq:
+          type: string
+          x-struct:
+          x-validate:
+      type: object
+      x-struct:
+      x-validate:
+    post-filter-updated_at:
+      additionalProperties: false
+      properties:
+        eq:
+          x-struct:
+          x-validate:
+        greater_than:
+          x-struct:
+          x-validate:
+        greater_than_or_equal:
+          x-struct:
+          x-validate:
+        in:
+          items:
+            x-struct:
+            x-validate:
+          type: array
+          x-struct:
+          x-validate:
+        is_nil:
+          type: boolean
+          x-struct:
+          x-validate:
+        less_than:
+          x-struct:
+          x-validate:
+        less_than_or_equal:
+          x-struct:
+          x-validate:
+        not_eq:
+          x-struct:
+          x-validate:
+      type: object
+      x-struct:
+      x-validate:
+    token:
+      additionalProperties: false
+      description: A "Resource object" representing a token
+      properties:
+        attributes:
+          additionalProperties: false
+          description: An attributes object for a token
+          properties:
+            expires_at:
+              description: Field included by default.
+              format: date-time
+              type: string
+              x-struct:
+              x-validate:
+            extra_data:
+              anyOf:
+                - nullable: true
+                  type: object
+                  x-struct:
+                  x-validate:
+                - type: 'null'
+              description: Field included by default.
+            purpose:
+              description: Field included by default.
+              type: string
+              x-struct:
+              x-validate:
+            subject:
+              description: Field included by default.
+              type: string
+              x-struct:
+              x-validate:
+          required:
+            - subject
+            - expires_at
+            - purpose
+          type: object
+          x-struct:
+          x-validate:
+        id:
+          type: string
+        relationships:
+          additionalProperties: false
+          description: A relationships object for a token
+          properties: {}
+          type: object
+          x-struct:
+          x-validate:
+        type:
+          type: string
+          x-struct:
+          x-validate:
+      required:
+        - type
+        - id
+      type: object
+      x-struct:
+      x-validate:
+    token-filter:
+      additionalProperties: false
+      description: Filters the query to results matching the given filter object
+      example: ''
+      properties:
+        and:
+          items:
+            $ref: '#/components/schemas/token-filter'
+          type: array
+          uniqueItems: true
+          x-struct:
+          x-validate:
+        expires_at:
+          $ref: '#/components/schemas/token-filter-expires_at'
+        extra_data:
+          $ref: '#/components/schemas/token-filter-extra_data'
+        jti:
+          $ref: '#/components/schemas/token-filter-jti'
+        not:
+          $ref: '#/components/schemas/token-filter'
+        or:
+          items:
+            $ref: '#/components/schemas/token-filter'
+          type: array
+          uniqueItems: true
+          x-struct:
+          x-validate:
+        purpose:
+          $ref: '#/components/schemas/token-filter-purpose'
+        subject:
+          $ref: '#/components/schemas/token-filter-subject'
+      type: deepObject
+      x-struct:
+      x-validate:
+    token-filter-expires_at:
+      additionalProperties: false
+      properties:
+        eq:
+          format: date-time
+          type: string
+          x-struct:
+          x-validate:
+        greater_than:
+          format: date-time
+          type: string
+          x-struct:
+          x-validate:
+        greater_than_or_equal:
+          format: date-time
+          type: string
+          x-struct:
+          x-validate:
+        in:
+          items:
+            format: date-time
+            type: string
+            x-struct:
+            x-validate:
+          type: array
+          x-struct:
+          x-validate:
+        is_nil:
+          type: boolean
+          x-struct:
+          x-validate:
+        less_than:
+          format: date-time
+          type: string
+          x-struct:
+          x-validate:
+        less_than_or_equal:
+          format: date-time
+          type: string
+          x-struct:
+          x-validate:
+        not_eq:
+          format: date-time
+          type: string
+          x-struct:
+          x-validate:
+      type: object
+      x-struct:
+      x-validate:
+    token-filter-extra_data:
+      additionalProperties: false
+      properties:
+        eq:
+          type: object
+          x-struct:
+          x-validate:
+        greater_than:
+          type: object
+          x-struct:
+          x-validate:
+        greater_than_or_equal:
+          type: object
+          x-struct:
+          x-validate:
+        in:
+          items:
+            type: object
+            x-struct:
+            x-validate:
+          type: array
+          x-struct:
+          x-validate:
+        is_nil:
+          type: boolean
+          x-struct:
+          x-validate:
+        less_than:
+          type: object
+          x-struct:
+          x-validate:
+        less_than_or_equal:
+          type: object
+          x-struct:
+          x-validate:
+        not_eq:
+          type: object
+          x-struct:
+          x-validate:
+      type: object
+      x-struct:
+      x-validate:
+    token-filter-jti:
+      additionalProperties: false
+      properties:
+        contains:
+          type: string
+          x-struct:
+          x-validate:
+        eq:
+          type: string
+          x-struct:
+          x-validate:
+        greater_than:
+          type: string
+          x-struct:
+          x-validate:
+        greater_than_or_equal:
+          type: string
+          x-struct:
+          x-validate:
+        ilike:
+          type: string
+          x-struct:
+          x-validate:
+        in:
+          items:
+            type: string
+            x-struct:
+            x-validate:
+          type: array
+          x-struct:
+          x-validate:
+        is_nil:
+          type: boolean
+          x-struct:
+          x-validate:
+        less_than:
+          type: string
+          x-struct:
+          x-validate:
+        less_than_or_equal:
+          type: string
+          x-struct:
+          x-validate:
+        like:
+          type: string
+          x-struct:
+          x-validate:
+        not_eq:
+          type: string
+          x-struct:
+          x-validate:
+      type: object
+      x-struct:
+      x-validate:
+    token-filter-purpose:
+      additionalProperties: false
+      properties:
+        contains:
+          type: string
+          x-struct:
+          x-validate:
+        eq:
+          type: string
+          x-struct:
+          x-validate:
+        greater_than:
+          type: string
+          x-struct:
+          x-validate:
+        greater_than_or_equal:
+          type: string
+          x-struct:
+          x-validate:
+        ilike:
+          type: string
+          x-struct:
+          x-validate:
+        in:
+          items:
+            type: string
+            x-struct:
+            x-validate:
+          type: array
+          x-struct:
+          x-validate:
+        is_nil:
+          type: boolean
+          x-struct:
+          x-validate:
+        less_than:
+          type: string
+          x-struct:
+          x-validate:
+        less_than_or_equal:
+          type: string
+          x-struct:
+          x-validate:
+        like:
+          type: string
+          x-struct:
+          x-validate:
+        not_eq:
+          type: string
+          x-struct:
+          x-validate:
+      type: object
+      x-struct:
+      x-validate:
+    token-filter-subject:
+      additionalProperties: false
+      properties:
+        contains:
+          type: string
+          x-struct:
+          x-validate:
+        eq:
+          type: string
+          x-struct:
+          x-validate:
+        greater_than:
+          type: string
+          x-struct:
+          x-validate:
+        greater_than_or_equal:
+          type: string
+          x-struct:
+          x-validate:
+        ilike:
+          type: string
+          x-struct:
+          x-validate:
+        in:
+          items:
+            type: string
+            x-struct:
+            x-validate:
+          type: array
+          x-struct:
+          x-validate:
+        is_nil:
+          type: boolean
+          x-struct:
+          x-validate:
+        less_than:
+          type: string
+          x-struct:
+          x-validate:
+        less_than_or_equal:
+          type: string
+          x-struct:
+          x-validate:
+        like:
+          type: string
+          x-struct:
+          x-validate:
+        not_eq:
+          type: string
+          x-struct:
+          x-validate:
+      type: object
+      x-struct:
+      x-validate:
+    user:
+      additionalProperties: false
+      description: A "Resource object" representing a user
+      properties:
+        attributes:
+          additionalProperties: false
+          description: An attributes object for a user
+          properties:
+            email:
+              description: Field included by default.
+              type: string
+              x-struct:
+              x-validate:
+          required:
+            - email
+          type: object
+          x-struct:
+          x-validate:
+        id:
+          type: string
+        relationships:
+          additionalProperties: false
+          description: A relationships object for a user
+          properties:
+            posts:
+              properties:
+                data:
+                  description: Relationship data for posts
+                  items:
+                    additionalProperties: false
+                    description: Resource identifiers for posts
+                    properties:
+                      id:
+                        type: string
+                        x-struct:
+                        x-validate:
+                      meta:
+                        additionalProperties: true
+                        type: object
+                        x-struct:
+                        x-validate:
+                      type:
+                        type: string
+                        x-struct:
+                        x-validate:
+                    required:
+                      - type
+                      - id
+                    type: object
+                  type: array
+                  uniqueItems: true
+                  x-struct:
+                  x-validate:
+              x-struct:
+              x-validate:
+          type: object
+          x-struct:
+          x-validate:
+        type:
+          type: string
+          x-struct:
+          x-validate:
+      required:
+        - type
+        - id
+      type: object
+      x-struct:
+      x-validate:
+    user-filter:
+      additionalProperties: false
+      description: Filters the query to results matching the given filter object
+      example: ''
+      properties:
+        and:
+          items:
+            $ref: '#/components/schemas/user-filter'
+          type: array
+          uniqueItems: true
+          x-struct:
+          x-validate:
+        email:
+          $ref: '#/components/schemas/user-filter-email'
+        id:
+          $ref: '#/components/schemas/user-filter-id'
+        not:
+          $ref: '#/components/schemas/user-filter'
+        or:
+          items:
+            $ref: '#/components/schemas/user-filter'
+          type: array
+          uniqueItems: true
+          x-struct:
+          x-validate:
+        posts:
+          $ref: '#/components/schemas/post-filter'
+      type: deepObject
+      x-struct:
+      x-validate:
+    user-filter-email:
+      additionalProperties: false
+      properties:
+        contains:
+          type: string
+          x-struct:
+          x-validate:
+        eq:
+          type: string
+          x-struct:
+          x-validate:
+        greater_than:
+          type: string
+          x-struct:
+          x-validate:
+        greater_than_or_equal:
+          type: string
+          x-struct:
+          x-validate:
+        in:
+          items:
+            type: string
+            x-struct:
+            x-validate:
+          type: array
+          x-struct:
+          x-validate:
+        is_nil:
+          type: boolean
+          x-struct:
+          x-validate:
+        less_than:
+          type: string
+          x-struct:
+          x-validate:
+        less_than_or_equal:
+          type: string
+          x-struct:
+          x-validate:
+        not_eq:
+          type: string
+          x-struct:
+          x-validate:
+      type: object
+      x-struct:
+      x-validate:
+    user-filter-id:
+      additionalProperties: false
+      properties:
+        eq:
+          format: uuid
+          type: string
+          x-struct:
+          x-validate:
+        greater_than:
+          format: uuid
+          type: string
+          x-struct:
+          x-validate:
+        greater_than_or_equal:
+          format: uuid
+          type: string
+          x-struct:
+          x-validate:
+        in:
+          items:
+            format: uuid
+            type: string
+            x-struct:
+            x-validate:
+          type: array
+          x-struct:
+          x-validate:
+        is_nil:
+          type: boolean
+          x-struct:
+          x-validate:
+        less_than:
+          format: uuid
+          type: string
+          x-struct:
+          x-validate:
+        less_than_or_equal:
+          format: uuid
+          type: string
+          x-struct:
+          x-validate:
+        not_eq:
+          format: uuid
+          type: string
+          x-struct:
+          x-validate:
+      type: object
+      x-struct:
+      x-validate:
+  securitySchemes:
+    bearerAuth:
+      bearerFormat: JWT
+      description: JWT for bearer authentication
+      scheme: bearer
+      type: http
+info:
+  title: Open API Specification
+  version: '1.1'
+openapi: 3.0.0
+paths:
+  /posts:
+    get:
+      callbacks: {}
+      deprecated: false
+      description: /posts operation on post resource
+      parameters:
+        - description: Filters the query to results with attributes matching the given filter object
+          in: query
+          name: filter
+          required: false
+          schema:
+            $ref: '#/components/schemas/post-filter'
+          style: deepObject
+        - description: Sort order to apply to the results
+          explode: false
+          in: query
+          name: sort
+          required: false
+          schema:
+            pattern: ^(id|-id|\+\+id|--id|title|-title|\+\+title|--title|content|-content|\+\+content|--content|created_at|-created_at|\+\+created_at|--created_at|updated_at|-updated_at|\+\+updated_at|--updated_at|author_id|-author_id|\+\+author_id|--author_id)(,(id|-id|\+\+id|--id|title|-title|\+\+title|--title|content|-content|\+\+content|--content|created_at|-created_at|\+\+created_at|--created_at|updated_at|-updated_at|\+\+updated_at|--updated_at|author_id|-author_id|\+\+author_id|--author_id))*$
+            type: string
+            x-struct:
+            x-validate:
+          style: form
+        - description: Paginates the response with the limit and offset or keyset pagination.
+          in: query
+          name: page
+          required: false
+          schema:
+            example:
+              limit: 25
+            properties:
+              after:
+                type: string
+                x-struct:
+                x-validate:
+              before:
+                type: string
+                x-struct:
+                x-validate:
+              count:
+                default: false
+                type: boolean
+                x-struct:
+                x-validate:
+              limit:
+                minimum: 1
+                type: integer
+                x-struct:
+                x-validate:
+              offset:
+                minimum: 0
+                type: integer
+                x-struct:
+                x-validate:
+            type: object
+            x-struct:
+            x-validate:
+          style: deepObject
+        - description: Relationship paths to include in the response
+          explode: false
+          in: query
+          name: include
+          required: false
+          schema:
+            pattern: ^()(,())*$
+            type: string
+            x-struct:
+            x-validate:
+          style: form
+        - description: Limits the response fields to only those listed for each type
+          in: query
+          name: fields
+          required: false
+          schema:
+            additionalProperties: true
+            example:
+              post: id,title,content,created_at,updated_at,author_id
+            properties:
+              post:
+                description: Comma separated field names for post
+                example: id,title,content,created_at,updated_at,author_id
+                type: string
+                x-struct:
+                x-validate:
+            type: object
+            x-struct:
+            x-validate:
+          style: deepObject
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                additionalProperties: false
+                properties:
+                  data:
+                    description: An array of resource objects representing a post
+                    items:
+                      $ref: '#/components/schemas/post'
+                    type: array
+                    uniqueItems: true
+                    x-struct:
+                    x-validate:
+                  included:
+                    items:
+                      oneOf: []
+                      x-struct:
+                      x-validate:
+                    type: array
+                    uniqueItems: true
+                    x-struct:
+                    x-validate:
+                  meta:
+                    additionalProperties: true
+                    type: object
+                    x-struct:
+                    x-validate:
+                type: object
+                x-struct:
+                x-validate:
+          description: Success
+        default:
+          $ref: '#/components/responses/errors'
+      tags:
+        - post
+    post:
+      callbacks: {}
+      deprecated: false
+      description: /posts operation on post resource
+      parameters:
+        - description: Relationship paths to include in the response
+          explode: false
+          in: query
+          name: include
+          required: false
+          schema:
+            pattern: ^()(,())*$
+            type: string
+            x-struct:
+            x-validate:
+          style: form
+        - description: Limits the response fields to only those listed for each type
+          in: query
+          name: fields
+          required: false
+          schema:
+            additionalProperties: true
+            example:
+              post: id,title,content,created_at,updated_at,author_id
+            properties:
+              post:
+                description: Comma separated field names for post
+                example: id,title,content,created_at,updated_at,author_id
+                type: string
+                x-struct:
+                x-validate:
+            type: object
+            x-struct:
+            x-validate:
+          style: deepObject
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              additionalProperties: false
+              properties:
+                data:
+                  additionalProperties: false
+                  properties:
+                    attributes:
+                      additionalProperties: false
+                      properties:
+                        author_id:
+                          format: uuid
+                          type: string
+                          x-struct:
+                          x-validate:
+                        content:
+                          type: string
+                          x-struct:
+                          x-validate:
+                        title:
+                          type: string
+                          x-struct:
+                          x-validate:
+                      required:
+                        - title
+                        - content
+                        - author_id
+                      type: object
+                      x-struct:
+                      x-validate:
+                    relationships:
+                      additionalProperties: false
+                      properties: {}
+                      type: object
+                      x-struct:
+                      x-validate:
+                    type:
+                      enum:
+                        - post
+                      x-struct:
+                      x-validate:
+                  type: object
+                  x-struct:
+                  x-validate:
+              required:
+                - data
+              type: object
+              x-struct:
+              x-validate:
+        description: Request body for the /posts operation on post resource
+        required: true
+      responses:
+        '201':
+          content:
+            application/vnd.api+json:
+              schema:
+                additionalProperties: false
+                properties:
+                  data:
+                    $ref: '#/components/schemas/post'
+                  included:
+                    items:
+                      oneOf: []
+                      x-struct:
+                      x-validate:
+                    type: array
+                    uniqueItems: true
+                    x-struct:
+                    x-validate:
+                  meta:
+                    additionalProperties: true
+                    type: object
+                    x-struct:
+                    x-validate:
+                x-struct:
+                x-validate:
+          description: Success
+        default:
+          $ref: '#/components/responses/errors'
+      tags:
+        - post
+  /posts/{id}:
+    delete:
+      callbacks: {}
+      deprecated: false
+      description: /posts/:id operation on post resource
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            x-struct:
+            x-validate:
+          style: form
+        - description: Relationship paths to include in the response
+          explode: false
+          in: query
+          name: include
+          required: false
+          schema:
+            pattern: ^()(,())*$
+            type: string
+            x-struct:
+            x-validate:
+          style: form
+        - description: Limits the response fields to only those listed for each type
+          in: query
+          name: fields
+          required: false
+          schema:
+            additionalProperties: true
+            example:
+              post: id,title,content,created_at,updated_at,author_id
+            properties:
+              post:
+                description: Comma separated field names for post
+                example: id,title,content,created_at,updated_at,author_id
+                type: string
+                x-struct:
+                x-validate:
+            type: object
+            x-struct:
+            x-validate:
+          style: deepObject
+      responses:
+        '200':
+          description: Deleted successfully
+        default:
+          $ref: '#/components/responses/errors'
+      tags:
+        - post
+    get:
+      callbacks: {}
+      deprecated: false
+      description: /posts/:id operation on post resource
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            x-struct:
+            x-validate:
+          style: form
+        - description: Relationship paths to include in the response
+          explode: false
+          in: query
+          name: include
+          required: false
+          schema:
+            pattern: ^()(,())*$
+            type: string
+            x-struct:
+            x-validate:
+          style: form
+        - description: Limits the response fields to only those listed for each type
+          in: query
+          name: fields
+          required: false
+          schema:
+            additionalProperties: true
+            example:
+              post: id,title,content,created_at,updated_at,author_id
+            properties:
+              post:
+                description: Comma separated field names for post
+                example: id,title,content,created_at,updated_at,author_id
+                type: string
+                x-struct:
+                x-validate:
+            type: object
+            x-struct:
+            x-validate:
+          style: deepObject
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                additionalProperties: false
+                properties:
+                  data:
+                    $ref: '#/components/schemas/post'
+                  included:
+                    items:
+                      oneOf: []
+                      x-struct:
+                      x-validate:
+                    type: array
+                    uniqueItems: true
+                    x-struct:
+                    x-validate:
+                  meta:
+                    additionalProperties: true
+                    type: object
+                    x-struct:
+                    x-validate:
+                x-struct:
+                x-validate:
+          description: Success
+        default:
+          $ref: '#/components/responses/errors'
+      tags:
+        - post
+    patch:
+      callbacks: {}
+      deprecated: false
+      description: /posts/:id operation on post resource
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            x-struct:
+            x-validate:
+          style: form
+        - description: Relationship paths to include in the response
+          explode: false
+          in: query
+          name: include
+          required: false
+          schema:
+            pattern: ^()(,())*$
+            type: string
+            x-struct:
+            x-validate:
+          style: form
+        - description: Limits the response fields to only those listed for each type
+          in: query
+          name: fields
+          required: false
+          schema:
+            additionalProperties: true
+            example:
+              post: id,title,content,created_at,updated_at,author_id
+            properties:
+              post:
+                description: Comma separated field names for post
+                example: id,title,content,created_at,updated_at,author_id
+                type: string
+                x-struct:
+                x-validate:
+            type: object
+            x-struct:
+            x-validate:
+          style: deepObject
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              additionalProperties: false
+              properties:
+                data:
+                  additionalProperties: false
+                  properties:
+                    attributes:
+                      additionalProperties: false
+                      properties:
+                        content:
+                          anyOf:
+                            - type: string
+                              x-struct:
+                              x-validate:
+                            - type: 'null'
+                        title:
+                          anyOf:
+                            - type: string
+                              x-struct:
+                              x-validate:
+                            - type: 'null'
+                      type: object
+                      x-struct:
+                      x-validate:
+                    id:
+                      type: string
+                      x-struct:
+                      x-validate:
+                    relationships:
+                      additionalProperties: false
+                      properties: {}
+                      type: object
+                      x-struct:
+                      x-validate:
+                    type:
+                      enum:
+                        - post
+                      x-struct:
+                      x-validate:
+                  required:
+                    - id
+                  type: object
+                  x-struct:
+                  x-validate:
+              required:
+                - data
+              type: object
+              x-struct:
+              x-validate:
+        description: Request body for the /posts/:id operation on post resource
+        required: false
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                additionalProperties: false
+                properties:
+                  data:
+                    $ref: '#/components/schemas/post'
+                  included:
+                    items:
+                      oneOf: []
+                      x-struct:
+                      x-validate:
+                    type: array
+                    uniqueItems: true
+                    x-struct:
+                    x-validate:
+                  meta:
+                    additionalProperties: true
+                    type: object
+                    x-struct:
+                    x-validate:
+                x-struct:
+                x-validate:
+          description: Success
+        default:
+          $ref: '#/components/responses/errors'
+      tags:
+        - post
+  /tokens:
+    get:
+      callbacks: {}
+      deprecated: false
+      description: /tokens operation on token resource
+      parameters:
+        - description: Filters the query to results with attributes matching the given filter object
+          in: query
+          name: filter
+          required: false
+          schema:
+            $ref: '#/components/schemas/token-filter'
+          style: deepObject
+        - description: Sort order to apply to the results
+          explode: false
+          in: query
+          name: sort
+          required: false
+          schema:
+            pattern: ^(jti|-jti|\+\+jti|--jti|subject|-subject|\+\+subject|--subject|expires_at|-expires_at|\+\+expires_at|--expires_at|purpose|-purpose|\+\+purpose|--purpose|extra_data|-extra_data|\+\+extra_data|--extra_data)(,(jti|-jti|\+\+jti|--jti|subject|-subject|\+\+subject|--subject|expires_at|-expires_at|\+\+expires_at|--expires_at|purpose|-purpose|\+\+purpose|--purpose|extra_data|-extra_data|\+\+extra_data|--extra_data))*$
+            type: string
+            x-struct:
+            x-validate:
+          style: form
+        - description: Paginates the response with the limit and offset or keyset pagination.
+          in: query
+          name: page
+          required: false
+          schema:
+            example:
+              limit: 25
+            properties:
+              after:
+                type: string
+                x-struct:
+                x-validate:
+              before:
+                type: string
+                x-struct:
+                x-validate:
+              count:
+                default: false
+                type: boolean
+                x-struct:
+                x-validate:
+              limit:
+                minimum: 1
+                type: integer
+                x-struct:
+                x-validate:
+              offset:
+                minimum: 0
+                type: integer
+                x-struct:
+                x-validate:
+            type: object
+            x-struct:
+            x-validate:
+          style: deepObject
+        - description: Relationship paths to include in the response
+          explode: false
+          in: query
+          name: include
+          required: false
+          schema:
+            pattern: ^()(,())*$
+            type: string
+            x-struct:
+            x-validate:
+          style: form
+        - description: Limits the response fields to only those listed for each type
+          in: query
+          name: fields
+          required: false
+          schema:
+            additionalProperties: true
+            example:
+              token: jti,subject,expires_at,purpose,extra_data
+            properties:
+              token:
+                description: Comma separated field names for token
+                example: jti,subject,expires_at,purpose,extra_data
+                type: string
+                x-struct:
+                x-validate:
+            type: object
+            x-struct:
+            x-validate:
+          style: deepObject
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                additionalProperties: false
+                properties:
+                  data:
+                    description: An array of resource objects representing a token
+                    items:
+                      $ref: '#/components/schemas/token'
+                    type: array
+                    uniqueItems: true
+                    x-struct:
+                    x-validate:
+                  included:
+                    items:
+                      oneOf: []
+                      x-struct:
+                      x-validate:
+                    type: array
+                    uniqueItems: true
+                    x-struct:
+                    x-validate:
+                  meta:
+                    additionalProperties: true
+                    type: object
+                    x-struct:
+                    x-validate:
+                type: object
+                x-struct:
+                x-validate:
+          description: Success
+        default:
+          $ref: '#/components/responses/errors'
+      tags:
+        - token
+  /tokens/{id}:
+    get:
+      callbacks: {}
+      deprecated: false
+      description: /tokens/:id operation on token resource
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            x-struct:
+            x-validate:
+          style: form
+        - description: Relationship paths to include in the response
+          explode: false
+          in: query
+          name: include
+          required: false
+          schema:
+            pattern: ^()(,())*$
+            type: string
+            x-struct:
+            x-validate:
+          style: form
+        - description: Limits the response fields to only those listed for each type
+          in: query
+          name: fields
+          required: false
+          schema:
+            additionalProperties: true
+            example:
+              token: jti,subject,expires_at,purpose,extra_data
+            properties:
+              token:
+                description: Comma separated field names for token
+                example: jti,subject,expires_at,purpose,extra_data
+                type: string
+                x-struct:
+                x-validate:
+            type: object
+            x-struct:
+            x-validate:
+          style: deepObject
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                additionalProperties: false
+                properties:
+                  data:
+                    $ref: '#/components/schemas/token'
+                  included:
+                    items:
+                      oneOf: []
+                      x-struct:
+                      x-validate:
+                    type: array
+                    uniqueItems: true
+                    x-struct:
+                    x-validate:
+                  meta:
+                    additionalProperties: true
+                    type: object
+                    x-struct:
+                    x-validate:
+                x-struct:
+                x-validate:
+          description: Success
+        default:
+          $ref: '#/components/responses/errors'
+      tags:
+        - token
+  /users:
+    get:
+      callbacks: {}
+      deprecated: false
+      description: /users operation on user resource
+      parameters:
+        - description: Filters the query to results with attributes matching the given filter object
+          in: query
+          name: filter
+          required: false
+          schema:
+            $ref: '#/components/schemas/user-filter'
+          style: deepObject
+        - description: Sort order to apply to the results
+          explode: false
+          in: query
+          name: sort
+          required: false
+          schema:
+            pattern: ^(id|-id|\+\+id|--id|email|-email|\+\+email|--email)(,(id|-id|\+\+id|--id|email|-email|\+\+email|--email))*$
+            type: string
+            x-struct:
+            x-validate:
+          style: form
+        - description: Paginates the response with the limit and offset or keyset pagination.
+          in: query
+          name: page
+          required: false
+          schema:
+            example:
+              limit: 25
+            properties:
+              after:
+                type: string
+                x-struct:
+                x-validate:
+              before:
+                type: string
+                x-struct:
+                x-validate:
+              count:
+                default: false
+                type: boolean
+                x-struct:
+                x-validate:
+              limit:
+                minimum: 1
+                type: integer
+                x-struct:
+                x-validate:
+              offset:
+                minimum: 0
+                type: integer
+                x-struct:
+                x-validate:
+            type: object
+            x-struct:
+            x-validate:
+          style: deepObject
+        - description: Relationship paths to include in the response
+          explode: false
+          in: query
+          name: include
+          required: false
+          schema:
+            pattern: ^()(,())*$
+            type: string
+            x-struct:
+            x-validate:
+          style: form
+        - description: Limits the response fields to only those listed for each type
+          in: query
+          name: fields
+          required: false
+          schema:
+            additionalProperties: true
+            example:
+              user: id,email
+            properties:
+              user:
+                description: Comma separated field names for user
+                example: id,email
+                type: string
+                x-struct:
+                x-validate:
+            type: object
+            x-struct:
+            x-validate:
+          style: deepObject
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                additionalProperties: false
+                properties:
+                  data:
+                    description: An array of resource objects representing a user
+                    items:
+                      $ref: '#/components/schemas/user'
+                    type: array
+                    uniqueItems: true
+                    x-struct:
+                    x-validate:
+                  included:
+                    items:
+                      oneOf: []
+                      x-struct:
+                      x-validate:
+                    type: array
+                    uniqueItems: true
+                    x-struct:
+                    x-validate:
+                  meta:
+                    additionalProperties: true
+                    type: object
+                    x-struct:
+                    x-validate:
+                type: object
+                x-struct:
+                x-validate:
+          description: Success
+        default:
+          $ref: '#/components/responses/errors'
+      tags:
+        - user
+  /users/{id}:
+    get:
+      callbacks: {}
+      deprecated: false
+      description: /users/:id operation on user resource
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            x-struct:
+            x-validate:
+          style: form
+        - description: Relationship paths to include in the response
+          explode: false
+          in: query
+          name: include
+          required: false
+          schema:
+            pattern: ^()(,())*$
+            type: string
+            x-struct:
+            x-validate:
+          style: form
+        - description: Limits the response fields to only those listed for each type
+          in: query
+          name: fields
+          required: false
+          schema:
+            additionalProperties: true
+            example:
+              user: id,email
+            properties:
+              user:
+                description: Comma separated field names for user
+                example: id,email
+                type: string
+                x-struct:
+                x-validate:
+            type: object
+            x-struct:
+            x-validate:
+          style: deepObject
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                additionalProperties: false
+                properties:
+                  data:
+                    $ref: '#/components/schemas/user'
+                  included:
+                    items:
+                      oneOf: []
+                      x-struct:
+                      x-validate:
+                    type: array
+                    uniqueItems: true
+                    x-struct:
+                    x-validate:
+                  meta:
+                    additionalProperties: true
+                    type: object
+                    x-struct:
+                    x-validate:
+                x-struct:
+                x-validate:
+          description: Success
+        default:
+          $ref: '#/components/responses/errors'
+      tags:
+        - user
+security:
+  - bearerAuth: []
+servers: []
+tags: []
