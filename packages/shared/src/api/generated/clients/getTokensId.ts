@@ -3,9 +3,9 @@
 * Do not edit manually.
 */
 
-import fetch from "../../client.js";
-import type { RequestConfig, ResponseErrorConfig } from "../../client.js";
-import type { GetTokensIdQueryResponse, GetTokensIdPathParams, GetTokensIdQueryParams } from "../models/GetTokensId.js";
+import fetch from "../../client";
+import type { RequestConfig, ResponseErrorConfig } from "../../client";
+import type { GetTokensIdQueryResponse, GetTokensIdPathParams, GetTokensIdQueryParams } from "../models/GetTokensId";
 
 function getGetTokensIdUrl(id: GetTokensIdPathParams["id"]) {
   const res = { method: 'GET', url: `/tokens/${id}` as const }  

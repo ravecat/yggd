@@ -3,9 +3,9 @@
 * Do not edit manually.
 */
 
-import type { PostFilter } from "./PostFilter.js";
-import type { UserFilterEmail } from "./UserFilterEmail.js";
-import type { UserFilterId } from "./UserFilterId.js";
+import type { PostFilter } from "./PostFilter";
+import type { UserFilterEmail } from "./UserFilterEmail";
+import type { UserFilterId } from "./UserFilterId";
 
 /**
  * @description Filters the query to results matching the given filter object

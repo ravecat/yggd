@@ -44,6 +44,7 @@ export const axiosInstance = axios.create({
   },
 })
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const client = async <TData, TError = unknown, TVariables = unknown>(
   config: RequestConfig<TVariables>
 ): Promise<ResponseConfig<TData>> => {

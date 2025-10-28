@@ -13,7 +13,7 @@ export default defineConfig({
     path: './packages/shared/src/api/generated',
     clean: true,
     extension: {
-      '.ts': '.js',
+      '.ts': '',
     },
   },
   plugins: [
@@ -33,7 +33,7 @@ export default defineConfig({
       },
       dataReturnType: 'data',
       pathParamsType: 'inline',
-      importPath: '../../client.js',
+      importPath: '../../client',
     }),
     // Temporarily disabled due to kubb bugs with zod v4
     // pluginZod({

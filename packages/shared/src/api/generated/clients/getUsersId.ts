@@ -3,9 +3,9 @@
 * Do not edit manually.
 */
 
-import fetch from "../../client.js";
-import type { RequestConfig, ResponseErrorConfig } from "../../client.js";
-import type { GetUsersIdQueryResponse, GetUsersIdPathParams, GetUsersIdQueryParams } from "../models/GetUsersId.js";
+import fetch from "../../client";
+import type { RequestConfig, ResponseErrorConfig } from "../../client";
+import type { GetUsersIdQueryResponse, GetUsersIdPathParams, GetUsersIdQueryParams } from "../models/GetUsersId";
 
 function getGetUsersIdUrl(id: GetUsersIdPathParams["id"]) {
   const res = { method: 'GET', url: `/users/${id}` as const }  

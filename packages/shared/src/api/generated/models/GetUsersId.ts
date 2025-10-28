@@ -3,8 +3,8 @@
 * Do not edit manually.
 */
 
-import type { Errors } from "./Errors.js";
-import type { User } from "./User.js";
+import type { Errors } from "./Errors";
+import type { User } from "./User";
 
 export type GetUsersIdPathParams = {
     /**

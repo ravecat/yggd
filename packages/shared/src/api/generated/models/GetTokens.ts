@@ -3,9 +3,9 @@
 * Do not edit manually.
 */
 
-import type { Errors } from "./Errors.js";
-import type { Token } from "./Token.js";
-import type { TokenFilter } from "./TokenFilter.js";
+import type { Errors } from "./Errors";
+import type { Token } from "./Token";
+import type { TokenFilter } from "./TokenFilter";
 
 export type GetTokensQueryParams = {
     /**

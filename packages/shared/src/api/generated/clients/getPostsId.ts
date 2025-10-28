@@ -3,9 +3,9 @@
 * Do not edit manually.
 */
 
-import fetch from "../../client.js";
-import type { RequestConfig, ResponseErrorConfig } from "../../client.js";
-import type { GetPostsIdQueryResponse, GetPostsIdPathParams, GetPostsIdQueryParams } from "../models/GetPostsId.js";
+import fetch from "../../client";
+import type { RequestConfig, ResponseErrorConfig } from "../../client";
+import type { GetPostsIdQueryResponse, GetPostsIdPathParams, GetPostsIdQueryParams } from "../models/GetPostsId";
 
 function getGetPostsIdUrl(id: GetPostsIdPathParams["id"]) {
   const res = { method: 'GET', url: `/posts/${id}` as const }  

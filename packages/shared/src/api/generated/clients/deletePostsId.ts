@@ -3,9 +3,9 @@
 * Do not edit manually.
 */
 
-import fetch from "../../client.js";
-import type { RequestConfig, ResponseErrorConfig } from "../../client.js";
-import type { DeletePostsIdMutationResponse, DeletePostsIdPathParams, DeletePostsIdQueryParams } from "../models/DeletePostsId.js";
+import fetch from "../../client";
+import type { RequestConfig, ResponseErrorConfig } from "../../client";
+import type { DeletePostsIdMutationResponse, DeletePostsIdPathParams, DeletePostsIdQueryParams } from "../models/DeletePostsId";
 
 function getDeletePostsIdUrl(id: DeletePostsIdPathParams["id"]) {
   const res = { method: 'DELETE', url: `/posts/${id}` as const }  

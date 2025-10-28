@@ -3,6 +3,6 @@
 * Do not edit manually.
 */
 
-import type { Error } from "./Error.js";
+import type { Error } from "./Error";
 
 export type Errors = Error[];

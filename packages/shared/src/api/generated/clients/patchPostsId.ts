@@ -3,9 +3,9 @@
 * Do not edit manually.
 */
 
-import fetch from "../../client.js";
-import type { RequestConfig, ResponseErrorConfig } from "../../client.js";
-import type { PatchPostsIdMutationRequest, PatchPostsIdMutationResponse, PatchPostsIdPathParams, PatchPostsIdQueryParams } from "../models/PatchPostsId.js";
+import fetch from "../../client";
+import type { RequestConfig, ResponseErrorConfig } from "../../client";
+import type { PatchPostsIdMutationRequest, PatchPostsIdMutationResponse, PatchPostsIdPathParams, PatchPostsIdQueryParams } from "../models/PatchPostsId";
 
 function getPatchPostsIdUrl(id: PatchPostsIdPathParams["id"]) {
   const res = { method: 'PATCH', url: `/posts/${id}` as const }  

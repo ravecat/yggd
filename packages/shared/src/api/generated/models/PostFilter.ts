@@ -3,13 +3,13 @@
 * Do not edit manually.
 */
 
-import type { PostFilterAuthorId } from "./PostFilterAuthorId.js";
-import type { PostFilterContent } from "./PostFilterContent.js";
-import type { PostFilterCreatedAt } from "./PostFilterCreatedAt.js";
-import type { PostFilterId } from "./PostFilterId.js";
-import type { PostFilterTitle } from "./PostFilterTitle.js";
-import type { PostFilterUpdatedAt } from "./PostFilterUpdatedAt.js";
-import type { UserFilter } from "./UserFilter.js";
+import type { PostFilterAuthorId } from "./PostFilterAuthorId";
+import type { PostFilterContent } from "./PostFilterContent";
+import type { PostFilterCreatedAt } from "./PostFilterCreatedAt";
+import type { PostFilterId } from "./PostFilterId";
+import type { PostFilterTitle } from "./PostFilterTitle";
+import type { PostFilterUpdatedAt } from "./PostFilterUpdatedAt";
+import type { UserFilter } from "./UserFilter";
 
 /**
  * @description Filters the query to results matching the given filter object

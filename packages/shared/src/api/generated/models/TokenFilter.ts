@@ -3,11 +3,11 @@
 * Do not edit manually.
 */
 
-import type { TokenFilterExpiresAt } from "./TokenFilterExpiresAt.js";
-import type { TokenFilterExtraData } from "./TokenFilterExtraData.js";
-import type { TokenFilterJti } from "./TokenFilterJti.js";
-import type { TokenFilterPurpose } from "./TokenFilterPurpose.js";
-import type { TokenFilterSubject } from "./TokenFilterSubject.js";
+import type { TokenFilterExpiresAt } from "./TokenFilterExpiresAt";
+import type { TokenFilterExtraData } from "./TokenFilterExtraData";
+import type { TokenFilterJti } from "./TokenFilterJti";
+import type { TokenFilterPurpose } from "./TokenFilterPurpose";
+import type { TokenFilterSubject } from "./TokenFilterSubject";
 
 /**
  * @description Filters the query to results matching the given filter object

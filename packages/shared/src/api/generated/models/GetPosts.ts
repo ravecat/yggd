@@ -3,9 +3,9 @@
 * Do not edit manually.
 */
 
-import type { Errors } from "./Errors.js";
-import type { Post } from "./Post.js";
-import type { PostFilter } from "./PostFilter.js";
+import type { Errors } from "./Errors";
+import type { Post } from "./Post";
+import type { PostFilter } from "./PostFilter";
 
 export type GetPostsQueryParams = {
     /**

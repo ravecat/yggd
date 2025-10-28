@@ -3,9 +3,9 @@
 * Do not edit manually.
 */
 
-import fetch from "../../client.js";
-import type { RequestConfig, ResponseErrorConfig } from "../../client.js";
-import type { PostsMutationRequest, PostsMutationResponse, PostsQueryParams } from "../models/PostPosts.js";
+import fetch from "../../client";
+import type { RequestConfig, ResponseErrorConfig } from "../../client";
+import type { PostsMutationRequest, PostsMutationResponse, PostsQueryParams } from "../models/PostPosts";
 
 function getPostPostsUrl() {
   const res = { method: 'POST', url: `/posts` as const }  

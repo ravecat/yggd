@@ -3,7 +3,7 @@
 * Do not edit manually.
 */
 
-import type { Links } from "./Links.js";
+import type { Links } from "./Links";
 
 export type Error = {
     /**

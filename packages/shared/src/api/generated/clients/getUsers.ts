@@ -3,9 +3,9 @@
 * Do not edit manually.
 */
 
-import fetch from "../../client.js";
-import type { RequestConfig, ResponseErrorConfig } from "../../client.js";
-import type { GetUsersQueryResponse, GetUsersQueryParams } from "../models/GetUsers.js";
+import fetch from "../../client";
+import type { RequestConfig, ResponseErrorConfig } from "../../client";
+import type { GetUsersQueryResponse, GetUsersQueryParams } from "../models/GetUsers";
 
 function getGetUsersUrl() {
   const res = { method: 'GET', url: `/users` as const }  

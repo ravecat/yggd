@@ -3,9 +3,9 @@
 * Do not edit manually.
 */
 
-import type { Errors } from "./Errors.js";
-import type { User } from "./User.js";
-import type { UserFilter } from "./UserFilter.js";
+import type { Errors } from "./Errors";
+import type { User } from "./User";
+import type { UserFilter } from "./UserFilter";
 
 export type GetUsersQueryParams = {
     /**

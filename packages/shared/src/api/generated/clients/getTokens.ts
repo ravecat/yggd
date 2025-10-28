@@ -3,9 +3,9 @@
 * Do not edit manually.
 */
 
-import fetch from "../../client.js";
-import type { RequestConfig, ResponseErrorConfig } from "../../client.js";
-import type { GetTokensQueryResponse, GetTokensQueryParams } from "../models/GetTokens.js";
+import fetch from "../../client";
+import type { RequestConfig, ResponseErrorConfig } from "../../client";
+import type { GetTokensQueryResponse, GetTokensQueryParams } from "../models/GetTokens";
 
 function getGetTokensUrl() {
   const res = { method: 'GET', url: `/tokens` as const }  

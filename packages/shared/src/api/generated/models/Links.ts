@@ -3,7 +3,7 @@
 * Do not edit manually.
 */
 
-import type { Link } from "./Link.js";
+import type { Link } from "./Link";
 
 export type Links = {
     [key: string]: Link;

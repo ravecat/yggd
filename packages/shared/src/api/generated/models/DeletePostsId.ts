@@ -3,7 +3,7 @@
 * Do not edit manually.
 */
 
-import type { Errors } from "./Errors.js";
+import type { Errors } from "./Errors";
 
 export type DeletePostsIdPathParams = {
     /**

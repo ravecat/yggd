@@ -3,9 +3,9 @@
 * Do not edit manually.
 */
 
-import fetch from "../../client.js";
-import type { RequestConfig, ResponseErrorConfig } from "../../client.js";
-import type { GetPostsQueryResponse, GetPostsQueryParams } from "../models/GetPosts.js";
+import fetch from "../../client";
+import type { RequestConfig, ResponseErrorConfig } from "../../client";
+import type { GetPostsQueryResponse, GetPostsQueryParams } from "../models/GetPosts";
 
 function getGetPostsUrl() {
   const res = { method: 'GET', url: `/posts` as const }  

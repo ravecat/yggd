@@ -3,8 +3,8 @@
 * Do not edit manually.
 */
 
-import type { Errors } from "./Errors.js";
-import type { Token } from "./Token.js";
+import type { Errors } from "./Errors";
+import type { Token } from "./Token";
 
 export type GetTokensIdPathParams = {
     /**
