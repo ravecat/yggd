@@ -12,7 +12,8 @@
       "types": "./src/index.ts",
       "import": "./dist/index.js",
       "default": "./dist/index.js"
-    }
+    },
+    "./tokens.css": "./src/styles/tokens.css"
   },
   "dependencies": {
     "axios": "^1.12.2",

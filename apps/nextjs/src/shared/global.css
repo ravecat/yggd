@@ -1,0 +1,12 @@
+@import "tailwindcss";
+@import "@yggd/shared/tokens.css";
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+  }
+}

@@ -1,4 +1,4 @@
-import "./global.css";
+import "../shared/global.css";
 
 export const metadata = {
   title: "Welcome to nextjs",
