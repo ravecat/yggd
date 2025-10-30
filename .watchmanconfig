@@ -1,0 +1,15 @@
+{
+  "ignore_dirs": [
+    "node_modules",
+    ".git",
+    ".next",
+    "dist",
+    ".nx",
+    "_build",
+    "deps",
+    "context_portal",
+    ".turbo",
+    "coverage",
+    "build"
+  ]
+}
