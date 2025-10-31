@@ -17,6 +17,7 @@ import {
 import { buttonVariants } from "@/shared/ui/button";
 import { cn } from "@/shared/lib/component";
 import { generatePageNumbers } from "@/shared/lib/pagination";
+import { parseQueryParams } from "@/shared/lib/query";
 
 type PostsResponseWithMeta = Awaited<ReturnType<typeof getPosts>> & {
   meta?: {
@@ -29,15 +30,21 @@ type PostsResponseWithMeta = Awaited<ReturnType<typeof getPosts>> & {
 export async function PostsList({
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const { page = "1" } = await searchParams;
-  const currentPage = parseInt(page, 10);
-  const offset = (currentPage - 1) * 10;
+  const params = await searchParams;
+  const { page, sort } = parseQueryParams(params) as {
+    page?: { limit?: number; offset?: number };
+    sort?: string;
+  };
+
+  const limit = page?.limit ?? 10;
+  const offset = page?.offset ?? 0;
+  const currentPage = Math.floor(offset / limit) + 1;
 
   const response = (await getPosts({
-    page: { limit: 10, offset, count: true },
-    sort: "-created_at",
+    page: { limit, offset, count: true },
+    sort: sort ?? "-created_at",
   })) as PostsResponseWithMeta;
 
   const posts = response.data || [];
@@ -46,8 +53,17 @@ export async function PostsList({
   const hasNextPage = !!links.next;
 
   const totalCount = response.meta?.page?.total ?? 0;
-  const totalPages = Math.ceil(totalCount / 10);
+  const totalPages = Math.ceil(totalCount / limit);
   const pageNumbers = generatePageNumbers(currentPage, totalPages);
+
+  const buildPageUrl = (page: number) => {
+    const params: [string, string][] = [
+      ["page[limit]", String(limit)],
+      ["page[offset]", String((page - 1) * limit)],
+      ...(sort ? [["sort", sort] as [string, string]] : []),
+    ];
+    return `/?${new URLSearchParams(params).toString()}`;
+  };
 
   if (posts.length === 0) {
     return <p className="text-lg text-gray-600">No posts yet.</p>;
@@ -92,7 +108,7 @@ export async function PostsList({
         <PaginationContent>
           <PaginationItem>
             <Link
-              href={hasPrevPage ? `/?page=${currentPage - 1}` : "#"}
+              href={hasPrevPage ? buildPageUrl(currentPage - 1) : "#"}
               aria-label="Go to previous page"
               aria-disabled={!hasPrevPage}
               className={cn(
@@ -108,7 +124,7 @@ export async function PostsList({
           {pageNumbers.map((pageNum) => (
             <PaginationItem key={pageNum}>
               <Link
-                href={`/?page=${pageNum}`}
+                href={buildPageUrl(pageNum)}
                 aria-current={pageNum === currentPage ? "page" : undefined}
                 aria-label={`Go to page ${pageNum}`}
                 className={cn(
@@ -125,7 +141,7 @@ export async function PostsList({
 
           <PaginationItem>
             <Link
-              href={hasNextPage ? `/?page=${currentPage + 1}` : "#"}
+              href={hasNextPage ? buildPageUrl(currentPage + 1) : "#"}
               aria-label="Go to next page"
               aria-disabled={!hasNextPage}
               className={cn(
