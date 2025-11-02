@@ -19,19 +19,52 @@ export async function SortButtons({
   const offset = page?.offset ?? 0;
   const currentSort = sort ?? "-created_at";
 
+  const sortFields = currentSort.split(",").map((field) => field.trim());
+
+  const getNewSortValue = (field: string): string => {
+    const asc = field;
+    const desc = `-${field}`;
+
+    const ascIndex = sortFields.indexOf(asc);
+    const descIndex = sortFields.indexOf(desc);
+
+    let newSortFields: string[];
+
+    if (descIndex !== -1) {
+      newSortFields = sortFields.filter((f) => f !== desc);
+      newSortFields.splice(descIndex, 0, asc);
+    } else if (ascIndex !== -1) {
+      newSortFields = sortFields.filter((f) => f !== asc);
+    } else {
+      newSortFields = [...sortFields, desc];
+    }
+
+    return newSortFields.join(",");
+  };
+
   return (
     <div className="flex gap-2 mb-6">
       {POST_SORT_OPTIONS.map((option) => {
-        const isActive =
-          currentSort === option.field || currentSort === `-${option.field}`;
-        const isDescending = currentSort === `-${option.field}`;
-        const sortValue = isActive && !currentSort.startsWith("-") ? "-" : "";
-        
+        const asc = option.field;
+        const desc = `-${option.field}`;
+
+        const ascIndex = sortFields.indexOf(asc);
+        const descIndex = sortFields.indexOf(desc);
+
+        const isActive = ascIndex !== -1 || descIndex !== -1;
+        const isDescending = descIndex !== -1;
+
+        const newSortValue = getNewSortValue(option.field);
+
         const params: [string, string][] = [
           ["page[limit]", String(limit)],
           ["page[offset]", String(offset)],
-          ["sort", `${sortValue}${option.field}`],
         ];
+        
+        if (newSortValue) {
+          params.push(["sort", newSortValue]);
+        }
+        
         const href = `/?${new URLSearchParams(params).toString()}`;
 
         return (
