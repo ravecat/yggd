@@ -18,6 +18,8 @@ import { buttonVariants } from "@/shared/ui/button";
 import { cn } from "@/shared/lib/component";
 import { generatePageNumbers } from "@/shared/lib/pagination";
 import { parseQueryParams } from "@/shared/lib/query";
+import type { AsyncSearchParams } from "@/shared/types";
+import type { GetPostsQueryParams } from "@yggd/shared";
 
 type PostsResponseWithMeta = Awaited<ReturnType<typeof getPosts>> & {
   meta?: {
@@ -30,21 +32,19 @@ type PostsResponseWithMeta = Awaited<ReturnType<typeof getPosts>> & {
 export async function PostsList({
   searchParams,
 }: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: AsyncSearchParams<GetPostsQueryParams>;
 }) {
   const params = await searchParams;
-  const { page, sort } = parseQueryParams(params) as {
-    page?: { limit?: number; offset?: number };
-    sort?: string;
-  };
+  const parsed = parseQueryParams<GetPostsQueryParams>(params);
+  const { page, sort } = parsed;
 
-  const limit = page?.limit ?? 10;
-  const offset = page?.offset ?? 0;
+  const limit = page!.limit!;
+  const offset = page!.offset!;
   const currentPage = Math.floor(offset / limit) + 1;
 
   const response = (await getPosts({
     page: { limit, offset, count: true },
-    sort: sort ?? "-created_at",
+    sort: sort!,
   })) as PostsResponseWithMeta;
 
   const posts = response.data || [];
