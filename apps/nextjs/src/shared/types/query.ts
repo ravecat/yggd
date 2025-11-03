@@ -77,7 +77,7 @@ export type SearchParams<TQueryParams = Record<string, unknown>> =
  *   searchParams: AsyncSearchParams<GetPostsQueryParams> 
  * }) {
  *   const params = await searchParams;
- *   const parsed = parseQueryParams<GetPostsQueryParams>(params);
+ *   const parsed = deserializeQueryParams<GetPostsQueryParams>(params);
  * }
  * 
  * @example

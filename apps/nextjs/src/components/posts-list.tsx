@@ -17,7 +17,7 @@ import {
 import { buttonVariants } from "@/shared/ui/button";
 import { cn } from "@/shared/lib/component";
 import { generatePageNumbers } from "@/shared/lib/pagination";
-import { parseQueryParams } from "@/shared/lib/query";
+import { deserializeQueryParams, serializeQueryParams } from "@/shared/lib/query";
 import type { AsyncSearchParams } from "@/shared/types";
 import type { GetPostsQueryParams } from "@yggd/shared";
 
@@ -35,7 +35,7 @@ export async function PostsList({
   searchParams: AsyncSearchParams<GetPostsQueryParams>;
 }) {
   const params = await searchParams;
-  const parsed = parseQueryParams<GetPostsQueryParams>(params);
+  const parsed = deserializeQueryParams<GetPostsQueryParams>(params);
   const { page, sort } = parsed;
 
   const limit = page!.limit!;
@@ -57,12 +57,11 @@ export async function PostsList({
   const pageNumbers = generatePageNumbers(currentPage, totalPages);
 
   const buildPageUrl = (page: number) => {
-    const params: [string, string][] = [
-      ["page[limit]", String(limit)],
-      ["page[offset]", String((page - 1) * limit)],
-      ...(sort ? [["sort", sort] as [string, string]] : []),
-    ];
-    return `/?${new URLSearchParams(params).toString()}`;
+    const queryParams = serializeQueryParams<GetPostsQueryParams>({
+      page: { limit, offset: (page - 1) * limit },
+      sort,
+    });
+    return `/?${new URLSearchParams(queryParams).toString()}`;
   };
 
   if (posts.length === 0) {
