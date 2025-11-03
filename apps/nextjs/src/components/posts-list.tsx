@@ -73,32 +73,34 @@ export async function PostsList({
       <ScrollArea className="flex-1 h-0">
         <div className="flex flex-col gap-4 pr-4 pb-4">
           {posts.map((post) => (
-            <Card key={post.id}>
-              <CardHeader>
-                <CardTitle className="text-xl">
-                  {post.attributes?.title || "Untitled"}
-                </CardTitle>
-                <CardDescription>
-                  {post.attributes?.created_at && (
-                    <>
-                      {new Date(
-                        post.attributes.created_at
-                      ).toLocaleDateString()}
-                    </>
-                  )}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="leading-normal text-sm text-gray-700">
-                  {post.attributes?.content ? (
-                    <>
-                      {post.attributes.content.substring(0, 200)}
-                      {post.attributes.content.length > 200 ? "..." : ""}
-                    </>
-                  ) : null}
-                </p>
-              </CardContent>
-            </Card>
+            <Link key={post.id} href={`/post/${post.id}`}>
+              <Card className="cursor-pointer hover:shadow-md transition-shadow">
+                <CardHeader>
+                  <CardTitle className="text-xl">
+                    {post.attributes?.title || "Untitled"}
+                  </CardTitle>
+                  <CardDescription>
+                    {post.attributes?.created_at && (
+                      <>
+                        {new Date(
+                          post.attributes.created_at
+                        ).toLocaleDateString()}
+                      </>
+                    )}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="leading-normal text-sm text-gray-700">
+                    {post.attributes?.content ? (
+                      <>
+                        {post.attributes.content.substring(0, 200)}
+                        {post.attributes.content.length > 200 ? "..." : ""}
+                      </>
+                    ) : null}
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
           ))}
         </div>
       </ScrollArea>
