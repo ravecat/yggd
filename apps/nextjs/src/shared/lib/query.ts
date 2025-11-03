@@ -1,28 +1,33 @@
-/**
- * Type representing Next.js searchParams structure
- */
-export type SearchParams = Record<string, string | string[] | undefined>;
+import type { SearchParams } from "../types/query";
 
 /**
  * Parses a flat object with bracket notation keys into a nested object structure.
  * 
+ * This function converts Next.js searchParams (with bracket notation) back into
+ * the original nested structure expected by the API, with type safety.
+ * 
  * Supports:
  * - Simple keys: { sort: "value" } → { sort: "value" }
- * - Nested keys: { "page[number]": "1" } → { page: { number: 1 } }
+ * - Nested keys: { "page[limit]": "10" } → { page: { limit: 10 } }
  * - Deep nesting: { "filter[title][contains]": "test" } → { filter: { title: { contains: "test" } } }
- * - Numeric conversion: { "page[number]": "5" } → { page: { number: 5 } }
+ * - Numeric conversion: { "page[limit]": "10" } → { page: { limit: 10 } }
  * - Arrays: { "tags[]": ["a", "b"] } → { tags: ["a", "b"] }
  * 
- * @param params - Flat object with bracket notation keys
- * @returns Nested object with parsed structure
+ * @template TQueryParams - Generated QueryParams type (e.g., GetPostsQueryParams)
+ * @param params - Flat object with bracket notation keys from Next.js searchParams
+ * @returns Parsed nested object structure matching TQueryParams (all fields optional)
  * 
  * @example
- * parseQueryParams({ "page[number]": "1", "page[size]": "10", "sort": "-created_at" })
- * // Returns: { page: { number: 1, size: 10 }, sort: "-created_at" }
+ * import type { GetPostsQueryParams } from "@yggd/shared";
+ * 
+ * const params = await searchParams;
+ * const parsed = parseQueryParams<GetPostsQueryParams>(params);
+ * // parsed.page is typed as { limit?: number; offset?: number; ... } | undefined
+ * // parsed.sort is typed as string | undefined
  */
-export function parseQueryParams<T = Record<string, unknown>>(
-  params: SearchParams
-): T {
+export function parseQueryParams<TQueryParams = Record<string, unknown>>(
+  params: SearchParams<TQueryParams>
+): Partial<TQueryParams> {
   const result: Record<string, unknown> = {};
 
   for (const [key, value] of Object.entries(params)) {
@@ -32,7 +37,7 @@ export function parseQueryParams<T = Record<string, unknown>>(
     setNestedValue(result, keys, value);
   }
 
-  return result as T;
+  return result as Partial<TQueryParams>;
 }
 
 /**

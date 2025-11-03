@@ -1,23 +1,22 @@
 import Link from "next/link";
 import { ArrowUpIcon, ArrowDownIcon } from "lucide-react";
 import { Button } from "@/shared/ui/button";
-import { POST_SORT_OPTIONS } from "../config/post-sort";
+import { POST_SORT_OPTIONS } from "../config/posts";
 import { parseQueryParams } from "@/shared/lib/query";
+import type { AsyncSearchParams } from "@/shared/types";
+import type { GetPostsQueryParams } from "@yggd/shared";
 
 export async function SortButtons({
   searchParams,
 }: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: AsyncSearchParams<GetPostsQueryParams>;
 }) {
   const params = await searchParams;
-  const { page, sort } = parseQueryParams(params) as {
-    page?: { limit?: number; offset?: number };
-    sort?: string;
-  };
+  const { page, sort } = parseQueryParams<GetPostsQueryParams>(params);
 
-  const limit = page?.limit ?? 10;
-  const offset = page?.offset ?? 0;
-  const currentSort = sort ?? "-created_at";
+  const limit = page!.limit!;
+  const offset = page!.offset!;
+  const currentSort = sort!;
 
   const sortFields = currentSort.split(",").map((field) => field.trim());
 
@@ -60,11 +59,11 @@ export async function SortButtons({
           ["page[limit]", String(limit)],
           ["page[offset]", String(offset)],
         ];
-        
+
         if (newSortValue) {
           params.push(["sort", newSortValue]);
         }
-        
+
         const href = `/?${new URLSearchParams(params).toString()}`;
 
         return (

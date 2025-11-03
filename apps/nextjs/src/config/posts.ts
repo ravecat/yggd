@@ -1,3 +1,9 @@
+export const POSTS_DEFAULT_PARAMS = {
+  limit: 10,
+  offset: 0,
+  sort: "-created_at",
+} as const;
+
 export const POST_SORT_OPTIONS = [
   {
     field: "created_at" as const,
