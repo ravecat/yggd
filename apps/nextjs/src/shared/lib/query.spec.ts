@@ -1,10 +1,10 @@
-import { parseQueryParams } from "./query";
+import { deserializeQueryParams, serializeQueryParams } from "./query";
 
-describe("parseQueryParams", () => {
+describe("deserializeQueryParams", () => {
   describe("simple keys", () => {
     test("parses simple string values", () => {
       const input = { sort: "-created_at", search: "test" };
-      const result = parseQueryParams(input);
+      const result = deserializeQueryParams(input);
 
       expect(result).toEqual({
         sort: "-created_at",
@@ -14,7 +14,7 @@ describe("parseQueryParams", () => {
 
     test("handles undefined values", () => {
       const input = { sort: "-created_at", search: undefined };
-      const result = parseQueryParams(input);
+      const result = deserializeQueryParams(input);
 
       expect(result).toEqual({
         sort: "-created_at",
@@ -23,7 +23,7 @@ describe("parseQueryParams", () => {
 
     test("converts numeric strings to numbers", () => {
       const input = { limit: "10", offset: "20" };
-      const result = parseQueryParams(input);
+      const result = deserializeQueryParams(input);
 
       expect(result).toEqual({
         limit: 10,
@@ -33,7 +33,7 @@ describe("parseQueryParams", () => {
 
     test("converts boolean strings to booleans", () => {
       const input = { active: "true", deleted: "false" };
-      const result = parseQueryParams(input);
+      const result = deserializeQueryParams(input);
 
       expect(result).toEqual({
         active: true,
@@ -48,7 +48,7 @@ describe("parseQueryParams", () => {
         "page[number]": "1",
         "page[size]": "10",
       };
-      const result = parseQueryParams(input);
+      const result = deserializeQueryParams(input);
 
       expect(result).toEqual({
         page: {
@@ -64,7 +64,7 @@ describe("parseQueryParams", () => {
         "page[number]": "1",
         "page[size]": "10",
       };
-      const result = parseQueryParams(input);
+      const result = deserializeQueryParams(input);
 
       expect(result).toEqual({
         sort: "-created_at",
@@ -82,7 +82,7 @@ describe("parseQueryParams", () => {
         "filter[title][contains]": "test",
         "filter[status][eq]": "published",
       };
-      const result = parseQueryParams(input);
+      const result = deserializeQueryParams(input);
 
       expect(result).toEqual({
         filter: {
@@ -100,7 +100,7 @@ describe("parseQueryParams", () => {
       const input = {
         "filter[author][name][like]": "John",
       };
-      const result = parseQueryParams(input);
+      const result = deserializeQueryParams(input);
 
       expect(result).toEqual({
         filter: {
@@ -120,7 +120,7 @@ describe("parseQueryParams", () => {
         "filter[title][contains]": "test",
         "filter[status][in]": "draft",
       };
-      const result = parseQueryParams(input);
+      const result = deserializeQueryParams(input);
 
       expect(result).toEqual({
         sort: "-created_at",
@@ -144,7 +144,7 @@ describe("parseQueryParams", () => {
       const input = {
         "tags[]": ["javascript", "typescript"],
       };
-      const result = parseQueryParams(input);
+      const result = deserializeQueryParams(input);
 
       expect(result).toEqual({
         tags: ["javascript", "typescript"],
@@ -155,7 +155,7 @@ describe("parseQueryParams", () => {
       const input = {
         "ids[]": ["1", "2", "3"],
       };
-      const result = parseQueryParams(input);
+      const result = deserializeQueryParams(input);
 
       expect(result).toEqual({
         ids: [1, 2, 3],
@@ -166,7 +166,7 @@ describe("parseQueryParams", () => {
       const input = {
         "values[]": ["true", "42", "text"],
       };
-      const result = parseQueryParams(input);
+      const result = deserializeQueryParams(input);
 
       expect(result).toEqual({
         values: [true, 42, "text"],
@@ -177,7 +177,7 @@ describe("parseQueryParams", () => {
   describe("edge cases", () => {
     test("handles empty string values", () => {
       const input = { search: "" };
-      const result = parseQueryParams(input);
+      const result = deserializeQueryParams(input);
 
       expect(result).toEqual({
         search: "",
@@ -186,7 +186,7 @@ describe("parseQueryParams", () => {
 
     test("handles empty object", () => {
       const input = {};
-      const result = parseQueryParams(input);
+      const result = deserializeQueryParams(input);
 
       expect(result).toEqual({});
     });
@@ -196,7 +196,7 @@ describe("parseQueryParams", () => {
         search: "hello@world.com",
         "filter[email][eq]": "test+tag@example.com",
       };
-      const result = parseQueryParams(input);
+      const result = deserializeQueryParams(input);
 
       expect(result).toEqual({
         search: "hello@world.com",
@@ -213,7 +213,7 @@ describe("parseQueryParams", () => {
         search: "hello world",
         "filter[title][contains]": "test value",
       };
-      const result = parseQueryParams(input);
+      const result = deserializeQueryParams(input);
 
       expect(result).toEqual({
         search: "hello world",
@@ -230,7 +230,7 @@ describe("parseQueryParams", () => {
         code: "123abc",
         "filter[id][eq]": "456def",
       };
-      const result = parseQueryParams(input);
+      const result = deserializeQueryParams(input);
 
       expect(result).toEqual({
         code: "123abc",
@@ -247,7 +247,7 @@ describe("parseQueryParams", () => {
         offset: "-10",
         "page[delta]": "-5",
       };
-      const result = parseQueryParams(input);
+      const result = deserializeQueryParams(input);
 
       expect(result).toEqual({
         offset: -10,
@@ -262,7 +262,7 @@ describe("parseQueryParams", () => {
         price: "19.99",
         "filter[rating][gte]": "4.5",
       };
-      const result = parseQueryParams(input);
+      const result = deserializeQueryParams(input);
 
       expect(result).toEqual({
         price: 19.99,
@@ -282,7 +282,7 @@ describe("parseQueryParams", () => {
         "page[size]": "25",
         "page[count]": "true",
       };
-      const result = parseQueryParams(input);
+      const result = deserializeQueryParams(input);
 
       expect(result).toEqual({
         page: {
@@ -298,7 +298,7 @@ describe("parseQueryParams", () => {
         "page[limit]": "10",
         "page[offset]": "20",
       };
-      const result = parseQueryParams(input);
+      const result = deserializeQueryParams(input);
 
       expect(result).toEqual({
         page: {
@@ -317,7 +317,7 @@ describe("parseQueryParams", () => {
         "filter[created_at][gte]": "2024-01-01",
         "filter[status][in]": "published",
       };
-      const result = parseQueryParams(input);
+      const result = deserializeQueryParams(input);
 
       expect(result).toEqual({
         sort: "-created_at,title",
@@ -344,7 +344,7 @@ describe("parseQueryParams", () => {
         "fields[post]": "title,content,created_at",
         "fields[user]": "name,email",
       };
-      const result = parseQueryParams(input);
+      const result = deserializeQueryParams(input);
 
       expect(result).toEqual({
         fields: {
@@ -352,6 +352,188 @@ describe("parseQueryParams", () => {
           user: "name,email",
         },
       });
+    });
+  });
+});
+
+describe("serializeQueryParams", () => {
+  describe("simple values", () => {
+    test("serializes simple string values", () => {
+      const result = serializeQueryParams({ sort: "title", search: "test" });
+
+      expect(result).toEqual([
+        ["sort", "title"],
+        ["search", "test"],
+      ]);
+    });
+
+    test("serializes numeric values", () => {
+      const result = serializeQueryParams({ limit: 10, offset: 20 });
+
+      expect(result).toEqual([
+        ["limit", "10"],
+        ["offset", "20"],
+      ]);
+    });
+
+    test("serializes boolean values", () => {
+      const result = serializeQueryParams({ active: true, deleted: false });
+
+      expect(result).toEqual([
+        ["active", "true"],
+        ["deleted", "false"],
+      ]);
+    });
+
+    test("skips undefined values", () => {
+      const result = serializeQueryParams({ sort: "title", search: undefined });
+
+      expect(result).toEqual([["sort", "title"]]);
+    });
+
+    test("skips null values", () => {
+      const result = serializeQueryParams({ sort: "title", search: null });
+
+      expect(result).toEqual([["sort", "title"]]);
+    });
+  });
+
+  describe("nested objects", () => {
+    test("serializes single-level nested objects", () => {
+      const result = serializeQueryParams({
+        page: { limit: 10, offset: 0 },
+      });
+
+      expect(result).toEqual([
+        ["page[limit]", "10"],
+        ["page[offset]", "0"],
+      ]);
+    });
+
+    test("serializes multi-level nested objects", () => {
+      const result = serializeQueryParams({
+        filter: { title: { contains: "test" } },
+      });
+
+      expect(result).toEqual([["filter[title][contains]", "test"]]);
+    });
+
+    test("serializes mixed simple and nested values", () => {
+      const result = serializeQueryParams({
+        page: { limit: 10, offset: 0 },
+        sort: "title",
+      });
+
+      expect(result).toEqual([
+        ["page[limit]", "10"],
+        ["page[offset]", "0"],
+        ["sort", "title"],
+      ]);
+    });
+  });
+
+  describe("arrays", () => {
+    test("serializes string arrays", () => {
+      const result = serializeQueryParams({
+        tags: ["typescript", "react"],
+      });
+
+      expect(result).toEqual([
+        ["tags[]", "typescript"],
+        ["tags[]", "react"],
+      ]);
+    });
+
+    test("serializes number arrays", () => {
+      const result = serializeQueryParams({
+        ids: [1, 2, 3],
+      });
+
+      expect(result).toEqual([
+        ["ids[]", "1"],
+        ["ids[]", "2"],
+        ["ids[]", "3"],
+      ]);
+    });
+
+    test("skips undefined and null values in arrays", () => {
+      const result = serializeQueryParams({
+        tags: ["a", undefined, "b", null, "c"],
+      });
+
+      expect(result).toEqual([
+        ["tags[]", "a"],
+        ["tags[]", "b"],
+        ["tags[]", "c"],
+      ]);
+    });
+  });
+
+  describe("round-trip conversion", () => {
+    test("parse -> serialize -> parse yields same result for simple values", () => {
+      const original = { sort: "title", limit: "10" };
+      const parsed = deserializeQueryParams(original);
+      const serialized = serializeQueryParams(parsed);
+      const reParsed = deserializeQueryParams(
+        Object.fromEntries(serialized) as Record<string, string>
+      );
+
+      expect(reParsed).toEqual(parsed);
+    });
+
+    test("parse -> serialize -> parse yields same result for nested objects", () => {
+      const original = { "page[limit]": "10", "page[offset]": "0" };
+      const parsed = deserializeQueryParams(original);
+      const serialized = serializeQueryParams(parsed);
+      const reParsed = deserializeQueryParams(
+        Object.fromEntries(serialized) as Record<string, string>
+      );
+
+      expect(reParsed).toEqual(parsed);
+    });
+
+    test("serialize -> parse yields correct structure", () => {
+      const original = {
+        page: { limit: 10, offset: 0 },
+        sort: "title",
+      };
+      const serialized = serializeQueryParams(original);
+      const parsed = deserializeQueryParams(
+        Object.fromEntries(serialized) as Record<string, string>
+      );
+
+      expect(parsed).toEqual(original);
+    });
+  });
+
+  describe("edge cases", () => {
+    test("handles empty object", () => {
+      const result = serializeQueryParams({});
+
+      expect(result).toEqual([]);
+    });
+
+    test("handles object with only undefined values", () => {
+      const result = serializeQueryParams({
+        sort: undefined,
+        search: undefined,
+      });
+
+      expect(result).toEqual([]);
+    });
+
+    test("handles deeply nested objects", () => {
+      const result = serializeQueryParams({
+        filter: {
+          user: {
+            profile: {
+              age: { gte: 18 },
+            },
+          },
+        },
+      });
+
+      expect(result).toEqual([["filter[user][profile][age][gte]", "18"]]);
     });
   });
 });

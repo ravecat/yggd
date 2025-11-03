@@ -1,7 +1,7 @@
 import type { SearchParams } from "../types/query";
 
 /**
- * Parses a flat object with bracket notation keys into a nested object structure.
+ * Deserializes a flat object with bracket notation keys into a nested object structure.
  * 
  * This function converts Next.js searchParams (with bracket notation) back into
  * the original nested structure expected by the API, with type safety.
@@ -15,17 +15,17 @@ import type { SearchParams } from "../types/query";
  * 
  * @template TQueryParams - Generated QueryParams type (e.g., GetPostsQueryParams)
  * @param params - Flat object with bracket notation keys from Next.js searchParams
- * @returns Parsed nested object structure matching TQueryParams (all fields optional)
+ * @returns Deserialized nested object structure matching TQueryParams (all fields optional)
  * 
  * @example
  * import type { GetPostsQueryParams } from "@yggd/shared";
  * 
  * const params = await searchParams;
- * const parsed = parseQueryParams<GetPostsQueryParams>(params);
+ * const parsed = deserializeQueryParams<GetPostsQueryParams>(params);
  * // parsed.page is typed as { limit?: number; offset?: number; ... } | undefined
  * // parsed.sort is typed as string | undefined
  */
-export function parseQueryParams<TQueryParams = Record<string, unknown>>(
+export function deserializeQueryParams<TQueryParams = Record<string, unknown>>(
   params: SearchParams<TQueryParams>
 ): Partial<TQueryParams> {
   const result: Record<string, unknown> = {};
@@ -147,4 +147,66 @@ function convertSingleValue(value: string): string | number | boolean {
   }
 
   return value;
+}
+
+/**
+ * Serializes a nested object structure into a flat array of key-value pairs
+ * with bracket notation, ready for URLSearchParams.
+ * 
+ * This is the inverse of deserializeQueryParams - converts typed query objects
+ * back into the flat format needed for URL construction.
+ * 
+ * Supports:
+ * - Simple keys: { sort: "value" } → [["sort", "value"]]
+ * - Nested objects: { page: { limit: 10 } } → [["page[limit]", "10"]]
+ * - Deep nesting: { filter: { title: { contains: "test" } } } → [["filter[title][contains]", "test"]]
+ * - Arrays: { tags: ["a", "b"] } → [["tags[]", "a"], ["tags[]", "b"]]
+ * - Skips undefined/null values
+ * 
+ * @template TQueryParams - Query params type (e.g., GetPostsQueryParams)
+ * @param params - Nested object structure to serialize
+ * @returns Array of [key, value] tuples for URLSearchParams
+ * 
+ * @example
+ * const params = serializeQueryParams({
+ *   page: { limit: 10, offset: 0 },
+ *   sort: "title"
+ * });
+ * // Returns: [["page[limit]", "10"], ["page[offset]", "0"], ["sort", "title"]]
+ * 
+ * const url = `/?${new URLSearchParams(params).toString()}`;
+ * // Results in: /?page[limit]=10&page[offset]=0&sort=title
+ */
+export function serializeQueryParams<TQueryParams = Record<string, unknown>>(
+  params: Partial<TQueryParams>
+): [string, string][] {
+  const result: [string, string][] = [];
+
+  function serialize(obj: unknown, prefix = ""): void {
+    if (obj === null || obj === undefined) {
+      return;
+    }
+
+    if (Array.isArray(obj)) {
+      obj.forEach((value) => {
+        if (value !== null && value !== undefined) {
+          result.push([`${prefix}[]`, String(value)]);
+        }
+      });
+      return;
+    }
+
+    if (typeof obj === "object") {
+      Object.entries(obj).forEach(([key, value]) => {
+        const newKey = prefix ? `${prefix}[${key}]` : key;
+        serialize(value, newKey);
+      });
+      return;
+    }
+
+    result.push([prefix, String(obj)]);
+  }
+
+  serialize(params);
+  return result;
 }
