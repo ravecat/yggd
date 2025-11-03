@@ -3,17 +3,13 @@ import { PostsList } from "../components/posts-list";
 import { PostsSkeleton } from "../components/posts-skeleton";
 import { SortButtons } from "../components/sort-buttons";
 import { SortButtonsSkeleton } from "../components/sort-buttons-skeleton";
-
-type PageSearchParams = {
-  "page[number]"?: string;
-  "page[size]"?: string;
-  sort?: string;
-};
+import type { AsyncSearchParams } from "@/shared/types";
+import type { GetPostsQueryParams } from "@yggd/shared";
 
 export default function Index({
   searchParams,
 }: {
-  searchParams: Promise<PageSearchParams>;
+  searchParams: AsyncSearchParams<GetPostsQueryParams>;
 }) {
   return (
     <div className="h-full flex flex-col">
