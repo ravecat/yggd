@@ -11,9 +11,10 @@ export type UtcDateTimeUsec = string;
 // User Schema
 export type UserResourceSchema = {
   __type: "Resource";
-  __primitiveFields: "id" | "email";
+  __primitiveFields: "id" | "email" | "name";
   id: UUID;
   email: string;
+  name: string | null;
   posts: { __type: "Relationship"; __array: true; __resource: PostResourceSchema; };
 };
 
@@ -52,6 +53,12 @@ export type UserFilterInput = {
   };
 
   email?: {
+    eq?: string;
+    notEq?: string;
+    in?: Array<string>;
+  };
+
+  name?: {
     eq?: string;
     notEq?: string;
     in?: Array<string>;
