@@ -43,6 +43,13 @@ defmodule AshFramework.Accounts.User do
 
         sender AshFramework.Accounts.User.Senders.SendMagicLinkEmail
       end
+
+      google do
+        client_id AshFramework.Secrets
+        client_secret AshFramework.Secrets
+        redirect_uri AshFramework.Secrets
+        identity_resource AshFramework.Accounts.UserIdentity
+      end
     end
   end
 
@@ -100,6 +107,32 @@ defmodule AshFramework.Accounts.User do
 
       run AshAuthentication.Strategy.MagicLink.Request
     end
+
+    create :register_with_google do
+      description "Register or sign in with Google OAuth"
+
+      argument :user_info, :map, allow_nil?: false
+      argument :oauth_tokens, :map, allow_nil?: false
+
+      upsert? true
+      upsert_identity :unique_email
+      upsert_fields [:email, :name]
+
+      change fn changeset, _ ->
+        user_info = Ash.Changeset.get_argument(changeset, :user_info)
+
+        changeset
+        |> Ash.Changeset.change_attribute(:email, user_info["email"])
+        |> Ash.Changeset.change_attribute(:name, user_info["name"])
+      end
+
+      change AshAuthentication.GenerateTokenChange
+      change AshAuthentication.Strategy.OAuth2.IdentityChange
+
+      metadata :token, :string do
+        allow_nil? false
+      end
+    end
   end
 
   policies do
@@ -119,11 +152,20 @@ defmodule AshFramework.Accounts.User do
       allow_nil? false
       public? true
     end
+
+    attribute :name, :string do
+      public? true
+    end
   end
 
   relationships do
     has_many :posts, AshFramework.Blog.Post do
       destination_attribute :author_id
+      public? true
+    end
+
+    has_many :identities, AshFramework.Accounts.UserIdentity do
+      destination_attribute :user_id
       public? true
     end
   end

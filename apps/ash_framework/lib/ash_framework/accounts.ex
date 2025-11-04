@@ -17,5 +17,6 @@ defmodule AshFramework.Accounts do
   resources do
     resource AshFramework.Accounts.Token
     resource AshFramework.Accounts.User
+    resource AshFramework.Accounts.UserIdentity
   end
 end

@@ -1,4 +1,5 @@
 import Config
+import Dotenvy
 
 # config/runtime.exs is executed for all environments, including
 # during releases. It is executed after compilation and before the
@@ -6,6 +7,19 @@ import Config
 # and secrets from environment variables or elsewhere. Do not define
 # any compile-time configuration in here, as it won't be applied.
 # The block below contains prod specific runtime configuration.
+
+env_dir_prefix = System.get_env("RELEASE_ROOT") || File.cwd!()
+
+source!([
+  Path.absname(".env", env_dir_prefix),
+  Path.absname(".#{config_env()}.env", env_dir_prefix),
+  System.get_env()
+])
+
+config :ash_framework, :oauth,
+  google_client_id: env!("GOOGLE_CLIENT_ID", :string!),
+  google_client_secret: env!("GOOGLE_CLIENT_SECRET", :string!),
+  google_redirect_uri: env!("GOOGLE_REDIRECT_URI", :string!, "")
 
 # ## Using releases
 #
