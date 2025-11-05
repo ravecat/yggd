@@ -16,7 +16,8 @@ defmodule AshFramework.Application do
       # {AshFramework.Worker, arg},
       # Start to serve requests, typically the last entry
       AshFrameworkWeb.Endpoint,
-      {AshAuthentication.Supervisor, [otp_app: :ash_framework]}
+      {AshAuthentication.Supervisor, [otp_app: :ash_framework]},
+      AshFramework.Auth.ExchangeCodeStore
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
