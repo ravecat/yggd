@@ -3,6 +3,8 @@ defmodule AshFrameworkWeb.AuthController do
   use AshAuthentication.Phoenix.Controller
   require Logger
 
+  alias AshFramework.Auth.ExchangeCodeStore
+
   def success(conn, {:google, :callback}, _user, token) when not is_nil(token) do
     case get_session(conn, :federated_auth_redirect_uri) do
       nil ->
@@ -12,8 +14,11 @@ defmodule AshFrameworkWeb.AuthController do
         |> json(%{error: "Authentication flow error: missing redirect_uri"})
 
       redirect_uri ->
-        callback_url = build_callback_url(redirect_uri, token)
-        Logger.info("Federated auth success, redirecting to: #{callback_url}")
+        # Create short-lived exchange code instead of passing token in URL
+        exchange_code = ExchangeCodeStore.create(token)
+        callback_url = build_callback_url(redirect_uri, exchange_code)
+
+        Logger.info("Federated auth success, redirecting with code to: #{callback_url}")
 
         conn
         |> delete_session(:federated_auth_redirect_uri)
@@ -72,7 +77,50 @@ defmodule AshFrameworkWeb.AuthController do
     |> redirect(to: return_to)
   end
 
-  defp build_callback_url(base_uri, token) do
+  @doc """
+  Exchanges authorization code for JWT token.
+
+  This endpoint is called by Next.js server after receiving the code in callback URL.
+  The code is single-use and expires after 60 seconds.
+
+  ## Request
+
+  POST /api/auth/exchange
+  Body: {"code": "abc123..."}
+
+  ## Response
+
+  Success: {"token": "eyJhbGc..."}
+  Error: {"error": "Invalid or already used code"}
+  """
+  def exchange(conn, %{"code" => code}) when is_binary(code) do
+    case ExchangeCodeStore.exchange(code) do
+      {:ok, token} ->
+        Logger.info("Successfully exchanged code for token")
+        json(conn, %{token: token})
+
+      {:error, :invalid_code} ->
+        Logger.warning("Invalid or already used exchange code")
+        conn
+        |> put_status(:bad_request)
+        |> json(%{error: "Invalid or already used code"})
+
+      {:error, :expired} ->
+        Logger.warning("Expired exchange code")
+        conn
+        |> put_status(:bad_request)
+        |> json(%{error: "Code has expired"})
+    end
+  end
+
+  def exchange(conn, _params) do
+    Logger.warning("Exchange endpoint called without code parameter")
+    conn
+    |> put_status(:bad_request)
+    |> json(%{error: "Missing code parameter"})
+  end
+
+  defp build_callback_url(base_uri, code) do
     uri = URI.parse(base_uri)
 
     existing_params =
@@ -82,7 +130,8 @@ defmodule AshFrameworkWeb.AuthController do
         %{}
       end
 
-    new_params = Map.put(existing_params, "token", token)
+    # Pass code instead of token for security
+    new_params = Map.put(existing_params, "code", code)
 
     %{uri | query: URI.encode_query(new_params)}
     |> URI.to_string()
