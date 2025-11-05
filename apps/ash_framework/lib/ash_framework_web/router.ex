@@ -38,6 +38,12 @@ defmodule AshFrameworkWeb.Router do
     forward "/", AshFrameworkWeb.AshJsonApiRouter
   end
 
+  scope "/auth", AshFrameworkWeb do
+    pipe_through [:api]
+
+    post "/exchange", AuthController, :exchange
+  end
+
   scope "/rpc", AshFrameworkWeb do
     pipe_through :rpc
 
