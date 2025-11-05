@@ -12,6 +12,7 @@ defmodule AshFrameworkWeb.Router do
     plug :put_root_layout, html: {AshFrameworkWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug AshFrameworkWeb.Plugs.FederatedAuthRedirect
     plug :load_from_session
   end
 

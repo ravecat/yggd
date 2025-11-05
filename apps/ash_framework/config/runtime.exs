@@ -21,6 +21,16 @@ config :ash_framework, :oauth,
   google_client_secret: env!("GOOGLE_CLIENT_SECRET", :string!),
   google_redirect_uri: env!("GOOGLE_REDIRECT_URI", :string!, "")
 
+# Federated Authentication redirect whitelist
+redirect_whitelist =
+  env!("FEDERATED_AUTH_REDIRECT_WHITELIST", :string!)
+  |> String.split(",")
+  |> Enum.map(&String.trim/1)
+  |> Enum.reject(&(&1 == ""))
+
+config :ash_framework, :federated_auth,
+  redirect_whitelist: redirect_whitelist
+
 # ## Using releases
 #
 # If you use `mix release`, you need to explicitly enable the server
