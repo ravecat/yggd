@@ -1,16 +1,21 @@
 defmodule AshFrameworkWeb.Plugs.FederatedAuthRedirect do
   @moduledoc """
-  Captures and validates client redirect_uri parameter for federated authentication flows.
+  Captures and validates client redirect_uri and PKCE parameters for federated authentication flows.
 
   This plug intercepts federated auth initiation requests (e.g., /auth/user/google)
-  and stores the validated redirect_uri in the session for use after authentication callback.
+  and stores the validated redirect_uri and PKCE code_challenge in the session for use after authentication callback.
 
   ## Flow
 
-  1. Client initiates auth: GET /auth/user/google?redirect_uri=https://client.com/callback
-  2. Plug validates redirect_uri against whitelist
-  3. Stores in session
-  4. After OAuth callback, AuthController retrieves redirect_uri and redirects client
+  1. Client initiates auth: GET /auth/user/google?redirect_uri=https://client.com/callback&code_challenge=ABC&code_challenge_method=S256
+  2. Plug validates redirect_uri against whitelist and PKCE parameters
+  3. Stores redirect_uri and code_challenge in session
+  4. After OAuth callback, AuthController uses code_challenge when creating exchange code
+
+  ## PKCE Security
+
+  PKCE (Proof Key for Code Exchange) protects against authorization code interception attacks.
+  The code_challenge is stored and later validated against code_verifier during token exchange.
 
   ## Configuration
 
@@ -20,6 +25,7 @@ defmodule AshFrameworkWeb.Plugs.FederatedAuthRedirect do
         redirect_whitelist: ["localhost:*", "*.example.com", "app.mycompany.com"]
 
   The redirect_uri is stored in session under the `:federated_auth_redirect_uri` key.
+  The code_challenge is stored in session under the `:pkce_code_challenge` key.
 
   ## Wildcard Patterns
 
@@ -49,15 +55,39 @@ defmodule AshFrameworkWeb.Plugs.FederatedAuthRedirect do
   defp federated_auth_initiation?(_conn), do: false
 
   defp handle_federated_auth(conn) do
-    case extract_redirect_uri(conn) do
-      {:ok, redirect_uri} ->
-        validate_and_store(conn, redirect_uri)
-
-      :none ->
+    with {:ok, redirect_uri} <- extract_redirect_uri(conn),
+         {:ok, code_challenge} <- extract_pkce_params(conn),
+         :ok <- validate_redirect_uri(redirect_uri) do
+      Logger.debug("Storing redirect_uri and PKCE challenge in session")
+      conn
+      |> put_session(:federated_auth_redirect_uri, redirect_uri)
+      |> put_session(:pkce_code_challenge, code_challenge)
+    else
+      {:error, :missing_redirect_uri} ->
         Logger.warning("Missing redirect_uri for federated auth request: #{conn.request_path}")
         conn
         |> put_status(:bad_request)
         |> Phoenix.Controller.json(%{error: "redirect_uri parameter is required"})
+        |> halt()
+
+      {:error, :missing_code_challenge} ->
+        Logger.warning("Missing code_challenge for federated auth request: #{conn.request_path}")
+        conn
+        |> put_status(:bad_request)
+        |> Phoenix.Controller.json(%{
+          error: "code_challenge parameter is required",
+          details: "PKCE is required for federated authentication"
+        })
+        |> halt()
+
+      {:error, :invalid_redirect_uri} ->
+        Logger.warning("Invalid redirect_uri rejected: #{inspect(conn.params["redirect_uri"])}")
+        conn
+        |> put_status(:bad_request)
+        |> Phoenix.Controller.json(%{
+          error: "Invalid redirect_uri",
+          details: "The provided redirect_uri is not in the allowed whitelist"
+        })
         |> halt()
     end
   end
@@ -65,23 +95,25 @@ defmodule AshFrameworkWeb.Plugs.FederatedAuthRedirect do
   defp extract_redirect_uri(conn) do
     case Map.get(conn.params, "redirect_uri") do
       uri when is_binary(uri) and uri != "" -> {:ok, uri}
-      _ -> :none
+      _ -> {:error, :missing_redirect_uri}
     end
   end
 
-  defp validate_and_store(conn, redirect_uri) do
-    if valid_redirect_uri?(redirect_uri) do
-      Logger.debug("Storing redirect_uri in session: #{redirect_uri}")
-      put_session(conn, :federated_auth_redirect_uri, redirect_uri)
+  defp extract_pkce_params(conn) do
+    code_challenge = Map.get(conn.params, "code_challenge")
+
+    if is_nil(code_challenge) or code_challenge == "" do
+      {:error, :missing_code_challenge}
     else
-      Logger.warning("Invalid redirect_uri rejected: #{redirect_uri}")
-      conn
-      |> put_status(:bad_request)
-      |> Phoenix.Controller.json(%{
-        error: "Invalid redirect_uri",
-        details: "The provided redirect_uri is not in the allowed whitelist"
-      })
-      |> halt()
+      {:ok, code_challenge}
+    end
+  end
+
+  defp validate_redirect_uri(redirect_uri) do
+    if valid_redirect_uri?(redirect_uri) do
+      :ok
+    else
+      {:error, :invalid_redirect_uri}
     end
   end
 
