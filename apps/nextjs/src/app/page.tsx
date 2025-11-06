@@ -21,7 +21,11 @@ export default function Index({
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-2xl text-gray-900">Latest Posts</h1>
           <div className="flex gap-3">
-            <Suspense fallback={<div className="h-10 w-40 animate-pulse bg-gray-200 rounded-md" />}>
+            <Suspense
+              fallback={
+                <div className="h-10 w-40 animate-pulse bg-gray-200 rounded-md" />
+              }
+            >
               <SignIn />
             </Suspense>
             <Link href="/post/create">

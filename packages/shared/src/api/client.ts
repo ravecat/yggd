@@ -123,7 +123,7 @@ export class ValidationError extends Error {
 }
 
 export const axiosInstance = axios.create({
-  baseURL: process.env.PUBLIC_API_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_URL || process.env.NEXTJS_API_URL || 'http://localhost:4000/api',
   headers: {
     'Accept': 'application/vnd.api+json',
     'Content-Type': 'application/vnd.api+json',

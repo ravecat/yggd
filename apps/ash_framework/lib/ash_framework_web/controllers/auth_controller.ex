@@ -1,27 +1,34 @@
 defmodule AshFrameworkWeb.AuthController do
   use AshFrameworkWeb, :controller
   use AshAuthentication.Phoenix.Controller
+
   require Logger
 
   alias AshFramework.Auth.ExchangeCodeStore
 
   def success(conn, {:google, :callback}, _user, token) when not is_nil(token) do
-    case get_session(conn, :federated_auth_redirect_uri) do
-      nil ->
+    case {get_session(conn, :federated_auth_redirect_uri), get_session(conn, :pkce_code_challenge)} do
+      {nil, _} ->
         Logger.error("Missing redirect_uri in session after federated auth")
         conn
         |> put_status(:internal_server_error)
         |> json(%{error: "Authentication flow error: missing redirect_uri"})
 
-      redirect_uri ->
-        # Create short-lived exchange code instead of passing token in URL
-        exchange_code = ExchangeCodeStore.create(token)
+      {_, nil} ->
+        Logger.error("Missing code_challenge in session after federated auth")
+        conn
+        |> put_status(:internal_server_error)
+        |> json(%{error: "Authentication flow error: missing PKCE challenge"})
+
+      {redirect_uri, code_challenge} ->
+        exchange_code = ExchangeCodeStore.create(token, code_challenge)
         callback_url = build_callback_url(redirect_uri, exchange_code)
 
         Logger.info("Federated auth success, redirecting with code to: #{callback_url}")
 
         conn
         |> delete_session(:federated_auth_redirect_uri)
+        |> delete_session(:pkce_code_challenge)
         |> redirect(external: callback_url)
     end
   end
@@ -82,19 +89,11 @@ defmodule AshFrameworkWeb.AuthController do
 
   This endpoint is called by Next.js server after receiving the code in callback URL.
   The code is single-use and expires after 60 seconds.
-
-  ## Request
-
-  POST /api/auth/exchange
-  Body: {"code": "abc123..."}
-
-  ## Response
-
-  Success: {"token": "eyJhbGc..."}
-  Error: {"error": "Invalid or already used code"}
+  PKCE validation is performed to ensure the code was not intercepted.
   """
-  def exchange(conn, %{"code" => code}) when is_binary(code) do
-    case ExchangeCodeStore.exchange(code) do
+  def exchange(conn, %{"code" => code, "code_verifier" => code_verifier})
+      when is_binary(code) and is_binary(code_verifier) do
+    case ExchangeCodeStore.exchange(code, code_verifier) do
       {:ok, token} ->
         Logger.info("Successfully exchanged code for token")
         json(conn, %{token: token})
@@ -110,7 +109,20 @@ defmodule AshFrameworkWeb.AuthController do
         conn
         |> put_status(:bad_request)
         |> json(%{error: "Code has expired"})
+
+      {:error, :invalid_verifier} ->
+        Logger.warning("Invalid PKCE verifier")
+        conn
+        |> put_status(:unauthorized)
+        |> json(%{error: "Invalid PKCE verifier"})
     end
+  end
+
+  def exchange(conn, %{"code" => _code}) do
+    Logger.warning("Exchange endpoint called without code_verifier parameter")
+    conn
+    |> put_status(:bad_request)
+    |> json(%{error: "Missing code_verifier parameter"})
   end
 
   def exchange(conn, _params) do
