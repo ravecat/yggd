@@ -2,7 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { postPosts, ValidationError } from "@yggd/shared";
+import { postPosts } from "@yggd/shared";
+import { assigns } from "@/shared/lib/session";
 
 export type CreatePostState = {
   errors?: {
@@ -17,36 +18,19 @@ export async function createPost(
   _prevState: CreatePostState,
   formData: FormData
 ): Promise<CreatePostState> {
-  const title = formData.get("title") as string;
-  const content = formData.get("content") as string;
+  const session = await assigns();
 
-  try {
-    await postPosts({
-      data: {
-        type: "post",
-        attributes: {
-          title,
-          content,
-          author_id: "",
-        },
+  await postPosts({
+    data: {
+      type: "post",
+      attributes: {
+        title: formData.get("title") as string,
+        content: formData.get("content") as string,
+        author_id: session.userId!,
       },
-    });
+    },
+  });
 
-    revalidatePath("/");
-    redirect("/");
-  } catch (error) {
-    if (error instanceof ValidationError) {
-      return {
-        errors: error.traverseErrors(['title', 'content']),
-      };
-    }
-
-    return {
-      errors: {
-        general: [
-          error instanceof Error ? error.message : "Failed to create post",
-        ],
-      },
-    };
-  }
+  revalidatePath("/");
+  redirect("/");
 }
