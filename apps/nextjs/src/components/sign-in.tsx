@@ -1,12 +1,12 @@
 import { LogIn, LogOut } from "lucide-react";
 import { Button } from "@/shared/ui/button";
-import { verifySession } from "@/shared/lib/session";
+import { assigns } from "@/shared/lib/session";
 import { signup, signout } from "@/app/actions/auth";
 
 export async function SignIn() {
-  const { isAuthenticated } = await verifySession();
+  const { userId } = await assigns();
 
-  if (isAuthenticated) {
+  if (userId) {
     return (
       <form action={signout}>
         <Button type="submit" variant="outline">
