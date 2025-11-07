@@ -1,11 +1,12 @@
 import Link from "next/link";
-import { ArrowUpIcon, ArrowDownIcon } from "lucide-react";
+import { ArrowUpIcon, ArrowDownIcon, PlusIcon } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import { POST_SORT_OPTIONS } from "../config/posts";
 import {
   deserializeQueryParams,
   serializeQueryParams,
 } from "@/shared/lib/query";
+import { assigns } from "@/shared/lib/session";
 import type { AsyncSearchParams } from "@/shared/types";
 import type { GetPostsQueryParams } from "@yggd/shared";
 
@@ -16,6 +17,7 @@ export async function SortButtons({
 }) {
   const params = await searchParams;
   const { page, sort } = deserializeQueryParams<GetPostsQueryParams>(params);
+  const { userId } = await assigns();
 
   const limit = page!.limit!;
   const offset = page!.offset!;
@@ -45,6 +47,14 @@ export async function SortButtons({
 
   return (
     <div className="flex gap-2 mb-6">
+      {userId && (
+        <Link href="/post/create">
+          <Button size="sm" className="w-48">
+            <PlusIcon className="h-4 w-4 mr-2" />
+            Create Post
+          </Button>
+        </Link>
+      )}
       {POST_SORT_OPTIONS.map((option) => {
         const asc = option.field;
         const desc = `-${option.field}`;
