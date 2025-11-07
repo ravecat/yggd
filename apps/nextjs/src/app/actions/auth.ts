@@ -32,9 +32,12 @@ export async function signup() {
 
 export async function signout() {
   const cookieStore = await cookies();
+  cookieStore.delete('auth_token');
 
-  cookieStore.set('auth_token', '', { expires: new Date(0) });
-  redirect('/');
+  (async () => {
+    "use server";
+    redirect("/");
+  })();
 }
 
 export async function exchangeCodeForToken(code: string): Promise<string> {
