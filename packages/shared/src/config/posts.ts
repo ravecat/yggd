@@ -30,3 +30,4 @@ export const POSTS_CONFIG = {
 
 export type PostSortOption = (typeof POSTS_CONFIG.sort.options)[number];
 export type PostSortField = PostSortOption["field"];
+export type PostSortConfig = typeof POSTS_CONFIG.sort;
