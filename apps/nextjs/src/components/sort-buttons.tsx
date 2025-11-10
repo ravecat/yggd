@@ -1,14 +1,14 @@
 import Link from "next/link";
 import { ArrowUpIcon, ArrowDownIcon, PlusIcon } from "lucide-react";
 import { Button } from "@/shared/ui/button";
-import { POSTS_CONFIG } from "@yggd/shared";
 import {
+  POSTS_CONFIG,
   deserializeQueryParams,
   serializeQueryParams,
-} from "@/shared/lib/query";
+  type GetPostsQueryParams,
+} from "@yggd/shared";
 import { assigns } from "@/shared/lib/session";
 import type { AsyncSearchParams } from "@/shared/types";
-import type { GetPostsQueryParams } from "@yggd/shared";
 
 export async function SortButtons({
   searchParams,
