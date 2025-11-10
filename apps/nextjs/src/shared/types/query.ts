@@ -1,36 +1,9 @@
+import type { FlattenToBracketNotation } from "@yggd/shared";
+
 /**
  * Type utilities for converting JSON:API QueryParams to Next.js searchParams format
  * with bracket notation support.
  */
-
-/**
- * Utility type that recursively flattens nested object keys into bracket notation.
- * Converts structures like `{ page: { limit: number } }` into `{ "page[limit]": string }`.
- * 
- * This type handles:
- * - Primitives (string, number, boolean) - kept as-is
- * - Nested objects - converted to bracket notation
- * - Deep nesting - recursively processed
- * - Optional fields - preserved
- * 
- * @example
- * type Input = { page: { limit: number; offset: number }; sort: string };
- * type Output = FlattenToBracketNotation<Input>;
- * // Result: { "page[limit]": string; "page[offset]": string; sort: string }
- */
-type FlattenToBracketNotation<T> = {
-  [K in keyof T as K extends string
-    ? T[K] extends Record<string, any>
-      ? T[K] extends any[]
-        ? K
-        : `${K}[${Extract<keyof T[K], string>}]` | K
-      : K
-    : never]: T[K] extends Record<string, any>
-    ? T[K] extends any[]
-      ? string | string[] | undefined
-      : string | string[] | undefined
-    : string | string[] | undefined;
-};
 
 /**
  * Generic type for Next.js searchParams that accepts generated QueryParams types.

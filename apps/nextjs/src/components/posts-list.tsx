@@ -1,4 +1,9 @@
-import { getPosts } from "@yggd/shared";
+import {
+  getPosts,
+  deserializeQueryParams,
+  serializeQueryParams,
+  type GetPostsQueryParams,
+} from "@yggd/shared";
 import Link from "next/link";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { ScrollArea } from "@/shared/ui/scroll-area";
@@ -17,9 +22,7 @@ import {
 import { buttonVariants } from "@/shared/ui/button";
 import { cn } from "@/shared/lib/component";
 import { generatePageNumbers } from "@/shared/lib/pagination";
-import { deserializeQueryParams, serializeQueryParams } from "@/shared/lib/query";
 import type { AsyncSearchParams } from "@/shared/types";
-import type { GetPostsQueryParams } from "@yggd/shared";
 
 type PostsResponseWithMeta = Awaited<ReturnType<typeof getPosts>> & {
   meta?: {
