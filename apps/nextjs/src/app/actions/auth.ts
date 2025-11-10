@@ -33,11 +33,7 @@ export async function signup() {
 export async function signout() {
   const cookieStore = await cookies();
   cookieStore.delete('auth_token');
-
-  (async () => {
-    "use server";
-    redirect("/");
-  })();
+  redirect("/");
 }
 
 export async function exchangeCodeForToken(code: string): Promise<string> {
