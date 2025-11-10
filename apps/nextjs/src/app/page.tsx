@@ -1,11 +1,11 @@
 import { Suspense } from "react";
 import { PostsList } from "../components/posts-list";
 import { PostsSkeleton } from "../components/posts-skeleton";
-import { SortButtons } from "../components/sort-buttons";
-import { SortButtonsSkeleton } from "../components/sort-buttons-skeleton";
+import { ControlPanel } from "../components/control-panel";
+import { ControlPanelSkeleton } from "../components/control-panel-skeleton";
 import { SignIn } from "../components/sign-in";
 import type { AsyncSearchParams } from "@/shared/types";
-import type { GetPostsQueryParams } from "@yggd/shared";
+import { POSTS_CONFIG, type GetPostsQueryParams } from "@yggd/shared";
 
 export default function Index({
   searchParams,
@@ -25,8 +25,8 @@ export default function Index({
           </Suspense>
         </div>
 
-        <Suspense fallback={<SortButtonsSkeleton />}>
-          <SortButtons searchParams={searchParams} />
+        <Suspense fallback={<ControlPanelSkeleton />}>
+          <ControlPanel searchParams={searchParams} config={POSTS_CONFIG} />
         </Suspense>
 
         <Suspense fallback={<PostsSkeleton />}>
