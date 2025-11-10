@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowUpIcon, ArrowDownIcon, PlusIcon } from "lucide-react";
 import { Button } from "@/shared/ui/button";
-import { POST_SORT_OPTIONS } from "../config/posts";
+import { POSTS_CONFIG } from "@yggd/shared";
 import {
   deserializeQueryParams,
   serializeQueryParams,
@@ -55,7 +55,7 @@ export async function SortButtons({
           </Button>
         </Link>
       )}
-      {POST_SORT_OPTIONS.map((option) => {
+      {POSTS_CONFIG.sort.options.map((option) => {
         const asc = option.field;
         const desc = `-${option.field}`;
 
