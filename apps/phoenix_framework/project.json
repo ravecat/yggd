@@ -7,8 +7,9 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "iex -S mix phx.server",
-        "cwd": "apps/phoenix_framework"
+        "command": "mix phx.server",
+        "cwd": "apps/phoenix_framework",
+        "color": true
       },
       "dependsOn": ["setup"]
     },

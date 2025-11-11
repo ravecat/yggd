@@ -53,11 +53,10 @@
     },
     "test": {
       "cache": true,
-      "dependsOn": [
-        "^build"
-      ]
+      "dependsOn": ["^build"]
     }
   },
+  "parallel": 4,
   "generators": {
     "@nx/next": {
       "application": {

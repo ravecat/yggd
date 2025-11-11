@@ -7,7 +7,7 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "iex -S mix phx.server",
+        "command": "mix phx.server",
         "cwd": "apps/ash_framework"
       },
       "dependsOn": ["setup"]
@@ -15,7 +15,11 @@
     "setup": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["mix deps.get", "mix ash.setup"],
+        "commands": [
+          "mix deps.get",
+          "cd assets && npm install",
+          "mix ash.setup"
+        ],
         "cwd": "apps/ash_framework",
         "parallel": false
       }
