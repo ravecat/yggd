@@ -11,6 +11,13 @@ dist/
 .env.local
 .env*.local
 
+# Elixir
+_build/
+deps/
+*.beam
+*.ez
+priv/static/
+
 .nx
 context_portal/
 
