@@ -9,8 +9,37 @@
 Yggd is a polyglot monorepo managed by [Nx](https://nx.dev) that combines multiple technologies:
 
 - **Next.js** (TypeScript/React) - Frontend application
-- **Phoenix** (Elixir/Ash Framework) - Backend API
+- **Ash Framework** (Elixir/Phoenix) - JSON:API backend with declarative resources
+- **Phoenix Framework** (Elixir) - Traditional Phoenix backend application
 - **Shared packages** - Common utilities and types
+
+## Applications
+
+### apps/nextjs
+
+Frontend application built with Next.js 15, TypeScript, and React.
+
+- **Port**: 3000
+- **Tech**: Next.js, TypeScript, React, Tailwind CSS
+- **Purpose**: User-facing web application
+
+### apps/ash_framework
+
+Backend API with Ash Framework providing JSON:API endpoints.
+
+- **Port**: 4000
+- **Tech**: Elixir, Phoenix, Ash Framework, PostgreSQL
+- **Purpose**: Declarative resource-based API with auto-generated admin
+
+### apps/phoenix_framework
+
+Traditional Phoenix application for channel logic.
+
+- **Port**: 4001
+- **Tech**: Elixir, Phoenix, Ecto, PostgreSQL
+- **Purpose**: Standard Phoenix development patterns
+
+See [docs/applications-comparison.md](docs/applications-comparison.md) for detailed comparison.
 
 ## Prerequisites
 
@@ -34,9 +63,10 @@ npm install
 # Install Nx CLI globally (optional, but recommended)
 npm install -g nx
 
-# Setup backend
+# Setup backend (choose one or both)
 # Make sure PostgreSQL is running
 nx run ash_framework:setup
+nx run phoenix_framework:setup
 
 # Seed the database (optional)
 nx run ash_framework:seed
@@ -55,8 +85,9 @@ nx run-many -t serve --tui
 
 # Or start applications individually:
 
-nx run nextjs:serve
-nx run ash_framework:serve
+nx run nextjs:serve             # http://localhost:3000
+nx run ash_framework:serve      # http://localhost:4000
+nx run phoenix_framework:serve  # http://localhost:4001
 ```
 
 ## Nx Commands
@@ -91,6 +122,7 @@ Each project defines its available commands (targets) in `project.json`:
 
 - `/apps/nextjs/project.json` - Next.js application targets
 - `/apps/ash_framework/project.json` - Ash Framework application targets
+- `/apps/phoenix_framework/project.json` - Phoenix Framework application targets
 - `/packages/shared/project.json` - Shared package targets
 
 ## Useful Resources
