@@ -64,11 +64,5 @@
         "linter": "eslint"
       }
     }
-  },
-  "nxIgnore": [
-    "apps/ash_framework/assets/**",
-    "apps/ash_framework/_build/**",
-    "apps/ash_framework/deps/**",
-    "apps/ash_framework/priv/**"
-  ]
+  }
 }
