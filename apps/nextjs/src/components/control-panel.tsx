@@ -98,7 +98,7 @@ export async function ControlPanel({ searchParams, config }: ControlPanelProps) 
   });
 
   return (
-    <div className="flex gap-2 mb-6">
+    <div className="flex gap-2">
       {userId && (
         <Link href="/post/create">
           <Button size="sm" className="w-48">
