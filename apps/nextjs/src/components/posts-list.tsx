@@ -72,9 +72,9 @@ export async function PostsList({
   }
 
   return (
-    <div className="flex-1 flex flex-col min-h-0">
+    <div className="flex-1 flex flex-col min-h-0 gap-2">
       <ScrollArea className="flex-1 h-0">
-        <div className="flex flex-col gap-4 pr-4 pb-4">
+        <div className="flex flex-col gap-4">
           {posts.map((post) => (
             <Link key={post.id} href={`/post/${post.id}`}>
               <Card className="cursor-pointer hover:shadow-md transition-shadow">
