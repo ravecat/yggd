@@ -9,6 +9,7 @@
     "module": "esnext",
     "moduleResolution": "bundler",
     "forceConsistentCasingInFileNames": true,
+    "lib": ["ES2020", "DOM"],
     "types": [
       "node"
     ]

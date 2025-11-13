@@ -1,4 +1,5 @@
 import "../shared/global.css";
+import { Socket } from "../shared/contexts/socket";
 
 export const metadata = {
   title: "Welcome to nextjs",
@@ -15,8 +16,10 @@ export default function Layout({
   return (
     <html lang="en">
       <body>
-        {children}
-        {modal}
+        <Socket>
+          {children}
+          {modal}
+        </Socket>
       </body>
     </html>
   );
