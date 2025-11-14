@@ -65,7 +65,9 @@ defmodule PhoenixFramework.MixProject do
       {:gettext, "~> 0.26"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.2.0"},
-      {:bandit, "~> 1.5"}
+      {:bandit, "~> 1.5"},
+      {:y_ex, "~> 0.6"},
+      {:repatch, "~> 1.5", only: :test}
     ]
   end
 

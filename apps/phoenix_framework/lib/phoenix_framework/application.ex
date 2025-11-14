@@ -12,6 +12,8 @@ defmodule PhoenixFramework.Application do
       PhoenixFramework.Repo,
       {DNSCluster, query: Application.get_env(:phoenix_framework, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: PhoenixFramework.PubSub},
+      {Registry, keys: :unique, name: PhoenixFramework.Registry},
+      {DynamicSupervisor, name: PhoenixFramework.Supervisor.SharedDoc, strategy: :one_for_one},
       # Start a worker by calling: PhoenixFramework.Worker.start_link(arg)
       # {PhoenixFramework.Worker, arg},
       # Start to serve requests, typically the last entry
