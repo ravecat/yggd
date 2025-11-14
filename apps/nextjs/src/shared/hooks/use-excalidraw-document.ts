@@ -17,13 +17,15 @@ interface UseExcalidrawDocumentReturn {
 }
 
 export function useExcalidrawDocument(
-  socket: Socket,
+  socket: Socket | null,
   options: UseExcalidrawDocumentOptions = {}
 ): UseExcalidrawDocumentReturn {
   const [ydoc, setYdoc] = useState<Y.Doc | null>(null);
   const [provider, setProvider] = useState<PhoenixChannelProvider | null>(null);
 
   useEffect(() => {
+    if (!socket) return;
+
     const doc = new Y.Doc();
     setYdoc(doc);
 
