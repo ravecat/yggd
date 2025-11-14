@@ -6,7 +6,7 @@ import { ExcalidrawBinding } from "y-excalidraw";
 import { useExcalidrawDocument } from "../shared/hooks/use-excalidraw-document";
 import type { ExcalidrawAPI } from "../shared/types";
 import "@excalidraw/excalidraw/index.css";
-import { getSocket } from "@yggd/shared";
+import { useSocket } from "../shared/contexts/socket";
 
 const Excalidraw = dynamic(
   async () => (await import("@excalidraw/excalidraw")).Excalidraw,
@@ -21,7 +21,7 @@ const Excalidraw = dynamic(
 );
 
 export function ExcalidrawCanvas() {
-  const socket = getSocket();
+  const socket = useSocket();
   const { ydoc, provider } = useExcalidrawDocument(socket);
   const [api, setApi] = useState<ExcalidrawAPI | null>(null);
   const [binding, setBinding] = useState<ExcalidrawBinding | null>(null);
