@@ -13,9 +13,16 @@ export function getSocket(): Socket {
   }
 
   if (!globalSocket) {
-    globalSocket = new Socket("/socket", {
+    const socketUrl = process.env.NEXT_PUBLIC_PHOENIX_URL || "ws://localhost:4001/socket";
+    
+    globalSocket = new Socket(socketUrl, {
       params: {},
     });
+    
+    globalSocket.onError((error) => {
+      console.error("[Socket] Connection error:", error);
+    });
+    
     globalSocket.connect();
   }
 

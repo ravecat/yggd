@@ -27,7 +27,8 @@ defmodule PhoenixFrameworkWeb.SharedDocServer do
   def start_doc_server(doc_name) do
     case DynamicSupervisor.start_child(
            PhoenixFramework.Supervisor.SharedDoc,
-           {SharedDoc, doc_name: doc_name, name: via(doc_name)}
+           {SharedDoc,
+            doc_name: doc_name, persistence: PhoenixFramework.Yjs.Persistence, name: via(doc_name)}
          ) do
       {:ok, pid} ->
         {:ok, pid}
