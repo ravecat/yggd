@@ -20,10 +20,11 @@ defmodule PhoenixFrameworkWeb.SharedDocChannel do
           |> assign(:doc_name, doc_name)
           |> assign(:doc_pid, doc_pid)
 
+        Logger.info("Client joined y_doc_room:#{doc_name}")
         {:ok, socket}
 
       {:error, reason} ->
-        Logger.error("Failed to start doc server: #{inspect(reason)}")
+        Logger.error("Failed to start doc server for #{doc_name}: #{inspect(reason)}")
         {:error, %{reason: "failed to initialize document"}}
     end
   end
@@ -47,7 +48,14 @@ defmodule PhoenixFrameworkWeb.SharedDocChannel do
   end
 
   @impl true
-  def terminate(_reason, _socket) do
+  def handle_info(msg, socket) do
+    Logger.debug("Unknown message: #{inspect(msg)}")
+    {:noreply, socket}
+  end
+
+  @impl true
+  def terminate(_reason, socket) do
+    Logger.info("Client left y_doc_room:#{socket.assigns.doc_name}")
     :ok
   end
 end

@@ -1,5 +1,6 @@
 defmodule PhoenixFrameworkWeb.UserSocket do
   use Phoenix.Socket
+  require Logger
 
   @moduledoc """
   Socket handler for WebSocket connections.
@@ -10,7 +11,8 @@ defmodule PhoenixFrameworkWeb.UserSocket do
   channel "y_doc_room:*", PhoenixFrameworkWeb.SharedDocChannel
 
   @impl true
-  def connect(_params, socket, _connect_info) do
+  def connect(params, socket, _connect_info) do
+    Logger.debug("WebSocket connection: #{inspect(params)}")
     {:ok, socket}
   end
 
