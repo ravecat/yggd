@@ -1,11 +1,11 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
+import { createContext, useContext, useRef, useEffect, type ReactNode } from "react";
 import { Socket as PhoenixSocket } from "phoenix";
 import { getSocket } from "@yggd/shared";
 
 interface SocketContextValue {
-  socket: PhoenixSocket | null;
+  socket: PhoenixSocket;
 }
 
 const SocketContext = createContext<SocketContextValue | undefined>(undefined);
@@ -15,21 +15,22 @@ interface SocketProps {
 }
 
 export function Socket({ children }: SocketProps) {
-  const [socket, setSocket] = useState<PhoenixSocket | null>(null);
+  const socketRef = useRef<PhoenixSocket>(getSocket());
 
   useEffect(() => {
-    const phoenixSocket = getSocket();
-    setSocket(phoenixSocket);
+    return () => {
+      socketRef.current.disconnect();
+    };
   }, []);
 
   return (
-    <SocketContext.Provider value={{ socket }}>
+    <SocketContext.Provider value={{ socket: socketRef.current }}>
       {children}
     </SocketContext.Provider>
   );
 }
 
-export function useSocket(): PhoenixSocket | null {
+export function useSocket(): PhoenixSocket {
   const context = useContext(SocketContext);
 
   if (context === undefined) {
