@@ -9,7 +9,7 @@ let globalSocket: Socket | null = null;
  */
 export function getSocket(): Socket {
   if (typeof window === "undefined") {
-    throw new Error("Socket can only be created on client side");
+    return globalSocket as Socket;
   }
 
   if (!globalSocket) {
@@ -20,7 +20,7 @@ export function getSocket(): Socket {
     });
     
     globalSocket.onError((error) => {
-      console.error("[Socket] Connection error:", error);
+      console.error("Socket connection error:", error);
     });
     
     globalSocket.connect();

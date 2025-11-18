@@ -2,11 +2,10 @@
 
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
-import { ExcalidrawBinding } from "y-excalidraw";
-import { useExcalidrawDocument } from "../shared/hooks/use-excalidraw-document";
 import type { ExcalidrawAPI } from "../shared/types";
+import { ExcalidrawDocument } from "../shared/lib/excalidraw-document";
+import type { ExcalidrawBinding } from "../shared/lib/excalidraw-binding";
 import "@excalidraw/excalidraw/index.css";
-import { useSocket } from "../shared/contexts/socket";
 
 const Excalidraw = dynamic(
   async () => (await import("@excalidraw/excalidraw")).Excalidraw,
@@ -21,28 +20,46 @@ const Excalidraw = dynamic(
 );
 
 export function ExcalidrawCanvas() {
-  const socket = useSocket();
-  const { ydoc, provider } = useExcalidrawDocument(socket);
   const [api, setApi] = useState<ExcalidrawAPI | null>(null);
   const [binding, setBinding] = useState<ExcalidrawBinding | null>(null);
 
   useEffect(() => {
-    if (!api || !ydoc || !provider) return;
+    if (!api) {
+      return;
+    }
 
-    const binding = new ExcalidrawBinding(
-      ydoc.getArray("elements"),
-      ydoc.getMap("assets"),
-      api,
-      provider.awareness
-    );
+    let currentBinding: ExcalidrawBinding | null = null;
+    let ydoc: any = null;
+    let provider: any = null;
 
-    setBinding(binding);
+    (async () => {
+      const { ExcalidrawBinding } = await import(
+        "../shared/lib/excalidraw-binding"
+      );
+      
+      // Get singleton instance
+      const instance = ExcalidrawDocument.getInstance();
+      ydoc = instance.ydoc;
+      provider = instance.provider;
+
+      console.log("🏗️ [CANVAS] Creating new ExcalidrawBinding, Y.Doc clientID:", ydoc.clientID);
+
+      currentBinding = new ExcalidrawBinding(
+        ydoc.getArray("elements"),
+        ydoc.getArray("assets"),
+        api,
+        provider.awareness
+      );
+
+      setBinding(currentBinding);
+    })();
 
     return () => {
-      binding.destroy();
+      console.log("🧹 [CANVAS] Cleaning up ExcalidrawBinding");
+      currentBinding?.destroy();
       setBinding(null);
     };
-  }, [api, ydoc, provider]);
+  }, [api]);
 
   return (
     <div className="h-full w-full border border-gray-200 shadow-xs">
