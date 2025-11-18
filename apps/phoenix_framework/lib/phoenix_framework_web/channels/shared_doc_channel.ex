@@ -8,19 +8,21 @@ defmodule PhoenixFrameworkWeb.SharedDocChannel do
   @moduledoc """
   Channel for real-time Yjs document synchronization.
   Handles sync messages for collaborative editing using Yex.
+
+  Uses Phoenix.PubSub for broadcasting updates to all connected clients
+  instead of relying on Yex.Sync.SharedDoc observer mechanism.
   """
   @impl true
   def join("y_doc_room:" <> doc_name, _payload, socket) do
     case SharedDocServer.lookup_doc_server(doc_name) do
       {:ok, doc_pid} ->
-        SharedDoc.observe(doc_pid)
+        Phoenix.PubSub.subscribe(PhoenixFramework.PubSub, "y_doc_room:#{doc_name}")
 
         socket =
           socket
           |> assign(:doc_name, doc_name)
           |> assign(:doc_pid, doc_pid)
 
-        Logger.info("Client joined y_doc_room:#{doc_name}")
         {:ok, socket}
 
       {:error, reason} ->
@@ -37,13 +39,24 @@ defmodule PhoenixFrameworkWeb.SharedDocChannel do
 
   @impl true
   def handle_in("yjs", {:binary, chunk}, socket) do
+    # Apply update to SharedDoc (for persistence and CRDT merging)
     SharedDoc.send_yjs_message(socket.assigns.doc_pid, chunk)
+
+    # Broadcast to all other connected clients via PubSub
+    Phoenix.PubSub.broadcast_from(
+      PhoenixFramework.PubSub,
+      self(),
+      "y_doc_room:#{socket.assigns.doc_name}",
+      {:yjs_update, chunk}
+    )
+
     {:noreply, socket}
   end
 
   @impl true
-  def handle_info({:yjs, message, _proc}, socket) do
-    push(socket, "yjs", {:binary, message})
+  def handle_info({:yjs_update, chunk}, socket) do
+    # Received update from another client via PubSub
+    push(socket, "yjs", {:binary, chunk})
     {:noreply, socket}
   end
 
@@ -54,8 +67,7 @@ defmodule PhoenixFrameworkWeb.SharedDocChannel do
   end
 
   @impl true
-  def terminate(_reason, socket) do
-    Logger.info("Client left y_doc_room:#{socket.assigns.doc_name}")
+  def terminate(_reason, _socket) do
     :ok
   end
 end

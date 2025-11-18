@@ -5,6 +5,7 @@ defmodule PhoenixFramework.Yjs.Ecto do
 
     quote do
       import Ecto.Query
+      require Logger
 
       @repo unquote(repo)
       @schema unquote(schema)
@@ -16,6 +17,8 @@ defmodule PhoenixFramework.Yjs.Ecto do
 
         updates = get_updates(doc_name)
 
+        Logger.debug("[YJS:Persistence] Loading #{length(updates)} updates for #{doc_name}")
+
         Yex.Doc.transaction(ydoc, fn ->
           Enum.each(updates, fn update ->
             Yex.apply_update(ydoc, update.value)
@@ -26,6 +29,7 @@ defmodule PhoenixFramework.Yjs.Ecto do
           {:ok, u} = Yex.encode_state_as_update(ydoc)
           {:ok, sv} = Yex.encode_state_vector(ydoc)
           clock = List.last(updates, nil).inserted_at
+          Logger.debug("[YJS:Persistence] Flushing #{length(updates)} updates for #{doc_name}")
           flush_document(doc_name, u, sv, clock)
         end
 
