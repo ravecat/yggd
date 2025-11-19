@@ -9,7 +9,8 @@
       "options": {
         "command": "next dev",
         "cwd": "apps/nextjs"
-      }
+      },
+      "continuous": true
     },
     "typecheck": {
       "executor": "nx:run-commands",

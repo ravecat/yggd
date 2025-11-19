@@ -10,18 +10,14 @@
         "command": "mix phx.server",
         "cwd": "apps/ash_framework"
       },
-      "dependsOn": ["setup"]
+      "dependsOn": ["setup"],
+      "continuous": true
     },
     "setup": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "mix deps.get",
-          "cd assets && npm install",
-          "mix ash.setup"
-        ],
-        "cwd": "apps/ash_framework",
-        "parallel": false
+        "command": "mix setup",
+        "cwd": "apps/ash_framework"
       }
     },
     "build": {
