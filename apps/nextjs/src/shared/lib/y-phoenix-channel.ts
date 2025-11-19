@@ -38,7 +38,6 @@ messageHandlers[messageSync] = (
   emitSynced,
   _messageType,
 ) => {
-  console.log("📦 [YJS:SYNC] Processing sync message");
   encoding.writeVarUint(encoder, messageSync);
   const syncMessageType = syncProtocol.readSyncMessage(
     decoder,
@@ -46,13 +45,11 @@ messageHandlers[messageSync] = (
     provider.doc,
     provider,
   );
-  console.log("📦 [YJS:SYNC] Sync message type:", syncMessageType, "(1=step1, 2=step2, 3=update)");
   if (
     emitSynced &&
     syncMessageType === syncProtocol.messageYjsSyncStep2 &&
     !provider.synced
   ) {
-    console.log("📦 [YJS:SYNC] Setting synced to true");
     provider.synced = true;
   }
 };
@@ -81,15 +78,12 @@ messageHandlers[messageAwareness] = (
   _emitSynced,
   _messageType,
 ) => {
-  console.log("👥 [YJS:AWARENESS] Processing awareness update");
   const update = decoding.readVarUint8Array(decoder);
-  console.log("👥 [YJS:AWARENESS] Update bytes:", update.length);
   awarenessProtocol.applyAwarenessUpdate(
     provider.awareness,
     update,
     provider,
   );
-  console.log("👥 [YJS:AWARENESS] Awareness states count:", provider.awareness.getStates().size);
 };
 
 /**
@@ -103,16 +97,12 @@ const readMessage = (
   buf: Uint8Array,
   emitSynced: boolean,
 ): encoding.Encoder => {
-  console.log("🟢 [YJS:CLIENT] readMessage - bytes:", buf.length, "first 20 bytes:", Array.from(buf.slice(0, 20)));
   const decoder = decoding.createDecoder(buf);
   const encoder = encoding.createEncoder();
   const messageType = decoding.readVarUint(decoder);
-  console.log("🟢 [YJS:CLIENT] Message type:", messageType, "(0=sync, 1=awareness, 3=queryAwareness)");
   const messageHandler = provider.messageHandlers[messageType];
   if (/** @type {any} */ (messageHandler)) {
-    console.log("🟢 [YJS:CLIENT] Calling handler for message type:", messageType);
     messageHandler(encoder, decoder, provider, emitSynced, messageType);
-    console.log("🟢 [YJS:CLIENT] Handler completed");
   } else {
     console.error("🔴 [YJS:CLIENT] Unable to compute message - no handler for type:", messageType);
   }
@@ -159,25 +149,20 @@ const setupChannel = (provider: PhoenixChannelProvider) => {
       );
     });
 
-    console.log("🔌 [YJS:CLIENT] Setting up channel.on('yjs') listener");
     provider.channel.on("yjs", (data) => {
-      console.log("🔵 [YJS:CLIENT] *** Received message from server ***, bytes:", new Uint8Array(data).length);
       provider.wsLastMessageReceived = time.getUnixTime();
       const encoder = readMessage(provider, new Uint8Array(data), true);
       if (encoding.length(encoder) > 1) {
         provider.channel?.push("yjs", encoding.toUint8Array(encoder).buffer);
       }
     });
-    console.log("🔌 [YJS:CLIENT] channel.on('yjs') listener set up complete");
 
     provider.emit("status", [
       {
         status: "connecting",
       },
     ]);
-    console.log("🔌 [YJS:CLIENT] Attempting to join channel...");
     provider.channel.join().receive("ok", (_resp) => {
-      console.log("✅ [YJS:CLIENT] Successfully joined channel!");
       provider.emit("status", [
         {
           status: "connected",
@@ -189,7 +174,6 @@ const setupChannel = (provider: PhoenixChannelProvider) => {
       syncProtocol.writeSyncStep1(encoder, provider.doc);
 
       const data = encoding.toUint8Array(encoder);
-      console.log("📤 [YJS:CLIENT] Sending initial sync (yjs_sync)");
       provider.channel?.push("yjs_sync", data.buffer);
 
       // broadcast local awareness state
@@ -220,9 +204,7 @@ const broadcastMessage = (
   buf: Uint8Array,
 ) => {
   const channel = provider.channel;
-  console.log("📡 [YJS:CLIENT] broadcastMessage called, channel state:", channel?.state, "bytes:", buf.length);
   if (channel?.state === "joined") {
-    console.log("📤 [YJS:CLIENT] Pushing message to channel");
     channel.push("yjs", buf.buffer);
   } else {
     console.warn("⚠️ [YJS:CLIENT] Channel not joined, state:", channel?.state);
