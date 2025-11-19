@@ -11,13 +11,10 @@ const docname = "excalidraw:excalidraw";
 const persistence = new IndexeddbPersistence(docname, ydoc);
 const roomname = `y_doc_room:${docname}`;
 
-console.log("🔧 [DOCUMENT] Creating PhoenixChannelProvider with socket:", socket);
 const provider = new PhoenixChannelProvider(socket, roomname, ydoc);
 
 const username = generateUsername();
 provider.awareness.setLocalStateField("user", { name: username });
-
-console.log("✅ [DOCUMENT] Module initialized - ydoc clientID:", ydoc.clientID);
 
 export class ExcalidrawDocument {
   private constructor() {}
