@@ -3,6 +3,16 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/nextjs/src",
   "projectType": "application",
+  "namedInputs": {
+    "production": [
+      "default",
+      "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)",
+      "!{projectRoot}/tsconfig.spec.json",
+      "!{projectRoot}/jest.config.[jt]s",
+      "!{projectRoot}/.eslintrc.json",
+      "!{projectRoot}/eslint.config.[jt]s"
+    ]
+  },
   "targets": {
     "serve": {
       "executor": "nx:run-commands",
@@ -19,7 +29,7 @@
         "cwd": "apps/nextjs"
       },
       "cache": true,
-      "inputs": ["default", "{workspaceRoot}/tsconfig.base.json"]
+      "inputs": ["production", "^production"]
     },
     "format": {
       "executor": "nx:run-commands",
@@ -34,7 +44,8 @@
         "command": "prettier --check .",
         "cwd": "apps/nextjs"
       },
-      "cache": true
+      "cache": true,
+      "inputs": ["production", "^production"]
     }
   },
   "tags": []
