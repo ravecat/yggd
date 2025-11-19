@@ -24,7 +24,7 @@
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "mix compile",
+        "command": "mix deploy",
         "cwd": "apps/phoenix_framework"
       },
       "cache": true,
