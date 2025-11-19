@@ -90,7 +90,13 @@ defmodule PhoenixFramework.MixProject do
         "esbuild phoenix_framework --minify",
         "phx.digest"
       ],
-      precommit: ["compile --warning-as-errors", "deps.unlock --unused", "format", "test"]
+      precommit: ["compile --warning-as-errors", "deps.unlock --unused", "format", "test"],
+      deploy: [
+        "deps.get --only prod",
+        "compile",
+        "assets.setup",
+        "assets.deploy"
+      ]
     ]
   end
 end
