@@ -104,6 +104,11 @@ defmodule AshFramework.MixProject do
         "esbuild ash_framework --minify",
         "phx.digest"
       ],
+      deploy: [
+        "deps.get --only prod",
+        "compile --force",
+        "assets.deploy"
+      ],
       precommit: ["compile --warning-as-errors", "deps.unlock --unused", "format", "test"]
     ]
   end
