@@ -32,9 +32,10 @@
         "{projectRoot}/**/*.ex",
         "{projectRoot}/**/*.exs",
         "{projectRoot}/mix.lock",
-        "{projectRoot}/config/**/*"
+        "{projectRoot}/config/**/*",
+        "{projectRoot}/assets/**/*"
       ],
-      "outputs": ["{projectRoot}/_build"]
+      "outputs": ["{projectRoot}/_build", "{projectRoot}/priv/static"]
     },
     "test": {
       "executor": "nx:run-commands",
