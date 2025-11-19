@@ -11,14 +11,14 @@
         "cwd": "apps/phoenix_framework",
         "color": true
       },
-      "dependsOn": ["setup"]
+      "dependsOn": ["setup"],
+      "continuous": true
     },
     "setup": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["mix deps.get", "mix ecto.setup"],
-        "cwd": "apps/phoenix_framework",
-        "parallel": false
+        "command": "mix setup",
+        "cwd": "apps/phoenix_framework"
       }
     },
     "build": {
