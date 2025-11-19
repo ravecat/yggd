@@ -3,6 +3,14 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/ash_framework/lib",
   "projectType": "application",
+  "namedInputs": {
+    "production": [
+      "default",
+      "!{projectRoot}/**/*_test.exs",
+      "!{projectRoot}/**/*.spec.exs",
+      "!{projectRoot}/test/**/*"
+    ]
+  },
   "targets": {
     "serve": {
       "executor": "nx:run-commands",
@@ -28,11 +36,13 @@
       },
       "cache": true,
       "inputs": [
-        "{projectRoot}/**/*.ex",
-        "{projectRoot}/**/*.exs",
+        "{projectRoot}/lib/**/*.ex",
+        "{projectRoot}/lib/**/*.exs",
+        "{projectRoot}/mix.exs",
         "{projectRoot}/mix.lock",
-        "{projectRoot}/config/**/*",
-        "{projectRoot}/assets/**/*"
+        "{projectRoot}/config/**/*.exs",
+        "{projectRoot}/assets/**/*",
+        "!{projectRoot}/assets/node_modules/**/*"
       ],
       "outputs": ["{projectRoot}/_build", "{projectRoot}/priv/static"]
     },
@@ -125,7 +135,10 @@
         "cwd": "apps/ash_framework"
       },
       "cache": true,
-      "inputs": ["{projectRoot}/assets/**/*"],
+      "inputs": [
+        "{projectRoot}/assets/**/*",
+        "!{projectRoot}/assets/node_modules/**/*"
+      ],
       "outputs": ["{projectRoot}/priv/static"]
     }
   },
