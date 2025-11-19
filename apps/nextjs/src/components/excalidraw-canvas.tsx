@@ -42,8 +42,6 @@ export function ExcalidrawCanvas() {
       ydoc = instance.ydoc;
       provider = instance.provider;
 
-      console.log("🏗️ [CANVAS] Creating new ExcalidrawBinding, Y.Doc clientID:", ydoc.clientID);
-
       currentBinding = new ExcalidrawBinding(
         ydoc.getArray("elements"),
         ydoc.getArray("assets"),
@@ -55,7 +53,6 @@ export function ExcalidrawCanvas() {
     })();
 
     return () => {
-      console.log("🧹 [CANVAS] Cleaning up ExcalidrawBinding");
       currentBinding?.destroy();
       setBinding(null);
     };

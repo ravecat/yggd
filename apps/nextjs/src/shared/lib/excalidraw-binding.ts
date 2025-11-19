@@ -102,8 +102,6 @@ export class ExcalidrawBinding {
 
           const version = hashElementsVersion(elements);
           if (version !== this.lastVersion) {
-            console.log("✏️ [BINDING] Local change detected, version:", version, "elements:", elements.length);
-
             const gcAssetFiles = () => {
               const usedFileIds = new Set([
                 ...elements.map(e => e.type === "image" ? e.fileId : null).filter((f): f is FileId => f !== null),
@@ -117,7 +115,6 @@ export class ExcalidrawBinding {
             }
 
             this.#yElements.doc?.transact(() => {
-              console.log("📤 [BINDING] Sending changes to Y.js");
               // check deletion
               for (const yElem of this.#yElements.yarray) {
                 const deleted =
@@ -164,7 +161,6 @@ export class ExcalidrawBinding {
       event: Array<Y.YEvent<any>>,
       txn: Y.Transaction,
     ) => {
-      console.log("🟡 [BINDING] Remote elements change, origin:", txn.origin === this ? "self" : "external");
       if (txn.origin === this) {
         return;
       }
@@ -172,10 +168,8 @@ export class ExcalidrawBinding {
       const remoteElements = this.#yElements.yarray
         .map(({ val }) => ({ ...val }))
         .filter(isValidElement);
-      console.log("🟡 [BINDING] Remote elements:", remoteElements.length);
       
       const currentElements = this.#api.getSceneElements();
-      console.log("🟡 [BINDING] Current elements:", currentElements.length);
       
       const elements = reconcileElements(
         currentElements,
@@ -183,8 +177,6 @@ export class ExcalidrawBinding {
         remoteElements,
         this.#api.getAppState(),
       );
-      
-      console.log("🟡 [BINDING] Reconciled elements:", elements.length);
 
       this.#api.updateScene({ elements, captureUpdate: "NEVER" });
     };
@@ -251,7 +243,6 @@ export class ExcalidrawBinding {
         updated: number[];
         removed: number[];
       }) => {
-        console.log("🟣 [AWARENESS] Change detected - added:", added.length, "updated:", updated.length, "removed:", removed.length);
         const states = awareness.getStates();
 
         const collaborators = new Map(this.collaborators);
