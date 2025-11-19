@@ -16,7 +16,7 @@ _build/
 deps/
 *.beam
 *.ez
-priv/static/
+**/priv/static/
 
 .nx
 context_portal/
