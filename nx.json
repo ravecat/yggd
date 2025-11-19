@@ -8,6 +8,14 @@
   "tui": {
     "enabled": false
   },
+  "namedInputs": {
+    "default": ["{projectRoot}/**/*", "global"],
+    "global": [
+      "{workspaceRoot}/tsconfig.base.json",
+      "{workspaceRoot}/jest.preset.js",
+      "{workspaceRoot}/eslint.config.mjs"
+    ]
+  },
   "plugins": [
     {
       "plugin": "@nx/js/typescript",

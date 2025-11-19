@@ -3,6 +3,16 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/shared/src",
   "projectType": "library",
+  "namedInputs": {
+    "production": [
+      "default",
+      "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)",
+      "!{projectRoot}/tsconfig.spec.json",
+      "!{projectRoot}/jest.config.[jt]s",
+      "!{projectRoot}/.eslintrc.json",
+      "!{projectRoot}/eslint.config.[jt]s"
+    ]
+  },
   "targets": {
     "serve": {
       "executor": "nx:run-commands",
@@ -11,6 +21,11 @@
         "cwd": "packages/shared"
       },
       "continuous": true
+    },
+    "build": {
+      "cache": true,
+      "inputs": ["production", "^production"],
+      "outputs": ["{projectRoot}/dist"]
     }
   },
   "tags": []
