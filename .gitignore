@@ -19,6 +19,7 @@ deps/
 **/priv/static/
 
 .nx
+project-graph.json
 context_portal/
 
 test-output
