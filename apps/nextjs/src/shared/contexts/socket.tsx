@@ -1,8 +1,13 @@
 "use client";
 
-import { createContext, useContext, useRef, useEffect, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useRef,
+  useEffect,
+  type ReactNode,
+} from "react";
 import { Socket as PhoenixSocket } from "phoenix";
-import { getSocket } from "@yggd/shared";
 
 interface SocketContextValue {
   socket: PhoenixSocket;
@@ -15,9 +20,13 @@ interface SocketProps {
 }
 
 export function Socket({ children }: SocketProps) {
-  const socketRef = useRef<PhoenixSocket>(getSocket());
+  const socketRef = useRef<PhoenixSocket>(
+    new PhoenixSocket(process.env.NEXT_PUBLIC_PHOENIX_URL!, { params: {} })
+  );
 
   useEffect(() => {
+    socketRef?.current.connect();
+
     return () => {
       socketRef.current.disconnect();
     };

@@ -55,7 +55,12 @@ defmodule PhoenixFrameworkWeb.SharedDocChannel do
 
   @impl true
   def handle_info({:yjs_update, chunk}, socket) do
-    # Received update from another client via PubSub
+    push(socket, "yjs", {:binary, chunk})
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info({:yjs, chunk, _doc_pid}, socket) do
     push(socket, "yjs", {:binary, chunk})
     {:noreply, socket}
   end
