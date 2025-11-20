@@ -3,8 +3,9 @@
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import type { ExcalidrawAPI } from "../shared/types";
-import { ExcalidrawDocument } from "../shared/lib/excalidraw-document";
-import type { ExcalidrawBinding } from "../shared/lib/excalidraw-binding";
+import { getExcalidrawDocument } from "@yggd/shared"
+import { useSocket } from "../shared/contexts/socket";
+import { ExcalidrawBinding } from "y-excalidraw";
 import "@excalidraw/excalidraw/index.css";
 
 const Excalidraw = dynamic(
@@ -20,6 +21,8 @@ const Excalidraw = dynamic(
 );
 
 export function ExcalidrawCanvas() {
+  const socket = useSocket();
+
   const [api, setApi] = useState<ExcalidrawAPI | null>(null);
   const [binding, setBinding] = useState<ExcalidrawBinding | null>(null);
 
@@ -29,22 +32,13 @@ export function ExcalidrawCanvas() {
     }
 
     let currentBinding: ExcalidrawBinding | null = null;
-    let ydoc: any = null;
-    let provider: any = null;
 
     (async () => {
-      const { ExcalidrawBinding } = await import(
-        "../shared/lib/excalidraw-binding"
-      );
-      
-      // Get singleton instance
-      const instance = ExcalidrawDocument.getInstance();
-      ydoc = instance.ydoc;
-      provider = instance.provider;
+      const { ydoc, provider } = await getExcalidrawDocument(socket);
 
       currentBinding = new ExcalidrawBinding(
-        ydoc.getArray("elements"),
-        ydoc.getArray("assets"),
+        ydoc.getArray<any>("elements"),
+        ydoc.getMap<any>("assets"),
         api,
         provider.awareness
       );
@@ -56,7 +50,7 @@ export function ExcalidrawCanvas() {
       currentBinding?.destroy();
       setBinding(null);
     };
-  }, [api]);
+  }, [api, socket]);
 
   return (
     <div className="h-full w-full border border-gray-200 shadow-xs">
