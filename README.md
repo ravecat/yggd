@@ -8,10 +8,9 @@
 
 Yggd is a polyglot monorepo managed by [Nx](https://nx.dev) that combines multiple technologies:
 
-- **Next.js** (TypeScript/React) - Frontend application
+- **Next.js** (TypeScript/React) - Frontend application (OAuth PKCE, realtime Excalidraw collaboration, JSONAPI filtering/pagination/sorting)
 - **Ash Framework** (Elixir/Phoenix) - JSON:API backend with declarative resources
 - **Phoenix Framework** (Elixir) - Traditional Phoenix backend application
-- **Shared packages** - Common utilities and types
 
 ## Applications
 
@@ -38,8 +37,6 @@ Traditional Phoenix application for channel logic.
 - **Port**: 4001
 - **Tech**: Elixir, Phoenix, Ecto, PostgreSQL
 - **Purpose**: Standard Phoenix development patterns
-
-See [docs/applications-comparison.md](docs/applications-comparison.md) for detailed comparison.
 
 ## Prerequisites
 
