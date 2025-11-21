@@ -6,21 +6,14 @@
 
 ## Overview
 
-Yggd is a polyglot monorepo managed by [Nx](https://nx.dev) that combines multiple technologies:
-
-- **Next.js** (TypeScript/React) - Frontend application (OAuth PKCE, realtime Excalidraw collaboration, JSONAPI filtering/pagination/sorting)
-- **Ash Framework** (Elixir/Phoenix) - JSON:API backend with declarative resources
-- **Phoenix Framework** (Elixir) - Traditional Phoenix backend application
-
-## Applications
+Current project is a polyglot monorepo managed by [Nx](https://nx.dev) that combines multiple applications:
 
 ### apps/nextjs
 
-Frontend application built with Next.js 15, TypeScript, and React.
+Frontend application (OAuth PKCE, realtime Excalidraw collaboration, JSONAPI filtering/pagination/sorting)
 
 - **Port**: 3000
-- **Tech**: Next.js, TypeScript, React, Tailwind CSS
-- **Purpose**: User-facing web application
+- **Tech**: Next.js 16, TypeScript, React, Tailwind CSS, PostgreSQL
 
 ### apps/ash_framework
 
@@ -28,7 +21,6 @@ Backend API with Ash Framework providing JSON:API endpoints.
 
 - **Port**: 4000
 - **Tech**: Elixir, Phoenix, Ash Framework, PostgreSQL
-- **Purpose**: Declarative resource-based API with auto-generated admin
 
 ### apps/phoenix_framework
 
@@ -36,18 +28,43 @@ Traditional Phoenix application for channel logic.
 
 - **Port**: 4001
 - **Tech**: Elixir, Phoenix, Ecto, PostgreSQL
-- **Purpose**: Standard Phoenix development patterns
 
 ## Prerequisites
 
-Before you begin, ensure you have the following installed:
+Before beginning, ensure the following are installed:
 
 - **Node.js** (v20.x or higher)
 - **npm** (v10.x or higher)
 - **Elixir** (v1.14 or higher)
 - **Erlang/OTP** (v25 or higher)
 - **PostgreSQL** (v14 or higher)
-- **Nx CLI** (optional): `npm install -g nx`
+
+or use [asdf](https://asdf-vm.com/) tool version manager with instructions below.
+
+### ASDF installation (optional, recommended)
+
+The project uses `.tool-versions` to declare required runtimes; `asdf` can install and manage these versions.
+
+1. Install `asdf` for the operating system and follow the official getting [started guide](https://asdf-vm.com/guide/getting-started.html).
+
+2. Install required asdf plugins:
+   - Node.js - [asdf-nodejs](https://github.com/asdf-vm/asdf-nodejs.git)
+   - Erlang - [asdf-erlang](https://github.com/asdf-vm/asdf-erlang.git)
+   - Elixir - [asdf-elixir](https://github.com/asdf-vm/asdf-elixir.git)
+   - PostgreSQL - [asdf-postgres](https://github.com/smashedtoatoms/asdf-postgres)
+
+   See the plugin documentation for platform-specific prerequisites and additional usage notes.
+
+3. Install the versions declared in `.tool-versions` by running the following command from the project root (after required plugins are added):
+
+```bash
+asdf install
+```
+
+Notes:
+
+- Building runtimes dependencies may require native dependencies (e.g., C build tools, OpenSSL, zlib). See the plugin documents for OS-specific prerequisites.
+- If `asdf` is not used, install required runtimes using the system package manager.
 
 ## Quick Start
 
@@ -57,88 +74,59 @@ Before you begin, ensure you have the following installed:
 # Install all dependencies
 npm install
 
-# Install Nx CLI globally (optional, but recommended)
-npm install -g nx
-
-# Setup backend (choose one or both)
-# Make sure PostgreSQL is running
-nx run ash_framework:setup
-nx run phoenix_framework:setup
-
-# Seed the database (optional)
-nx run ash_framework:seed
+# Seed the database with test data (optional)
+npx nx run ash_framework:seed
 ```
-
-> **Note**: If you don't install Nx globally, you can use `npx nx` instead of `nx` in all commands below.
 
 ### Running Applications
 
 ```bash
 # Start all applications in development mode
-nx run-many -t serve
+npx nx run-many -t serve
 
 # Or use interactive UI to select and run targets
-nx run-many -t serve --tui
+npx nx run-many -t serve --tui
 
 # Or start applications individually:
 
-nx run nextjs:serve             # http://localhost:3000
-nx run ash_framework:serve      # http://localhost:4000
-nx run phoenix_framework:serve  # http://localhost:4001
+npx nx run nextjs:serve             # http://localhost:3000
+npx nx run ash_framework:serve      # http://localhost:4000
+npx nx run phoenix_framework:serve  # http://localhost:4001
 ```
 
 ## Nx Commands
 
-All project commands are based on Nx. You can find available targets in each project's `project.json` file.
+All project commands are based on [Nx](https://nx.dev). Available targets are defined in each project's `project.json` file.
 
 ### Essential Commands
 
 ```bash
 # List all projects in the workspace
-nx show projects
+npx nx show projects
 
 # Show dependency graph (opens in browser)
-nx graph
+npx nx graph
 
 # Run a target for all projects
-nx run-many -t <target>
+npx nx run-many -t <target>
 
 # Run a specific target for a project
-nx run <project>:<target>
+npx nx run <project>:<target>
 
 # Examples:
-nx run-many -t build          # Build all projects
-nx run-many -t test           # Test all projects
-nx run nextjs:build           # Build Next.js app
-nx run ash_framework:test     # Test Ash Framework app
+npx nx run-many -t build          # Build all projects
+npx nx run-many -t test           # Test all projects
+npx nx run nextjs:build           # Build Next.js app
+npx nx run ash_framework:test     # Test Ash Framework app
 ```
 
-### Finding Available Targets
-
-Each project defines its available commands (targets) in `project.json`:
-
-- `/apps/nextjs/project.json` - Next.js application targets
-- `/apps/ash_framework/project.json` - Ash Framework application targets
-- `/apps/phoenix_framework/project.json` - Phoenix Framework application targets
-- `/packages/shared/project.json` - Shared package targets
-
 ## Useful Resources
-
-### Documentation
 
 - [Nx Documentation](https://nx.dev/getting-started/intro) - Monorepo management
 - [Next.js Documentation](https://nextjs.org/docs) - Frontend framework
 - [Phoenix Framework](https://hexdocs.pm/phoenix/overview.html) - Web framework
 - [Ash Framework](https://hexdocs.pm/ash/get-started.html) - Declarative resource framework
 - [Elixir](https://elixir-lang.org/getting-started/introduction.html) - Programming language
-
-### Learning Resources
-
-- [Nx Tutorial](https://nx.dev/getting-started/tutorials)
-- [Next.js Learn](https://nextjs.org/learn)
-- [Elixir School](https://elixirschool.com/)
-- [Phoenix Guides](https://hexdocs.pm/phoenix/up_and_running.html)
-- [Ash Framework Guides](https://hexdocs.pm/ash/readme.html)
 
 ## License
 
