@@ -20,15 +20,20 @@ interface SocketProps {
 }
 
 export function Socket({ children }: SocketProps) {
-  const socketRef = useRef<PhoenixSocket>(
-    new PhoenixSocket(process.env.NEXT_PUBLIC_PHOENIX_URL!, { params: {} })
-  );
+  const socketRef = useRef<PhoenixSocket | null>(null);
+
+  if (!socketRef.current) {
+    socketRef.current = new PhoenixSocket(
+      process.env.NEXT_PUBLIC_PHOENIX_URL!,
+      { params: {} }
+    );
+  }
 
   useEffect(() => {
-    socketRef?.current.connect();
+    socketRef.current?.connect();
 
     return () => {
-      socketRef.current.disconnect();
+      socketRef.current?.disconnect();
     };
   }, []);
 
