@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import type { ExcalidrawAPI } from "../shared/types";
 import { getExcalidrawDocument } from "@yggd/shared"
-import { useSocket } from "../shared/contexts/socket";
+import { useSocket } from "@yggd/shared/react";
 import { ExcalidrawBinding } from "y-excalidraw";
 import "@excalidraw/excalidraw/index.css";
 

@@ -3,12 +3,17 @@
     "target": "es2017",
     "parser": {
       "syntax": "typescript",
+      "tsx": true,
       "decorators": true,
       "dynamicImport": true
     },
     "transform": {
       "decoratorMetadata": true,
-      "legacyDecorator": true
+      "legacyDecorator": true,
+      "react": {
+        "runtime": "automatic",
+        "importSource": "react"
+      }
     },
     "keepClassNames": true,
     "externalHelpers": true,
