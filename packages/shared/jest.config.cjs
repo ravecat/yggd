@@ -12,10 +12,10 @@ swcJestConfig.swcrc = false;
 module.exports = {
   displayName: '@yggd/shared',
   preset: '../../jest.preset.js',
-  testEnvironment: 'node',
+  testEnvironment: 'jsdom',
   transform: {
-    '^.+\\.[tj]s$': ['@swc/jest', swcJestConfig]
+    '^.+\\.[tj]sx?$': ['@swc/jest', swcJestConfig]
   },
-  moduleFileExtensions: ['ts', 'js', 'html'],
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'html'],
   coverageDirectory: 'test-output/jest/coverage'
 };
