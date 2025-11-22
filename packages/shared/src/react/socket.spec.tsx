@@ -1,4 +1,6 @@
 import { render, renderHook, screen, waitFor } from "@testing-library/react";
+import { act } from "react";
+import { createRoot } from "react-dom/client";
 import { Socket, useSocket } from "./socket";
 
 const mockConnect = jest.fn();
@@ -85,11 +87,11 @@ describe("Socket Context", () => {
     expect(mockSocketInstances[mockSocketInstances.length - 1].url).toBe(
       process.env.NEXT_PUBLIC_PHOENIX_URL
     );
-    expect(
-      mockSocketInstances[mockSocketInstances.length - 1].options
-    ).toEqual({
-      params: {},
-    });
+    expect(mockSocketInstances[mockSocketInstances.length - 1].options).toEqual(
+      {
+        params: {},
+      }
+    );
 
     unmount();
   });
@@ -157,6 +159,38 @@ describe("Socket Context", () => {
     }).toThrow("useSocket must be used within Socket component");
 
     console.error = originalError;
+  });
+
+  test("throws when provider is mounted in a different root", () => {
+    const rootA = document.createElement("div");
+    const rootB = document.createElement("div");
+    document.body.appendChild(rootA);
+    document.body.appendChild(rootB);
+
+    const ProviderRoot = createRoot(rootA);
+    // Mount a provider in a separate root
+    act(() => {
+      ProviderRoot.render(
+        <Socket>
+          <div data-testid="provider-mounted" />
+        </Socket>
+      );
+    });
+
+    const TestConsumer = () => {
+      useSocket();
+      return null;
+    };
+
+    // Attempt to render consumer in a different root — should throw since the
+    // provider is not in the same React root/context boundary. Use render from
+    // testing-library to capture thrown errors in the test adapter.
+    expect(() => render(<TestConsumer />, { container: rootB })).toThrow(
+      "useSocket must be used within Socket component"
+    );
+    act(() => {
+      ProviderRoot.unmount();
+    });
   });
 
   test("returns same socket instance across multiple hook calls", () => {
@@ -310,9 +344,7 @@ describe("Socket Context", () => {
     const TestComponent = () => {
       const socket = useSocket();
       return (
-        <div data-testid="socket-present">
-          {socket ? "present" : "absent"}
-        </div>
+        <div data-testid="socket-present">{socket ? "present" : "absent"}</div>
       );
     };
 
