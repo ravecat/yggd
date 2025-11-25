@@ -10,6 +10,9 @@ const nextConfig = {
   // See: https://nx.dev/recipes/next/next-config-setup
   // nx: {},
   cacheComponents: true,
+
+  // Standalone mode for minimal production Docker images
+  output: "standalone",
 };
 
 /** @type {(import("@nx/next/src/utils/config").NextPlugin | import("@nx/next/src/utils/config").NextPluginThatReturnsConfigFn)[]} */

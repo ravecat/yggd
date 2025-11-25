@@ -1,0 +1,873 @@
+{
+  "graph": {
+    "nodes": {
+      "phoenix_framework": {
+        "name": "phoenix_framework",
+        "type": "app",
+        "data": {
+          "root": "apps/phoenix_framework",
+          "name": "phoenix_framework",
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "apps/phoenix_framework/lib",
+          "projectType": "application",
+          "tags": [
+            "phoenix",
+            "elixir",
+            "backend"
+          ],
+          "namedInputs": {
+            "production": [
+              "default",
+              "!{projectRoot}/**/*_test.exs",
+              "!{projectRoot}/**/*.spec.exs",
+              "!{projectRoot}/test/**/*"
+            ]
+          },
+          "targets": {
+            "serve": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "mix phx.server",
+                "cwd": "apps/phoenix_framework",
+                "color": true
+              },
+              "dependsOn": [
+                "setup"
+              ],
+              "continuous": true,
+              "configurations": {},
+              "parallelism": true
+            },
+            "setup": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "mix setup",
+                "cwd": "apps/phoenix_framework"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "mix deploy",
+                "cwd": "apps/phoenix_framework"
+              },
+              "cache": true,
+              "inputs": [
+                "{projectRoot}/lib/**/*.ex",
+                "{projectRoot}/lib/**/*.exs",
+                "{projectRoot}/mix.exs",
+                "{projectRoot}/mix.lock",
+                "{projectRoot}/config/**/*.exs",
+                "{projectRoot}/assets/**/*",
+                "!{projectRoot}/assets/node_modules/**/*"
+              ],
+              "outputs": [
+                "{projectRoot}/_build",
+                "{projectRoot}/priv/static"
+              ],
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "mix test",
+                "cwd": "apps/phoenix_framework"
+              },
+              "cache": true,
+              "inputs": [
+                "{projectRoot}/lib/**/*.ex",
+                "{projectRoot}/lib/**/*.exs",
+                "{projectRoot}/test/**/*.exs"
+              ],
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": [
+                "^build"
+              ]
+            },
+            "lint": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "mix format --check-formatted",
+                "cwd": "apps/phoenix_framework"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "format": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "mix format",
+                "cwd": "apps/phoenix_framework"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "db:create": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "mix ecto.create",
+                "cwd": "apps/phoenix_framework"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "db:migrate": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "mix ecto.migrate",
+                "cwd": "apps/phoenix_framework"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "db:reset": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "mix ecto.reset",
+                "cwd": "apps/phoenix_framework"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "ash_framework": {
+        "name": "ash_framework",
+        "type": "app",
+        "data": {
+          "root": "apps/ash_framework",
+          "name": "ash_framework",
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "apps/ash_framework/lib",
+          "projectType": "application",
+          "tags": [
+            "backend",
+            "elixir",
+            "phoenix",
+            "ash"
+          ],
+          "namedInputs": {
+            "production": [
+              "default",
+              "!{projectRoot}/**/*_test.exs",
+              "!{projectRoot}/**/*.spec.exs",
+              "!{projectRoot}/test/**/*"
+            ]
+          },
+          "targets": {
+            "serve": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "mix phx.server",
+                "cwd": "apps/ash_framework"
+              },
+              "dependsOn": [
+                "setup"
+              ],
+              "continuous": true,
+              "configurations": {},
+              "parallelism": true
+            },
+            "setup": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "mix setup",
+                "cwd": "apps/ash_framework"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "mix deploy",
+                "cwd": "apps/ash_framework"
+              },
+              "cache": true,
+              "inputs": [
+                "{projectRoot}/lib/**/*.ex",
+                "{projectRoot}/lib/**/*.exs",
+                "{projectRoot}/mix.exs",
+                "{projectRoot}/mix.lock",
+                "{projectRoot}/config/**/*.exs",
+                "{projectRoot}/assets/**/*",
+                "!{projectRoot}/assets/node_modules/**/*"
+              ],
+              "outputs": [
+                "{projectRoot}/_build",
+                "{projectRoot}/priv/static"
+              ],
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "mix test",
+                "cwd": "apps/ash_framework"
+              },
+              "cache": true,
+              "dependsOn": [
+                "build"
+              ],
+              "inputs": [
+                "default",
+                "{projectRoot}/test/**/*.exs"
+              ],
+              "configurations": {},
+              "parallelism": true
+            },
+            "format": {
+              "executor": "nx:run-commands",
+              "options": {
+                "commands": [
+                  "mix format",
+                  "prettier --write assets"
+                ],
+                "cwd": "apps/ash_framework",
+                "parallel": false
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "format-check": {
+              "executor": "nx:run-commands",
+              "options": {
+                "commands": [
+                  "mix format --check-formatted",
+                  "prettier --check assets"
+                ],
+                "cwd": "apps/ash_framework",
+                "parallel": false
+              },
+              "cache": true,
+              "configurations": {},
+              "parallelism": true
+            },
+            "ash-codegen": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "mix ash.codegen",
+                "cwd": "apps/ash_framework"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "ash-typescript": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "mix ash_typescript.codegen",
+                "cwd": "apps/ash_framework"
+              },
+              "outputs": [
+                "{projectRoot}/assets/js/ash_rpc.ts"
+              ],
+              "configurations": {},
+              "parallelism": true
+            },
+            "codegen:openapi": {
+              "executor": "nx:run-commands",
+              "options": {
+                "commands": [
+                  "mix openapi.spec.json --spec AshFrameworkWeb.AshJsonApiRouter && mv openapi.json ../../",
+                  "mix openapi.spec.yaml --spec AshFrameworkWeb.AshJsonApiRouter && mv openapi.yaml ../../"
+                ],
+                "cwd": "apps/ash_framework",
+                "parallel": true
+              },
+              "outputs": [
+                "{workspaceRoot}/openapi.json",
+                "{workspaceRoot}/openapi.yaml"
+              ],
+              "configurations": {},
+              "parallelism": true
+            },
+            "db-reset": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "mix ash.reset",
+                "cwd": "apps/ash_framework"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "db-migrate": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "mix ash.migrate",
+                "cwd": "apps/ash_framework"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "seed": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "mix seed.posts",
+                "cwd": "apps/ash_framework"
+              },
+              "dependsOn": [
+                "setup"
+              ],
+              "configurations": {},
+              "parallelism": true
+            },
+            "assets-build": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "mix assets.build",
+                "cwd": "apps/ash_framework"
+              },
+              "cache": true,
+              "inputs": [
+                "{projectRoot}/assets/**/*",
+                "!{projectRoot}/assets/node_modules/**/*"
+              ],
+              "outputs": [
+                "{projectRoot}/priv/static"
+              ],
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@yggd/shared": {
+        "name": "@yggd/shared",
+        "type": "lib",
+        "data": {
+          "root": "packages/shared",
+          "targets": {
+            "typecheck": {
+              "dependsOn": [
+                "build",
+                "^typecheck"
+              ],
+              "options": {
+                "cwd": "packages/shared",
+                "command": "tsc --build --emitDeclarationOnly"
+              },
+              "cache": true,
+              "inputs": [
+                "production",
+                "^production"
+              ],
+              "outputs": [
+                "{projectRoot}/**/*.js",
+                "{projectRoot}/**/*.cjs",
+                "{projectRoot}/**/*.mjs",
+                "{projectRoot}/**/*.jsx",
+                "{projectRoot}/**/*.js.map",
+                "{projectRoot}/**/*.jsx.map",
+                "{projectRoot}/**/*.d.ts",
+                "{projectRoot}/**/*.d.cts",
+                "{projectRoot}/**/*.d.mts",
+                "{projectRoot}/**/*.d.ts.map",
+                "{projectRoot}/**/*.d.cts.map",
+                "{projectRoot}/**/*.d.mts.map",
+                "{projectRoot}/tsconfig.tsbuildinfo",
+                "{projectRoot}/dist/**/*.d.ts",
+                "{projectRoot}/dist/tsconfig.lib.tsbuildinfo",
+                "{projectRoot}/out-tsc/jest/**/*.d.ts",
+                "{projectRoot}/out-tsc/jest/tsconfig.tsbuildinfo"
+              ],
+              "syncGenerators": [
+                "@nx/js:typescript-sync"
+              ],
+              "metadata": {
+                "technologies": [
+                  "typescript"
+                ],
+                "description": "Runs type-checking for the project.",
+                "help": {
+                  "command": "npx tsc --build --help",
+                  "example": {
+                    "args": [
+                      "--force"
+                    ]
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "dependsOn": [
+                "^build"
+              ],
+              "cache": true,
+              "inputs": [
+                "production",
+                "^production"
+              ],
+              "outputs": [
+                "{projectRoot}/dist"
+              ],
+              "syncGenerators": [
+                "@nx/js:typescript-sync"
+              ],
+              "metadata": {
+                "technologies": [
+                  "typescript"
+                ],
+                "description": "Builds the project with `tsc`.",
+                "help": {
+                  "command": "npx tsc --build --help",
+                  "example": {
+                    "args": [
+                      "--force"
+                    ]
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "options": {
+                "cwd": "packages/shared",
+                "command": "tsc --build tsconfig.lib.json"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build-deps": {
+              "dependsOn": [
+                "^build"
+              ],
+              "configurations": {},
+              "options": {},
+              "parallelism": true,
+              "executor": "nx:noop"
+            },
+            "watch-deps": {
+              "continuous": true,
+              "dependsOn": [
+                "build-deps"
+              ],
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "npx nx watch --projects @yggd/shared --includeDependentProjects -- npx nx build-deps @yggd/shared"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "options": {
+                "cwd": "packages/shared",
+                "env": {
+                  "TS_NODE_COMPILER_OPTIONS": "{\"moduleResolution\":\"node10\",\"module\":\"commonjs\",\"customConditions\":null}"
+                },
+                "command": "jest"
+              },
+              "metadata": {
+                "technologies": [
+                  "jest"
+                ],
+                "description": "Run Jest Tests",
+                "help": {
+                  "command": "npx jest --help",
+                  "example": {
+                    "options": {
+                      "coverage": true
+                    }
+                  }
+                }
+              },
+              "cache": true,
+              "inputs": [
+                "default",
+                "^production",
+                "{workspaceRoot}/jest.preset.js",
+                {
+                  "externalDependencies": [
+                    "jest"
+                  ]
+                }
+              ],
+              "outputs": [
+                "{projectRoot}/test-output/jest/coverage"
+              ],
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": [
+                "^build"
+              ]
+            },
+            "lint": {
+              "cache": true,
+              "options": {
+                "cwd": "packages/shared",
+                "command": "eslint ."
+              },
+              "inputs": [
+                "default",
+                "^default",
+                "{workspaceRoot}/eslint.config.mjs",
+                "{workspaceRoot}/packages/shared/eslint.config.mjs",
+                "{workspaceRoot}/tools/eslint-rules/**/*",
+                {
+                  "externalDependencies": [
+                    "eslint"
+                  ]
+                }
+              ],
+              "outputs": [
+                "{options.outputFile}"
+              ],
+              "metadata": {
+                "technologies": [
+                  "eslint"
+                ],
+                "description": "Runs ESLint on project",
+                "help": {
+                  "command": "npx eslint --help",
+                  "example": {
+                    "options": {
+                      "max-warnings": 0
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "nx-release-publish": {
+              "executor": "@nx/js:release-publish",
+              "dependsOn": [
+                "^nx-release-publish"
+              ],
+              "options": {},
+              "configurations": {},
+              "parallelism": true
+            },
+            "serve": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "tsc --project tsconfig.lib.json --watch",
+                "cwd": "packages/shared"
+              },
+              "continuous": true,
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "name": "@yggd/shared",
+          "projectType": "library",
+          "tags": [
+            "npm:public"
+          ],
+          "metadata": {
+            "targetGroups": {},
+            "js": {
+              "packageName": "@yggd/shared",
+              "packageVersion": "0.0.1",
+              "packageExports": {
+                "./package.json": "./package.json",
+                ".": {
+                  "types": "./src/index.ts",
+                  "import": "./dist/index.js",
+                  "default": "./dist/index.js"
+                },
+                "./tokens.css": "./src/styles/tokens.css",
+                "./react": {
+                  "types": "./dist/react/index.d.ts",
+                  "import": "./dist/react/index.js",
+                  "default": "./dist/react/index.js"
+                }
+              },
+              "packageMain": "./dist/index.js",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "packages/shared/src",
+          "namedInputs": {
+            "production": [
+              "default",
+              "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)",
+              "!{projectRoot}/tsconfig.spec.json",
+              "!{projectRoot}/jest.config.[jt]s",
+              "!{projectRoot}/.eslintrc.json",
+              "!{projectRoot}/eslint.config.[jt]s"
+            ]
+          },
+          "implicitDependencies": []
+        }
+      },
+      "nextjs": {
+        "name": "nextjs",
+        "type": "app",
+        "data": {
+          "root": "apps/nextjs",
+          "targets": {
+            "build": {
+              "options": {
+                "cwd": "apps/nextjs",
+                "tty": false,
+                "command": "next build"
+              },
+              "dependsOn": [
+                "^build"
+              ],
+              "cache": true,
+              "inputs": [
+                "default",
+                "^production",
+                {
+                  "externalDependencies": [
+                    "next"
+                  ]
+                }
+              ],
+              "outputs": [
+                "{workspaceRoot}/apps/nextjs/.next/!(cache)/**/*",
+                "{workspaceRoot}/apps/nextjs/.next/!(cache)"
+              ],
+              "syncGenerators": [
+                "@nx/js:typescript-sync"
+              ],
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "dev": {
+              "continuous": true,
+              "options": {
+                "cwd": "apps/nextjs",
+                "command": "next dev"
+              },
+              "syncGenerators": [
+                "@nx/js:typescript-sync"
+              ],
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "start": {
+              "continuous": true,
+              "options": {
+                "cwd": "apps/nextjs",
+                "command": "next start"
+              },
+              "dependsOn": [
+                "build"
+              ],
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "serve-static": {
+              "continuous": true,
+              "options": {
+                "cwd": "apps/nextjs",
+                "command": "next start"
+              },
+              "dependsOn": [
+                "build"
+              ],
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "build-deps": {
+              "dependsOn": [
+                "^build"
+              ],
+              "configurations": {},
+              "options": {},
+              "parallelism": true,
+              "executor": "nx:noop"
+            },
+            "watch-deps": {
+              "continuous": true,
+              "dependsOn": [
+                "build-deps"
+              ],
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "npx nx watch --projects nextjs --includeDependentProjects -- npx nx build-deps nextjs"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "options": {
+                "cwd": "apps/nextjs",
+                "env": {
+                  "TS_NODE_COMPILER_OPTIONS": "{\"moduleResolution\":\"node10\",\"module\":\"commonjs\",\"customConditions\":null}"
+                },
+                "command": "jest"
+              },
+              "metadata": {
+                "technologies": [
+                  "jest"
+                ],
+                "description": "Run Jest Tests",
+                "help": {
+                  "command": "npx jest --help",
+                  "example": {
+                    "options": {
+                      "coverage": true
+                    }
+                  }
+                }
+              },
+              "cache": true,
+              "inputs": [
+                "default",
+                "^production",
+                "{workspaceRoot}/jest.preset.js",
+                {
+                  "externalDependencies": [
+                    "jest"
+                  ]
+                }
+              ],
+              "outputs": [
+                "{workspaceRoot}/coverage/apps/nextjs"
+              ],
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": [
+                "^build"
+              ]
+            },
+            "lint": {
+              "cache": true,
+              "options": {
+                "cwd": "apps/nextjs",
+                "command": "eslint ."
+              },
+              "inputs": [
+                "default",
+                "^default",
+                "{workspaceRoot}/eslint.config.mjs",
+                "{workspaceRoot}/apps/nextjs/eslint.config.mjs",
+                "{workspaceRoot}/tools/eslint-rules/**/*",
+                {
+                  "externalDependencies": [
+                    "eslint"
+                  ]
+                }
+              ],
+              "outputs": [
+                "{options.outputFile}"
+              ],
+              "metadata": {
+                "technologies": [
+                  "eslint"
+                ],
+                "description": "Runs ESLint on project",
+                "help": {
+                  "command": "npx eslint --help",
+                  "example": {
+                    "options": {
+                      "max-warnings": 0
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "serve": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "next dev",
+                "cwd": "apps/nextjs"
+              },
+              "continuous": true,
+              "configurations": {},
+              "parallelism": true
+            },
+            "typecheck": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "tsc --noEmit",
+                "cwd": "apps/nextjs"
+              },
+              "cache": true,
+              "inputs": [
+                "production",
+                "^production"
+              ],
+              "configurations": {},
+              "parallelism": true
+            },
+            "format": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "prettier --write .",
+                "cwd": "apps/nextjs"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "format-check": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "prettier --check .",
+                "cwd": "apps/nextjs"
+              },
+              "cache": true,
+              "inputs": [
+                "production",
+                "^production"
+              ],
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "name": "nextjs",
+          "projectType": "application",
+          "tags": [
+            "npm:private"
+          ],
+          "metadata": {
+            "targetGroups": {},
+            "js": {
+              "packageName": "nextjs",
+              "packageVersion": "0.0.1",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "apps/nextjs/src",
+          "namedInputs": {
+            "production": [
+              "default",
+              "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)",
+              "!{projectRoot}/tsconfig.spec.json",
+              "!{projectRoot}/jest.config.[jt]s",
+              "!{projectRoot}/.eslintrc.json",
+              "!{projectRoot}/eslint.config.[jt]s"
+            ]
+          },
+          "implicitDependencies": []
+        }
+      }
+    },
+    "dependencies": {
+      "phoenix_framework": [],
+      "ash_framework": [],
+      "@yggd/shared": [],
+      "nextjs": [
+        {
+          "source": "nextjs",
+          "target": "@yggd/shared",
+          "type": "static"
+        }
+      ]
+    }
+  }
+}
