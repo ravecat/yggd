@@ -72,5 +72,32 @@
         "linter": "eslint"
       }
     }
+  },
+  "release": {
+    "projectsRelationship": "independent",
+    "git": {
+      "commitMessage": "chore(release): {version}"
+    },
+    "releaseTag": {
+      "requireSemver": true
+    },
+    "version": {
+      "conventionalCommits": false
+    },
+    "changelog": {
+      "projectChangelogs": {
+        "file": "{projectRoot}/CHANGELOG.md",
+        "replaceExistingContents": false
+      },
+      "workspaceChangelog": {
+        "file": false
+      }
+    },
+    "groups": {
+      "javascript": {
+        "projects": ["apps/nextjs", "packages/*"],
+        "projectsRelationship": "independent"
+      }
+    }
   }
 }
