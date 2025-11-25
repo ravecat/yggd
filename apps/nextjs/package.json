@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
+    "@yggd/shared": "^0.0.1",
     "@excalidraw/excalidraw": "^0.18.0",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-dropdown-menu": "^2.1.16",
@@ -25,9 +26,5 @@
     "y-protocols": "^1.0.6",
     "y-utility": "^0.1.4",
     "yjs": "^13.6.27"
-  },
-  "devDependencies": {
-    "@testing-library/jest-dom": "^6.9.1",
-    "@types/phoenix": "^1.6.6"
   }
 }
