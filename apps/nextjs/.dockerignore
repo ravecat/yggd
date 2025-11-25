@@ -1,0 +1,60 @@
+# Git
+.git
+.gitignore
+**/.git
+
+# Dependencies (installed in Dockerfile via npm ci)
+node_modules
+**/node_modules
+
+# Build artifacts (created during Docker build)
+.next
+**/.next
+dist
+**/dist
+_build
+**/_build
+
+# Nx cache
+.nx
+.nx/cache
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Environment files (pass via docker run -e or compose)
+.env*
+!.env.example
+
+# IDE
+.vscode
+.idea
+**/.vscode
+**/.idea
+
+# Tests
+coverage
+test-output
+**/__tests__
+**/*.test.*
+**/*.spec.*
+*.tsbuildinfo
+**/*.tsbuildinfo
+
+# Allow .spec.swcrc for Nx
+!**/.spec.swcrc
+
+# Context Portal
+context_portal
+
+# Temporary files
+*.tmp
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
