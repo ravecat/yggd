@@ -14,7 +14,7 @@ export function Socket({ children }: { children: ReactNode }) {
 
   if (!socketRef.current && typeof window !== "undefined") {
     socketRef.current = new PhoenixSocket(
-      process.env.NEXT_PUBLIC_PHOENIX_URL as string,
+      process.env.PUBLIC_PHOENIX_URL as string,
       { params: {} }
     );
   }
@@ -22,7 +22,7 @@ export function Socket({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!socketRef.current) {
       socketRef.current = new PhoenixSocket(
-        process.env.NEXT_PUBLIC_PHOENIX_URL as string,
+        process.env.PUBLIC_PHOENIX_URL as string,
         { params: {} }
       );
     }
