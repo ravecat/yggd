@@ -37,7 +37,8 @@ RUN node -e "const fs=require('fs'); \
   fs.writeFileSync('nx.json', JSON.stringify(nx, null, 2));"
 
 ENV NEXT_TELEMETRY_DISABLED=1
-RUN npx nx build nextjs --skip-nx-cache
+
+RUN  npx nx build nextjs --skip-nx-cache
 
 #################################
 # Runner Stage

@@ -40,7 +40,7 @@ describe("Socket Context", () => {
 
     expect(mockSocketInstances).toHaveLength(1);
     expect(mockSocketInstances[0].url).toBe(
-      process.env.NEXT_PUBLIC_PHOENIX_URL
+      process.env.PUBLIC_PHOENIX_URL
     );
     expect(mockSocketInstances[0].options).toEqual({ params: {} });
 
@@ -85,7 +85,7 @@ describe("Socket Context", () => {
     );
 
     expect(mockSocketInstances[mockSocketInstances.length - 1].url).toBe(
-      process.env.NEXT_PUBLIC_PHOENIX_URL
+      process.env.PUBLIC_PHOENIX_URL
     );
     expect(mockSocketInstances[mockSocketInstances.length - 1].options).toEqual(
       {
