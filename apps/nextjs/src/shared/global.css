@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import "@yggd/shared/tokens.css";
+@import "@rvct/shared/tokens.css";
 
 @layer base {
   * {

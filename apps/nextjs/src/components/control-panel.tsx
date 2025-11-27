@@ -5,7 +5,7 @@ import {
   deserializeQueryParams,
   serializeQueryParams,
   type GetPostsQueryParams,
-} from "@yggd/shared";
+} from "@rvct/shared";
 import { assigns } from "@/shared/lib/session";
 import type { AsyncSearchParams } from "@/shared/types";
 

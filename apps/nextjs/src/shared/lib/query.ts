@@ -1,7 +1,7 @@
 import {
   deserializeQueryParams as sharedDeserialize,
   serializeQueryParams as sharedSerialize,
-} from "@yggd/shared";
+} from "@rvct/shared";
 import type { SearchParams } from "../types/query";
 
 /**
@@ -15,7 +15,7 @@ import type { SearchParams } from "../types/query";
  * @returns Deserialized nested object structure matching TQueryParams (all fields optional)
  * 
  * @example
- * import type { GetPostsQueryParams } from "@yggd/shared";
+ * import type { GetPostsQueryParams } from "@rvct/shared";
  * 
  * const params = await searchParams;
  * const parsed = deserializeQueryParams<GetPostsQueryParams>(params);

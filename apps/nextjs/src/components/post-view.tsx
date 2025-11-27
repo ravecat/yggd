@@ -1,4 +1,4 @@
-import { getPostsId } from "@yggd/shared";
+import { getPostsId } from "@rvct/shared";
 import { notFound } from "next/navigation";
 
 export async function PostView({
