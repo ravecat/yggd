@@ -10,7 +10,7 @@ const swcJestConfig = JSON.parse(
 swcJestConfig.swcrc = false;
 
 module.exports = {
-  displayName: '@yggd/shared',
+  displayName: '@rvct/shared',
   preset: '../../jest.preset.js',
   testEnvironment: 'jsdom',
   transform: {
