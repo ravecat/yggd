@@ -26,8 +26,8 @@ config :ash_framework, AshFrameworkWeb.Endpoint,
   debug_errors: true,
   secret_key_base: "tWS0LjMScNH4LajMVAeZ8S+r0MFHa6V13BKW66jNZQ4/tkSelFNwIzuANrEgo2Rl",
   watchers: [
-    esbuild: {Esbuild, :install_and_run, [:ash_framework, ~w(--sourcemap=inline --watch)]},
-    tailwind: {Tailwind, :install_and_run, [:ash_framework, ~w(--watch)]}
+    esbuild: {Esbuild, :install_and_run, [:assets, ~w(--sourcemap=inline --watch)]},
+    tailwind: {Tailwind, :install_and_run, [:assets, ~w(--watch)]}
   ]
 
 # ## SSL Support
