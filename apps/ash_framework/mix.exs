@@ -65,6 +65,7 @@ defmodule AshFramework.MixProject do
       {:phoenix_live_view, "~> 1.1.0"},
       {:lazy_html, ">= 0.1.0", only: :test},
       {:phoenix_live_dashboard, "~> 0.8.3"},
+      {:bun, "~> 1.3", runtime: Mix.env() == :dev},
       {:esbuild, "~> 0.10", runtime: Mix.env() == :dev},
       {:tailwind, "~> 0.3", runtime: Mix.env() == :dev},
       {:heroicons,
@@ -100,12 +101,13 @@ defmodule AshFramework.MixProject do
       "assets.setup": [
         "tailwind.install --if-missing",
         "esbuild.install --if-missing",
-        "cmd cd assets && npm install"
+        "bun.install --if-missing",
+        "bun assets install"
       ],
-      "assets.build": ["compile", "tailwind ash_framework", "esbuild ash_framework"],
+      "assets.build": ["compile", "tailwind assets", "esbuild assets"],
       "assets.deploy": [
-        "tailwind ash_framework --minify",
-        "esbuild ash_framework --minify",
+        "tailwind assets --minify",
+        "esbuild assets --minify",
         "phx.digest"
       ],
       deploy: [
