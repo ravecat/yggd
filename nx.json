@@ -53,6 +53,12 @@
       "options": {
         "targetName": "lint"
       }
+    },
+    {
+      "plugin": "@nx/docker",
+      "options": {
+        "buildTarget": { "name": "package" }
+      }
     }
   ],
   "targetDefaults": {
@@ -60,6 +66,10 @@
       "cache": true
     },
     "test": {
+      "cache": true,
+      "dependsOn": ["^build"]
+    },
+    "package": {
       "cache": true,
       "dependsOn": ["^build"]
     }
@@ -96,7 +106,14 @@
     "groups": {
       "javascript": {
         "projects": ["apps/nextjs", "packages/*"],
-        "projectsRelationship": "independent"
+        "projectsRelationship": "independent",
+        "docker": {
+          "versionSchemes": {
+            "production": "{versionActionsVersion}"
+          },
+          "registryUrl": "ghcr.io",
+          "repositoryName": "ravecat"
+        }
       }
     }
   }
