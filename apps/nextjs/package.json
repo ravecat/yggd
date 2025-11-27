@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "@yggd/shared": "^0.0.1",
+    "@yggd/shared": "0.0.1",
     "@excalidraw/excalidraw": "^0.18.0",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-dropdown-menu": "^2.1.16",

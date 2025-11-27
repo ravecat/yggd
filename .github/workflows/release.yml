@@ -2,34 +2,35 @@ name: release
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   workflow_dispatch: {}
 
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Use Node.js
+      - name: Prepare Node.js environment
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Dry run - release (preview changelog and version plan)
+      - name: Dry run - packages release preview
+        if: github.event_name == 'push'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx nx release --dry-run --verbose --yes
+        run: npx nx release --groups=packages --dry-run --verbose --skip-publish
 
-      - name: Run release
-        if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/master'
+      - name: Dry run - apps release preview
+        if: github.event_name == 'push'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npx nx release
+        run: npx nx release --groups=apps --dry-run --verbose --skip-publish
