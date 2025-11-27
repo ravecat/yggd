@@ -92,28 +92,32 @@
       "requireSemver": true
     },
     "version": {
-      "conventionalCommits": false
+      "conventionalCommits": false,
+      "updateDependents": "never",
+      "versionActionsOptions": {
+        "preserveMatchingDependencyRanges": false
+      }
     },
     "changelog": {
       "projectChangelogs": {
         "file": "{projectRoot}/CHANGELOG.md",
-        "replaceExistingContents": false
+        "replaceExistingContents": false,
+        "renderOptions": {
+          "authors": false
+        }
       },
       "workspaceChangelog": {
         "file": false
       }
     },
     "groups": {
-      "javascript": {
-        "projects": ["apps/nextjs", "packages/*"],
-        "projectsRelationship": "independent",
-        "docker": {
-          "versionSchemes": {
-            "production": "{versionActionsVersion}"
-          },
-          "registryUrl": "ghcr.io",
-          "repositoryName": "ravecat"
-        }
+      "packages": {
+        "projects": ["packages/*"],
+        "projectsRelationship": "independent"
+      },
+      "apps": {
+        "projects": ["apps/nextjs"],
+        "projectsRelationship": "independent"
       }
     }
   }
