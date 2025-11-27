@@ -95,7 +95,8 @@
       "conventionalCommits": false,
       "updateDependents": "never",
       "versionActionsOptions": {
-        "preserveMatchingDependencyRanges": false
+        "preserveMatchingDependencyRanges": false,
+        "skipLockFileUpdate": true
       }
     },
     "changelog": {
