@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { POSTS_CONFIG } from "@yggd/shared";
+import { POSTS_CONFIG } from "@rvct/shared";
 
 function handlePostsRequest(request: NextRequest): NextResponse {
   const { searchParams } = request.nextUrl;
