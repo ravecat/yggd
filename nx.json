@@ -94,7 +94,7 @@
       "requireSemver": true
     },
     "git": {
-      "commitMessage": "chore(release): {version}"
+      "commitMessage": "chore(release): {projectName}@{version}"
     },
     "version": {
       "conventionalCommits": true,
@@ -119,11 +119,17 @@
     "groups": {
       "packages": {
         "projects": ["packages/*"],
-        "projectsRelationship": "independent"
+        "projectsRelationship": "independent",
+        "git": {
+          "commitMessage": "chore(release): {projectName}@{version}"
+        }
       },
       "apps": {
         "projects": ["apps/nextjs"],
-        "projectsRelationship": "independent"
+        "projectsRelationship": "independent",
+        "git": {
+          "commitMessage": "chore(release): {projectName}@{version}"
+        }
       }
     }
   }
