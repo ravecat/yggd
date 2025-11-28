@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getPostsId } from "@yggd/shared";
+import { getPostsId } from "@rvct/shared";
 
 export function PostSkeleton() {
   return (

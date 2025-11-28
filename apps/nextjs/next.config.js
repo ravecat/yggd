@@ -18,7 +18,7 @@ const nextConfig = {
 /** @type {(import("@nx/next/src/utils/config").NextPlugin | import("@nx/next/src/utils/config").NextPluginThatReturnsConfigFn)[]} */
 const plugins = [
   // Add more Next.js plugins to this list if needed.
-  // withNx,
+  withNx,
 ];
 
 module.exports = composePlugins(...plugins)(nextConfig);

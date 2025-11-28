@@ -3,7 +3,7 @@ import {
   deserializeQueryParams,
   serializeQueryParams,
   type GetPostsQueryParams,
-} from "@yggd/shared";
+} from "@rvct/shared";
 import Link from "next/link";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { ScrollArea } from "@/shared/ui/scroll-area";
