@@ -34,7 +34,7 @@ jobs:
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
-      - name: Dry run - packages release preview
+      - name: Packages release (preview)
         if: >
           github.event_name == 'push' &&
           github.ref == 'refs/heads/master'
@@ -42,7 +42,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx nx release --groups=packages --dry-run --verbose --skip-publish
 
-      - name: Dry run - apps release preview
+      - name: Apps release (preview)
         if: >
           github.event_name == 'push' &&
           github.ref == 'refs/heads/master'
@@ -61,8 +61,8 @@ jobs:
 
       - name: Release apps
         if: >
-          github.event_name == 'workflow_dispatch' ||
-          startsWith(github.ref, 'refs/tags/')
+          github.event_name == 'workflow_dispatch' &&
+          github.ref == 'refs/heads/master'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx nx release --groups=apps --skip-publish
