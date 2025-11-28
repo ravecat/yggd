@@ -1,4 +1,4 @@
-import type { FlattenToBracketNotation } from "@yggd/shared";
+import type { FlattenToBracketNotation } from "@rvct/shared";
 
 /**
  * Type utilities for converting JSON:API QueryParams to Next.js searchParams format
@@ -15,7 +15,7 @@ import type { FlattenToBracketNotation } from "@yggd/shared";
  * @template TQueryParams - Generated QueryParams type (e.g., GetPostsQueryParams)
  * 
  * @example
- * import type { GetPostsQueryParams } from "@yggd/shared";
+ * import type { GetPostsQueryParams } from "@rvct/shared";
  * 
  * type PostsParams = SearchParams<GetPostsQueryParams>;
  * // Accepts: { "page[limit]": "10", "page[offset]": "0", sort: "-created_at" }
@@ -40,7 +40,7 @@ export type SearchParams<TQueryParams = Record<string, unknown>> =
  * @template TQueryParams - Generated QueryParams type (e.g., GetPostsQueryParams)
  * 
  * @example
- * import type { GetPostsQueryParams } from "@yggd/shared";
+ * import type { GetPostsQueryParams } from "@rvct/shared";
  * import type { AsyncSearchParams } from "@/shared/types";
  * 
  * // For components

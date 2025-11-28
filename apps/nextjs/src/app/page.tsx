@@ -7,7 +7,7 @@ import { SignIn } from "../components/sign-in";
 import { ExcalidrawCanvas } from "../components/excalidraw-canvas";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import type { AsyncSearchParams } from "@/shared/types";
-import { POSTS_CONFIG, type GetPostsQueryParams } from "@yggd/shared";
+import { POSTS_CONFIG, type GetPostsQueryParams } from "@rvct/shared";
 
 export default function Index({
   searchParams,

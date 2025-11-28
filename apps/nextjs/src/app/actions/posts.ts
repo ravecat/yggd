@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { postPosts } from "@yggd/shared";
+import { postPosts } from "@rvct/shared";
 import { assigns } from "@/shared/lib/session";
 
 export type CreatePostState = {
