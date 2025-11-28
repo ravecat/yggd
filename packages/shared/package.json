@@ -20,12 +20,15 @@
     }
   },
   "peerDependencies": {
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react": "^18.0.0 || ^19.0.0"
   },
   "dependencies": {
     "axios": "^1.12.2",
+    "friendly-username-generator": "^2.0.4",
     "phoenix": "^1.8.1",
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "y-indexeddb": "^9.0.12",
+    "y-phoenix-channel": "^0.1.1",
+    "yjs": "^13.6.27"
   }
 }

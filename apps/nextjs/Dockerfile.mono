@@ -9,15 +9,21 @@ FROM node:${NODE_VERSION}-bullseye-slim AS builder
 
 WORKDIR /app
 
+# Copy package files first for better caching
 COPY package*.json ./
-COPY next.config.js ./
-COPY tsconfig*.json ./
+COPY apps/nextjs/package*.json ./apps/nextjs/
+COPY apps/nextjs/next.config.js ./apps/nextjs/
+COPY apps/nextjs/tsconfig*.json ./apps/nextjs/
+COPY nx.json ./
 
-RUN npm install
+# Install dependencies
+RUN npm ci
 
+# Copy source code
 COPY . .
 
-RUN npx next build
+# Build application
+RUN npx nx build nextjs --verbose
 
 # #################################
 # Runner Stage
@@ -32,9 +38,9 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN addgroup --system --gid 1001 nodejs && \
   adduser --system --uid 1001 nextjs
 
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/apps/nextjs/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/apps/nextjs/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/apps/nextjs/public ./public
 
 USER nextjs
 
