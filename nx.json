@@ -72,6 +72,11 @@
     "package": {
       "cache": true,
       "dependsOn": ["^build"]
+    },
+    "nx-release-publish": {
+      "options": {
+        "access": "public"
+      }
     }
   },
   "parallel": 4,
@@ -85,14 +90,14 @@
   },
   "release": {
     "projectsRelationship": "independent",
-    "git": {
-      "commitMessage": "chore(release): {version}"
-    },
     "releaseTag": {
       "requireSemver": true
     },
+    "git": {
+      "commitMessage": "chore(release): {version}"
+    },
     "version": {
-      "conventionalCommits": false,
+      "conventionalCommits": true,
       "updateDependents": "never",
       "versionActionsOptions": {
         "preserveMatchingDependencyRanges": false,
