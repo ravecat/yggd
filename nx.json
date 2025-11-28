@@ -120,6 +120,9 @@
       "packages": {
         "projects": ["packages/*"],
         "projectsRelationship": "independent",
+        "version": {
+          "fallbackCurrentVersionResolver": "disk"
+        },
         "git": {
           "commitMessage": "chore(release): {projectName}@{version}"
         }
@@ -127,6 +130,9 @@
       "apps": {
         "projects": ["apps/nextjs"],
         "projectsRelationship": "independent",
+        "version": {
+          "fallbackCurrentVersionResolver": "disk"
+        },
         "git": {
           "commitMessage": "chore(release): {projectName}@{version}"
         }
