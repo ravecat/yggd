@@ -59,6 +59,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx nx release --groups=packages
 
+      - name: Release apps
+        if: >
+          github.event_name == 'workflow_dispatch' ||
+          startsWith(github.ref, 'refs/tags/')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx nx release --groups=apps --skip-publish
+
   docker:
     name: Build and Push Docker Image to GHCR
     runs-on: ubuntu-latest

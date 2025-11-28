@@ -105,6 +105,7 @@
       }
     },
     "changelog": {
+      "automaticFromRef": true,
       "projectChangelogs": {
         "file": "{projectRoot}/CHANGELOG.md",
         "replaceExistingContents": false,
