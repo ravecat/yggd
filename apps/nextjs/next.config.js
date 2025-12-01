@@ -13,6 +13,9 @@ const nextConfig = {
 
   // Standalone mode for minimal production Docker images
   output: "standalone",
+  env: {
+    PUBLIC_PHOENIX_URL: process.env.PUBLIC_PHOENIX_URL,
+  },
 };
 
 /** @type {(import("@nx/next/src/utils/config").NextPlugin | import("@nx/next/src/utils/config").NextPluginThatReturnsConfigFn)[]} */
