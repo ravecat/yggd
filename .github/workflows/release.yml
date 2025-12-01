@@ -64,6 +64,12 @@ jobs:
         with:
           fetch-depth: 0
           filter: tree:0
+          persist-credentials: true
+
+      - name: Set Git user
+        run: |
+          git config user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
+          git config user.name "${{ github.actor }}"
 
       - name: Prepare Node.js environment
         uses: actions/setup-node@v4
