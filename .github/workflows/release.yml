@@ -7,16 +7,29 @@ on:
     tags:
       - v*.*.*
       - "*.*.*"
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: "Release"
+        required: true
+        type: choice
+        options:
+          - packages
+          - apps
 
 permissions:
   contents: read
 
 jobs:
   release:
+    concurrency:
+      group: release-${{ github.ref }}
+      cancel-in-progress: true
     permissions:
       contents: write
       packages: write
+      actions: read
+      pull-requests: read
     name: Release apps and packages
     runs-on: ubuntu-latest
     steps:
@@ -24,6 +37,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          filter: tree:0
 
       - name: Prepare Node.js environment
         uses: actions/setup-node@v4
@@ -32,40 +46,55 @@ jobs:
           cache: "npm"
 
       - name: Install dependencies
-        run: npm ci --legacy-peer-deps
+        run: npm ci
 
-      - name: Packages release (preview)
+      - name: Set SHAs for affected detection
+        uses: nrwl/nx-set-shas@v4
+
+      - name: Detect affected projects
+        id: affected
+        run: |
+          PACKAGES=$(npx nx show projects --type lib --affected | paste -sd ',')
+          APPS=$(npx nx show projects --type app --affected | paste -sd ',')
+          echo "packages=$PACKAGES" >> $GITHUB_OUTPUT
+          echo "apps=$APPS" >> $GITHUB_OUTPUT
+          echo "Found affected packages: $PACKAGES"
+          echo "Found affected apps: $APPS"
+
+      - name: Release packages (preview)
         if: >
           github.event_name == 'push' &&
           github.ref == 'refs/heads/master'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx nx release --groups=packages --dry-run --verbose --skip-publish
+        run: |
+          npx nx affected -t build -p 'packages/*' --parallel
+          npx nx release --projects=${{ steps.affected.outputs.packages }} --dry-run --verbose
 
-      - name: Apps release (preview)
+      - name: Release apps (preview)
         if: >
           github.event_name == 'push' &&
           github.ref == 'refs/heads/master'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx nx release --groups=apps --dry-run --verbose --skip-publish
+        run: npx nx release --projects=${{ steps.affected.outputs.apps }} --dry-run --verbose
 
       - name: Release packages
         if: >
-          github.event_name == 'workflow_dispatch' ||
-          startsWith(github.ref, 'refs/tags/')
+          github.event_name == 'workflow_dispatch' &&
+          github.ref == 'refs/heads/master' &&
+          github.event.inputs.release_type == 'packages'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx nx release --groups=packages
+        run: |
+          npx nx affected -t build -p 'packages/*' --parallel
+          npx nx release --projects=${{ steps.affected.outputs.packages }}
 
       - name: Release apps
         if: >
           github.event_name == 'workflow_dispatch' &&
-          github.ref == 'refs/heads/master'
+          github.ref == 'refs/heads/master' &&
+          github.event.inputs.release_type == 'apps'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx nx release --groups=apps --skip-publish
+        run: npx nx release --projects=${{ steps.affected.outputs.apps }} --skip-publish
 
   docker:
     name: Build and Push Docker Image to GHCR
