@@ -1,12 +1,26 @@
 {
-  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    "composite": true,
+    "declarationMap": true,
+    "importHelpers": true,
+    "isolatedModules": true,
+    "lib": ["es2022", "dom", "dom.iterable", "esnext"],
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "es2022",
+    "customConditions": ["development"],
     "jsx": "preserve",
     "noEmit": true,
     "emitDeclarationOnly": false,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
@@ -46,9 +60,5 @@
     "eslint.config.cjs",
     "eslint.config.mjs"
   ],
-  "references": [
-    {
-      "path": "../../packages/shared"
-    }
-  ]
+  "references": []
 }
