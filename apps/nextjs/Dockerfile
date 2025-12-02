@@ -9,15 +9,15 @@ FROM node:${NODE_VERSION}-bullseye-slim AS builder
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package*.json pnpm-lock.yaml ./
 COPY next.config.js ./
 COPY tsconfig*.json ./
 
-RUN npm install
+RUN corepack enable pnpm && pnpm install --frozen-lockfile
 
 COPY . .
 
-RUN npx next build
+RUN pnpm exec next build
 
 # #################################
 # Runner Stage
