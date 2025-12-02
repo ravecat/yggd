@@ -112,7 +112,7 @@ defmodule AshFramework.MixProject do
       ],
       deploy: [
         "deps.get --only prod",
-        "compile --force",
+        "compile",
         "assets.deploy"
       ],
       precommit: ["compile --warning-as-errors", "deps.unlock --unused", "format", "test"]
