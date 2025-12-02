@@ -1,3 +1,9 @@
+## 0.1.1 (2025-12-02)
+
+### 🩹 Fixes
+
+- **shared:** include dependencies to package ([1334a6a](https://github.com/ravecat/yggd/commit/1334a6a))
+
 ## 0.1.0 (2025-11-28)
 
 ### 🚀 Features
