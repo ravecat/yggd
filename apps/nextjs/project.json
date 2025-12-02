@@ -46,6 +46,13 @@
       },
       "cache": true,
       "inputs": ["production", "^production"]
+    },
+    "build": {
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/.next",
+        "!{projectRoot}/.next/standalone"
+      ]
     }
   },
   "tags": []
