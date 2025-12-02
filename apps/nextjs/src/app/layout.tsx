@@ -1,5 +1,5 @@
 import "../shared/global.css";
-import { SocketProvider } from "../components/socket-provider";
+import { Providers } from "../components/providers";
 
 export const metadata = {
   title: "Welcome to nextjs",
@@ -16,10 +16,10 @@ export default function Layout({
   return (
     <html lang="en">
       <body>
-        <SocketProvider>
+        <Providers>
           {children}
           {modal}
-        </SocketProvider>
+        </Providers>
       </body>
     </html>
   );
