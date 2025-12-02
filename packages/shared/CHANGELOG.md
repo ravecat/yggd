@@ -1,3 +1,9 @@
+## 0.1.3 (2025-12-02)
+
+### 🩹 Fixes
+
+- **shared:** update socket provider contract ([07ea340](https://github.com/ravecat/yggd/commit/07ea340))
+
 ## 0.1.2 (2025-12-02)
 
 ### 🩹 Fixes
