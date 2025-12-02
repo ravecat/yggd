@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "composite": true,
-    "declarationMap": false,
+    "composite": false,
+    "declarationMap": true,
     "sourceMap": false,
     "importHelpers": true,
     "isolatedModules": true,
@@ -20,6 +20,7 @@
     "baseUrl": ".",
     "rootDir": "src",
     "outDir": "dist",
+    "declaration": true,
     "emitDeclarationOnly": false,
     "forceConsistentCasingInFileNames": true,
     "types": [
