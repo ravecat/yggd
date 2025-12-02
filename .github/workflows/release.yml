@@ -131,7 +131,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           npx nx run-many -t build -p ${{ needs.metadata.outputs.affected_packages }} --parallel
-          npx nx release --projects=${{ needs.metadata.outputs.affected_packages }}
+            npx nx release --projects=${{ needs.metadata.outputs.affected_packages }} --yes
 
       - name: Release apps
         if: >
@@ -140,7 +140,7 @@ jobs:
           github.event.inputs.release == 'apps'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx nx release --projects=${{ needs.metadata.outputs.affected_apps }} --skip-publish
+        run: npx nx release --projects=${{ needs.metadata.outputs.affected_apps }} --skip-publish --yes
 
   docker:
     name: Build and Push Docker Image to GHCR
