@@ -1,3 +1,9 @@
+## 0.1.2 (2025-12-02)
+
+### 🩹 Fixes
+
+- **shared:** include type declation to package ([65c734f](https://github.com/ravecat/yggd/commit/65c734f))
+
 ## 0.1.1 (2025-12-02)
 
 ### 🩹 Fixes
