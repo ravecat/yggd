@@ -3,6 +3,7 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { generateCodeVerifier, generateCodeChallenge } from '@/shared/lib/pkce';
+import { getEnv } from '@/env';
 
 export async function signup() {
   const verifier = generateCodeVerifier();
@@ -17,8 +18,9 @@ export async function signup() {
     maxAge: 60 * 10,
   });
 
-  const callbackUri = `${process.env.AUTH_SERVICE_URL}/auth/callback`;
-  const oauthUrl = new URL(`${process.env.APP_URL}/auth/user/google`);
+  const env = getEnv();
+  const callbackUri = `${env.AUTH_SERVICE_URL}/auth/callback`;
+  const oauthUrl = new URL(`${env.APP_URL}/auth/user/google`);
 
   oauthUrl.searchParams.set('redirect_uri', callbackUri);
   oauthUrl.searchParams.set('code_challenge', challenge);
@@ -41,7 +43,8 @@ export async function exchangeCodeForToken(code: string): Promise<string> {
     throw new Error('PKCE verifier not found in cookie');
   }
 
-  const response = await fetch(`${process.env.AUTH_SERVICE_URL}/auth/exchange`, {
+  const env = getEnv();
+  const response = await fetch(`${env.AUTH_SERVICE_URL}/auth/exchange`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ code, code_verifier: verifier }),
