@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 import { jwtVerify, type JWTPayload } from 'jose';
 
 const SECRET_KEY = new TextEncoder().encode(
-  process.env.NEXTJS_TOKEN_SIGNING_SECRET
+  process.env.TOKEN_SIGNING_SECRET
 );
 
 export async function decrypt(token: string | undefined = ''): Promise<JWTPayload | null> {
