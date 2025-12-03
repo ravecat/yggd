@@ -1,6 +1,7 @@
 import "../shared/global.css";
 import { Providers } from "../components/providers";
-import { Environment } from "../contexts/environment";
+import { EnvironmentProvider } from "../contexts/environment";
+import { getEnv } from "../env";
 
 export const metadata = {
   title: "Welcome to nextjs",
@@ -14,19 +15,17 @@ export default function Layout({
   children: React.ReactNode;
   modal: React.ReactNode;
 }) {
+  const env = getEnv();
+  
   return (
     <html lang="en">
       <body>
-        <Environment
-          env={{
-            PUBLIC_CHANNEL_URL: process.env.PUBLIC_CHANNEL_URL,
-          }}
-        >
+        <EnvironmentProvider env={env}>
           <Providers>
             {children}
             {modal}
           </Providers>
-        </Environment>
+        </EnvironmentProvider>
       </body>
     </html>
   );

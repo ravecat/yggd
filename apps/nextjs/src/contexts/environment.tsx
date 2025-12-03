@@ -1,26 +1,25 @@
 "use client";
 
 import { createContext, useContext, ReactNode } from "react";
+import type { Environment } from "../env";
 
-const EnvContext = createContext<Record<string, string | undefined> | null>(
-  null
-);
+const EnvContext = createContext<Environment | null>(null);
 
-export function Environment({
+export function EnvironmentProvider({
   children,
   env,
 }: {
   children: ReactNode;
-  env: Record<string, string | undefined>;
+  env: Environment;
 }) {
   return <EnvContext.Provider value={env}>{children}</EnvContext.Provider>;
 }
 
-export function useEnv() {
+export function useEnv(): Environment {
   const context = useContext(EnvContext);
 
   if (!context) {
-    throw new Error("useEnv must be used within Environment provider");
+    throw new Error("useEnv must be used within EnvironmentProvider");
   }
 
   return context;

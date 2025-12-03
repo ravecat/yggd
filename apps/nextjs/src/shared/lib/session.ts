@@ -2,10 +2,16 @@ import 'server-only';
 import { cache } from 'react';
 import { cookies } from 'next/headers';
 import { jwtVerify, type JWTPayload } from 'jose';
+import { getEnv } from '../../env';
 
-const SECRET_KEY = new TextEncoder().encode(
-  process.env.TOKEN_SIGNING_SECRET
-);
+let secretKey: Uint8Array;
+
+function getSecretKey(): Uint8Array {
+  if (!secretKey) {
+    secretKey = new TextEncoder().encode(getEnv().TOKEN_SIGNING_SECRET);
+  }
+  return secretKey;
+}
 
 export async function decrypt(token: string | undefined = ''): Promise<JWTPayload | null> {
   if (!token) {
@@ -13,7 +19,7 @@ export async function decrypt(token: string | undefined = ''): Promise<JWTPayloa
   }
 
   try {
-    const { payload } = await jwtVerify(token, SECRET_KEY, {
+    const { payload } = await jwtVerify(token, getSecretKey(), {
       algorithms: ['HS256'],
     });
 
