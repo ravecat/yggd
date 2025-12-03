@@ -188,7 +188,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ matrix.app }}
+          images: ${{ env.REGISTRY }}/${{ github.repository_owner }}/yggd/${{ matrix.app }}
           tags: |
             type=ref,event=branch
             type=ref,event=tag
