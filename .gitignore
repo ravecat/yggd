@@ -24,3 +24,13 @@ project-graph.json
 context_portal/
 
 test-output
+
+# Nix
+result
+result-*
+
+# PostgreSQL
+.pg_data/
+
+# direnv
+.direnv/
