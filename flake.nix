@@ -1,5 +1,5 @@
 {
-  description = "Yggd dev environment";
+  description = "Moda dev environment";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";

@@ -1,4 +1,4 @@
-# Yggd Monorepo
+# Moda
 
 > **Educational Project Disclaimer**
 >
