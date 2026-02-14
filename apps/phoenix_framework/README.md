@@ -1,6 +1,6 @@
 # PhoenixFramework
 
-A standalone Phoenix application within the Yggd monorepo.
+A standalone Phoenix application within the monorepo.
 
 ## Getting Started
 
