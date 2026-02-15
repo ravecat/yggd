@@ -3,6 +3,8 @@ node_modules
 
 # Build outputs
 dist
+_build
+deps
 
 # Generated files
 *.generated.*
@@ -22,3 +24,6 @@ pnpm-lock.yaml
 # IDE
 .vscode
 .idea
+
+# Worktrees
+.worktrees
