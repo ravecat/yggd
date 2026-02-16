@@ -35,17 +35,16 @@ Now you can visit [`localhost:4001`](http://localhost:4001) from your browser.
 
 ## Database
 
-* Database name: `phoenix_framework_dev` (development)
-* Database name: `phoenix_framework_test` (test)
-* Port: 5432 (PostgreSQL default)
+- Database name: `phoenix_framework_dev` (development)
+- Database name: `phoenix_framework_test` (test)
+- Port: 5432 (PostgreSQL default)
 
 Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
 
 ## Resources
 
-* Official website: <https://www.phoenixframework.org/>
-* Guides: <https://hexdocs.pm/phoenix/overview.html>
-* Docs: <https://hexdocs.pm/phoenix>
-* Forum: <https://elixirforum.com/c/phoenix-forum>
-* Source: <https://github.com/phoenixframework/phoenix>
-
+- Official website: <https://www.phoenixframework.org/>
+- Guides: <https://hexdocs.pm/phoenix/overview.html>
+- Docs: <https://hexdocs.pm/phoenix>
+- Forum: <https://elixirforum.com/c/phoenix-forum>
+- Source: <https://github.com/phoenixframework/phoenix>
