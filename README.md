@@ -43,13 +43,15 @@ Add direnv hook to the shell - see [direnv docs](https://direnv.net/docs/hook.ht
 
 **With direnv (recommended):**
 
-If direnv is configured, the environment activates automatically when you `cd` into the project directory. On first use, approve with:
+If direnv is configured, the environment activates automatically when you `cd` into the project directory. On first use,
+approve with:
 
 ```bash
 direnv allow
 ```
 
-After that, no explicit commands are needed - direnv will load and unload the environment on entering and leaving the directory.
+After that, no explicit commands are needed - direnv will load and unload the environment on entering and leaving the
+directory.
 
 **Without direnv (manual):**
 
