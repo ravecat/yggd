@@ -12,12 +12,6 @@ defmodule AshFramework.Accounts.User do
 
   json_api do
     type "user"
-
-    routes do
-      base "/users"
-      get :read
-      index :read
-    end
   end
 
   authentication do
@@ -159,8 +153,8 @@ defmodule AshFramework.Accounts.User do
   end
 
   relationships do
-    has_many :posts, AshFramework.Blog.Post do
-      destination_attribute :author_id
+    has_many :todos, AshFramework.Tasks.Todo do
+      destination_attribute :user_id
       public? true
     end
 

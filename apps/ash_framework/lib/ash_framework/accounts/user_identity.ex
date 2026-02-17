@@ -25,10 +25,6 @@ defmodule AshFramework.Accounts.UserIdentity do
     end
   end
 
-  identities do
-    identity :unique_identity, [:strategy, :uid, :user_id]
-  end
-
   policies do
     bypass AshAuthentication.Checks.AshAuthenticationInteraction do
       authorize_if always()
@@ -37,5 +33,9 @@ defmodule AshFramework.Accounts.UserIdentity do
     policy always() do
       forbid_if always()
     end
+  end
+
+  identities do
+    identity :unique_identity, [:strategy, :uid, :user_id]
   end
 end

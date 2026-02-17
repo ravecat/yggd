@@ -1,1 +1,87 @@
-{"additionalProperties":false,"description":"A \"Resource object\" representing a user","properties":{"attributes":{"additionalProperties":false,"description":"An attributes object for a user","properties":{"email":{"description":"Field included by default.","type":"string","x-struct":null,"x-validate":null}},"required":["email"],"type":"object","x-struct":null,"x-validate":null},"id":{"type":"string"},"relationships":{"additionalProperties":false,"description":"A relationships object for a user","properties":{"posts":{"properties":{"data":{"description":"Relationship data for posts","items":{"additionalProperties":false,"description":"Resource identifiers for posts","properties":{"id":{"type":"string","x-struct":null,"x-validate":null},"meta":{"additionalProperties":true,"type":"object","x-struct":null,"x-validate":null},"type":{"type":"string","x-struct":null,"x-validate":null}},"required":["type","id"],"type":"object"},"type":"array","uniqueItems":true,"x-struct":null,"x-validate":null}},"x-struct":null,"x-validate":null}},"type":"object","x-struct":null,"x-validate":null},"type":{"type":"string","x-struct":null,"x-validate":null}},"required":["type","id"],"type":"object","x-struct":null,"x-validate":null,"x-readme-ref-name":"user"}
+{
+  "additionalProperties": false,
+  "description": "A \"Resource object\" representing a user",
+  "properties": {
+    "attributes": {
+      "additionalProperties": false,
+      "description": "An attributes object for a user",
+      "properties": {
+        "email": {
+          "description": "Field included by default.",
+          "type": "string",
+          "x-struct": null,
+          "x-validate": null
+        },
+        "name": {
+          "anyOf": [
+            {
+              "nullable": true,
+              "type": "string",
+              "x-struct": null,
+              "x-validate": null
+            },
+            { "type": "null" }
+          ],
+          "description": "Field included by default."
+        }
+      },
+      "required": ["email"],
+      "type": "object",
+      "x-struct": null,
+      "x-validate": null
+    },
+    "id": { "type": "string" },
+    "relationships": {
+      "additionalProperties": false,
+      "description": "A relationships object for a user",
+      "properties": {
+        "todos": {
+          "properties": {
+            "data": {
+              "description": "Relationship data for todos",
+              "items": {
+                "additionalProperties": false,
+                "description": "Resource identifiers for todos",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "x-struct": null,
+                    "x-validate": null
+                  },
+                  "meta": {
+                    "additionalProperties": true,
+                    "type": "object",
+                    "x-struct": null,
+                    "x-validate": null
+                  },
+                  "type": {
+                    "type": "string",
+                    "x-struct": null,
+                    "x-validate": null
+                  }
+                },
+                "required": ["type", "id"],
+                "type": "object"
+              },
+              "type": "array",
+              "uniqueItems": true,
+              "x-struct": null,
+              "x-validate": null
+            }
+          },
+          "x-struct": null,
+          "x-validate": null
+        }
+      },
+      "type": "object",
+      "x-struct": null,
+      "x-validate": null
+    },
+    "type": { "type": "string", "x-struct": null, "x-validate": null }
+  },
+  "required": ["type", "id"],
+  "type": "object",
+  "x-struct": null,
+  "x-validate": null,
+  "x-readme-ref-name": "user"
+}

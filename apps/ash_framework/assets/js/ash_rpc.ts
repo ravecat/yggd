@@ -15,22 +15,23 @@ export type UserResourceSchema = {
   id: UUID;
   email: string;
   name: string | null;
-  posts: { __type: "Relationship"; __array: true; __resource: PostResourceSchema; };
+  todos: { __type: "Relationship"; __array: true; __resource: TodoResourceSchema; };
 };
 
 
 
-// Post Schema
-export type PostResourceSchema = {
+// Todo Schema
+export type TodoResourceSchema = {
   __type: "Resource";
-  __primitiveFields: "id" | "title" | "content" | "createdAt" | "updatedAt" | "authorId";
+  __primitiveFields: "id" | "title" | "content" | "status" | "createdAt" | "updatedAt" | "userId";
   id: UUID;
   title: string;
   content: string;
+  status: "todo" | "in_progress" | "completed";
   createdAt: UtcDateTimeUsec;
   updatedAt: UtcDateTimeUsec;
-  authorId: UUID;
-  author: { __type: "Relationship"; __resource: UserResourceSchema; };
+  userId: UUID;
+  user: { __type: "Relationship"; __resource: UserResourceSchema; };
 };
 
 
@@ -65,13 +66,13 @@ export type UserFilterInput = {
   };
 
 
-  posts?: PostFilterInput;
+  todos?: TodoFilterInput;
 
 };
-export type PostFilterInput = {
-  and?: Array<PostFilterInput>;
-  or?: Array<PostFilterInput>;
-  not?: Array<PostFilterInput>;
+export type TodoFilterInput = {
+  and?: Array<TodoFilterInput>;
+  or?: Array<TodoFilterInput>;
+  not?: Array<TodoFilterInput>;
 
   id?: {
     eq?: UUID;
@@ -89,6 +90,12 @@ export type PostFilterInput = {
     eq?: string;
     notEq?: string;
     in?: Array<string>;
+  };
+
+  status?: {
+    eq?: "todo" | "in_progress" | "completed";
+    notEq?: "todo" | "in_progress" | "completed";
+    in?: Array<"todo" | "in_progress" | "completed">;
   };
 
   createdAt?: {
@@ -111,14 +118,14 @@ export type PostFilterInput = {
     in?: Array<UtcDateTimeUsec>;
   };
 
-  authorId?: {
+  userId?: {
     eq?: UUID;
     notEq?: UUID;
     in?: Array<UUID>;
   };
 
 
-  author?: UserFilterInput;
+  user?: UserFilterInput;
 
 };
 
@@ -687,21 +694,21 @@ export async function validateListUsers(
 }
 
 
-export type ListPostsFields = UnifiedFieldSelection<PostResourceSchema>[];
+export type ListTodosFields = UnifiedFieldSelection<TodoResourceSchema>[];
 
 
-type InferListPostsResult<
-  Fields extends ListPostsFields,
-  Page extends ListPostsConfig["page"] = undefined
-> = ConditionalPaginatedResultMixed<Page, Array<InferResult<PostResourceSchema, Fields>>, {
-  results: Array<InferResult<PostResourceSchema, Fields>>;
+type InferListTodosResult<
+  Fields extends ListTodosFields,
+  Page extends ListTodosConfig["page"] = undefined
+> = ConditionalPaginatedResultMixed<Page, Array<InferResult<TodoResourceSchema, Fields>>, {
+  results: Array<InferResult<TodoResourceSchema, Fields>>;
   hasMore: boolean;
   limit: number;
   offset: number;
   count?: number | null;
   type: "offset";
 }, {
-  results: Array<InferResult<PostResourceSchema, Fields>>;
+  results: Array<InferResult<TodoResourceSchema, Fields>>;
   hasMore: boolean;
   limit: number;
   after: string | null;
@@ -712,9 +719,9 @@ type InferListPostsResult<
   type: "keyset";
 }>;
 
-export type ListPostsConfig = {
-  fields: ListPostsFields;
-  filter?: PostFilterInput;
+export type ListTodosConfig = {
+  fields: ListTodosFields;
+  filter?: TodoFilterInput;
   sort?: string;
   page?: (
     {
@@ -732,7 +739,7 @@ export type ListPostsConfig = {
   customFetch?: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
 };
 
-export type ListPostsResult<Fields extends ListPostsFields, Page extends ListPostsConfig["page"] = undefined> = | { success: true; data: InferListPostsResult<Fields, Page>; }
+export type ListTodosResult<Fields extends ListTodosFields, Page extends ListTodosConfig["page"] = undefined> = | { success: true; data: InferListTodosResult<Fields, Page>; }
 | {
     success: false;
     errors: Array<{
@@ -744,13 +751,13 @@ export type ListPostsResult<Fields extends ListPostsFields, Page extends ListPos
   }
 ;
 
-export async function listPosts<Fields extends ListPostsFields, Config extends ListPostsConfig>(
+export async function listTodos<Fields extends ListTodosFields, Config extends ListTodosConfig>(
   config: Config & { fields: Fields }
-): Promise<ListPostsResult<Fields, Config["page"]>> {
+): Promise<ListTodosResult<Fields, Config["page"]>> {
   let processedConfig = config;
 
   const payload = {
-    action: "list_posts",
+    action: "list_todos",
     fields: config.fields,
     ...(config.filter && { filter: config.filter }),
     ...(config.sort && { sort: config.sort }),
@@ -785,11 +792,11 @@ export async function listPosts<Fields extends ListPostsFields, Config extends L
     };
   }
 
-  return result as ListPostsResult<Fields, Config["page"]>;
+  return result as ListTodosResult<Fields, Config["page"]>;
 }
 
 
-export type ValidateListPostsResult =
+export type ValidateListTodosResult =
   | { success: true }
   | {
       success: false;
@@ -803,17 +810,17 @@ export type ValidateListPostsResult =
     };
 
 
-export async function validateListPosts(
+export async function validateListTodos(
   config: {
   headers?: Record<string, string>;
   fetchOptions?: RequestInit;
   customFetch?: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
 }
-): Promise<ValidateListPostsResult> {
+): Promise<ValidateListTodosResult> {
   let processedConfig = config;
 
   const payload = {
-    action: "list_posts"
+    action: "list_todos"
   };
 
   const headers: Record<string, string> = {
@@ -844,29 +851,31 @@ export async function validateListPosts(
     };
   }
 
-  return result as ValidateListPostsResult;
+  return result as ValidateListTodosResult;
 }
 
 
-export type CreatePostInput = {
+export type CreateTodoInput = {
   title: string;
   content: string;
-  authorId: UUID;
+  status?: "todo" | "in_progress" | "completed";
+  userId: UUID;
 };
 
-export type CreatePostValidationErrors = {
+export type CreateTodoValidationErrors = {
   title?: string[];
   content?: string[];
-  authorId?: string[];
+  status?: string[];
+  userId?: string[];
 };
 
-export type CreatePostFields = UnifiedFieldSelection<PostResourceSchema>[];
+export type CreateTodoFields = UnifiedFieldSelection<TodoResourceSchema>[];
 
-type InferCreatePostResult<
-  Fields extends CreatePostFields,
-> = InferResult<PostResourceSchema, Fields>;
+type InferCreateTodoResult<
+  Fields extends CreateTodoFields,
+> = InferResult<TodoResourceSchema, Fields>;
 
-export type CreatePostResult<Fields extends CreatePostFields> = | { success: true; data: InferCreatePostResult<Fields>; }
+export type CreateTodoResult<Fields extends CreateTodoFields> = | { success: true; data: InferCreateTodoResult<Fields>; }
 | {
     success: false;
     errors: Array<{
@@ -878,19 +887,19 @@ export type CreatePostResult<Fields extends CreatePostFields> = | { success: tru
   }
 ;
 
-export async function createPost<Fields extends CreatePostFields>(
+export async function createTodo<Fields extends CreateTodoFields>(
   config: {
-  input: CreatePostInput;
+  input: CreateTodoInput;
   fields: Fields;
   headers?: Record<string, string>;
   fetchOptions?: RequestInit;
   customFetch?: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
 }
-): Promise<CreatePostResult<Fields>> {
+): Promise<CreateTodoResult<Fields>> {
   let processedConfig = config;
 
   const payload = {
-    action: "create_post",
+    action: "create_todo",
     input: config.input,
     fields: config.fields
   };
@@ -923,11 +932,11 @@ export async function createPost<Fields extends CreatePostFields>(
     };
   }
 
-  return result as CreatePostResult<Fields>;
+  return result as CreateTodoResult<Fields>;
 }
 
 
-export type ValidateCreatePostResult =
+export type ValidateCreateTodoResult =
   | { success: true }
   | {
       success: false;
@@ -941,18 +950,18 @@ export type ValidateCreatePostResult =
     };
 
 
-export async function validateCreatePost(
+export async function validateCreateTodo(
   config: {
-  input: CreatePostInput;
+  input: CreateTodoInput;
   headers?: Record<string, string>;
   fetchOptions?: RequestInit;
   customFetch?: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
 }
-): Promise<ValidateCreatePostResult> {
+): Promise<ValidateCreateTodoResult> {
   let processedConfig = config;
 
   const payload = {
-    action: "create_post",
+    action: "create_todo",
     input: config.input
   };
 
@@ -984,27 +993,29 @@ export async function validateCreatePost(
     };
   }
 
-  return result as ValidateCreatePostResult;
+  return result as ValidateCreateTodoResult;
 }
 
 
-export type UpdatePostInput = {
+export type UpdateTodoInput = {
   title: string;
   content: string;
+  status?: "todo" | "in_progress" | "completed";
 };
 
-export type UpdatePostValidationErrors = {
+export type UpdateTodoValidationErrors = {
   title?: string[];
   content?: string[];
+  status?: string[];
 };
 
-export type UpdatePostFields = UnifiedFieldSelection<PostResourceSchema>[];
+export type UpdateTodoFields = UnifiedFieldSelection<TodoResourceSchema>[];
 
-type InferUpdatePostResult<
-  Fields extends UpdatePostFields,
-> = InferResult<PostResourceSchema, Fields>;
+type InferUpdateTodoResult<
+  Fields extends UpdateTodoFields,
+> = InferResult<TodoResourceSchema, Fields>;
 
-export type UpdatePostResult<Fields extends UpdatePostFields> = | { success: true; data: InferUpdatePostResult<Fields>; }
+export type UpdateTodoResult<Fields extends UpdateTodoFields> = | { success: true; data: InferUpdateTodoResult<Fields>; }
 | {
     success: false;
     errors: Array<{
@@ -1016,20 +1027,20 @@ export type UpdatePostResult<Fields extends UpdatePostFields> = | { success: tru
   }
 ;
 
-export async function updatePost<Fields extends UpdatePostFields>(
+export async function updateTodo<Fields extends UpdateTodoFields>(
   config: {
   primaryKey: UUID;
-  input: UpdatePostInput;
+  input: UpdateTodoInput;
   fields: Fields;
   headers?: Record<string, string>;
   fetchOptions?: RequestInit;
   customFetch?: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
 }
-): Promise<UpdatePostResult<Fields>> {
+): Promise<UpdateTodoResult<Fields>> {
   let processedConfig = config;
 
   const payload = {
-    action: "update_post",
+    action: "update_todo",
     primaryKey: config.primaryKey,
     input: config.input,
     fields: config.fields
@@ -1063,11 +1074,11 @@ export async function updatePost<Fields extends UpdatePostFields>(
     };
   }
 
-  return result as UpdatePostResult<Fields>;
+  return result as UpdateTodoResult<Fields>;
 }
 
 
-export type ValidateUpdatePostResult =
+export type ValidateUpdateTodoResult =
   | { success: true }
   | {
       success: false;
@@ -1081,19 +1092,19 @@ export type ValidateUpdatePostResult =
     };
 
 
-export async function validateUpdatePost(
+export async function validateUpdateTodo(
   config: {
   primaryKey: string;
-  input: UpdatePostInput;
+  input: UpdateTodoInput;
   headers?: Record<string, string>;
   fetchOptions?: RequestInit;
   customFetch?: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
 }
-): Promise<ValidateUpdatePostResult> {
+): Promise<ValidateUpdateTodoResult> {
   let processedConfig = config;
 
   const payload = {
-    action: "update_post",
+    action: "update_todo",
     primaryKey: config.primaryKey,
     input: config.input
   };
@@ -1126,7 +1137,7 @@ export async function validateUpdatePost(
     };
   }
 
-  return result as ValidateUpdatePostResult;
+  return result as ValidateUpdateTodoResult;
 }
 
 

@@ -59,12 +59,14 @@ defmodule AshFrameworkWeb.Plugs.FederatedAuthRedirect do
          {:ok, code_challenge} <- extract_pkce_params(conn),
          :ok <- validate_redirect_uri(redirect_uri) do
       Logger.debug("Storing redirect_uri and PKCE challenge in session")
+
       conn
       |> put_session(:federated_auth_redirect_uri, redirect_uri)
       |> put_session(:pkce_code_challenge, code_challenge)
     else
       {:error, :missing_redirect_uri} ->
         Logger.warning("Missing redirect_uri for federated auth request: #{conn.request_path}")
+
         conn
         |> put_status(:bad_request)
         |> Phoenix.Controller.json(%{error: "redirect_uri parameter is required"})
@@ -72,6 +74,7 @@ defmodule AshFrameworkWeb.Plugs.FederatedAuthRedirect do
 
       {:error, :missing_code_challenge} ->
         Logger.warning("Missing code_challenge for federated auth request: #{conn.request_path}")
+
         conn
         |> put_status(:bad_request)
         |> Phoenix.Controller.json(%{
@@ -82,6 +85,7 @@ defmodule AshFrameworkWeb.Plugs.FederatedAuthRedirect do
 
       {:error, :invalid_redirect_uri} ->
         Logger.warning("Invalid redirect_uri rejected: #{inspect(conn.params["redirect_uri"])}")
+
         conn
         |> put_status(:bad_request)
         |> Phoenix.Controller.json(%{
@@ -119,23 +123,26 @@ defmodule AshFrameworkWeb.Plugs.FederatedAuthRedirect do
 
   defp valid_redirect_uri?(redirect_uri) do
     case URI.parse(redirect_uri) do
-      %URI{scheme: scheme, host: host, port: port, authority: authority} when scheme in ["http", "https"] and not is_nil(host) ->
+      %URI{scheme: scheme, host: host, port: port, authority: authority}
+      when scheme in ["http", "https"] and not is_nil(host) ->
         whitelist = get_whitelist()
 
         # Check if port was explicitly specified in the URL (authority contains ":")
         explicit_port? = String.contains?(authority || "", ":")
 
-        host_with_port = if explicit_port? && port do
-          "#{host}:#{port}"
-        else
-          host
-        end
+        host_with_port =
+          if explicit_port? && port do
+            "#{host}:#{port}"
+          else
+            host
+          end
 
         Enum.any?(whitelist, fn pattern ->
           match_pattern?(host_with_port, pattern)
         end)
 
-      _ -> false
+      _ ->
+        false
     end
   end
 
