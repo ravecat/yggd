@@ -133,6 +133,10 @@ config :bun,
   assets: [
     args: ["install"],
     cd: Path.expand("../assets", __DIR__)
+  ],
+  ash_codegen: [
+    args: ["x", "chokidar-cli@3"],
+    cd: Path.expand("..", __DIR__)
   ]
 
 # Configures Elixir's Logger
