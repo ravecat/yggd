@@ -9,7 +9,7 @@ export async function SignIn() {
   if (userId) {
     return (
       <form action={signout}>
-        <Button type="submit" variant="outline">
+        <Button type="submit" variant="outline" size="sm">
           <LogOut className="h-4 w-4 mr-2" />
           Sign Out
         </Button>
@@ -19,7 +19,7 @@ export async function SignIn() {
 
   return (
     <form action={signup}>
-      <Button type="submit" variant="outline">
+      <Button type="submit" variant="outline" size="sm">
         <LogIn className="h-4 w-4 mr-2" />
         Sign in with Google
       </Button>
