@@ -27,7 +27,13 @@ config :ash_framework, AshFrameworkWeb.Endpoint,
   secret_key_base: "tWS0LjMScNH4LajMVAeZ8S+r0MFHa6V13BKW66jNZQ4/tkSelFNwIzuANrEgo2Rl",
   watchers: [
     esbuild: {Esbuild, :install_and_run, [:assets, ~w(--sourcemap=inline --watch)]},
-    tailwind: {Tailwind, :install_and_run, [:assets, ~w(--watch)]}
+    tailwind: {Tailwind, :install_and_run, [:assets, ~w(--watch)]},
+    ash_codegen:
+      {Bun, :install_and_run,
+       [
+         :ash_codegen,
+         ["lib/**/*.{ex,exs}", "-c", "mix ash.codegen --dev"]
+       ]}
   ]
 
 # ## SSL Support
