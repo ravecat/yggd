@@ -1,6 +1,5 @@
-import { getTodosId, ValidationError } from "@rvct/shared";
 import { notFound } from "next/navigation";
-import { Modal } from "@/shared/ui/modal";
+import { getTodosId, ValidationError } from "@rvct/shared";
 
 function shouldRenderNotFound(error: unknown): boolean {
   if (error instanceof ValidationError) {
@@ -16,7 +15,7 @@ function shouldRenderNotFound(error: unknown): boolean {
   return responseStatus === 404;
 }
 
-export default async function TodoModal({
+export async function TodoView({
   params,
 }: {
   params: Promise<{ id: string }>;
@@ -41,22 +40,24 @@ export default async function TodoModal({
   }
 
   return (
-    <Modal title={todo.attributes?.title}>
-      <article className="prose max-w-none">
-        {todo.attributes?.created_at && (
-          <time className="text-xs text-gray-500 mb-4 block">
-            {new Date(todo.attributes.created_at).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </time>
-        )}
+    <>
+      <h1 className="mb-6 text-4xl font-bold">
+        {todo.attributes?.title || "Untitled"}
+      </h1>
 
-        <div className="mt-4 text-gray-800 whitespace-pre-wrap leading-relaxed text-sm">
-          {todo.attributes?.content}
-        </div>
-      </article>
-    </Modal>
+      {todo.attributes?.created_at && (
+        <time className="mb-8 block text-sm text-gray-600">
+          {new Date(todo.attributes.created_at).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+        </time>
+      )}
+
+      <div className="mt-8 whitespace-pre-wrap text-gray-800 leading-relaxed">
+        {todo.attributes?.content}
+      </div>
+    </>
   );
 }

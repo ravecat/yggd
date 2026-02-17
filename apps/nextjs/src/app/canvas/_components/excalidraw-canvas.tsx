@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
-import type { ExcalidrawAPI } from "../shared/types";
-import { getExcalidrawDocument } from "@rvct/shared"
+import type { ExcalidrawAPI } from "@/shared/types";
+import { getExcalidrawDocument } from "@rvct/shared";
 import { useSocket } from "@rvct/shared/react";
 import { ExcalidrawBinding } from "y-excalidraw";
 import "@excalidraw/excalidraw/index.css";
@@ -17,7 +17,7 @@ const Excalidraw = dynamic(
         <div className="text-gray-400">Loading canvas...</div>
       </div>
     ),
-  }
+  },
 );
 
 export function ExcalidrawCanvas() {
@@ -40,7 +40,7 @@ export function ExcalidrawCanvas() {
         ydoc.getArray<any>("elements"),
         ydoc.getMap<any>("assets"),
         api,
-        provider.awareness
+        provider.awareness,
       );
 
       setBinding(currentBinding);

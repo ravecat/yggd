@@ -23,6 +23,7 @@ import { buttonVariants } from "@/shared/ui/button";
 import { cn } from "@/shared/lib/component";
 import { generatePageNumbers } from "@/shared/lib/pagination";
 import type { AsyncSearchParams } from "@/shared/types";
+import { assigns } from "@/shared/lib/session";
 
 type TodosResponseWithMeta = Awaited<ReturnType<typeof getTodos>> & {
   meta?: {
@@ -68,7 +69,26 @@ export async function TodosList({
   };
 
   if (todos.length === 0) {
-    return <p className="text-lg text-gray-600">No todos yet.</p>;
+    const { userId } = await assigns();
+
+    return (
+      <div className="flex min-h-[320px] flex-1 items-center justify-center rounded-lg border border-dashed border-border bg-muted/20 px-6 text-center">
+        <div className="space-y-2">
+          <p className="text-lg font-medium text-foreground">No tasks yet</p>
+          {userId ? (
+            <p className="text-sm text-muted-foreground">
+              <span className="font-medium text-foreground">Create task</span>{" "}
+              to add your first item.
+            </p>
+          ) : (
+            <p className="text-sm text-muted-foreground">
+              <span className="font-medium text-foreground">Sign in</span> to
+              add tasks.
+            </p>
+          )}
+        </div>
+      </div>
+    );
   }
 
   return (
