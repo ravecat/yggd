@@ -28,8 +28,7 @@ redirect_whitelist =
   |> Enum.map(&String.trim/1)
   |> Enum.reject(&(&1 == ""))
 
-config :ash_framework, :federated_auth,
-  redirect_whitelist: redirect_whitelist
+config :ash_framework, :federated_auth, redirect_whitelist: redirect_whitelist
 
 # ## Using releases
 #

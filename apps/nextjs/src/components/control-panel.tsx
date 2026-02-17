@@ -4,7 +4,7 @@ import { Button } from "@/shared/ui/button";
 import {
   deserializeQueryParams,
   serializeQueryParams,
-  type GetPostsQueryParams,
+  type GetTodosQueryParams,
 } from "@rvct/shared";
 import { assigns } from "@/shared/lib/session";
 import type { AsyncSearchParams } from "@/shared/types";
@@ -34,13 +34,16 @@ type ControlPanelConfig = {
 };
 
 type ControlPanelProps = {
-  searchParams: AsyncSearchParams<GetPostsQueryParams>;
+  searchParams: AsyncSearchParams<GetTodosQueryParams>;
   config: ControlPanelConfig;
 };
 
-export async function ControlPanel({ searchParams, config }: ControlPanelProps) {
+export async function ControlPanel({
+  searchParams,
+  config,
+}: ControlPanelProps) {
   const params = await searchParams;
-  const { page, sort } = deserializeQueryParams<GetPostsQueryParams>(params);
+  const { page, sort } = deserializeQueryParams<GetTodosQueryParams>(params);
   const { userId } = await assigns();
 
   const limit = page!.limit!;
@@ -81,7 +84,7 @@ export async function ControlPanel({ searchParams, config }: ControlPanelProps) 
     const isDescending = descIndex !== -1;
     const newSortValue = getNewSortValue(option.field);
 
-    const queryParams = serializeQueryParams<GetPostsQueryParams>({
+    const queryParams = serializeQueryParams<GetTodosQueryParams>({
       page: { limit, offset },
       sort: newSortValue,
     });
@@ -100,10 +103,10 @@ export async function ControlPanel({ searchParams, config }: ControlPanelProps) 
   return (
     <div className="flex gap-2">
       {userId && (
-        <Link href="/post/create">
+        <Link href="/todo/create">
           <Button size="sm" className="w-48">
             <PlusIcon className="h-4 w-4 mr-2" />
-            Create Post
+            Create Todo
           </Button>
         </Link>
       )}

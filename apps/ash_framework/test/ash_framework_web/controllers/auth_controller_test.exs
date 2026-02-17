@@ -162,4 +162,30 @@ defmodule AshFrameworkWeb.AuthControllerTest do
       assert json_response(legitimate_conn, 200) == %{"token" => token}
     end
   end
+
+  describe "federated OAuth callback failure handling" do
+    test "redirects back to client callback with error when redirect_uri exists in session", %{
+      conn: conn
+    } do
+      conn =
+        conn
+        |> init_test_session(%{})
+        |> put_session(:federated_auth_redirect_uri, "http://localhost:3000/auth/callback")
+        |> put_session(:pkce_code_challenge, "pkce_challenge")
+
+      conn = AshFrameworkWeb.AuthController.failure(conn, {:google, :callback}, :oauth_error)
+
+      assert redirected_to(conn, 302) == "http://localhost:3000/auth/callback?error=oauth_failed"
+      assert get_session(conn, :federated_auth_redirect_uri) == nil
+      assert get_session(conn, :pkce_code_challenge) == nil
+    end
+
+    test "falls back to backend sign-in page when redirect_uri is missing", %{conn: conn} do
+      conn = conn |> init_test_session(%{})
+
+      conn = AshFrameworkWeb.AuthController.failure(conn, {:google, :callback}, :oauth_error)
+
+      assert redirected_to(conn, 302) == "/sign-in"
+    end
+  end
 end

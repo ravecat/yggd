@@ -53,8 +53,8 @@ export class ValidationError extends Error {
    * @returns Extracted field name or null
    * @example
    * extractFieldName('/data/attributes/title') // 'title'
-   * extractFieldName('/data/relationships/author') // 'author'
-   * extractFieldName('/data/attributes/author_id') // 'author_id'
+   * extractFieldName('/data/relationships/user') // 'user'
+   * extractFieldName('/data/attributes/user_id') // 'user_id'
    */
   private extractFieldName(pointer?: string): string | null {
     if (!pointer) return null
@@ -154,5 +154,7 @@ const client = async <TData, TError = unknown, TVariables = unknown>(
 ): Promise<ResponseConfig<TData>> => {
   return axiosInstance.request<TVariables, ResponseConfig<TData>>({ ...config })
 }
+
+export type Client = typeof client
 
 export default client

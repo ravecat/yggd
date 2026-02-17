@@ -39,3 +39,7 @@ npm-debug.log
 .env
 .env.local
 .env.*.local
+
+# Ash codegen temporary development artifacts
+/priv/resource_snapshots/**/*_dev.json
+/priv/repo/migrations/*_dev.exs

@@ -1,6 +1,7 @@
 import "../shared/global.css";
 import { Providers } from "../components/providers";
 import { Environment } from "../contexts/environment";
+import { Suspense } from "react";
 
 export const metadata = {
   title: "Welcome to nextjs",
@@ -22,10 +23,12 @@ export default function Layout({
             PUBLIC_CHANNEL_URL: process.env.PUBLIC_CHANNEL_URL,
           }}
         >
-          <Providers>
-            {children}
-            {modal}
-          </Providers>
+          <Suspense fallback={null}>
+            <Providers>
+              {children}
+              {modal}
+            </Providers>
+          </Suspense>
         </Environment>
       </body>
     </html>

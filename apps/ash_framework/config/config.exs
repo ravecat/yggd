@@ -84,7 +84,7 @@ config :spark,
 config :ash_framework,
   ecto_repos: [AshFramework.Repo],
   generators: [timestamp_type: :utc_datetime],
-  ash_domains: [AshFramework.Accounts, AshFramework.Blog]
+  ash_domains: [AshFramework.Accounts, AshFramework.Tasks]
 
 # Configures the endpoint
 config :ash_framework, AshFrameworkWeb.Endpoint,
