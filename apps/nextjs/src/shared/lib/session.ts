@@ -3,17 +3,17 @@ import { cache } from 'react';
 import { cookies } from 'next/headers';
 import { jwtVerify, type JWTPayload } from 'jose';
 
-const SECRET_KEY = new TextEncoder().encode(
+const TOKEN_SIGNING_KEY = new TextEncoder().encode(
   process.env.TOKEN_SIGNING_SECRET
 );
 
-export async function decrypt(token: string | undefined = ''): Promise<JWTPayload | null> {
+export async function verifyToken(token: string | undefined = ''): Promise<JWTPayload | null> {
   if (!token) {
     return null;
   }
 
   try {
-    const { payload } = await jwtVerify(token, SECRET_KEY, {
+    const { payload } = await jwtVerify(token, TOKEN_SIGNING_KEY, {
       algorithms: ['HS256'],
     });
 
@@ -28,7 +28,7 @@ export const assigns = cache(async () => {
   const cookieStore = await cookies();
   const token = cookieStore.get('auth_token')?.value;
 
-  const session = await decrypt(token);
+  const session = await verifyToken(token);
 
   if (!session?.sub) {
     return { userId: null };

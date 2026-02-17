@@ -1,18 +1,18 @@
 import { Suspense } from "react";
-import { PostsList } from "../components/posts-list";
-import { PostsSkeleton } from "../components/posts-skeleton";
+import { TodosList } from "../components/todos-list";
+import { TodosSkeleton } from "../components/todos-skeleton";
 import { ControlPanel } from "../components/control-panel";
 import { ControlPanelSkeleton } from "../components/control-panel-skeleton";
 import { SignIn } from "../components/sign-in";
 import { ExcalidrawCanvas } from "../components/excalidraw-canvas";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import type { AsyncSearchParams } from "@/shared/types";
-import { POSTS_CONFIG, type GetPostsQueryParams } from "@rvct/shared";
+import { TODOS_CONFIG, type GetTodosQueryParams } from "@rvct/shared";
 
 export default function Index({
   searchParams,
 }: {
-  searchParams: AsyncSearchParams<GetPostsQueryParams>;
+  searchParams: AsyncSearchParams<GetTodosQueryParams>;
 }) {
   return (
     <div className="h-full flex flex-col gap-4">
@@ -32,11 +32,11 @@ export default function Index({
         <div className="flex-1 p-4 pt-0 flex flex-col min-h-0 overflow-auto">
           <div className="max-w-6xl mx-auto w-full flex-1 flex flex-col min-h-0 gap-4">
             <Suspense fallback={<ControlPanelSkeleton />}>
-              <ControlPanel searchParams={searchParams} config={POSTS_CONFIG} />
+              <ControlPanel searchParams={searchParams} config={TODOS_CONFIG} />
             </Suspense>
 
-            <Suspense fallback={<PostsSkeleton />}>
-              <PostsList searchParams={searchParams} />
+            <Suspense fallback={<TodosSkeleton />}>
+              <TodosList searchParams={searchParams} />
             </Suspense>
           </div>
         </div>

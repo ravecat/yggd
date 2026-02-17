@@ -12,7 +12,7 @@ export default function Error({
       <h1
         style={{ fontSize: "2.5rem", marginBottom: "2rem", color: "#dc2626" }}
       >
-        Error Loading Posts
+        Error Loading Todos
       </h1>
       <p style={{ fontSize: "1.1rem", color: "#666", marginBottom: "1rem" }}>
         {error.message}

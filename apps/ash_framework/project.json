@@ -123,7 +123,7 @@
     "seed": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "mix seed.posts",
+        "command": "mix seed.todos",
         "cwd": "apps/ash_framework"
       },
       "dependsOn": ["setup"]

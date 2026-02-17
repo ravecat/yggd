@@ -7,22 +7,25 @@ defmodule AshFrameworkWeb.AuthController do
   alias AshFramework.Auth.ExchangeCodeStore
 
   def success(conn, {:google, :callback}, _user, token) when not is_nil(token) do
-    case {get_session(conn, :federated_auth_redirect_uri), get_session(conn, :pkce_code_challenge)} do
+    case {get_session(conn, :federated_auth_redirect_uri),
+          get_session(conn, :pkce_code_challenge)} do
       {nil, _} ->
         Logger.error("Missing redirect_uri in session after federated auth")
+
         conn
         |> put_status(:internal_server_error)
         |> json(%{error: "Authentication flow error: missing redirect_uri"})
 
       {_, nil} ->
         Logger.error("Missing code_challenge in session after federated auth")
+
         conn
         |> put_status(:internal_server_error)
         |> json(%{error: "Authentication flow error: missing PKCE challenge"})
 
       {redirect_uri, code_challenge} ->
         exchange_code = ExchangeCodeStore.create(token, code_challenge)
-        callback_url = build_callback_url(redirect_uri, exchange_code)
+        callback_url = build_callback_url(redirect_uri, %{"code" => exchange_code})
 
         Logger.info("Federated auth success, redirecting with code to: #{callback_url}")
 
@@ -50,6 +53,30 @@ defmodule AshFrameworkWeb.AuthController do
     |> assign(:current_user, user)
     |> put_flash(:info, message)
     |> redirect(to: return_to)
+  end
+
+  def failure(conn, {:google, :callback}, reason) do
+    Logger.warning("Federated OAuth callback failed: #{inspect(reason)}")
+
+    redirect_uri = get_session(conn, :federated_auth_redirect_uri)
+
+    conn =
+      conn
+      |> delete_session(:federated_auth_redirect_uri)
+      |> delete_session(:pkce_code_challenge)
+
+    case redirect_uri do
+      nil ->
+        redirect(conn, to: ~p"/sign-in")
+
+      redirect_uri ->
+        callback_url = build_callback_url(redirect_uri, %{"error" => "oauth_failed"})
+
+        Logger.info("Federated auth failed, redirecting back to client: #{callback_url}")
+
+        conn
+        |> redirect(external: callback_url)
+    end
   end
 
   def failure(conn, activity, reason) do
@@ -100,18 +127,21 @@ defmodule AshFrameworkWeb.AuthController do
 
       {:error, :invalid_code} ->
         Logger.warning("Invalid or already used exchange code")
+
         conn
         |> put_status(:bad_request)
         |> json(%{error: "Invalid or already used code"})
 
       {:error, :expired} ->
         Logger.warning("Expired exchange code")
+
         conn
         |> put_status(:bad_request)
         |> json(%{error: "Code has expired"})
 
       {:error, :invalid_verifier} ->
         Logger.warning("Invalid PKCE verifier")
+
         conn
         |> put_status(:unauthorized)
         |> json(%{error: "Invalid PKCE verifier"})
@@ -120,6 +150,7 @@ defmodule AshFrameworkWeb.AuthController do
 
   def exchange(conn, %{"code" => _code}) do
     Logger.warning("Exchange endpoint called without code_verifier parameter")
+
     conn
     |> put_status(:bad_request)
     |> json(%{error: "Missing code_verifier parameter"})
@@ -127,12 +158,13 @@ defmodule AshFrameworkWeb.AuthController do
 
   def exchange(conn, _params) do
     Logger.warning("Exchange endpoint called without code parameter")
+
     conn
     |> put_status(:bad_request)
     |> json(%{error: "Missing code parameter"})
   end
 
-  defp build_callback_url(base_uri, code) do
+  defp build_callback_url(base_uri, params) do
     uri = URI.parse(base_uri)
 
     existing_params =
@@ -142,8 +174,7 @@ defmodule AshFrameworkWeb.AuthController do
         %{}
       end
 
-    # Pass code instead of token for security
-    new_params = Map.put(existing_params, "code", code)
+    new_params = Map.merge(existing_params, params)
 
     %{uri | query: URI.encode_query(new_params)}
     |> URI.to_string()

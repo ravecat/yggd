@@ -4,17 +4,7 @@ defmodule AshFramework.Accounts.Token do
     domain: AshFramework.Accounts,
     data_layer: AshPostgres.DataLayer,
     authorizers: [Ash.Policy.Authorizer],
-    extensions: [AshAuthentication.TokenResource, AshJsonApi.Resource]
-
-  json_api do
-    type "token"
-
-    routes do
-      base "/tokens"
-      get :read
-      index :read
-    end
-  end
+    extensions: [AshAuthentication.TokenResource]
 
   postgres do
     table "tokens"

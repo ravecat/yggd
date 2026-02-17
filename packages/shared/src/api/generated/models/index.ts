@@ -1,34 +1,83 @@
-export type { DeletePostsIdPathParams, DeletePostsIdQueryParams, DeletePostsId200, DeletePostsIdError, DeletePostsIdMutationResponse, DeletePostsIdMutation } from "./DeletePostsId";
+export type {
+  DeleteTodosIdPathParams,
+  DeleteTodosIdQueryParams,
+  DeleteTodosId200,
+  DeleteTodosIdError,
+  DeleteTodosIdMutationResponse,
+  DeleteTodosIdMutation,
+} from "./DeleteTodosId";
 export type { Error } from "./Error";
 export type { Errors } from "./Errors";
-export type { GetPostsQueryParams, GetPosts200, GetPostsError, GetPostsQueryResponse, GetPostsQuery } from "./GetPosts";
-export type { GetPostsIdPathParams, GetPostsIdQueryParams, GetPostsId200, GetPostsIdError, GetPostsIdQueryResponse, GetPostsIdQuery } from "./GetPostsId";
-export type { GetTokensQueryParams, GetTokens200, GetTokensError, GetTokensQueryResponse, GetTokensQuery } from "./GetTokens";
-export type { GetTokensIdPathParams, GetTokensIdQueryParams, GetTokensId200, GetTokensIdError, GetTokensIdQueryResponse, GetTokensIdQuery } from "./GetTokensId";
-export type { GetUsersQueryParams, GetUsers200, GetUsersError, GetUsersQueryResponse, GetUsersQuery } from "./GetUsers";
-export type { GetUsersIdPathParams, GetUsersIdQueryParams, GetUsersId200, GetUsersIdError, GetUsersIdQueryResponse, GetUsersIdQuery } from "./GetUsersId";
+export type {
+  GetTodosQueryParams,
+  GetTodos200,
+  GetTodosError,
+  GetTodosQueryResponse,
+  GetTodosQuery,
+} from "./GetTodos";
+export type {
+  GetTodosIdPathParams,
+  GetTodosIdQueryParams,
+  GetTodosId200,
+  GetTodosIdError,
+  GetTodosIdQueryResponse,
+  GetTodosIdQuery,
+} from "./GetTodosId";
 export type { Link } from "./Link";
 export type { Links } from "./Links";
-export type { PatchPostsIdPathParams, PatchPostsIdQueryParams, PatchPostsId200, PatchPostsIdError, DataTypeEnum2Key, PatchPostsIdMutationRequest, PatchPostsIdMutationResponse, PatchPostsIdMutation } from "./PatchPostsId";
-export type { Post } from "./Post";
-export type { PostFilter } from "./PostFilter";
-export type { PostFilterAuthorId } from "./PostFilterAuthorId";
-export type { PostFilterContent } from "./PostFilterContent";
-export type { PostFilterCreatedAt } from "./PostFilterCreatedAt";
-export type { PostFilterId } from "./PostFilterId";
-export type { PostFilterTitle } from "./PostFilterTitle";
-export type { PostFilterUpdatedAt } from "./PostFilterUpdatedAt";
-export type { PostsQueryParams, Posts201, PostsError, DataTypeEnumKey, PostsMutationRequest, PostsMutationResponse, PostPostsMutation } from "./PostPosts";
-export type { Token } from "./Token";
-export type { TokenFilter } from "./TokenFilter";
-export type { TokenFilterExpiresAt } from "./TokenFilterExpiresAt";
-export type { TokenFilterExtraData } from "./TokenFilterExtraData";
-export type { TokenFilterJti } from "./TokenFilterJti";
-export type { TokenFilterPurpose } from "./TokenFilterPurpose";
-export type { TokenFilterSubject } from "./TokenFilterSubject";
+export type {
+  PatchTodosIdPathParams,
+  PatchTodosIdQueryParams,
+  PatchTodosId200,
+  PatchTodosIdError,
+  AttributesStatusEnum3Key,
+  DataTypeEnum2Key,
+  PatchTodosIdMutationRequest,
+  PatchTodosIdMutationResponse,
+  PatchTodosIdMutation,
+} from "./PatchTodosId";
+export type {
+  PostTodosQueryParams,
+  PostTodos201,
+  PostTodosError,
+  AttributesStatusEnum2Key,
+  DataTypeEnumKey,
+  PostTodosMutationRequest,
+  PostTodosMutationResponse,
+  PostTodosMutation,
+} from "./PostTodos";
+export type { AttributesStatusEnumKey, Todo } from "./Todo";
+export type { TodoFilter } from "./TodoFilter";
+export type { TodoFilterContent } from "./TodoFilterContent";
+export type { TodoFilterCreatedAt } from "./TodoFilterCreatedAt";
+export type { TodoFilterId } from "./TodoFilterId";
+export type {
+  TodoFilterStatusEqEnumKey,
+  TodoFilterStatusGreaterThanEnumKey,
+  TodoFilterStatusGreaterThanOrEqualEnumKey,
+  TodoFilterStatusInEnumKey,
+  TodoFilterStatusLessThanEnumKey,
+  TodoFilterStatusLessThanOrEqualEnumKey,
+  TodoFilterStatusNotEqEnumKey,
+  TodoFilterStatus,
+} from "./TodoFilterStatus";
+export type { TodoFilterTitle } from "./TodoFilterTitle";
+export type { TodoFilterUpdatedAt } from "./TodoFilterUpdatedAt";
+export type { TodoFilterUserId } from "./TodoFilterUserId";
 export type { User } from "./User";
 export type { UserFilter } from "./UserFilter";
 export type { UserFilterEmail } from "./UserFilterEmail";
 export type { UserFilterId } from "./UserFilterId";
-export { dataTypeEnum2 } from "./PatchPostsId";
-export { dataTypeEnum } from "./PostPosts";
+export type { UserFilterName } from "./UserFilterName";
+export { attributesStatusEnum3 } from "./PatchTodosId";
+export { dataTypeEnum2 } from "./PatchTodosId";
+export { attributesStatusEnum2 } from "./PostTodos";
+export { dataTypeEnum } from "./PostTodos";
+export { attributesStatusEnum } from "./Todo";
+export { todoFilterStatusEqEnum } from "./TodoFilterStatus";
+export { todoFilterStatusGreaterThanEnum } from "./TodoFilterStatus";
+export { todoFilterStatusGreaterThanOrEqualEnum } from "./TodoFilterStatus";
+export { todoFilterStatusInEnum } from "./TodoFilterStatus";
+export { todoFilterStatusLessThanEnum } from "./TodoFilterStatus";
+export { todoFilterStatusLessThanOrEqualEnum } from "./TodoFilterStatus";
+export { todoFilterStatusNotEqEnum } from "./TodoFilterStatus";

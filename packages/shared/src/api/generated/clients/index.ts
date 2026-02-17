@@ -1,9 +1,5 @@
-export { deletePostsId } from "./deletePostsId";
-export { getPosts } from "./getPosts";
-export { getPostsId } from "./getPostsId";
-export { getTokens } from "./getTokens";
-export { getTokensId } from "./getTokensId";
-export { getUsers } from "./getUsers";
-export { getUsersId } from "./getUsersId";
-export { patchPostsId } from "./patchPostsId";
-export { postPosts } from "./postPosts";
+export { deleteTodosId } from "./deleteTodosId";
+export { getTodos } from "./getTodos";
+export { getTodosId } from "./getTodosId";
+export { patchTodosId } from "./patchTodosId";
+export { postTodos } from "./postTodos";
