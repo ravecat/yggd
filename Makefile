@@ -1,8 +1,18 @@
-.PHONY: serve format format.check
+.PHONY: all setup start serve format format.check
+
+all:
+	$(MAKE) serve
+
+setup:
+	pnpm install --recursive
+	npx nx run-many -t setup --all --outputStyle=stream
+
+start:
+	npx nx run-many -t start --all --tui
 
 serve:
-	pnpm install
-	npx nx run-many -t serve --tui
+	$(MAKE) setup
+	$(MAKE) start
 
 format:
 	npx prettier --write "**/*.md"
