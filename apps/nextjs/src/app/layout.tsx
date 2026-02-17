@@ -2,6 +2,7 @@ import "../shared/global.css";
 import { Providers } from "../components/providers";
 import { Environment } from "../contexts/environment";
 import { Suspense } from "react";
+import { Navbar } from "@/app/_components/navbar";
 
 export const metadata = {
   title: "Welcome to nextjs",
@@ -25,7 +26,10 @@ export default function Layout({
         >
           <Suspense fallback={null}>
             <Providers>
-              {children}
+              <div className="flex h-full flex-col">
+                <Navbar />
+                <main className="flex min-h-0 flex-1 flex-col">{children}</main>
+              </div>
               {modal}
             </Providers>
           </Suspense>
