@@ -63,7 +63,19 @@ nix develop
 
 ## Quick Start
 
-All projects:
+Prepare workspace dependencies (apps + packages) and project setup targets:
+
+```bash
+make setup
+```
+
+Start all projects:
+
+```bash
+make start
+```
+
+One-command alias:
 
 ```bash
 make serve
@@ -72,7 +84,7 @@ make serve
 Selected projects:
 
 ```bash
-npx nx run-many -t serve -p nextjs,ash_framework --tui
+npx nx run-many -t start -p nextjs,ash_framework --tui
 ```
 
 ## License

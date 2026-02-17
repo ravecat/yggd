@@ -15,11 +15,19 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "mix phx.server",
+        "command": "mix serve",
         "cwd": "apps/phoenix_framework",
         "color": true
       },
-      "dependsOn": ["setup"],
+      "continuous": true
+    },
+    "start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "mix start",
+        "cwd": "apps/phoenix_framework",
+        "color": true
+      },
       "continuous": true
     },
     "setup": {
