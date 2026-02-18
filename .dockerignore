@@ -7,6 +7,8 @@ node_modules
 **/.next
 dist
 **/dist
+!packages/shared/dist
+!packages/shared/dist/**
 
 # Nx cache
 .nx

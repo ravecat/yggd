@@ -3,8 +3,9 @@
 * Do not edit manually.
 */
 
+import { z } from "zod/v4";
 
 /**
  * @description A link MUST be represented as either: a string containing the link\'s URL or a link object.
-*/
-export type Link = string;
+ */
+export const linkSchema = z.string().describe("A link MUST be represented as either: a string containing the link's URL or a link object.")

@@ -47,7 +47,7 @@ defmodule AshFramework.MixProject do
       {:ash_json_api, "~> 1.0"},
       {:picosat_elixir, "~> 0.2"},
       {:sourceror, "~> 1.8", only: [:dev, :test]},
-      {:ash_typescript, "~> 0.6"},
+      {:ash_typescript, "~> 0.14"},
       {:live_debugger, "~> 0.4", only: [:dev]},
       {:ash_admin, "~> 0.13"},
       {:ash_authentication_phoenix, "~> 2.0"},

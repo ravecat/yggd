@@ -37,7 +37,9 @@ export function ExcalidrawCanvas() {
       const { ydoc, provider } = await getExcalidrawDocument(socket);
 
       currentBinding = new ExcalidrawBinding(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- y-excalidraw requires Y.Array<Y.Map<any>>
         ydoc.getArray<any>("elements"),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- y-excalidraw requires Y.Map<any>
         ydoc.getMap<any>("assets"),
         api,
         provider.awareness,

@@ -1,8 +1,7 @@
 import {
   getTodos,
-  deserializeQueryParams,
-  serializeQueryParams,
   type GetTodosQueryParams,
+  serializeQueryParams,
 } from "@rvct/shared";
 import Link from "next/link";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
@@ -22,10 +21,10 @@ import {
 import { buttonVariants } from "~/shared/ui/button";
 import { cn } from "~/shared/lib/component";
 import { generatePageNumbers } from "~/shared/lib/pagination";
-import type { AsyncSearchParams } from "~/shared/types";
 import { assigns } from "~/shared/lib/session";
 
 type TodosResponseWithMeta = Awaited<ReturnType<typeof getTodos>> & {
+  links?: Record<string, string>;
   meta?: {
     page?: {
       total?: number;
@@ -34,25 +33,44 @@ type TodosResponseWithMeta = Awaited<ReturnType<typeof getTodos>> & {
 };
 
 export async function TodosList({
-  searchParams,
+  query,
 }: {
-  searchParams: AsyncSearchParams<GetTodosQueryParams>;
+  query: Partial<GetTodosQueryParams>;
 }) {
-  const params = await searchParams;
-  const parsed = deserializeQueryParams<GetTodosQueryParams>(params);
-  const { page, sort } = parsed;
+  const page = getPageObject(query.page);
 
-  const limit = page!.limit!;
-  const offset = page!.offset!;
+  const response = (await getTodos(
+    page
+      ? {
+          ...query,
+          page: { ...page, count: true },
+        }
+      : query.page === undefined
+        ? {
+            ...query,
+            page: { count: true },
+          }
+        : query,
+  )) as TodosResponseWithMeta;
+
+  const links = response.links ?? {};
+  const todos = response.data || [];
+
+  const limit =
+    getPositiveInteger(page?.limit) ??
+    getPositiveInteger(getPageParamFromLink(links.self, "limit")) ??
+    getPositiveInteger(todos.length) ??
+    1;
+  const offset =
+    getNonNegativeInteger(page?.offset) ??
+    getNonNegativeInteger(getPageParamFromLink(links.self, "offset")) ??
+    0;
+  const sort =
+    typeof query.sort === "string" && query.sort.trim().length > 0
+      ? query.sort
+      : undefined;
   const currentPage = Math.floor(offset / limit) + 1;
 
-  const response = (await getTodos({
-    page: { limit, offset, count: true },
-    sort: sort!,
-  })) as TodosResponseWithMeta;
-
-  const todos = response.data || [];
-  const links = (response as any).links || {};
   const hasPrevPage = !!links.prev;
   const hasNextPage = !!links.next;
 
@@ -62,8 +80,9 @@ export async function TodosList({
 
   const buildPageUrl = (page: number) => {
     const queryParams = serializeQueryParams<GetTodosQueryParams>({
+      ...query,
       page: { limit, offset: (page - 1) * limit },
-      sort,
+      ...(sort ? { sort } : {}),
     });
     return `/?${new URLSearchParams(queryParams).toString()}`;
   };
@@ -184,4 +203,55 @@ export async function TodosList({
       </Pagination>
     </div>
   );
+}
+
+function getPositiveInteger(value: unknown): number | undefined {
+  if (typeof value !== "number" || !Number.isFinite(value)) {
+    return undefined;
+  }
+
+  const parsed = Math.trunc(value);
+  return parsed > 0 ? parsed : undefined;
+}
+
+function getNonNegativeInteger(value: unknown): number | undefined {
+  if (typeof value !== "number" || !Number.isFinite(value)) {
+    return undefined;
+  }
+
+  const parsed = Math.trunc(value);
+  return parsed >= 0 ? parsed : undefined;
+}
+
+function getPageParamFromLink(
+  link: unknown,
+  key: "limit" | "offset",
+): number | undefined {
+  if (typeof link !== "string" || link.trim().length === 0) {
+    return undefined;
+  }
+
+  try {
+    const url = new URL(link, "http://localhost");
+    const value = url.searchParams.get(`page[${key}]`);
+
+    if (!value) {
+      return undefined;
+    }
+
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? Math.trunc(parsed) : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function getPageObject(
+  value: unknown,
+): GetTodosQueryParams["page"] | undefined {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return undefined;
+  }
+
+  return value as GetTodosQueryParams["page"];
 }

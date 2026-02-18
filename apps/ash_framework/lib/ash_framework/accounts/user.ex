@@ -12,6 +12,7 @@ defmodule AshFramework.Accounts.User do
 
   json_api do
     type "user"
+    derive_filter? false
   end
 
   authentication do
