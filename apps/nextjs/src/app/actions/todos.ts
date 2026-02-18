@@ -20,13 +20,17 @@ export async function createTodo(
 ): Promise<CreateTodoState> {
   const session = await assigns();
 
+  if (!session.userId) {
+    return { errors: { general: ["Not authenticated"] } };
+  }
+
   await postTodos({
     data: {
       type: "todo",
       attributes: {
         title: formData.get("title") as string,
         content: formData.get("content") as string,
-        user_id: session.userId!,
+        user_id: session.userId,
       },
     },
   });

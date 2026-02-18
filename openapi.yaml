@@ -172,392 +172,6 @@ components:
       type: object
       x-struct:
       x-validate:
-    todo-filter:
-      additionalProperties: false
-      description: Filters the query to results matching the given filter object
-      example: ''
-      properties:
-        and:
-          items:
-            $ref: '#/components/schemas/todo-filter'
-          type: array
-          uniqueItems: true
-          x-struct:
-          x-validate:
-        content:
-          $ref: '#/components/schemas/todo-filter-content'
-        created_at:
-          $ref: '#/components/schemas/todo-filter-created_at'
-        id:
-          $ref: '#/components/schemas/todo-filter-id'
-        not:
-          $ref: '#/components/schemas/todo-filter'
-        or:
-          items:
-            $ref: '#/components/schemas/todo-filter'
-          type: array
-          uniqueItems: true
-          x-struct:
-          x-validate:
-        status:
-          $ref: '#/components/schemas/todo-filter-status'
-        title:
-          $ref: '#/components/schemas/todo-filter-title'
-        updated_at:
-          $ref: '#/components/schemas/todo-filter-updated_at'
-        user:
-          $ref: '#/components/schemas/user-filter'
-        user_id:
-          $ref: '#/components/schemas/todo-filter-user_id'
-      type: deepObject
-      x-struct:
-      x-validate:
-    todo-filter-content:
-      additionalProperties: false
-      properties:
-        contains:
-          type: string
-          x-struct:
-          x-validate:
-        eq:
-          type: string
-          x-struct:
-          x-validate:
-        greater_than:
-          type: string
-          x-struct:
-          x-validate:
-        greater_than_or_equal:
-          type: string
-          x-struct:
-          x-validate:
-        ilike:
-          type: string
-          x-struct:
-          x-validate:
-        in:
-          items:
-            type: string
-            x-struct:
-            x-validate:
-          type: array
-          x-struct:
-          x-validate:
-        is_nil:
-          type: boolean
-          x-struct:
-          x-validate:
-        less_than:
-          type: string
-          x-struct:
-          x-validate:
-        less_than_or_equal:
-          type: string
-          x-struct:
-          x-validate:
-        like:
-          type: string
-          x-struct:
-          x-validate:
-        not_eq:
-          type: string
-          x-struct:
-          x-validate:
-      type: object
-      x-struct:
-      x-validate:
-    todo-filter-created_at:
-      additionalProperties: false
-      properties:
-        eq:
-          x-struct:
-          x-validate:
-        greater_than:
-          x-struct:
-          x-validate:
-        greater_than_or_equal:
-          x-struct:
-          x-validate:
-        in:
-          items:
-            x-struct:
-            x-validate:
-          type: array
-          x-struct:
-          x-validate:
-        is_nil:
-          type: boolean
-          x-struct:
-          x-validate:
-        less_than:
-          x-struct:
-          x-validate:
-        less_than_or_equal:
-          x-struct:
-          x-validate:
-        not_eq:
-          x-struct:
-          x-validate:
-      type: object
-      x-struct:
-      x-validate:
-    todo-filter-id:
-      additionalProperties: false
-      properties:
-        eq:
-          format: uuid
-          type: string
-          x-struct:
-          x-validate:
-        greater_than:
-          format: uuid
-          type: string
-          x-struct:
-          x-validate:
-        greater_than_or_equal:
-          format: uuid
-          type: string
-          x-struct:
-          x-validate:
-        in:
-          items:
-            format: uuid
-            type: string
-            x-struct:
-            x-validate:
-          type: array
-          x-struct:
-          x-validate:
-        is_nil:
-          type: boolean
-          x-struct:
-          x-validate:
-        less_than:
-          format: uuid
-          type: string
-          x-struct:
-          x-validate:
-        less_than_or_equal:
-          format: uuid
-          type: string
-          x-struct:
-          x-validate:
-        not_eq:
-          format: uuid
-          type: string
-          x-struct:
-          x-validate:
-      type: object
-      x-struct:
-      x-validate:
-    todo-filter-status:
-      additionalProperties: false
-      properties:
-        eq:
-          enum:
-            - todo
-            - in_progress
-            - completed
-          type: string
-          x-struct:
-          x-validate:
-        greater_than:
-          enum:
-            - todo
-            - in_progress
-            - completed
-          type: string
-          x-struct:
-          x-validate:
-        greater_than_or_equal:
-          enum:
-            - todo
-            - in_progress
-            - completed
-          type: string
-          x-struct:
-          x-validate:
-        in:
-          items:
-            enum:
-              - todo
-              - in_progress
-              - completed
-            type: string
-            x-struct:
-            x-validate:
-          type: array
-          x-struct:
-          x-validate:
-        is_nil:
-          type: boolean
-          x-struct:
-          x-validate:
-        less_than:
-          enum:
-            - todo
-            - in_progress
-            - completed
-          type: string
-          x-struct:
-          x-validate:
-        less_than_or_equal:
-          enum:
-            - todo
-            - in_progress
-            - completed
-          type: string
-          x-struct:
-          x-validate:
-        not_eq:
-          enum:
-            - todo
-            - in_progress
-            - completed
-          type: string
-          x-struct:
-          x-validate:
-      type: object
-      x-struct:
-      x-validate:
-    todo-filter-title:
-      additionalProperties: false
-      properties:
-        contains:
-          type: string
-          x-struct:
-          x-validate:
-        eq:
-          type: string
-          x-struct:
-          x-validate:
-        greater_than:
-          type: string
-          x-struct:
-          x-validate:
-        greater_than_or_equal:
-          type: string
-          x-struct:
-          x-validate:
-        ilike:
-          type: string
-          x-struct:
-          x-validate:
-        in:
-          items:
-            type: string
-            x-struct:
-            x-validate:
-          type: array
-          x-struct:
-          x-validate:
-        is_nil:
-          type: boolean
-          x-struct:
-          x-validate:
-        less_than:
-          type: string
-          x-struct:
-          x-validate:
-        less_than_or_equal:
-          type: string
-          x-struct:
-          x-validate:
-        like:
-          type: string
-          x-struct:
-          x-validate:
-        not_eq:
-          type: string
-          x-struct:
-          x-validate:
-      type: object
-      x-struct:
-      x-validate:
-    todo-filter-updated_at:
-      additionalProperties: false
-      properties:
-        eq:
-          x-struct:
-          x-validate:
-        greater_than:
-          x-struct:
-          x-validate:
-        greater_than_or_equal:
-          x-struct:
-          x-validate:
-        in:
-          items:
-            x-struct:
-            x-validate:
-          type: array
-          x-struct:
-          x-validate:
-        is_nil:
-          type: boolean
-          x-struct:
-          x-validate:
-        less_than:
-          x-struct:
-          x-validate:
-        less_than_or_equal:
-          x-struct:
-          x-validate:
-        not_eq:
-          x-struct:
-          x-validate:
-      type: object
-      x-struct:
-      x-validate:
-    todo-filter-user_id:
-      additionalProperties: false
-      properties:
-        eq:
-          format: uuid
-          type: string
-          x-struct:
-          x-validate:
-        greater_than:
-          format: uuid
-          type: string
-          x-struct:
-          x-validate:
-        greater_than_or_equal:
-          format: uuid
-          type: string
-          x-struct:
-          x-validate:
-        in:
-          items:
-            format: uuid
-            type: string
-            x-struct:
-            x-validate:
-          type: array
-          x-struct:
-          x-validate:
-        is_nil:
-          type: boolean
-          x-struct:
-          x-validate:
-        less_than:
-          format: uuid
-          type: string
-          x-struct:
-          x-validate:
-        less_than_or_equal:
-          format: uuid
-          type: string
-          x-struct:
-          x-validate:
-        not_eq:
-          format: uuid
-          type: string
-          x-struct:
-          x-validate:
-      type: object
-      x-struct:
-      x-validate:
     user:
       additionalProperties: false
       description: A "Resource object" representing a user
@@ -634,187 +248,6 @@ components:
       type: object
       x-struct:
       x-validate:
-    user-filter:
-      additionalProperties: false
-      description: Filters the query to results matching the given filter object
-      example: ''
-      properties:
-        and:
-          items:
-            $ref: '#/components/schemas/user-filter'
-          type: array
-          uniqueItems: true
-          x-struct:
-          x-validate:
-        email:
-          $ref: '#/components/schemas/user-filter-email'
-        id:
-          $ref: '#/components/schemas/user-filter-id'
-        name:
-          $ref: '#/components/schemas/user-filter-name'
-        not:
-          $ref: '#/components/schemas/user-filter'
-        or:
-          items:
-            $ref: '#/components/schemas/user-filter'
-          type: array
-          uniqueItems: true
-          x-struct:
-          x-validate:
-        todos:
-          $ref: '#/components/schemas/todo-filter'
-      type: deepObject
-      x-struct:
-      x-validate:
-    user-filter-email:
-      additionalProperties: false
-      properties:
-        contains:
-          type: string
-          x-struct:
-          x-validate:
-        eq:
-          type: string
-          x-struct:
-          x-validate:
-        greater_than:
-          type: string
-          x-struct:
-          x-validate:
-        greater_than_or_equal:
-          type: string
-          x-struct:
-          x-validate:
-        in:
-          items:
-            type: string
-            x-struct:
-            x-validate:
-          type: array
-          x-struct:
-          x-validate:
-        is_nil:
-          type: boolean
-          x-struct:
-          x-validate:
-        less_than:
-          type: string
-          x-struct:
-          x-validate:
-        less_than_or_equal:
-          type: string
-          x-struct:
-          x-validate:
-        not_eq:
-          type: string
-          x-struct:
-          x-validate:
-      type: object
-      x-struct:
-      x-validate:
-    user-filter-id:
-      additionalProperties: false
-      properties:
-        eq:
-          format: uuid
-          type: string
-          x-struct:
-          x-validate:
-        greater_than:
-          format: uuid
-          type: string
-          x-struct:
-          x-validate:
-        greater_than_or_equal:
-          format: uuid
-          type: string
-          x-struct:
-          x-validate:
-        in:
-          items:
-            format: uuid
-            type: string
-            x-struct:
-            x-validate:
-          type: array
-          x-struct:
-          x-validate:
-        is_nil:
-          type: boolean
-          x-struct:
-          x-validate:
-        less_than:
-          format: uuid
-          type: string
-          x-struct:
-          x-validate:
-        less_than_or_equal:
-          format: uuid
-          type: string
-          x-struct:
-          x-validate:
-        not_eq:
-          format: uuid
-          type: string
-          x-struct:
-          x-validate:
-      type: object
-      x-struct:
-      x-validate:
-    user-filter-name:
-      additionalProperties: false
-      properties:
-        contains:
-          type: string
-          x-struct:
-          x-validate:
-        eq:
-          type: string
-          x-struct:
-          x-validate:
-        greater_than:
-          type: string
-          x-struct:
-          x-validate:
-        greater_than_or_equal:
-          type: string
-          x-struct:
-          x-validate:
-        ilike:
-          type: string
-          x-struct:
-          x-validate:
-        in:
-          items:
-            type: string
-            x-struct:
-            x-validate:
-          type: array
-          x-struct:
-          x-validate:
-        is_nil:
-          type: boolean
-          x-struct:
-          x-validate:
-        less_than:
-          type: string
-          x-struct:
-          x-validate:
-        less_than_or_equal:
-          type: string
-          x-struct:
-          x-validate:
-        like:
-          type: string
-          x-struct:
-          x-validate:
-        not_eq:
-          type: string
-          x-struct:
-          x-validate:
-      type: object
-      x-struct:
-      x-validate:
   securitySchemes:
     bearerAuth:
       bearerFormat: JWT
@@ -832,13 +265,6 @@ paths:
       deprecated: false
       description: /todos operation on todo resource
       parameters:
-        - description: Filters the query to results with attributes matching the given filter object
-          in: query
-          name: filter
-          required: false
-          schema:
-            $ref: '#/components/schemas/todo-filter'
-          style: deepObject
         - description: Sort order to apply to the results
           explode: false
           in: query
@@ -856,7 +282,7 @@ paths:
           required: false
           schema:
             example:
-              limit: 25
+              limit: 10
             properties:
               after:
                 type: string
@@ -891,7 +317,7 @@ paths:
           name: include
           required: false
           schema:
-            pattern: ^()(,())*$
+            pattern: ^(user)(,(user))*$
             type: string
             x-struct:
             x-validate:
@@ -932,7 +358,8 @@ paths:
                     x-validate:
                   included:
                     items:
-                      oneOf: []
+                      oneOf:
+                        - $ref: '#/components/schemas/user'
                       x-struct:
                       x-validate:
                     type: array
@@ -963,7 +390,7 @@ paths:
           name: include
           required: false
           schema:
-            pattern: ^()(,())*$
+            pattern: ^(user)(,(user))*$
             type: string
             x-struct:
             x-validate:
@@ -1061,7 +488,8 @@ paths:
                     $ref: '#/components/schemas/todo'
                   included:
                     items:
-                      oneOf: []
+                      oneOf:
+                        - $ref: '#/components/schemas/user'
                       x-struct:
                       x-validate:
                     type: array
@@ -1100,7 +528,7 @@ paths:
           name: include
           required: false
           schema:
-            pattern: ^()(,())*$
+            pattern: ^(user)(,(user))*$
             type: string
             x-struct:
             x-validate:
@@ -1150,7 +578,7 @@ paths:
           name: include
           required: false
           schema:
-            pattern: ^()(,())*$
+            pattern: ^(user)(,(user))*$
             type: string
             x-struct:
             x-validate:
@@ -1185,7 +613,8 @@ paths:
                     $ref: '#/components/schemas/todo'
                   included:
                     items:
-                      oneOf: []
+                      oneOf:
+                        - $ref: '#/components/schemas/user'
                       x-struct:
                       x-validate:
                     type: array
@@ -1223,7 +652,7 @@ paths:
           name: include
           required: false
           schema:
-            pattern: ^()(,())*$
+            pattern: ^(user)(,(user))*$
             type: string
             x-struct:
             x-validate:
@@ -1322,7 +751,8 @@ paths:
                     $ref: '#/components/schemas/todo'
                   included:
                     items:
-                      oneOf: []
+                      oneOf:
+                        - $ref: '#/components/schemas/user'
                       x-struct:
                       x-validate:
                     type: array

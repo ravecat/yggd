@@ -1,19 +1,19 @@
-import { defineConfig } from '@kubb/core'
-import { pluginOas } from '@kubb/plugin-oas'
-import { pluginTs } from '@kubb/plugin-ts'
-import { pluginClient } from '@kubb/plugin-client'
-// import { pluginZod } from '@kubb/plugin-zod'
+import { defineConfig } from "@kubb/core";
+import { pluginOas } from "@kubb/plugin-oas";
+import { pluginTs } from "@kubb/plugin-ts";
+import { pluginClient } from "@kubb/plugin-client";
+import { pluginZod } from "@kubb/plugin-zod";
 
 export default defineConfig({
-  root: '.',
+  root: ".",
   input: {
-    path: './openapi.json',
+    path: "./openapi.json",
   },
   output: {
-    path: './packages/shared/src/api/generated',
+    path: "./packages/shared/src/api/generated",
     clean: true,
     extension: {
-      '.ts': '',
+      ".ts": "",
     },
   },
   plugins: [
@@ -22,25 +22,25 @@ export default defineConfig({
     }),
     pluginTs({
       output: {
-        path: 'models',
+        path: "models",
       },
-      enumType: 'asConst',
-      dateType: 'string',
+      enumType: "asConst",
+      dateType: "string",
     }),
     pluginClient({
       output: {
-        path: 'clients',
+        path: "clients",
       },
-      dataReturnType: 'data',
-      pathParamsType: 'inline',
-      importPath: '../../client',
+      dataReturnType: "data",
+      pathParamsType: "inline",
+      importPath: "../../client",
     }),
-    // Temporarily disabled due to kubb bugs with zod v4
-    // pluginZod({
-    //   output: {
-    //     path: 'zod',
-    //   },
-    //   dateType: 'string',
-    // }),
+    pluginZod({
+      output: {
+        path: "zod",
+      },
+      dateType: "string",
+      version: "4",
+    }),
   ],
-})
+});

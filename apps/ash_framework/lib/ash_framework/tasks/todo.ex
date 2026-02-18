@@ -8,6 +8,8 @@ defmodule AshFramework.Tasks.Todo do
 
   json_api do
     type "todo"
+    includes [:user]
+    derive_filter? false
 
     routes do
       base "/todos"
@@ -29,7 +31,17 @@ defmodule AshFramework.Tasks.Todo do
   end
 
   actions do
-    defaults [:read, :destroy]
+    defaults [:destroy]
+
+    read :read do
+      pagination offset?: true,
+                 keyset?: true,
+                 required?: true,
+                 default_limit: 10,
+                 max_page_size: 100
+
+      prepare build(default_sort: [created_at: :desc])
+    end
 
     create :create do
       accept [:title, :content, :status, :user_id]
