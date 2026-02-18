@@ -1,7 +1,7 @@
 import { LogIn, LogOut } from "lucide-react";
-import { Button } from "@/shared/ui/button";
-import { assigns } from "@/shared/lib/session";
-import { signup, signout } from "@/app/actions/auth";
+import { Button } from "~/shared/ui/button";
+import { assigns } from "~/shared/lib/session";
+import { signup, signout } from "~/app/actions/auth";
 
 export async function SignIn() {
   const { userId } = await assigns();

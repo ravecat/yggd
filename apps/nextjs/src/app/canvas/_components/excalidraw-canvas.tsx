@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
-import type { ExcalidrawAPI } from "@/shared/types";
+import type { ExcalidrawAPI } from "~/shared/types";
 import { getExcalidrawDocument } from "@rvct/shared";
 import { useSocket } from "@rvct/shared/react";
 import { ExcalidrawBinding } from "y-excalidraw";

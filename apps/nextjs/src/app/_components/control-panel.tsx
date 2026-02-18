@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { ArrowUpIcon, ArrowDownIcon, PlusIcon } from "lucide-react";
-import { Button } from "@/shared/ui/button";
+import { Button } from "~/shared/ui/button";
 import {
   deserializeQueryParams,
   serializeQueryParams,
   type GetTodosQueryParams,
 } from "@rvct/shared";
-import { assigns } from "@/shared/lib/session";
-import type { AsyncSearchParams } from "@/shared/types";
+import { assigns } from "~/shared/lib/session";
+import type { AsyncSearchParams } from "~/shared/types";
 
 type ControlPanelConfig = {
   page: {

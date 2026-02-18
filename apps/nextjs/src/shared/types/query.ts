@@ -41,7 +41,7 @@ export type SearchParams<TQueryParams = Record<string, unknown>> =
  *
  * @example
  * import type { GetTodosQueryParams } from "@rvct/shared";
- * import type { AsyncSearchParams } from "@/shared/types";
+ * import type { AsyncSearchParams } from "~/shared/types";
  *
  * // For components
  * export async function TodosList({

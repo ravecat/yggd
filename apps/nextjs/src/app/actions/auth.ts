@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { generateCodeVerifier, generateCodeChallenge } from "@/shared/lib/pkce";
+import { generateCodeVerifier, generateCodeChallenge } from "~/shared/lib/pkce";
 
 export async function signup() {
   const verifier = generateCodeVerifier();
