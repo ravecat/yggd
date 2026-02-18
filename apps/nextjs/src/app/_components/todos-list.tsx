@@ -6,24 +6,24 @@ import {
 } from "@rvct/shared";
 import Link from "next/link";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import { ScrollArea } from "@/shared/ui/scroll-area";
+import { ScrollArea } from "~/shared/ui/scroll-area";
 import {
   Card,
   CardHeader,
   CardTitle,
   CardDescription,
   CardContent,
-} from "@/shared/ui/card";
+} from "~/shared/ui/card";
 import {
   Pagination,
   PaginationContent,
   PaginationItem,
-} from "@/shared/ui/pagination";
-import { buttonVariants } from "@/shared/ui/button";
-import { cn } from "@/shared/lib/component";
-import { generatePageNumbers } from "@/shared/lib/pagination";
-import type { AsyncSearchParams } from "@/shared/types";
-import { assigns } from "@/shared/lib/session";
+} from "~/shared/ui/pagination";
+import { buttonVariants } from "~/shared/ui/button";
+import { cn } from "~/shared/lib/component";
+import { generatePageNumbers } from "~/shared/lib/pagination";
+import type { AsyncSearchParams } from "~/shared/types";
+import { assigns } from "~/shared/lib/session";
 
 type TodosResponseWithMeta = Awaited<ReturnType<typeof getTodos>> & {
   meta?: {

@@ -2,14 +2,14 @@
 
 import { useRouter } from "next/navigation";
 import { useActionState } from "react";
-import { createTodo } from "@/app/actions/todos";
+import { createTodo } from "~/app/actions/todos";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/shared/ui/dialog";
-import { Button } from "@/shared/ui/button";
+} from "~/shared/ui/dialog";
+import { Button } from "~/shared/ui/button";
 
 export default function CreateTodoModal() {
   const router = useRouter();

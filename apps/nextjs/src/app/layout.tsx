@@ -2,7 +2,7 @@ import "../shared/global.css";
 import { Providers } from "../components/providers";
 import { Environment } from "../contexts/environment";
 import { Suspense } from "react";
-import { Navbar } from "@/app/_components/navbar";
+import { Navbar } from "~/app/_components/navbar";
 
 export const metadata = {
   title: "Welcome to nextjs",

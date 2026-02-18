@@ -1,6 +1,6 @@
 import { getTodosId, ValidationError } from "@rvct/shared";
 import { notFound } from "next/navigation";
-import { Modal } from "@/shared/ui/modal";
+import { Modal } from "~/shared/ui/modal";
 
 function shouldRenderNotFound(error: unknown): boolean {
   if (error instanceof ValidationError) {

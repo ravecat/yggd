@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { NavLinks } from "./nav-links";
-import { SignIn } from "@/components/sign-in";
+import { SignIn } from "~/components/sign-in";
 
 function SignInFallback() {
   return <div className="h-9 w-40 animate-pulse rounded-md bg-gray-200" />;

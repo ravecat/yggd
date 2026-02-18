@@ -3,7 +3,7 @@ import { TodosList } from "./_components/todos-list";
 import { TodosSkeleton } from "./_components/todos-skeleton";
 import { ControlPanel } from "./_components/control-panel";
 import { ControlPanelSkeleton } from "./_components/control-panel-skeleton";
-import type { AsyncSearchParams } from "@/shared/types";
+import type { AsyncSearchParams } from "~/shared/types";
 import { TODOS_CONFIG, type GetTodosQueryParams } from "@rvct/shared";
 
 export default function Index({

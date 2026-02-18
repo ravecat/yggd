@@ -6,7 +6,7 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { exchangeCodeForToken } from "@/app/actions/auth";
+import { exchangeCodeForToken } from "~/app/actions/auth";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
