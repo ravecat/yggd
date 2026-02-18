@@ -13,12 +13,13 @@ WORKDIR /workspace
 
 # Copy workspace configuration from monorepo context
 COPY --from=monorepo pnpm-workspace.yaml pnpm-lock.yaml package.json ./
+COPY --from=monorepo packages/shared/package.json ./packages/shared/
 
 # Copy package.json from local context (apps/nextjs)
 COPY package.json ./apps/nextjs/
 
-# Install dependencies using pnpm workspace
-RUN pnpm install --frozen-lockfile --filter nextjs
+# Install app dependencies together with workspace dependency graph
+RUN pnpm install --frozen-lockfile --filter nextjs...
 
 #################################
 # Builder Stage
@@ -32,10 +33,12 @@ WORKDIR /workspace
 # Copy installed dependencies
 COPY --from=deps /workspace/node_modules ./node_modules
 COPY --from=deps /workspace/apps/nextjs/node_modules ./apps/nextjs/node_modules
+COPY --from=deps /workspace/packages/shared/node_modules ./packages/shared/node_modules
 COPY --from=deps /workspace/pnpm-workspace.yaml /workspace/package.json /workspace/pnpm-lock.yaml ./
 
 # Copy Next.js app from local context (apps/nextjs)
 COPY . ./apps/nextjs
+COPY --from=monorepo packages/shared ./packages/shared
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
