@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { postTodos } from "@rvct/shared";
-import { assigns } from "@/shared/lib/session";
+import { assigns } from "~/shared/lib/session";
 
 export type CreateTodoState = {
   errors?: {
