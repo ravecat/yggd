@@ -17,8 +17,11 @@ ARG DEBIAN_VERSION=bookworm-20251117-slim
 
 ARG BUILDER_IMAGE="docker.io/hexpm/elixir:${ELIXIR_VERSION}-erlang-${OTP_VERSION}-debian-${DEBIAN_VERSION}"
 ARG RUNNER_IMAGE="docker.io/debian:${DEBIAN_VERSION}"
+ARG APP_DIR=.
 
 FROM ${BUILDER_IMAGE} AS builder
+
+ARG APP_DIR
 
 # install build dependencies
 RUN apt-get update \
@@ -36,34 +39,34 @@ RUN mix local.hex --force \
 ENV MIX_ENV="prod"
 
 # install mix dependencies
-COPY mix.exs mix.lock ./
+COPY ${APP_DIR}/mix.exs ${APP_DIR}/mix.lock ./
 RUN mix deps.get --only $MIX_ENV
 RUN mkdir config
 
 # copy compile-time config files before we compile dependencies
 # to ensure any relevant config change will trigger the dependencies
 # to be re-compiled.
-COPY config/config.exs config/${MIX_ENV}.exs config/
+COPY ${APP_DIR}/config/config.exs ${APP_DIR}/config/${MIX_ENV}.exs config/
 RUN mix deps.compile
 
 RUN mix assets.setup
 
-COPY priv priv
+COPY ${APP_DIR}/priv priv
 
-COPY lib lib
+COPY ${APP_DIR}/lib lib
 
 # Compile the release
 RUN mix compile
 
-COPY assets assets
+COPY ${APP_DIR}/assets assets
 
 # compile assets
 RUN mix assets.deploy
 
 # Changes to config/runtime.exs don't require recompiling the code
-COPY config/runtime.exs config/
+COPY ${APP_DIR}/config/runtime.exs config/
 
-COPY rel rel
+COPY ${APP_DIR}/rel rel
 RUN mix release
 
 # start a new build stage so that the final image will only contain

@@ -1,5 +1,7 @@
 name: release
-run-name: ${{ github.event_name == 'workflow_dispatch' && format('release {0}', github.event.inputs.release) || github.event.head_commit.message }}
+run-name:
+  ${{ github.event_name == 'workflow_dispatch' && format('release {0}',
+  github.event.inputs.release) || github.event.head_commit.message }}
 
 on:
   push:
@@ -120,23 +122,25 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Release packages (preview)
-        if: >
+        if: |-
           github.event_name == 'push' &&
-          github.ref == 'refs/heads/master'
+          github.ref_name == github.event.repository.default_branch
         run: |
           pnpm exec nx run-many -t build -p ${{ needs.metadata.outputs.affected_packages }} --parallel
           pnpm exec nx release --projects=${{ needs.metadata.outputs.affected_packages }} --dry-run --verbose
 
       - name: Release apps (preview)
-        if: >
+        if: |-
           github.event_name == 'push' &&
-          github.ref == 'refs/heads/master'
-        run: pnpm exec nx release --projects=${{ needs.metadata.outputs.affected_apps }} --dry-run --verbose
+          github.ref_name == github.event.repository.default_branch
+        run:
+          pnpm exec nx release --projects=${{
+          needs.metadata.outputs.affected_apps }} --dry-run --verbose
 
       - name: Release packages
-        if: >
+        if: |-
           github.event_name == 'workflow_dispatch' &&
-          github.ref == 'refs/heads/master' &&
+          github.ref_name == github.event.repository.default_branch &&
           github.event.inputs.release == 'packages'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
@@ -147,21 +151,24 @@ jobs:
           pnpm exec nx release --projects=${{ needs.metadata.outputs.affected_packages }} --yes
 
       - name: Release apps
-        if: >
+        if: |-
           github.event_name == 'workflow_dispatch' &&
-          github.ref == 'refs/heads/master' &&
+          github.ref_name == github.event.repository.default_branch &&
           github.event.inputs.release == 'apps'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: pnpm exec nx release --projects=${{ needs.metadata.outputs.affected_apps }} --skip-publish --yes
+        run:
+          pnpm exec nx release --projects=${{
+          needs.metadata.outputs.affected_apps }} --skip-publish --yes
 
-  docker:
+  build:
     name: Build and push ${{ matrix.app }} to GHCR
     runs-on: ubuntu-latest
     needs: [release, metadata]
     if: >
-      (github.event_name == 'workflow_dispatch' && github.event.inputs.release == 'apps') ||
-      (github.event_name == 'push' && needs.metadata.outputs.affected_apps != '')
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.release
+      == 'apps') || (github.event_name == 'push' &&
+      needs.metadata.outputs.affected_apps != '')
     env:
       REGISTRY: ghcr.io
     permissions:
@@ -188,7 +195,9 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ github.event.repository.name }}/${{ matrix.app }}
+          images:
+            ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{
+            github.event.repository.name }}/${{ matrix.app }}
           tags: |
             type=ref,event=branch
             type=ref,event=tag
@@ -201,13 +210,13 @@ jobs:
       - name: Build and push ${{ matrix.app }} docker image
         uses: docker/build-push-action@v5
         with:
-          context: ./apps/${{ matrix.app }}
+          context: .
           file: ./apps/${{ matrix.app }}/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            APP_DIR=apps/${{ matrix.app }}
           cache-from: type=gha,scope=${{ matrix.app }}
           cache-to: type=gha,mode=max,scope=${{ matrix.app }}
           platforms: linux/amd64,linux/arm64
-          build-contexts: |
-            monorepo=./
