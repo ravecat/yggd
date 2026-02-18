@@ -16,7 +16,10 @@ COPY . .
 
 RUN pnpm install --frozen-lockfile
 
-# Create standalone deployment - resolves workspace:* to npm versions
+# Build dependency libraries for nextjs based on Nx project graph
+RUN pnpm exec nx run nextjs:build-deps
+
+# Create standalone deployment for the Next.js app
 RUN pnpm deploy --legacy --filter nextjs /app
 
 #################################
