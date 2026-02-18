@@ -23,6 +23,7 @@ deps/
 project-graph.json
 context_portal/
 *.dump
+.plans
 
 test-output
 
