@@ -11,7 +11,8 @@
   - Project overview: [docs/README.md](README.md)
   - ADR links: [ADR-001](adr/001-monorepo-tooling.md), [ADR-002](adr/002-ash-backend.md),
     [ADR-003](adr/003-phoenix-channels.md), [ADR-004](adr/004-api-contract.md), [ADR-005](adr/005-styling-approach.md),
-    [ADR-006](adr/006-todo-canonical-resource.md)
+    [ADR-006](adr/006-todo-canonical-resource.md), [ADR-007](adr/007-zod-runtime-validation.md),
+    [ADR-008](adr/008-simplified-filter-surface.md)
 
 ## Summary
 
@@ -58,7 +59,7 @@ C4Context
 | `apps/solidstart`        | SolidStart, Solid.js | Frontend TODO app - feature parity implementation             |
 | `apps/ash_framework`     | Ash v3, Phoenix 1.8  | HTTP API and auth for TODO resources                          |
 | `apps/phoenix_framework` | Phoenix 1.8, Yjs     | WebSocket services for collaborative canvas and activity feed |
-| `packages/shared`        | TypeScript, axios    | Shared SDK, types, design tokens, and cross-app utilities     |
+| `packages/shared`        | TypeScript, axios    | Shared SDK, generated types and Zod schemas, design tokens    |
 
 ### Container diagram
 
@@ -191,6 +192,7 @@ sequenceDiagram
 | id         | UUID     | required                                                           | primary key      |
 | user_id    | UUID     | required, fk -> User.id                                            | owner            |
 | title      | string   | required                                                           | task title       |
+| content    | string   | required                                                           | task body        |
 | status     | string   | required, enum(`todo`, `in_progress`, `completed`), default `todo` | workflow status  |
 | created_at | datetime | required                                                           | creation time    |
 | updated_at | datetime | required                                                           | last update time |
@@ -226,6 +228,7 @@ details.
 | Validation               | Invalid input is rejected by server-side validation before persistence.                            | assumed |
 | Error format             | Failures return stable machine-readable error payloads for client handling.                        | assumed |
 | Consistency guarantees   | Persisted state is the single source of truth for CRUD and realtime updates.                       | assumed |
+| Runtime validation       | API request and response payloads are validated at runtime using generated Zod schemas.            | assumed |
 | Compatibility boundaries | Contract changes are introduced in a backward-compatible way or behind explicit migration windows. | assumed |
 
 #### Resource catalog (planning-level)
@@ -338,4 +341,6 @@ live chart), and puts everything in a single monorepo for build tooling comparis
 | Phoenix for real-time                        | Familiar environment, existing Yjs infra, fallback backend       | [ADR-003](adr/003-phoenix-channels.md)        |
 | JSON:API via Ash + OpenAPI codegen           | Standards-based, type-safe, framework-agnostic client            | [ADR-004](adr/004-api-contract.md)            |
 | Shared CSS tokens + framework-native styling | Visual consistency without coupling implementations              | [ADR-005](adr/005-styling-approach.md)        |
-| Todo as canonical task resource              | Removes `Post` ambiguity and stabilizes TODO contract            | [ADR-006](adr/006-todo-canonical-resource.md) |
+| Todo as canonical task resource               | Removes `Post` ambiguity and stabilizes TODO contract            | [ADR-006](adr/006-todo-canonical-resource.md) |
+| Zod runtime validation from OpenAPI          | Single source of truth for compile-time and runtime contracts    | [ADR-007](adr/007-zod-runtime-validation.md)  |
+| Simplified API filter surface                | YAGNI - remove unused filter complexity, reduce generated code   | [ADR-008](adr/008-simplified-filter-surface.md)|
