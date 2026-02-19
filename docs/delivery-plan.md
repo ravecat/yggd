@@ -7,7 +7,8 @@
 - Planning horizon: current release cycle (target dates TBD)
 - Owner: Max
 - Status: draft
-- Related docs: [Design doc](design-doc.md), [ADR-006](adr/006-todo-canonical-resource.md)
+- Related docs: [Design doc](design-doc.md), [ADR-006](adr/006-todo-canonical-resource.md),
+  [ADR-007](adr/007-zod-runtime-validation.md), [ADR-008](adr/008-simplified-filter-surface.md)
 
 ## Goal and release definition of done
 
@@ -19,8 +20,8 @@
 
 | Increment | Outcome                                   | Included slices or features                                                      | Dependencies            | Owner | Target date | Exit criteria                                                          |
 | --------- | ----------------------------------------- | -------------------------------------------------------------------------------- | ----------------------- | ----- | ----------- | ---------------------------------------------------------------------- |
-| R0        | Backend foundation ready                  | Canonical Todo contract, auth exchange, canvas persistence, activity push        | -                       | Max   | TBD         | OpenAPI exposes canonical `Todo`; backend tests and build pass         |
-| R1        | Shared frontend foundation ready          | React-free API client, generated types, design tokens                            | R0 (contract stability) | Max   | TBD         | `packages/shared` builds, tests pass, no base React dependency leakage |
+| R0        | Backend foundation ready                  | Canonical Todo contract, simplified filters, auth exchange, canvas, activity push | -                       | Max   | TBD         | OpenAPI exposes canonical `Todo`; filters simplified; build pass        |
+| R1        | Shared frontend foundation ready          | React-free API client, generated types + Zod schemas, design tokens              | R0 (contract stability) | Max   | TBD         | `packages/shared` builds, tests pass, Zod schemas generated            |
 | R2        | Reference implementation aligned          | Next.js app adopts Todo contract, verifies Tasks, Canvas, Activity               | R0, R1                  | Max   | TBD         | Next.js build passes and all 3 tabs + auth flow work                   |
 | R3        | Trail-blazer for non-React pattern        | SvelteKit app with all 3 tabs + auth                                             | R0, R1, R2 patterns     | Max   | TBD         | SvelteKit build passes and parity checks succeed                       |
 | R4        | Framework expansion complete              | Nuxt, Qwik, SolidStart parity implementation                                     | R0, R1, R3 recommended  | Max   | TBD         | Nuxt, Qwik, SolidStart builds pass and parity checks succeed           |
@@ -42,6 +43,10 @@
   - Owner: `packages/shared`
   - Needed by: R2, R3, R4
   - Fallback: pin generated client version per app until unified package is stable
+- Dependency: Generated Zod validation schemas stability
+  - Owner: `packages/shared`
+  - Needed by: R2, R3, R4
+  - Fallback: use TypeScript types only and defer runtime validation until schemas stabilize
 - Dependency: Realtime contracts for canvas and activity channels
   - Owner: `phoenix_framework`
   - Needed by: R2, R3, R4
