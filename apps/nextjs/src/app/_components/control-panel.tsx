@@ -44,7 +44,7 @@ export async function ControlPanel({ query }: ControlPanelProps) {
     return result.join(",");
   };
 
-  const buttonData = SORT_FIELDS.map((field) => {
+  const sortData = SORT_FIELDS.map((field) => {
     const asc = sortFields.includes(field);
     const desc = sortFields.includes(`-${field}`);
     const active = asc || desc;
@@ -60,17 +60,17 @@ export async function ControlPanel({ query }: ControlPanelProps) {
   });
 
   return (
-    <div className="flex gap-2">
+    <div className="flex flex-wrap gap-2">
       {userId && (
-        <Link href="/todo/create" className="shrink-0">
-          <Button size="sm" className="min-w-31">
+        <Link href="/todo/create" className="w-full shrink-0 sm:w-auto">
+          <Button size="sm" className="w-full min-w-31 sm:w-auto">
             <PlusIcon className="h-4 w-4" />
             Create task
           </Button>
         </Link>
       )}
-      <div className="ml-auto grid grid-cols-3 gap-2">
-        {buttonData.map((data) => (
+      <div className="ml-auto grid w-full grid-cols-3 gap-2 sm:w-auto">
+        {sortData.map((data) => (
           <Link
             key={data.field}
             href={data.href}
