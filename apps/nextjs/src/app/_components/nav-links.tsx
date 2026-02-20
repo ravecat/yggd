@@ -7,11 +7,19 @@ import { Tabs, TabsList, TabsTrigger } from "~/shared/ui/tabs";
 const links = [
   { href: "/", label: "Todo", value: "todo" },
   { href: "/canvas", label: "Canvas", value: "canvas" },
+  { href: "/telemetry", label: "Telemetry", value: "telemetry" },
+  { href: "/chart", label: "Chart", value: "chart" },
 ] as const;
 
 function getActiveValue(pathname: string): (typeof links)[number]["value"] {
   if (pathname === "/canvas" || pathname.startsWith("/canvas/")) {
     return "canvas";
+  }
+  if (pathname === "/telemetry" || pathname.startsWith("/telemetry/")) {
+    return "telemetry";
+  }
+  if (pathname === "/chart" || pathname.startsWith("/chart/")) {
+    return "chart";
   }
 
   return "todo";
