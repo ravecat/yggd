@@ -53,6 +53,21 @@ if config_env() == :prod do
   host = System.get_env("PHX_HOST") || "example.com"
   port = String.to_integer(System.get_env("PORT") || "4000")
 
+  check_origin =
+    case System.get_env("PHX_CHECK_ORIGIN") do
+      nil ->
+        true
+
+      "" ->
+        true
+
+      value ->
+        value
+        |> String.split(",", trim: true)
+        |> Enum.map(&String.trim/1)
+        |> Enum.reject(&(&1 == ""))
+    end
+
   config :phoenix_framework, :dns_cluster_query, System.get_env("DNS_CLUSTER_QUERY")
 
   config :phoenix_framework, PhoenixFrameworkWeb.Endpoint,
@@ -65,7 +80,8 @@ if config_env() == :prod do
       ip: {0, 0, 0, 0, 0, 0, 0, 0},
       port: port
     ],
-    secret_key_base: secret_key_base
+    secret_key_base: secret_key_base,
+    check_origin: check_origin
 
   # ## SSL Support
   #
