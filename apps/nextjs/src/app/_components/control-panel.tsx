@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpIcon, ArrowDownIcon, PlusIcon } from "lucide-react";
+import { ChevronUpIcon, ChevronDownIcon, PlusIcon } from "lucide-react";
 import { Button } from "~/shared/ui/button";
 import {
   type GetTodosQueryParams,
@@ -7,6 +7,7 @@ import {
   serializeQueryParams,
 } from "@rvct/shared";
 import { assigns } from "~/shared/lib/session";
+import { cn } from "~/shared/lib/component";
 
 type ControlPanelProps = {
   query: Partial<GetTodosQueryParams>;
@@ -17,7 +18,6 @@ type TodoSortField = keyof NonNullable<Todo["attributes"]>;
 const SORT_FIELDS = [
   "title",
   "status",
-  "created_at",
   "updated_at",
 ] as const satisfies ReadonlyArray<TodoSortField>;
 
@@ -47,6 +47,7 @@ export async function ControlPanel({ query }: ControlPanelProps) {
   const buttonData = SORT_FIELDS.map((field) => {
     const asc = sortFields.includes(field);
     const desc = sortFields.includes(`-${field}`);
+    const active = asc || desc;
 
     const queryParams = serializeQueryParams<GetTodosQueryParams>({
       ...query,
@@ -55,31 +56,49 @@ export async function ControlPanel({ query }: ControlPanelProps) {
 
     const href = `/?${new URLSearchParams(queryParams).toString()}`;
 
-    return { field, asc, desc, href };
+    return { field, asc, desc, active, href };
   });
 
   return (
     <div className="flex gap-2">
       {userId && (
-        <Link href="/todo/create">
-          <Button size="sm" className="w-48">
-            <PlusIcon className="h-4 w-4 mr-2" />
-            Create Todo
+        <Link href="/todo/create" className="shrink-0">
+          <Button size="sm">
+            <PlusIcon className="h-4 w-4" />
+            Create task
           </Button>
         </Link>
       )}
-      {buttonData.map((data) => (
-        <Link key={data.field} href={data.href}>
-          <Button variant="outline" size="sm" className="w-48 justify-between">
-            <span>{data.field}</span>
-            {data.desc ? (
-              <ArrowDownIcon className="h-3 w-3" />
-            ) : data.asc ? (
-              <ArrowUpIcon className="h-3 w-3" />
-            ) : null}
-          </Button>
-        </Link>
-      ))}
+      <div className="ml-auto grid grid-cols-3 gap-2">
+        {buttonData.map((data) => (
+          <Link
+            key={data.field}
+            href={data.href}
+            className={cn(
+              "flex min-w-0 items-center justify-between rounded-md border px-3 h-9 text-sm transition-colors",
+              data.active
+                ? "border-primary/30 bg-primary/5 text-foreground"
+                : "border-input bg-background text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+            )}
+          >
+            <span className="truncate">{data.field}</span>
+            <span className="flex shrink-0 flex-col ml-1.5">
+              <ChevronUpIcon
+                className={cn(
+                  "h-3.5 w-3.5 -mb-0.5 transition-colors",
+                  data.asc ? "text-primary" : "text-muted-foreground/30",
+                )}
+              />
+              <ChevronDownIcon
+                className={cn(
+                  "h-3.5 w-3.5 -mt-0.5 transition-colors",
+                  data.desc ? "text-primary" : "text-muted-foreground/30",
+                )}
+              />
+            </span>
+          </Link>
+        ))}
+      </div>
     </div>
   );
 }
