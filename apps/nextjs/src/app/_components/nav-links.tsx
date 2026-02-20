@@ -30,7 +30,7 @@ export function NavLinks() {
               key={link.href}
               value={link.value}
               asChild
-              className="h-8 flex-none px-3"
+              className="h-8 w-24 flex-none px-3"
               aria-current={activeValue === link.value ? "page" : undefined}
             >
               <Link href={link.href}>{link.label}</Link>

@@ -63,7 +63,7 @@ export async function ControlPanel({ query }: ControlPanelProps) {
     <div className="flex gap-2">
       {userId && (
         <Link href="/todo/create" className="shrink-0">
-          <Button size="sm">
+          <Button size="sm" className="min-w-31">
             <PlusIcon className="h-4 w-4" />
             Create task
           </Button>
@@ -75,7 +75,7 @@ export async function ControlPanel({ query }: ControlPanelProps) {
             key={data.field}
             href={data.href}
             className={cn(
-              "flex min-w-0 items-center justify-between rounded-md border px-3 h-9 text-sm transition-colors",
+              "flex min-w-31 items-center justify-between rounded-md border px-3 h-9 text-sm transition-colors",
               data.active
                 ? "border-primary/30 bg-primary/5 text-foreground"
                 : "border-input bg-background text-muted-foreground hover:bg-accent hover:text-accent-foreground",
