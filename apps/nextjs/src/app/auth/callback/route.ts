@@ -13,19 +13,19 @@ export async function GET(request: NextRequest) {
   const code = searchParams.get("code");
   const error = searchParams.get("error");
 
+  const appUrl = process.env.APP_URL;
+
   if (error) {
     console.error("OAuth error:", error);
     return NextResponse.redirect(
-      new URL(`/?error=${encodeURIComponent(error)}`, request.url)
+      new URL(`/?error=${encodeURIComponent(error)}`, appUrl)
     );
   }
 
   // Validate authorization code presence
   if (!code) {
     console.error("Missing authorization code in callback");
-    return NextResponse.redirect(
-      new URL("/?error=missing_code", request.url)
-    );
+    return NextResponse.redirect(new URL("/?error=missing_code", appUrl));
   }
 
   try {
@@ -33,11 +33,11 @@ export async function GET(request: NextRequest) {
 
     console.log("OAuth callback successful, token stored in cookie");
 
-    return NextResponse.redirect(new URL("/", request.url));
+    return NextResponse.redirect(new URL("/", appUrl));
   } catch (error) {
     console.error("Token exchange error:", error);
     return NextResponse.redirect(
-      new URL("/?error=exchange_failed", request.url)
+      new URL("/?error=exchange_failed", appUrl)
     );
   }
 }
