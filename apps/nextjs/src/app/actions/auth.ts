@@ -18,7 +18,7 @@ export async function signup() {
   });
 
   const callbackUri = `${process.env.APP_URL}/auth/callback`;
-  const oauthUrl = new URL(`${process.env.AUTH_SERVICE_URL}/auth/user/google`);
+  const oauthUrl = new URL("/auth/user/google", process.env.PUBLIC_API_URL);
 
   oauthUrl.searchParams.set("redirect_uri", callbackUri);
   oauthUrl.searchParams.set("code_challenge", challenge);
