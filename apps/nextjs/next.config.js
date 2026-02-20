@@ -1,6 +1,5 @@
 //@ts-check
 
-const path = require("path");
 const { composePlugins, withNx } = require("@nx/next");
 
 /**
@@ -14,8 +13,6 @@ const nextConfig = {
 
   // Standalone mode for minimal production Docker images
   output: "standalone",
-
-  outputFileTracingRoot: path.join(__dirname, "../../"),
 };
 
 /** @type {(import("@nx/next/src/utils/config").NextPlugin | import("@nx/next/src/utils/config").NextPluginThatReturnsConfigFn)[]} */
