@@ -206,7 +206,9 @@ export function serializeQueryParams<TQueryParams = QueryParams>(
       return;
     }
 
-    result.push([prefix, String(obj)]);
+    if (obj !== "") {
+      result.push([prefix, String(obj)]);
+    }
   }
 
   serialize(params);
