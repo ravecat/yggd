@@ -219,4 +219,4 @@ jobs:
             APP_DIR=apps/${{ matrix.app }}
           cache-from: type=gha,scope=${{ matrix.app }}
           cache-to: type=gha,mode=max,scope=${{ matrix.app }}
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
