@@ -10,11 +10,11 @@ function SignInFallback() {
 export function Navbar() {
   return (
     <header className="border-border bg-background">
-      <div className="mx-auto grid h-14 w-full max-w-6xl grid-cols-3 items-center gap-4 px-4">
+      <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-2 sm:grid sm:h-14 sm:grid-cols-3 sm:py-0">
         <div className="flex items-center">
           <PageSwitcher />
         </div>
-        <div className="flex items-center justify-center">
+        <div className="order-last flex w-full items-center justify-center sm:order-0 sm:w-auto">
           <NavLinks />
         </div>
         <div className="flex items-center justify-end">
