@@ -12,14 +12,15 @@
   - ADR links: [ADR-001](adr/001-monorepo-tooling.md), [ADR-002](adr/002-ash-backend.md),
     [ADR-003](adr/003-phoenix-channels.md), [ADR-004](adr/004-api-contract.md), [ADR-005](adr/005-styling-approach.md),
     [ADR-006](adr/006-todo-canonical-resource.md), [ADR-007](adr/007-zod-runtime-validation.md),
-    [ADR-008](adr/008-simplified-filter-surface.md)
+    [ADR-008](adr/008-simplified-filter-surface.md), [ADR-009](adr/009-asyncapi-channel-contracts.md),
+    [ADR-010](adr/010-otlp-telemetry-format.md), [ADR-011](adr/011-uplot-charting.md)
 
 ## Summary
 
 Moda is a learning project whose goal is to cover as many frontend frameworks as practical by building the same tabbed
-app in each. The app has three independent tabs - Tasks (TODO CRUD), Canvas (collaborative whiteboard), Activity (live
-chart) - chosen to exercise three distinct integration patterns: HTTP request-response, bidirectional CRDT sync, and
-server-push streaming. The initial framework set like Next.js, SvelteKit, Nuxt, Qwik, and SolidStart, with no fixed
+app in each. The app has four tabs - Tasks (TODO CRUD), Canvas (collaborative whiteboard), Telemetry (BEAM VM metrics dashboard),
+Chart (market data) - chosen to exercise distinct integration patterns: HTTP request-response (JSON:API),
+bidirectional CRDT sync (AsyncAPI), and server-push streaming (AsyncAPI + OTLP). The initial framework set like Next.js, SvelteKit, Nuxt, Qwik, and SolidStart, with no fixed
 upper limit on how many frameworks can be added over time, using a shared Ash/Phoenix backend and TypeScript API client
 in an Nx monorepo. The design keeps shared infrastructure framework-agnostic so each app implements its own integration
 patterns, maximizing per-framework learning.
@@ -50,16 +51,16 @@ C4Context
 
 ### Main components
 
-| Component                | Technology           | Responsibility                                                |
-| ------------------------ | -------------------- | ------------------------------------------------------------- |
-| `apps/nextjs`            | Next.js 16, React 19 | Frontend TODO app - feature parity implementation             |
-| `apps/sveltekit`         | SvelteKit, Svelte 5  | Frontend TODO app - feature parity implementation             |
-| `apps/nuxt`              | Nuxt 3, Vue 3        | Frontend TODO app - feature parity implementation             |
-| `apps/qwik`              | Qwik City            | Frontend TODO app - feature parity implementation             |
-| `apps/solidstart`        | SolidStart, Solid.js | Frontend TODO app - feature parity implementation             |
-| `apps/ash_framework`     | Ash v3, Phoenix 1.8  | HTTP API and auth for TODO resources                          |
-| `apps/phoenix_framework` | Phoenix 1.8, Yjs     | WebSocket services for collaborative canvas and activity feed |
-| `packages/shared`        | TypeScript, axios    | Shared SDK, generated types and Zod schemas, design tokens    |
+| Component                | Technology           | Responsibility                                                    |
+| ------------------------ | -------------------- | ----------------------------------------------------------------- |
+| `apps/nextjs`            | Next.js 16, React 19 | Frontend TODO app - feature parity implementation                 |
+| `apps/sveltekit`         | SvelteKit, Svelte 5  | Frontend TODO app - feature parity implementation                 |
+| `apps/nuxt`              | Nuxt 3, Vue 3        | Frontend TODO app - feature parity implementation                 |
+| `apps/qwik`              | Qwik City            | Frontend TODO app - feature parity implementation                 |
+| `apps/solidstart`        | SolidStart, Solid.js | Frontend TODO app - feature parity implementation                 |
+| `apps/ash_framework`     | Ash v3, Phoenix 1.8  | HTTP API and auth for TODO resources                              |
+| `apps/phoenix_framework` | Phoenix 1.8, Yjs     | WebSocket services for collaborative canvas and telemetry metrics |
+| `packages/shared`        | TypeScript, axios    | Shared SDK, generated types and Zod schemas, design tokens        |
 
 ### Container diagram
 
@@ -157,19 +158,22 @@ sequenceDiagram
     B->>B: Apply update to canvas
 ```
 
-#### Activity chart (server push)
+#### Telemetry metrics (server push + OTLP)
 
 ```mermaid
 sequenceDiagram
     participant F as Frontend
     participant P as Phoenix Backend
+    participant T as Erlang :telemetry
 
-    F->>P: join activity channel
+    F->>P: join telemetry:metrics channel
     P-->>F: ok
 
-    loop every timer tick
-        P-->>F: push {ts, value}
-        F->>F: Append point to chart
+    loop every interval
+        T-->>P: :telemetry events (process count, latency, connections)
+        P->>P: Format as OTLP JSON
+        P-->>F: push OTLP metrics payload
+        F->>F: Parse OTLP, update uPlot charts
     end
 ```
 
@@ -187,15 +191,16 @@ sequenceDiagram
 
 #### Todo
 
-| Field      | Type     | Constraints                                                        | Notes            |
-| ---------- | -------- | ------------------------------------------------------------------ | ---------------- |
-| id         | UUID     | required                                                           | primary key      |
-| user_id    | UUID     | required, fk -> User.id                                            | owner            |
-| title      | string   | required                                                           | task title       |
-| content    | string   | required                                                           | task body        |
-| status     | string   | required, enum(`todo`, `in_progress`, `completed`), default `todo` | workflow status  |
-| created_at | datetime | required                                                           | creation time    |
-| updated_at | datetime | required                                                           | last update time |
+| Field      | Type     | Constraints                                                                       | Notes            |
+| ---------- | -------- | --------------------------------------------------------------------------------- | ---------------- |
+| id         | UUID     | required                                                                          | primary key      |
+| user_id    | UUID     | required, fk -> User.id                                                           | owner            |
+| title      | string   | required                                                                          | task title       |
+| content    | string   | required                                                                          | task body        |
+| status     | string   | required, enum(`todo`, `in_progress`, `in_review`, `completed`), default `todo`   | workflow status  |
+| priority   | string   | required, enum(`low`, `medium`, `high`, `urgent`), default `medium`               | urgency level    |
+| created_at | datetime | required                                                                          | creation time    |
+| updated_at | datetime | required                                                                          | last update time |
 
 ### Relationships
 
@@ -208,7 +213,8 @@ erDiagram
 
 - `Todo` is the canonical task resource (ADR-006). Any `Post` naming is compatibility-only during migration.
 - `Todo` must belong to exactly one `User` through `user_id`.
-- `Todo` status must be one of `todo`, `in_progress`, or `completed`.
+- `Todo` status must be one of `todo`, `in_progress`, `in_review`, or `completed`.
+- `Todo` priority must be one of `low`, `medium`, `high`, or `urgent`.
 
 ## Contracts and consistency
 
@@ -253,12 +259,14 @@ implementation artifacts (OpenAPI and contract tests).
 
 ### Async contracts
 
-| Stream/topic   | Producer -> consumer                     | Purpose                            | Guarantees (planning-level)                        | Status   | Evidence              |
-| -------------- | ---------------------------------------- | ---------------------------------- | -------------------------------------------------- | -------- | --------------------- |
-| `y_doc_room:*` | Frontend clients <-> `phoenix_framework` | Collaborative Yjs document sync    | Realtime propagation and eventual CRDT convergence | verified | channel impl + router |
-| `activity:*`   | `phoenix_framework` -> frontend clients  | Server-pushed activity data stream | Best-effort push with client-tolerant rendering    | assumed  | requirements          |
+All async channels are described via [AsyncAPI](https://www.asyncapi.com/) specification.
 
-Detailed payload schemas, ordering, retry semantics, and event versioning are defined later in async specs and contract
+| Stream/topic         | Producer -> consumer                     | Purpose                             | Data format | Guarantees (planning-level)                        | Status   | Evidence              |
+| -------------------- | ---------------------------------------- | ----------------------------------- | ----------- | -------------------------------------------------- | -------- | --------------------- |
+| `y_doc_room:*`       | Frontend clients <-> `phoenix_framework` | Collaborative Yjs document sync     | Yjs binary  | Realtime propagation and eventual CRDT convergence | verified | channel impl + router |
+| `telemetry:metrics`  | `phoenix_framework` -> frontend clients  | BEAM VM metrics server-push stream  | OTLP JSON   | Best-effort push with client-tolerant rendering    | assumed  | requirements          |
+
+Detailed payload schemas, ordering, retry semantics, and event versioning are defined in `asyncapi.yaml` and contract
 tests.
 
 ### Consistency rules (minimal)
@@ -319,7 +327,7 @@ live chart), and puts everything in a single monorepo for build tooling comparis
   data in client state.
 - Real-time channels are public in MVP and do not require token validation on join.
 - Privacy: N/A - learning project, no real user data.
-- Observability: Console logging sufficient. No production monitoring needed.
+- Observability: BEAM metrics exposed via OTLP JSON over Phoenix channels (Telemetry tab). Console logging for debugging.
 - Failure modes: If one framework app fails, others are unaffected (independent builds/deploys).
 - Scalability: N/A - single developer, local development.
 
@@ -343,4 +351,7 @@ live chart), and puts everything in a single monorepo for build tooling comparis
 | Shared CSS tokens + framework-native styling | Visual consistency without coupling implementations              | [ADR-005](adr/005-styling-approach.md)        |
 | Todo as canonical task resource               | Removes `Post` ambiguity and stabilizes TODO contract            | [ADR-006](adr/006-todo-canonical-resource.md) |
 | Zod runtime validation from OpenAPI          | Single source of truth for compile-time and runtime contracts    | [ADR-007](adr/007-zod-runtime-validation.md)  |
-| Simplified API filter surface                | YAGNI - remove unused filter complexity, reduce generated code   | [ADR-008](adr/008-simplified-filter-surface.md)|
+| Simplified API filter surface                | YAGNI - remove unused filter complexity, reduce generated code   | [ADR-008](adr/008-simplified-filter-surface.md) |
+| AsyncAPI for async channel contracts         | Standards-based machine-readable spec for WebSocket channels     | [ADR-009](adr/009-asyncapi-channel-contracts.md) |
+| OTLP JSON for telemetry data format          | CNCF standard, integrates with Erlang `:telemetry` natively      | [ADR-010](adr/010-otlp-telemetry-format.md)     |
+| uPlot for charting                           | Smallest bundle (~45KB), fastest real-time, vanilla JS API       | [ADR-011](adr/011-uplot-charting.md)             |
