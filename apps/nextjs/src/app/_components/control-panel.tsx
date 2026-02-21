@@ -75,7 +75,7 @@ export async function ControlPanel({ query }: ControlPanelProps) {
             key={data.field}
             href={data.href}
             className={cn(
-              "flex min-w-31 items-center justify-between rounded-md border px-3 h-9 text-sm transition-colors",
+              "flex min-w-0 items-center justify-between rounded-md border px-3 h-9 text-sm transition-colors sm:min-w-31",
               data.active
                 ? "border-primary/30 bg-primary/5 text-foreground"
                 : "border-input bg-background text-muted-foreground hover:bg-accent hover:text-accent-foreground",

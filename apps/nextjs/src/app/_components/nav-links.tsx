@@ -30,15 +30,15 @@ export function NavLinks() {
   const activeValue = getActiveValue(pathname);
 
   return (
-    <nav aria-label="Primary">
-      <Tabs value={activeValue} className="w-auto">
-        <TabsList className="h-9 w-auto overflow-hidden p-0.5">
+    <nav aria-label="Primary" className="w-full min-w-0 sm:w-auto">
+      <Tabs value={activeValue} className="w-full sm:w-auto">
+        <TabsList className="h-9 w-full overflow-hidden p-0.5 sm:w-auto">
           {links.map((link) => (
             <TabsTrigger
               key={link.href}
               value={link.value}
               asChild
-              className="h-8 w-24 flex-none px-3"
+              className="h-8 min-w-0 flex-1 px-3"
               aria-current={activeValue === link.value ? "page" : undefined}
             >
               <Link href={link.href}>{link.label}</Link>
