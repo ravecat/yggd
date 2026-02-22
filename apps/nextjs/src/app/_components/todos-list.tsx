@@ -127,6 +127,9 @@ export async function TodosList({
                         <span className="uppercase tracking-wide text-xs mr-2">
                           {todo.attributes?.status || "todo"}
                         </span>
+                        <span className="uppercase tracking-wide text-xs mr-2">
+                          {todo.attributes?.priority || "medium"}
+                        </span>
                         {new Date(
                           todo.attributes.created_at,
                         ).toLocaleDateString()}

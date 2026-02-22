@@ -18,6 +18,7 @@ type TodoSortField = keyof NonNullable<Todo["attributes"]>;
 const SORT_FIELDS = [
   "title",
   "status",
+  "priority",
   "updated_at",
 ] as const satisfies ReadonlyArray<TodoSortField>;
 
@@ -69,7 +70,7 @@ export async function ControlPanel({ query }: ControlPanelProps) {
           </Button>
         </Link>
       )}
-      <div className="ml-auto grid w-full grid-cols-3 gap-2 sm:w-auto">
+      <div className="ml-auto grid w-full grid-cols-4 gap-2 sm:w-auto">
         {sortData.map((data) => (
           <Link
             key={data.field}

@@ -5,10 +5,10 @@ export type { GetTodosQueryParams, GetTodos200, GetTodosError, GetTodosQueryResp
 export type { GetTodosIdPathParams, GetTodosIdQueryParams, GetTodosId200, GetTodosIdError, GetTodosIdQueryResponse, GetTodosIdQuery } from "./GetTodosId";
 export type { Link } from "./Link";
 export type { Links } from "./Links";
-export type { PatchTodosIdPathParams, PatchTodosIdQueryParams, PatchTodosId200, PatchTodosIdError, AttributesStatusEnum3, DataTypeEnum2, PatchTodosIdMutationRequest, PatchTodosIdMutationResponse, PatchTodosIdMutation } from "./PatchTodosId";
-export type { PostTodosQueryParams, PostTodos201, PostTodosError, AttributesStatusEnum2, DataTypeEnum, PostTodosMutationRequest, PostTodosMutationResponse, PostTodosMutation } from "./PostTodos";
-export type { AttributesStatusEnum, Todo } from "./Todo";
+export type { PatchTodosIdPathParams, PatchTodosIdQueryParams, PatchTodosId200, PatchTodosIdError, AttributesPriorityEnum3, AttributesStatusEnum3, DataTypeEnum2, PatchTodosIdMutationRequest, PatchTodosIdMutationResponse, PatchTodosIdMutation } from "./PatchTodosId";
+export type { PostTodosQueryParams, PostTodos201, PostTodosError, AttributesPriorityEnum2, AttributesStatusEnum2, DataTypeEnum, PostTodosMutationRequest, PostTodosMutationResponse, PostTodosMutation } from "./PostTodos";
+export type { AttributesPriorityEnum, AttributesStatusEnum, Todo } from "./Todo";
 export type { User } from "./User";
-export { attributesStatusEnum3, dataTypeEnum2 } from "./PatchTodosId";
-export { attributesStatusEnum2, dataTypeEnum } from "./PostTodos";
-export { attributesStatusEnum } from "./Todo";
+export { attributesPriorityEnum3, attributesStatusEnum3, dataTypeEnum2 } from "./PatchTodosId";
+export { attributesPriorityEnum2, attributesStatusEnum2, dataTypeEnum } from "./PostTodos";
+export { attributesPriorityEnum, attributesStatusEnum } from "./Todo";

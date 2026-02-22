@@ -32,11 +32,12 @@ export type UserAttributesOnlySchema = {
 // Todo Schema
 export type TodoResourceSchema = {
   __type: "Resource";
-  __primitiveFields: "id" | "title" | "content" | "status" | "createdAt" | "updatedAt" | "userId";
+  __primitiveFields: "id" | "title" | "content" | "status" | "priority" | "createdAt" | "updatedAt" | "userId";
   id: UUID;
   title: string;
   content: string;
   status: "todo" | "in_progress" | "completed";
+  priority: "low" | "medium" | "high" | "urgent";
   createdAt: UtcDateTimeUsec;
   updatedAt: UtcDateTimeUsec;
   userId: UUID;
@@ -47,11 +48,12 @@ export type TodoResourceSchema = {
 
 export type TodoAttributesOnlySchema = {
   __type: "Resource";
-  __primitiveFields: "id" | "title" | "content" | "status" | "createdAt" | "updatedAt" | "userId";
+  __primitiveFields: "id" | "title" | "content" | "status" | "priority" | "createdAt" | "updatedAt" | "userId";
   id: UUID;
   title: string;
   content: string;
   status: "todo" | "in_progress" | "completed";
+  priority: "low" | "medium" | "high" | "urgent";
   createdAt: UtcDateTimeUsec;
   updatedAt: UtcDateTimeUsec;
   userId: UUID;
@@ -114,6 +116,12 @@ export type TodoFilterInput = {
     eq?: "todo" | "in_progress" | "completed";
     notEq?: "todo" | "in_progress" | "completed";
     in?: Array<"todo" | "in_progress" | "completed">;
+  };
+
+  priority?: {
+    eq?: "low" | "medium" | "high" | "urgent";
+    notEq?: "low" | "medium" | "high" | "urgent";
+    in?: Array<"low" | "medium" | "high" | "urgent">;
   };
 
   createdAt?: {
@@ -1042,6 +1050,7 @@ export type CreateTodoInput = {
   title: string;
   content: string;
   status?: "todo" | "in_progress" | "completed";
+  priority?: "low" | "medium" | "high" | "urgent";
   userId: UUID;
 };
 
@@ -1117,6 +1126,7 @@ export type UpdateTodoInput = {
   title?: string;
   content?: string;
   status?: "todo" | "in_progress" | "completed";
+  priority?: "low" | "medium" | "high" | "urgent";
 };
 
 export type UpdateTodoFields = UnifiedFieldSelection<TodoResourceSchema>[];

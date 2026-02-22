@@ -44,11 +44,11 @@ defmodule AshFramework.Tasks.Todo do
     end
 
     create :create do
-      accept [:title, :content, :status, :user_id]
+      accept [:title, :content, :status, :priority, :user_id]
     end
 
     update :update do
-      accept [:title, :content, :status]
+      accept [:title, :content, :status, :priority]
     end
   end
 
@@ -86,6 +86,12 @@ defmodule AshFramework.Tasks.Todo do
     attribute :status, AshFramework.Tasks.TodoStatus do
       allow_nil? false
       default :todo
+      public? true
+    end
+
+    attribute :priority, AshFramework.Tasks.TaskPriority do
+      allow_nil? false
+      default :medium
       public? true
     end
 

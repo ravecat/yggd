@@ -61,6 +61,15 @@ export type PatchTodosId200 = {
 */
 export type PatchTodosIdError = Errors;
 
+export const attributesPriorityEnum3 = {
+    "low": "low",
+    "medium": "medium",
+    "high": "high",
+    "urgent": "urgent"
+} as const;
+
+export type AttributesPriorityEnum3 = (typeof attributesPriorityEnum3)[keyof typeof attributesPriorityEnum3];
+
 export const attributesStatusEnum3 = {
     "todo": "todo",
     "in_progress": "in_progress",
@@ -88,6 +97,7 @@ export type PatchTodosIdMutationRequest = {
         */
         attributes?: {
             content?: (string | null);
+            priority?: (AttributesPriorityEnum3 | null);
             status?: (AttributesStatusEnum3 | null);
             title?: (string | null);
         };
