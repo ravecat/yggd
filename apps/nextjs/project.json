@@ -17,7 +17,7 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "next dev",
+        "command": "next dev --webpack",
         "cwd": "apps/nextjs"
       },
       "continuous": true
@@ -25,7 +25,7 @@
     "start": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "next dev",
+        "command": "next dev --webpack",
         "cwd": "apps/nextjs"
       },
       "continuous": true
