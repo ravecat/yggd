@@ -6,6 +6,8 @@
 
 Polyglot monorepo managed by [Nx](https://nx.dev) that combines multiple applications.
 
+**Live:** [moda.ravecat.io](https://moda.ravecat.io)
+
 ## Requirements
 
 - Nix (flakes enabled)
@@ -75,16 +77,16 @@ Start all projects:
 make start
 ```
 
-One-command alias:
+Or both in one command:
 
 ```bash
 make serve
 ```
 
-Selected projects:
+Selected projects (minimum: `ash_framework` for API, `phoenix_framework` for real-time, and any client app):
 
 ```bash
-npx nx run-many -t start -p nextjs,ash_framework --tui
+npx nx run-many -t start -p nextjs,ash_framework,phoenix_framework --tui
 ```
 
 ## License
