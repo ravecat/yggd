@@ -46,13 +46,19 @@ export async function TodoView({
       </h1>
 
       {todo.attributes?.created_at && (
-        <time className="mb-8 block text-sm text-gray-600">
-          {new Date(todo.attributes.created_at).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })}
-        </time>
+        <div className="mb-8 flex items-center gap-2 text-sm text-gray-600">
+          <time>
+            {new Date(todo.attributes.created_at).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </time>
+          <span>-</span>
+          <span className="capitalize">
+            {todo.attributes?.priority || "medium"} priority
+          </span>
+        </div>
       )}
 
       <div className="mt-8 whitespace-pre-wrap text-gray-800 leading-relaxed">

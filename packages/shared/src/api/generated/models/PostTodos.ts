@@ -54,6 +54,15 @@ export type PostTodos201 = {
 */
 export type PostTodosError = Errors;
 
+export const attributesPriorityEnum2 = {
+    "low": "low",
+    "medium": "medium",
+    "high": "high",
+    "urgent": "urgent"
+} as const;
+
+export type AttributesPriorityEnum2 = (typeof attributesPriorityEnum2)[keyof typeof attributesPriorityEnum2];
+
 export const attributesStatusEnum2 = {
     "todo": "todo",
     "in_progress": "in_progress",
@@ -84,6 +93,7 @@ export type PostTodosMutationRequest = {
              * @type string
             */
             content: string;
+            priority?: (AttributesPriorityEnum2 | null);
             status?: (AttributesStatusEnum2 | null);
             /**
              * @type string
