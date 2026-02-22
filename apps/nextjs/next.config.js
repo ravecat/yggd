@@ -15,6 +15,8 @@ const nextConfig = {
   // Standalone mode for minimal production Docker images
   output: "standalone",
 
+  outputFileTracingRoot: path.join(__dirname, "../../"),
+
   turbopack: {
     root: path.resolve(__dirname, "../.."),
   },
