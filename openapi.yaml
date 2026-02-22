@@ -91,6 +91,16 @@ components:
               description: Field included by default.
               x-struct:
               x-validate:
+            priority:
+              description: Field included by default.
+              enum:
+                - low
+                - medium
+                - high
+                - urgent
+              type: string
+              x-struct:
+              x-validate:
             status:
               description: Field included by default.
               enum:
@@ -119,6 +129,7 @@ components:
             - title
             - content
             - status
+            - priority
             - created_at
             - updated_at
             - user_id
@@ -271,7 +282,7 @@ paths:
           name: sort
           required: false
           schema:
-            pattern: ^(id|-id|\+\+id|--id|title|-title|\+\+title|--title|content|-content|\+\+content|--content|status|-status|\+\+status|--status|created_at|-created_at|\+\+created_at|--created_at|updated_at|-updated_at|\+\+updated_at|--updated_at|user_id|-user_id|\+\+user_id|--user_id)(,(id|-id|\+\+id|--id|title|-title|\+\+title|--title|content|-content|\+\+content|--content|status|-status|\+\+status|--status|created_at|-created_at|\+\+created_at|--created_at|updated_at|-updated_at|\+\+updated_at|--updated_at|user_id|-user_id|\+\+user_id|--user_id))*$
+            pattern: ^(id|-id|\+\+id|--id|title|-title|\+\+title|--title|content|-content|\+\+content|--content|status|-status|\+\+status|--status|priority|-priority|\+\+priority|--priority|created_at|-created_at|\+\+created_at|--created_at|updated_at|-updated_at|\+\+updated_at|--updated_at|user_id|-user_id|\+\+user_id|--user_id)(,(id|-id|\+\+id|--id|title|-title|\+\+title|--title|content|-content|\+\+content|--content|status|-status|\+\+status|--status|priority|-priority|\+\+priority|--priority|created_at|-created_at|\+\+created_at|--created_at|updated_at|-updated_at|\+\+updated_at|--updated_at|user_id|-user_id|\+\+user_id|--user_id))*$
             type: string
             x-struct:
             x-validate:
@@ -329,11 +340,11 @@ paths:
           schema:
             additionalProperties: true
             example:
-              todo: id,title,content,status,created_at,updated_at,user_id
+              todo: id,title,content,status,priority,created_at,updated_at,user_id
             properties:
               todo:
                 description: Comma separated field names for todo
-                example: id,title,content,status,created_at,updated_at,user_id
+                example: id,title,content,status,priority,created_at,updated_at,user_id
                 type: string
                 x-struct:
                 x-validate:
@@ -402,11 +413,11 @@ paths:
           schema:
             additionalProperties: true
             example:
-              todo: id,title,content,status,created_at,updated_at,user_id
+              todo: id,title,content,status,priority,created_at,updated_at,user_id
             properties:
               todo:
                 description: Comma separated field names for todo
-                example: id,title,content,status,created_at,updated_at,user_id
+                example: id,title,content,status,priority,created_at,updated_at,user_id
                 type: string
                 x-struct:
                 x-validate:
@@ -430,6 +441,17 @@ paths:
                           type: string
                           x-struct:
                           x-validate:
+                        priority:
+                          anyOf:
+                            - enum:
+                                - low
+                                - medium
+                                - high
+                                - urgent
+                              type: string
+                              x-struct:
+                              x-validate:
+                            - type: 'null'
                         status:
                           anyOf:
                             - enum:
@@ -540,11 +562,11 @@ paths:
           schema:
             additionalProperties: true
             example:
-              todo: id,title,content,status,created_at,updated_at,user_id
+              todo: id,title,content,status,priority,created_at,updated_at,user_id
             properties:
               todo:
                 description: Comma separated field names for todo
-                example: id,title,content,status,created_at,updated_at,user_id
+                example: id,title,content,status,priority,created_at,updated_at,user_id
                 type: string
                 x-struct:
                 x-validate:
@@ -590,11 +612,11 @@ paths:
           schema:
             additionalProperties: true
             example:
-              todo: id,title,content,status,created_at,updated_at,user_id
+              todo: id,title,content,status,priority,created_at,updated_at,user_id
             properties:
               todo:
                 description: Comma separated field names for todo
-                example: id,title,content,status,created_at,updated_at,user_id
+                example: id,title,content,status,priority,created_at,updated_at,user_id
                 type: string
                 x-struct:
                 x-validate:
@@ -664,11 +686,11 @@ paths:
           schema:
             additionalProperties: true
             example:
-              todo: id,title,content,status,created_at,updated_at,user_id
+              todo: id,title,content,status,priority,created_at,updated_at,user_id
             properties:
               todo:
                 description: Comma separated field names for todo
-                example: id,title,content,status,created_at,updated_at,user_id
+                example: id,title,content,status,priority,created_at,updated_at,user_id
                 type: string
                 x-struct:
                 x-validate:
@@ -691,6 +713,17 @@ paths:
                         content:
                           anyOf:
                             - type: string
+                              x-struct:
+                              x-validate:
+                            - type: 'null'
+                        priority:
+                          anyOf:
+                            - enum:
+                                - low
+                                - medium
+                                - high
+                                - urgent
+                              type: string
                               x-struct:
                               x-validate:
                             - type: 'null'

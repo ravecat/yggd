@@ -9,7 +9,7 @@ import { userSchema } from "./userSchema";
 import { z } from "zod/v4";
 
 export const getTodosQueryParamsSchema = z.object({
-    "sort": z.string().regex(/^(id|-id|\+\+id|--id|title|-title|\+\+title|--title|content|-content|\+\+content|--content|status|-status|\+\+status|--status|created_at|-created_at|\+\+created_at|--created_at|updated_at|-updated_at|\+\+updated_at|--updated_at|user_id|-user_id|\+\+user_id|--user_id)(,(id|-id|\+\+id|--id|title|-title|\+\+title|--title|content|-content|\+\+content|--content|status|-status|\+\+status|--status|created_at|-created_at|\+\+created_at|--created_at|updated_at|-updated_at|\+\+updated_at|--updated_at|user_id|-user_id|\+\+user_id|--user_id))*$/).describe("Sort order to apply to the results").optional(),
+    "sort": z.string().regex(/^(id|-id|\+\+id|--id|title|-title|\+\+title|--title|content|-content|\+\+content|--content|status|-status|\+\+status|--status|priority|-priority|\+\+priority|--priority|created_at|-created_at|\+\+created_at|--created_at|updated_at|-updated_at|\+\+updated_at|--updated_at|user_id|-user_id|\+\+user_id|--user_id)(,(id|-id|\+\+id|--id|title|-title|\+\+title|--title|content|-content|\+\+content|--content|status|-status|\+\+status|--status|priority|-priority|\+\+priority|--priority|created_at|-created_at|\+\+created_at|--created_at|updated_at|-updated_at|\+\+updated_at|--updated_at|user_id|-user_id|\+\+user_id|--user_id))*$/).describe("Sort order to apply to the results").optional(),
 "page": z.object({
     "after": z.string().optional(),
 "before": z.string().optional(),

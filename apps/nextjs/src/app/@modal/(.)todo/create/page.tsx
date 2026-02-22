@@ -10,6 +10,16 @@ import {
   DialogTitle,
 } from "~/shared/ui/dialog";
 import { Button } from "~/shared/ui/button";
+import { Input } from "~/shared/ui/input";
+import { Label } from "~/shared/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/shared/ui/select";
+import { Textarea } from "~/shared/ui/textarea";
 
 export default function CreateTodoModal() {
   const router = useRouter();
@@ -33,17 +43,12 @@ export default function CreateTodoModal() {
           )}
 
           <div>
-            <label
-              htmlFor="title"
-              className="block text-sm font-medium mb-2 text-gray-700"
-            >
+            <Label htmlFor="title" className="mb-2">
               Title *
-            </label>
-            <input
+            </Label>
+            <Input
               id="title"
               name="title"
-              type="text"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               disabled={pending}
               placeholder="Enter todo title"
               aria-describedby={state.errors?.title ? "title-error" : undefined}
@@ -56,16 +61,13 @@ export default function CreateTodoModal() {
           </div>
 
           <div>
-            <label
-              htmlFor="content"
-              className="block text-sm font-medium mb-2 text-gray-700"
-            >
+            <Label htmlFor="content" className="mb-2">
               Content *
-            </label>
-            <textarea
+            </Label>
+            <Textarea
               id="content"
               name="content"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md min-h-[200px] focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="min-h-[200px]"
               disabled={pending}
               placeholder="Describe your todo..."
               aria-describedby={
@@ -75,6 +77,33 @@ export default function CreateTodoModal() {
             {state.errors?.content && (
               <p id="content-error" className="mt-1 text-sm text-red-600">
                 {state.errors.content.join(", ")}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <Label htmlFor="priority" className="mb-2">
+              Priority
+            </Label>
+            <Select name="priority" defaultValue="medium" disabled={pending}>
+              <SelectTrigger
+                id="priority"
+                aria-describedby={
+                  state.errors?.priority ? "priority-error" : undefined
+                }
+              >
+                <SelectValue placeholder="Select priority" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="low">Low</SelectItem>
+                <SelectItem value="medium">Medium</SelectItem>
+                <SelectItem value="high">High</SelectItem>
+                <SelectItem value="urgent">Urgent</SelectItem>
+              </SelectContent>
+            </Select>
+            {state.errors?.priority && (
+              <p id="priority-error" className="mt-1 text-sm text-red-600">
+                {state.errors.priority.join(", ")}
               </p>
             )}
           </div>

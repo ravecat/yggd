@@ -4,6 +4,15 @@
 */
 
 
+export const attributesPriorityEnum = {
+    "low": "low",
+    "medium": "medium",
+    "high": "high",
+    "urgent": "urgent"
+} as const;
+
+export type AttributesPriorityEnum = (typeof attributesPriorityEnum)[keyof typeof attributesPriorityEnum];
+
 export const attributesStatusEnum = {
     "todo": "todo",
     "in_progress": "in_progress",
@@ -27,6 +36,11 @@ export type Todo = {
         */
         content: string;
         created_at: any;
+        /**
+         * @description Field included by default.
+         * @type string
+        */
+        priority: AttributesPriorityEnum;
         /**
          * @description Field included by default.
          * @type string

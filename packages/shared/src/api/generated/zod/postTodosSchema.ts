@@ -42,6 +42,7 @@ export const postTodosMutationRequestSchema = z.object({
     "data": z.object({
     "attributes": z.object({
     "content": z.string(),
+"priority": z.union([z.enum(["low", "medium", "high", "urgent"]), z.null()]).optional(),
 "status": z.union([z.enum(["todo", "in_progress", "completed"]), z.null()]).optional(),
 "title": z.string(),
 "user_id": z.uuid()
