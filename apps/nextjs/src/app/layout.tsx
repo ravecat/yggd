@@ -29,6 +29,26 @@ export default function Layout({
               <div className="flex h-full flex-col">
                 <Navbar />
                 <main className="flex min-h-0 flex-1 flex-col">{children}</main>
+                <footer>
+                  <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-3">
+                    <div className="flex items-center gap-3 text-sm">
+                      <a className="underline underline-offset-2" href="">
+                        openapi
+                      </a>
+                      <a className="underline underline-offset-2" href="">
+                        asyncapi
+                      </a>
+                    </div>
+                    <a
+                      className="underline underline-offset-2 text-sm"
+                      href="https://github.com/ravecat/moda"
+                      rel="noreferrer"
+                      target="_blank"
+                    >
+                      github
+                    </a>
+                  </div>
+                </footer>
               </div>
               {modal}
             </Providers>
