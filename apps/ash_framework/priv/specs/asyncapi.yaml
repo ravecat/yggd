@@ -3,13 +3,16 @@ info:
   title: Moda Async API
   version: 1.0.0
   description: >
-    Real-time collaborative document editing over Phoenix Channels using Yjs
-    CRDT.
+    Real-time async API over Phoenix Channels. Covers collaborative document
+    editing via Yjs CRDT and server-push BEAM/host telemetry metrics via OTLP JSON.
 
     Documents are synchronized via binary Yjs protocol messages over WebSocket.
+    Telemetry metrics are pushed as OTLP JSON payloads at fixed intervals.
   tags:
     - name: yjs
       description: Collaborative editing transport over Phoenix Channels
+    - name: telemetry
+      description: Real-time BEAM and host metrics server-push
   license:
     name: MIT
 servers:
@@ -78,6 +81,31 @@ channels:
         $ref: "#/components/messages/phxJoin"
       phxJoinReply:
         $ref: "#/components/messages/phxJoinReply"
+      phxError:
+        $ref: "#/components/messages/phxError"
+      phxClose:
+        $ref: "#/components/messages/phxClose"
+    bindings:
+      ws:
+        method: GET
+        bindingVersion: 0.1.0
+  telemetryMetrics:
+    address: "telemetry:metrics"
+    title: Telemetry Metrics Stream
+    description: >
+      Server-push Phoenix Channel for real-time BEAM runtime and host system
+      metrics. Server pushes OTLP JSON payloads at a fixed interval (default 2s).
+      No client-to-server data messages - pure server-push pattern.
+
+      Metrics include host CPU/memory, BEAM process count/memory/run queue,
+      HTTP request latency percentiles, and WebSocket connection count.
+    messages:
+      metricsOut:
+        $ref: "#/components/messages/metricsOut"
+      telemetryJoin:
+        $ref: "#/components/messages/telemetryJoin"
+      telemetryJoinReply:
+        $ref: "#/components/messages/telemetryJoinReply"
       phxError:
         $ref: "#/components/messages/phxError"
       phxClose:
@@ -155,6 +183,36 @@ operations:
       or explicit leave.
     messages:
       - $ref: "#/channels/yDocRoom/messages/phxClose"
+  joinTelemetry:
+    action: send
+    channel:
+      $ref: "#/channels/telemetryMetrics"
+    summary: Join the telemetry metrics channel
+    description: |
+      Client joins the telemetry metrics channel. No authentication required.
+      Server begins pushing OTLP JSON metrics payloads immediately after join reply.
+      No catch-up or historical data - stream starts from the moment of join.
+    messages:
+      - $ref: "#/channels/telemetryMetrics/messages/telemetryJoin"
+    reply:
+      channel:
+        $ref: "#/channels/telemetryMetrics"
+      messages:
+        - $ref: "#/channels/telemetryMetrics/messages/telemetryJoinReply"
+  receiveMetrics:
+    action: receive
+    channel:
+      $ref: "#/channels/telemetryMetrics"
+    summary: Receive OTLP metrics payload
+    description: |
+      Server pushes an OTLP JSON metrics payload at a fixed interval (default 2s).
+      The payload follows the OpenTelemetry Metrics Data Model with
+      `resourceMetrics` -> `scopeMetrics` -> `metrics` envelope structure.
+      Each metric contains `name`, `unit`, and typed data points (gauge values).
+    tags:
+      - $ref: "#/info/tags/1"
+    messages:
+      - $ref: "#/channels/telemetryMetrics/messages/metricsOut"
 components:
   serverVariables:
     domain:
@@ -163,6 +221,99 @@ components:
       default: "4001"
       description: Server port. Set via PORT env var.
   messages:
+    telemetryJoin:
+      name: phx_join
+      title: Join Telemetry Channel
+      summary: Request to join the telemetry metrics channel
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/joinPayload"
+      examples:
+        - name: telemetry-join
+          summary: Join telemetry channel
+          payload: {}
+    telemetryJoinReply:
+      name: phx_reply
+      title: Telemetry Join Reply
+      summary: Server confirms telemetry channel join
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/joinReply"
+      examples:
+        - name: telemetry-join-ok
+          summary: Successful join
+          payload:
+            status: ok
+            response: {}
+    metricsOut:
+      name: metrics
+      title: OTLP Metrics Payload
+      summary: Server-push OTLP JSON metrics
+      description: |
+        Periodic server-push event containing BEAM runtime and host system
+        metrics formatted as OTLP JSON. Pushed every 2 seconds (configurable).
+
+        Metrics included:
+        - system.cpu.load_average.1m (gauge)
+        - system.memory.usage (gauge, total/free/used)
+        - process.runtime.beam.memory.total (gauge)
+        - process.runtime.beam.memory.processes (gauge)
+        - process.runtime.beam.memory.ets (gauge)
+        - process.runtime.beam.process_count (gauge)
+        - process.runtime.beam.run_queue (gauge)
+        - http.server.request.duration (gauge with quantile attribute, p50/p95)
+        - phoenix.channel.connection.count (gauge)
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/otlpMetricsPayload"
+      examples:
+        - name: metrics-push
+          summary: Single metrics push with CPU, process count, and HTTP latency
+          payload:
+            resourceMetrics:
+              - resource:
+                  attributes:
+                    - key: service.name
+                      value:
+                        stringValue: phoenix_framework
+                    - key: host.name
+                      value:
+                        stringValue: moda-host
+                scopeMetrics:
+                  - scope:
+                      name: moda.telemetry
+                      version: 1.0.0
+                    metrics:
+                      - name: system.cpu.load_average.1m
+                        unit: "1"
+                        gauge:
+                          dataPoints:
+                            - timeUnixNano: "1740441600000000000"
+                              asDouble: 0.42
+                              attributes: []
+                      - name: process.runtime.beam.process_count
+                        unit: "{process}"
+                        gauge:
+                          dataPoints:
+                            - timeUnixNano: "1740441600000000000"
+                              asInt: "847"
+                              attributes: []
+                      - name: http.server.request.duration
+                        unit: ms
+                        gauge:
+                          dataPoints:
+                            - timeUnixNano: "1740441600000000000"
+                              asDouble: 12.5
+                              attributes:
+                                - key: quantile
+                                  value:
+                                    doubleValue: 0.5
+                            - timeUnixNano: "1740441600000000000"
+                              asDouble: 45.2
+                              attributes:
+                                - key: quantile
+                                  value:
+                                    doubleValue: 0.95
     phxJoin:
       name: phx_join
       title: Join Room
@@ -342,6 +493,115 @@ components:
       type: object
       description: Phoenix protocol payload for channel lifecycle events
       additionalProperties: true
+    otlpMetricsPayload:
+      type: object
+      description: |
+        OTLP JSON metrics payload following the OpenTelemetry Metrics Data Model.
+        See https://opentelemetry.io/docs/specs/otlp/#json-protobuf-encoding
+      required:
+        - resourceMetrics
+      properties:
+        resourceMetrics:
+          type: array
+          items:
+            $ref: "#/components/schemas/resourceMetrics"
+    resourceMetrics:
+      type: object
+      required:
+        - resource
+        - scopeMetrics
+      properties:
+        resource:
+          type: object
+          properties:
+            attributes:
+              type: array
+              items:
+                $ref: "#/components/schemas/keyValue"
+        scopeMetrics:
+          type: array
+          items:
+            type: object
+            properties:
+              scope:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  version:
+                    type: string
+              metrics:
+                type: array
+                items:
+                  $ref: "#/components/schemas/metric"
+    metric:
+      type: object
+      description: |
+        A single metric in OTLP format. Contains name, unit, and one of
+        the metric type fields (gauge, sum, histogram, etc.).
+        This implementation uses gauge for all metrics including pre-aggregated
+        histogram percentiles.
+      required:
+        - name
+        - gauge
+      properties:
+        name:
+          type: string
+          description: |
+            Metric name following OTel semantic conventions.
+            Examples: system.cpu.load_average.1m, process.runtime.beam.process_count
+        unit:
+          type: string
+          description: |
+            OTel unit string. Examples: "1" (dimensionless), "By" (bytes),
+            "ms" (milliseconds), "{process}" (count of processes)
+        gauge:
+          type: object
+          properties:
+            dataPoints:
+              type: array
+              items:
+                $ref: "#/components/schemas/dataPoint"
+    dataPoint:
+      type: object
+      description: A single data point within a metric
+      required:
+        - timeUnixNano
+      properties:
+        timeUnixNano:
+          type: string
+          description: Timestamp as nanoseconds since Unix epoch, encoded as string
+        asDouble:
+          type: number
+          description: Floating-point metric value
+        asInt:
+          type: string
+          description: Integer metric value, encoded as string per OTLP convention
+        attributes:
+          type: array
+          items:
+            $ref: "#/components/schemas/keyValue"
+    keyValue:
+      type: object
+      description: OTel key-value attribute pair
+      required:
+        - key
+        - value
+      properties:
+        key:
+          type: string
+        value:
+          type: object
+          description: Typed value (stringValue, intValue, doubleValue, boolValue)
+          properties:
+            stringValue:
+              type: string
+            intValue:
+              type: string
+            doubleValue:
+              type: number
+            boolValue:
+              type: boolean
   securitySchemes:
     socketToken:
       type: httpApiKey

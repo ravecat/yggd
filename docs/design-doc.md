@@ -327,7 +327,9 @@ live chart), and puts everything in a single monorepo for build tooling comparis
   data in client state.
 - Real-time channels are public in MVP and do not require token validation on join.
 - Privacy: N/A - learning project, no real user data.
-- Observability: BEAM metrics exposed via OTLP JSON over Phoenix channels (Telemetry tab). Console logging for debugging.
+- Observability: BEAM and host metrics exposed via OTLP JSON over Phoenix channels (Telemetry tab). Collection via
+  Erlang `:telemetry` + `:os_mon`, formatted as OTLP JSON following OTel semantic conventions (no OTel SDK - format
+  only, see ADR-010). Console logging for debugging.
 - Failure modes: If one framework app fails, others are unaffected (independent builds/deploys).
 - Scalability: N/A - single developer, local development.
 
