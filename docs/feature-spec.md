@@ -8,10 +8,9 @@
 
 ## Purpose
 
-Single source of truth for what every client app must implement to reach parity.
-Each feature has an ID, behavioral acceptance criteria, and integration hints.
-An agent implementing an app works through features top to bottom, checks the box when AC passes,
-and updates the status matrix.
+Single source of truth for what every client app must implement to reach parity. Each feature has an ID, behavioral
+acceptance criteria, and integration hints. An agent implementing an app works through features top to bottom, checks
+the box when AC passes, and updates the status matrix.
 
 ## How to use
 
@@ -33,9 +32,8 @@ Cross-cutting features shared across all pages.
 
 Sign-in / sign-out via Google OAuth 2.0 with PKCE.
 
-Sign-in button visible in navbar when not authenticated.
-Sign-out button visible when authenticated.
-Auth-gated UI elements (create, edit, delete) hidden for unauthenticated users.
+Sign-in button visible in navbar when not authenticated. Sign-out button visible when authenticated. Auth-gated UI
+elements (create, edit, delete) hidden for unauthenticated users.
 
 **Integration:**
 
@@ -56,13 +54,12 @@ Auth-gated UI elements (create, edit, delete) hidden for unauthenticated users.
 
 ### F0.2 - Framework switching
 
-User can switch between client framework implementations.
-Each app is served on a subdomain (e.g. `nextjs.moda.ravecat.io`, `sveltekit.moda.ravecat.io`).
-A dropdown in the navbar lists available frameworks and indicates the current one.
+User can switch between client framework implementations. Each app is served on a subdomain (e.g.
+`nextjs.moda.ravecat.io`, `sveltekit.moda.ravecat.io`). A dropdown in the navbar lists available frameworks and
+indicates the current one.
 
 **AC:**
 
-- [ ] Framework dropdown visible in navbar
 - [ ] Lists all available framework apps
 - [ ] Current framework is indicated
 - [ ] Selecting an entry navigates to the corresponding subdomain
@@ -77,7 +74,6 @@ Active tab is visually highlighted. Navigation does not cause full page reload w
 
 **AC:**
 
-- [ ] Navbar tabs visible for all pages
 - [ ] Clicking a tab navigates to the corresponding page
 - [ ] Active tab visually indicated based on current route
 
@@ -87,12 +83,10 @@ Active tab is visually highlighted. Navigation does not cause full page reload w
 
 > **Protocol:** JSON:API - all HTTP operations follow the [JSON:API](https://jsonapi.org/) specification.
 
-User sees a list of tasks fetched from the server.
-Each task shows: title, status badge, priority, formatted creation date.
-Status is an enum: `todo`, `in_progress`, `in_review`, `completed`.
-Priority is an enum: `low`, `medium`, `high`, `urgent`.
-Empty state shown when no tasks exist. Unauthenticated users see a different empty state message.
-Loading state (skeleton or spinner) while fetching.
+User sees a list of tasks fetched from the server. Each task shows: title, status badge, priority, formatted creation
+date. Status is an enum: `todo`, `in_progress`, `in_review`, `completed`. Priority is an enum: `low`, `medium`, `high`,
+`urgent`. Empty state shown when no tasks exist. Unauthenticated users see a different empty state message. Loading
+state (skeleton or spinner) while fetching.
 
 **Integration:** `getTodos(params)` from `@rvct/shared`
 
@@ -151,10 +145,10 @@ User can sort the task list by `priority` field, ascending or descending.
 
 User can page through tasks when total exceeds page size.
 
-Previous/Next controls and page indicators visible below the list.
-Active page reflected in URL (`?page[offset]=N`).
+Previous/Next controls and page indicators visible below the list. Active page reflected in URL (`?page[offset]=N`).
 
-**Integration:** `getTodos({ page: { limit, offset } })` - response includes `links.prev`, `links.next`, `meta.page.total`
+**Integration:** `getTodos({ page: { limit, offset } })` - response includes `links.prev`, `links.next`,
+`meta.page.total`
 
 **AC:**
 
@@ -169,8 +163,8 @@ Active page reflected in URL (`?page[offset]=N`).
 
 Authenticated user can create a new task.
 
-Form with fields: `title` (required), `content` (optional), `priority` (optional, default: `medium`).
-On success task appears in list. On validation error, field-level errors shown.
+Form with fields: `title` (required), `content` (optional), `priority` (optional, default: `medium`). On success task
+appears in list. On validation error, field-level errors shown.
 
 **Integration:** `postTodos(data)` from `@rvct/shared` - JSON:API envelope
 
@@ -185,43 +179,39 @@ On success task appears in list. On validation error, field-level errors shown.
 
 ## F2 - Canvas (`/canvas`)
 
-> **Protocol:** AsyncAPI - real-time operations follow [AsyncAPI](https://www.asyncapi.com/) conventions over Phoenix WebSocket channels.
+> **Protocol:** AsyncAPI - real-time operations follow [AsyncAPI](https://www.asyncapi.com/) conventions over Phoenix
+> WebSocket channels.
 
 Collaborative whiteboard powered by Excalidraw + Yjs CRDT over Phoenix WebSocket channels.
-
-**Integration:** `getExcalidrawDocument(socket)` from `@rvct/shared`, `y-excalidraw`, `y-phoenix-channel`
-
----
-
-### F2.1 - Canvas integration
 
 Excalidraw canvas renders in the main content area with grid mode enabled.
 Multiple users can draw simultaneously with real-time sync.
 Canvas state persists via IndexedDB and syncs on reconnect.
 
-**Integration:** Phoenix channel `canvas:{document_id}`, `y-indexeddb` provider
+**Integration:**
+
+- `getExcalidrawDocument(socket)` from `@rvct/shared`, `y-excalidraw`, `y-phoenix-channel`
+- Phoenix channel `canvas:{document_id}`, `y-indexeddb` provider
 
 **AC:**
 
 - [ ] Excalidraw canvas renders on page load
 - [ ] User can draw shapes, text, and lines
-- [ ] Changes sync between sessions within ~500ms
 - [ ] Remote user cursors/pointers visible
 - [ ] State survives page reload
 - [ ] Offline drawing syncs on reconnect
-
-Specs TBD - additional sub-features to follow.
 
 ---
 
 ## F3 - Telemetry (`/telemetry`)
 
-> **Protocol:** AsyncAPI - real-time operations described via [AsyncAPI](https://www.asyncapi.com/) specification over Phoenix WebSocket channels.
+> **Protocol:** AsyncAPI - real-time operations described via [AsyncAPI](https://www.asyncapi.com/) specification over
+> Phoenix WebSocket channels.
 
-BEAM VM metrics dashboard with real-time updates.
-Data pushed from server via Phoenix channel in [OTLP JSON](https://opentelemetry.io/docs/specs/otlp/) format (OpenTelemetry Protocol).
-Backend collects metrics via `opentelemetry_erlang` SDK subscribed to Erlang `:telemetry` events.
-Charts rendered via [uPlot](https://github.com/leeoniya/uPlot) - vanilla JS, framework-agnostic, ~45KB.
+BEAM VM metrics dashboard with real-time updates. Data pushed from server via Phoenix channel in
+[OTLP JSON](https://opentelemetry.io/docs/specs/otlp/) format (OpenTelemetry Protocol). Backend collects metrics via
+`opentelemetry_erlang` SDK subscribed to Erlang `:telemetry` events. Charts rendered via
+[uPlot](https://github.com/leeoniya/uPlot) - vanilla JS, framework-agnostic, ~45KB.
 
 Metrics:
 
@@ -240,41 +230,96 @@ All metrics available via Erlang `:telemetry` out of the box.
 - [ ] All metrics update in real-time without page refresh
 - [ ] Connection loss shows a disconnected state; metrics resume on reconnect
 
-Specs TBD - sub-features to follow.
-
 ---
 
 ## F4 - Chart (`/chart`)
 
-Market data charts.
+> **Protocol:** AsyncAPI - real-time operations over Phoenix WebSocket channels.
 
-Specs TBD.
+Live crypto price chart. Backend proxies [CoinCap WebSocket](https://docs.coincap.io/) (`wss://ws.coincap.io/prices`)
+via a Phoenix channel. Frontend renders a dual-series time-series line chart (BTC + ETH) with uPlot using a sliding
+window buffer.
+
+**Integration:**
+
+- Phoenix channel `chart:prices` - server pushes `{ ts, btc, eth }` on each CoinCap tick (~1s)
+- Backend: GenServer connects to CoinCap WS, broadcasts to channel subscribers, keeps last 300 points for late joiners
+- Frontend: sliding window buffer (300 points), `chart.setData(buf)` on each push
+- Chart: uPlot dual-series, left Y-axis BTC ($), right Y-axis ETH ($), shared X-axis (time)
+
+**AC:**
+
+- [ ] Chart renders with BTC and ETH series on page load
+- [ ] Prices update in real-time from CoinCap via Phoenix channel
+- [ ] Chart uses sliding window buffer (last ~5 min of data)
+- [ ] Connection loss shows disconnected state; chart resumes on reconnect
 
 ---
 
 ## Status matrix
 
-`✅` done | `🚧` in progress | `❌` not started | `⬜` app not yet bootstrapped
+`✅` done | `⬜` not bootstrapped | empty = not done
 
-| Feature                  | nextjs | sveltekit | nuxt | qwik | solidstart |
-| ------------------------ | :----: | :-------: | :--: | :--: | :--------: |
-| **F0 Global**            |        |           |      |      |            |
-| F0.1 Authentication      |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| F0.2 Framework switching |   🚧   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| F0.3 Navbar switching    |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| **F1 Tasks**             |        |           |      |      |            |
-| F1 Task list             |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| F1.1 Sort by updated_at  |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| F1.2 Sort by status      |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| F1.3 Sort by priority    |   ❌   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| F1.4 Pagination          |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| F1.5 Create task         |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| **F2 Canvas**            |        |           |      |      |            |
-| F2.1 Canvas integration  |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| **F3 Telemetry**         |        |           |      |      |            |
-| F3 Telemetry             |   ❌   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| **F4 Chart**             |        |           |      |      |            |
-| F4 Chart                 |   ❌   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Feature / AC                              | nextjs | sveltekit | nuxt | qwik | solidstart |
+| ----------------------------------------- | :----: | :-------: | :--: | :--: | :--------: |
+| **F0.1 Authentication**                   |  4/5   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Sign-in button visible                    |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| OAuth flow completes                      |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Navbar reflects auth state                |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Sign-out clears session                   |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Auth-gated controls hidden                |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| **F0.2 Framework switching**              |  1/3   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Lists all framework apps                  |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Current framework indicated               |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Navigates to corresponding subdomain      |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| **F0.3 Navbar page switching**            |  2/2   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Tab navigates to page                     |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Active tab indicated                      |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| **F1 Task list**                          |  4/4   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| List renders on page load                 |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Shows title, status, date                 |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Empty state visible                       |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Loading state visible                     |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| **F1.1 Sort by updated_at**               |  3/3   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Sort available                            |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Clicking toggles direction                |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Sort reflected in URL                     |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| **F1.2 Sort by status**                   |  3/3   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Sort available                            |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Clicking toggles direction                |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Sort reflected in URL                     |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| **F1.3 Sort by priority**                 |  0/3   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Sort available                            |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Clicking toggles direction                |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Sort reflected in URL                     |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| **F1.4 Pagination**                       |  4/4   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Controls render when total > page size    |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Next/Previous load correct pages          |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Current page reflected in URL             |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Direct URL shows correct page             |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| **F1.5 Create task**                      |  4/4   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Create button hidden when unauthed        |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Form opens on click                       |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Valid submission creates task             |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Invalid submission shows errors           |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| **F2 Canvas**                             |  5/5   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Canvas renders on page load               |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Draw shapes, text, lines                  |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Remote cursors visible                    |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| State survives reload                     |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Offline drawing syncs on reconnect        |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| **F3 Telemetry**                          |  0/6   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Three metric widgets render               |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| BEAM process count big number + sparkline |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| HTTP latency p50/p95 chart                |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| WebSocket connections count + trend       |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Real-time updates without refresh         |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Disconnected state; resume on reconnect   |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| **F4 Chart**                              |  0/4   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| BTC + ETH chart renders                   |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Prices update real-time via channel       |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Sliding window buffer (~5 min)            |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Disconnected state; resume on reconnect   |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
 
 ---
 
@@ -284,27 +329,28 @@ Specs TBD.
 
 All client apps import from `@rvct/shared`. Do not call the HTTP API directly.
 
-| Method                          | HTTP                | Used for       |
-| ------------------------------- | ------------------- | -------------- |
-| `getTodos(params?)`             | `GET /todos`        | F1, F1.1-F1.4  |
-| `getTodosId(id)`                | `GET /todos/:id`    | -              |
-| `postTodos(data)`               | `POST /todos`       | F1.5           |
-| `patchTodosId(id, data)`        | `PATCH /todos/:id`  | -              |
-| `deleteTodosId(id)`             | `DELETE /todos/:id` | -              |
-| `getExcalidrawDocument(socket)` | WS                  | F2.1           |
+| Method                          | HTTP                | Used for      |
+| ------------------------------- | ------------------- | ------------- |
+| `getTodos(params?)`             | `GET /todos`        | F1, F1.1-F1.4 |
+| `getTodosId(id)`                | `GET /todos/:id`    | -             |
+| `postTodos(data)`               | `POST /todos`       | F1.5          |
+| `patchTodosId(id, data)`        | `PATCH /todos/:id`  | -             |
+| `deleteTodosId(id)`             | `DELETE /todos/:id` | -             |
+| `getExcalidrawDocument(socket)` | WS                  | F2            |
 
 ### Phoenix WebSocket channels
 
-| Channel                 | Used for |
-| ----------------------- | -------- |
-| `canvas:{document_id}`  | F2.1     |
+| Channel                | Used for |
+| ---------------------- | -------- |
+| `canvas:{document_id}` | F2       |
+| `chart:prices`         | F4       |
 
 ### Auth cookies
 
-| Cookie           | Content                                       | TTL        |
-| ---------------- | --------------------------------------------- | ---------- |
-| `auth_token`     | Signed JWT (HS256), subject `user?id=<uuid>`  | 7 days     |
-| `pkce_verifier`  | PKCE code verifier (random 128-char string)   | 10 minutes |
+| Cookie          | Content                                      | TTL        |
+| --------------- | -------------------------------------------- | ---------- |
+| `auth_token`    | Signed JWT (HS256), subject `user?id=<uuid>` | 7 days     |
+| `pkce_verifier` | PKCE code verifier (random 128-char string)  | 10 minutes |
 
 ### Environment variables
 
