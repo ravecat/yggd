@@ -1,0 +1,914 @@
+{
+  "components": {
+    "responses": {
+      "errors": {
+        "content": {
+          "application/vnd.api+json": {
+            "schema": {
+              "$ref": "#/components/schemas/errors"
+            }
+          }
+        },
+        "description": "General Error"
+      }
+    },
+    "schemas": {
+      "error": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "description": "An application-specific error code, expressed as a string value.",
+            "type": "string"
+          },
+          "detail": {
+            "description": "A human-readable explanation specific to this occurrence of the problem.",
+            "type": "string"
+          },
+          "id": {
+            "description": "A unique identifier for this particular occurrence of the problem.",
+            "type": "string"
+          },
+          "links": {
+            "$ref": "#/components/schemas/links"
+          },
+          "source": {
+            "properties": {
+              "parameter": {
+                "description": "A string indicating which query parameter caused the error.",
+                "type": "string"
+              },
+              "pointer": {
+                "description": "A JSON Pointer [RFC6901] to the associated entity in the request document [e.g. \"/data\" for a primary data object, or \"/data/attributes/title\" for a specific attribute].",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "status": {
+            "description": "The HTTP status code applicable to this problem, expressed as a string value.",
+            "type": "string"
+          },
+          "title": {
+            "description": "A short, human-readable summary of the problem. It SHOULD NOT change from occurrence to occurrence of the problem, except for purposes of localization.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "errors": {
+        "items": {
+          "$ref": "#/components/schemas/error"
+        },
+        "type": "array",
+        "uniqueItems": true
+      },
+      "link": {
+        "description": "A link MUST be represented as either: a string containing the link's URL or a link object.",
+        "type": "string"
+      },
+      "links": {
+        "additionalProperties": {
+          "$ref": "#/components/schemas/link"
+        },
+        "type": "object"
+      },
+      "todo": {
+        "additionalProperties": false,
+        "description": "A \"Resource object\" representing a todo",
+        "properties": {
+          "attributes": {
+            "additionalProperties": false,
+            "description": "An attributes object for a todo",
+            "properties": {
+              "content": {
+                "description": "Field included by default.",
+                "type": "string"
+              },
+              "created_at": {
+                "description": "Field included by default."
+              },
+              "priority": {
+                "description": "Field included by default.",
+                "enum": [
+                  "low",
+                  "medium",
+                  "high",
+                  "urgent"
+                ],
+                "type": "string"
+              },
+              "status": {
+                "description": "Field included by default.",
+                "enum": [
+                  "todo",
+                  "in_progress",
+                  "completed"
+                ],
+                "type": "string"
+              },
+              "title": {
+                "description": "Field included by default.",
+                "type": "string"
+              },
+              "updated_at": {
+                "description": "Field included by default."
+              },
+              "user_id": {
+                "description": "Field included by default.",
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "title",
+              "content",
+              "status",
+              "priority",
+              "created_at",
+              "updated_at",
+              "user_id"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "type": "string"
+          },
+          "relationships": {
+            "additionalProperties": false,
+            "description": "A relationships object for a todo",
+            "properties": {
+              "user": {
+                "properties": {
+                  "data": {
+                    "additionalProperties": false,
+                    "description": "An identifier for user",
+                    "nullable": true,
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "meta": {
+                        "additionalProperties": true,
+                        "type": "object"
+                      },
+                      "type": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "id"
+                    ],
+                    "type": "object"
+                  }
+                }
+              }
+            },
+            "type": "object"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "id"
+        ],
+        "type": "object"
+      },
+      "user": {
+        "additionalProperties": false,
+        "description": "A \"Resource object\" representing a user",
+        "properties": {
+          "attributes": {
+            "additionalProperties": false,
+            "description": "An attributes object for a user",
+            "properties": {
+              "email": {
+                "description": "Field included by default.",
+                "type": "string"
+              },
+              "name": {
+                "anyOf": [
+                  {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "Field included by default."
+              }
+            },
+            "required": [
+              "email"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "type": "string"
+          },
+          "relationships": {
+            "additionalProperties": false,
+            "description": "A relationships object for a user",
+            "properties": {
+              "todos": {
+                "properties": {
+                  "data": {
+                    "description": "Relationship data for todos",
+                    "items": {
+                      "additionalProperties": false,
+                      "description": "Resource identifiers for todos",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "meta": {
+                          "additionalProperties": true,
+                          "type": "object"
+                        },
+                        "type": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "id"
+                      ],
+                      "type": "object"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
+                  }
+                }
+              }
+            },
+            "type": "object"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "id"
+        ],
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "bearerFormat": "JWT",
+        "description": "JWT for bearer authentication",
+        "scheme": "bearer",
+        "type": "http"
+      }
+    }
+  },
+  "info": {
+    "title": "Open API Specification",
+    "version": "1.1"
+  },
+  "openapi": "3.0.0",
+  "paths": {
+    "/todos": {
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "/todos operation on todo resource",
+        "parameters": [
+          {
+            "description": "Sort order to apply to the results",
+            "explode": false,
+            "in": "query",
+            "name": "sort",
+            "required": false,
+            "schema": {
+              "pattern": "^(id|-id|\\+\\+id|--id|title|-title|\\+\\+title|--title|content|-content|\\+\\+content|--content|status|-status|\\+\\+status|--status|priority|-priority|\\+\\+priority|--priority|created_at|-created_at|\\+\\+created_at|--created_at|updated_at|-updated_at|\\+\\+updated_at|--updated_at|user_id|-user_id|\\+\\+user_id|--user_id)(,(id|-id|\\+\\+id|--id|title|-title|\\+\\+title|--title|content|-content|\\+\\+content|--content|status|-status|\\+\\+status|--status|priority|-priority|\\+\\+priority|--priority|created_at|-created_at|\\+\\+created_at|--created_at|updated_at|-updated_at|\\+\\+updated_at|--updated_at|user_id|-user_id|\\+\\+user_id|--user_id))*$",
+              "type": "string"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Paginates the response with the limit and offset or keyset pagination.",
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "example": {
+                "limit": 10
+              },
+              "properties": {
+                "after": {
+                  "type": "string"
+                },
+                "before": {
+                  "type": "string"
+                },
+                "count": {
+                  "default": false,
+                  "type": "boolean"
+                },
+                "limit": {
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                "offset": {
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "style": "deepObject"
+          },
+          {
+            "description": "Relationship paths to include in the response",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "pattern": "^(user)(,(user))*$",
+              "type": "string"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Limits the response fields to only those listed for each type",
+            "in": "query",
+            "name": "fields",
+            "required": false,
+            "schema": {
+              "additionalProperties": true,
+              "example": {
+                "todo": "id,title,content,status,priority,created_at,updated_at,user_id"
+              },
+              "properties": {
+                "todo": {
+                  "description": "Comma separated field names for todo",
+                  "example": "id,title,content,status,priority,created_at,updated_at,user_id",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "style": "deepObject"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "data": {
+                      "description": "An array of resource objects representing a todo",
+                      "items": {
+                        "$ref": "#/components/schemas/todo"
+                      },
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "included": {
+                      "items": {
+                        "oneOf": [
+                          {
+                            "$ref": "#/components/schemas/user"
+                          }
+                        ]
+                      },
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "meta": {
+                      "additionalProperties": true,
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "$ref": "#/components/responses/errors"
+          }
+        },
+        "tags": [
+          "todo"
+        ]
+      },
+      "post": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "/todos operation on todo resource",
+        "parameters": [
+          {
+            "description": "Relationship paths to include in the response",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "pattern": "^(user)(,(user))*$",
+              "type": "string"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Limits the response fields to only those listed for each type",
+            "in": "query",
+            "name": "fields",
+            "required": false,
+            "schema": {
+              "additionalProperties": true,
+              "example": {
+                "todo": "id,title,content,status,priority,created_at,updated_at,user_id"
+              },
+              "properties": {
+                "todo": {
+                  "description": "Comma separated field names for todo",
+                  "example": "id,title,content,status,priority,created_at,updated_at,user_id",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "style": "deepObject"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.api+json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "data": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "attributes": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "content": {
+                            "type": "string"
+                          },
+                          "priority": {
+                            "anyOf": [
+                              {
+                                "enum": [
+                                  "low",
+                                  "medium",
+                                  "high",
+                                  "urgent"
+                                ],
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "status": {
+                            "anyOf": [
+                              {
+                                "enum": [
+                                  "todo",
+                                  "in_progress",
+                                  "completed"
+                                ],
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "user_id": {
+                            "format": "uuid",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "title",
+                          "content",
+                          "user_id"
+                        ],
+                        "type": "object"
+                      },
+                      "relationships": {
+                        "additionalProperties": false,
+                        "properties": {},
+                        "type": "object"
+                      },
+                      "type": {
+                        "enum": [
+                          "todo"
+                        ]
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "description": "Request body for the /todos operation on todo resource",
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/todo"
+                    },
+                    "included": {
+                      "items": {
+                        "oneOf": [
+                          {
+                            "$ref": "#/components/schemas/user"
+                          }
+                        ]
+                      },
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "meta": {
+                      "additionalProperties": true,
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "$ref": "#/components/responses/errors"
+          }
+        },
+        "tags": [
+          "todo"
+        ]
+      }
+    },
+    "/todos/{id}": {
+      "delete": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "/todos/:id operation on todo resource",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Relationship paths to include in the response",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "pattern": "^(user)(,(user))*$",
+              "type": "string"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Limits the response fields to only those listed for each type",
+            "in": "query",
+            "name": "fields",
+            "required": false,
+            "schema": {
+              "additionalProperties": true,
+              "example": {
+                "todo": "id,title,content,status,priority,created_at,updated_at,user_id"
+              },
+              "properties": {
+                "todo": {
+                  "description": "Comma separated field names for todo",
+                  "example": "id,title,content,status,priority,created_at,updated_at,user_id",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "style": "deepObject"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted successfully"
+          },
+          "default": {
+            "$ref": "#/components/responses/errors"
+          }
+        },
+        "tags": [
+          "todo"
+        ]
+      },
+      "get": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "/todos/:id operation on todo resource",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Relationship paths to include in the response",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "pattern": "^(user)(,(user))*$",
+              "type": "string"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Limits the response fields to only those listed for each type",
+            "in": "query",
+            "name": "fields",
+            "required": false,
+            "schema": {
+              "additionalProperties": true,
+              "example": {
+                "todo": "id,title,content,status,priority,created_at,updated_at,user_id"
+              },
+              "properties": {
+                "todo": {
+                  "description": "Comma separated field names for todo",
+                  "example": "id,title,content,status,priority,created_at,updated_at,user_id",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "style": "deepObject"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/todo"
+                    },
+                    "included": {
+                      "items": {
+                        "oneOf": [
+                          {
+                            "$ref": "#/components/schemas/user"
+                          }
+                        ]
+                      },
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "meta": {
+                      "additionalProperties": true,
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "$ref": "#/components/responses/errors"
+          }
+        },
+        "tags": [
+          "todo"
+        ]
+      },
+      "patch": {
+        "callbacks": {},
+        "deprecated": false,
+        "description": "/todos/:id operation on todo resource",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Relationship paths to include in the response",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "pattern": "^(user)(,(user))*$",
+              "type": "string"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Limits the response fields to only those listed for each type",
+            "in": "query",
+            "name": "fields",
+            "required": false,
+            "schema": {
+              "additionalProperties": true,
+              "example": {
+                "todo": "id,title,content,status,priority,created_at,updated_at,user_id"
+              },
+              "properties": {
+                "todo": {
+                  "description": "Comma separated field names for todo",
+                  "example": "id,title,content,status,priority,created_at,updated_at,user_id",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "style": "deepObject"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.api+json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "data": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "attributes": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "content": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "priority": {
+                            "anyOf": [
+                              {
+                                "enum": [
+                                  "low",
+                                  "medium",
+                                  "high",
+                                  "urgent"
+                                ],
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "status": {
+                            "anyOf": [
+                              {
+                                "enum": [
+                                  "todo",
+                                  "in_progress",
+                                  "completed"
+                                ],
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "title": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "id": {
+                        "type": "string"
+                      },
+                      "relationships": {
+                        "additionalProperties": false,
+                        "properties": {},
+                        "type": "object"
+                      },
+                      "type": {
+                        "enum": [
+                          "todo"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "id"
+                    ],
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "description": "Request body for the /todos/:id operation on todo resource",
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/todo"
+                    },
+                    "included": {
+                      "items": {
+                        "oneOf": [
+                          {
+                            "$ref": "#/components/schemas/user"
+                          }
+                        ]
+                      },
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "meta": {
+                      "additionalProperties": true,
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "$ref": "#/components/responses/errors"
+          }
+        },
+        "tags": [
+          "todo"
+        ]
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "servers": [
+    {
+      "url": "http://localhost:4000",
+      "variables": {}
+    }
+  ],
+  "tags": []
+}

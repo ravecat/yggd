@@ -32,9 +32,24 @@ export default function Layout({
                 <footer>
                   <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-3">
                     <div className="flex items-center gap-3 text-sm">
-                      <a className="underline underline-offset-2" href="">
-                        openapi
-                      </a>
+                      <span>
+                        <a
+                          className="underline underline-offset-2"
+                          href={`${process.env.PUBLIC_API_URL}/openapi/ui`}
+                          rel="noreferrer"
+                          target="_blank"
+                        >
+                          openapi
+                        </a>{" "}
+                        (<a
+                          className="underline underline-offset-2"
+                          href={`${process.env.PUBLIC_API_URL}/openapi`}
+                          rel="noreferrer"
+                          target="_blank"
+                        >
+                          raw
+                        </a>)
+                      </span>
                       <a className="underline underline-offset-2" href="">
                         asyncapi
                       </a>

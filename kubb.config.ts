@@ -7,7 +7,7 @@ import { pluginZod } from "@kubb/plugin-zod";
 export default defineConfig({
   root: ".",
   input: {
-    path: "./openapi.json",
+    path: "./apps/ash_framework/priv/specs/openapi.json",
   },
   output: {
     path: "./packages/shared/src/api/generated",

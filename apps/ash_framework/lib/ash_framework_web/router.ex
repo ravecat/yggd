@@ -32,10 +32,7 @@ defmodule AshFrameworkWeb.Router do
   scope "/api" do
     pipe_through [:api]
 
-    forward "/swagger", OpenApiSpex.Plug.SwaggerUI,
-      path: "/api/spec",
-      default_model_expand_depth: 4
-
+    forward "/openapi/ui", AshFrameworkWeb.Plugs.ScalarUI, spec_url: "/api/openapi"
     forward "/", AshFrameworkWeb.AshJsonApiRouter
   end
 
