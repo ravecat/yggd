@@ -20,6 +20,16 @@ const nextConfig = {
   turbopack: {
     root: path.resolve(__dirname, "../.."),
   },
+
+  webpack: (config, { dev }) => {
+    if (dev) {
+      config.cache = {
+        type: "filesystem",
+        buildDependencies: { config: [__filename] },
+      };
+    }
+    return config;
+  },
 };
 
 /** @type {(import("@nx/next/src/utils/config").NextPlugin | import("@nx/next/src/utils/config").NextPluginThatReturnsConfigFn)[]} */
