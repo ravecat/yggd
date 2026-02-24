@@ -208,25 +208,36 @@ Canvas state persists via IndexedDB and syncs on reconnect.
 > **Protocol:** AsyncAPI - real-time operations described via [AsyncAPI](https://www.asyncapi.com/) specification over
 > Phoenix WebSocket channels.
 
-BEAM VM metrics dashboard with real-time updates. Data pushed from server via Phoenix channel in
-[OTLP JSON](https://opentelemetry.io/docs/specs/otlp/) format (OpenTelemetry Protocol). Backend collects metrics via
-`opentelemetry_erlang` SDK subscribed to Erlang `:telemetry` events. Charts rendered via
-[uPlot](https://github.com/leeoniya/uPlot) - vanilla JS, framework-agnostic, ~45KB.
+BEAM runtime and host system metrics dashboard with real-time updates. Data pushed from server via Phoenix channel in
+[OTLP JSON](https://opentelemetry.io/docs/specs/otlp/) format (OpenTelemetry Metrics Data Model + semantic
+conventions, no SDK - see ADR-010). Backend collects metrics via Erlang `:telemetry` + `:os_mon`. Charts rendered via
+[uPlot](https://github.com/leeoniya/uPlot) - vanilla JS, framework-agnostic, ~45KB. No persistence - dashboard
+shows a rolling window from the moment the client connects.
 
 Metrics:
 
-- **BEAM process count** - big number + sparkline underneath
-- **HTTP request latency (p50/p95)** - line chart, two series, Y-axis in ms
-- **Active WebSocket connections** - counter, numeric widget + trend
+- **CPU load average** (`system.cpu.load_average.1m`) - big number + sparkline
+- **Memory usage** (`system.memory.usage`) - big number + sparkline, formatted as GB
+- **BEAM process count** (`process.runtime.beam.process_count`) - big number + sparkline
+- **BEAM memory** (`process.runtime.beam.memory.total`) - big number + sparkline, formatted as MB
+- **HTTP request latency** (`http.server.request.duration`) - line chart, two series (p50/p95), Y-axis in ms
+- **WebSocket connections** (`phoenix.channel.connection.count`) - big number + sparkline
 
-All metrics available via Erlang `:telemetry` out of the box.
+**Integration:**
+
+- Phoenix channel `telemetry:metrics` - server pushes `metrics` event every 2s with OTLP JSON payload
+- OTLP envelope: `resourceMetrics[0].scopeMetrics[0].metrics[]` - each metric has `name`, `unit`, `gauge.dataPoints`
+- Client: join channel, parse OTLP, append to rolling buffer (300 points), `uPlot.setData(buffer)`
 
 **AC:**
 
-- [ ] Dashboard renders three metric widgets on page load
+- [ ] Dashboard renders six metric widgets on page load
+- [ ] CPU load average displays current value with sparkline
+- [ ] Memory usage displays current value with sparkline, formatted as GB
 - [ ] BEAM process count displays current value as big number with sparkline
+- [ ] BEAM memory displays current value with sparkline, formatted as MB
 - [ ] HTTP latency chart shows p50 and p95 as two distinct series
-- [ ] WebSocket connections widget shows current count with trend indicator
+- [ ] WebSocket connections widget shows current count with sparkline
 - [ ] All metrics update in real-time without page refresh
 - [ ] Connection loss shows a disconnected state; metrics resume on reconnect
 
@@ -308,11 +319,14 @@ window buffer.
 | Remote cursors visible                    |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
 | State survives reload                     |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
 | Offline drawing syncs on reconnect        |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| **F3 Telemetry**                          |  0/6   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| Three metric widgets render               |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| **F3 Telemetry**                          |  0/9   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Six metric widgets render                 |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| CPU load average + sparkline              |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Memory usage + sparkline (GB)             |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
 | BEAM process count big number + sparkline |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| BEAM memory + sparkline (MB)              |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
 | HTTP latency p50/p95 chart                |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| WebSocket connections count + trend       |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| WebSocket connections + sparkline         |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
 | Real-time updates without refresh         |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
 | Disconnected state; resume on reconnect   |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
 | **F4 Chart**                              |  0/4   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
@@ -343,6 +357,7 @@ All client apps import from `@rvct/shared`. Do not call the HTTP API directly.
 | Channel                | Used for |
 | ---------------------- | -------- |
 | `canvas:{document_id}` | F2       |
+| `telemetry:metrics`    | F3       |
 | `chart:prices`         | F4       |
 
 ### Auth cookies
