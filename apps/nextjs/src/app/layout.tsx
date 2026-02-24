@@ -50,9 +50,24 @@ export default function Layout({
                           raw
                         </a>)
                       </span>
-                      <a className="underline underline-offset-2" href="">
-                        asyncapi
-                      </a>
+                      <span>
+                        <a
+                          className="underline underline-offset-2"
+                          href={`${process.env.PUBLIC_API_URL}/asyncapi/ui`}
+                          rel="noreferrer"
+                          target="_blank"
+                        >
+                          asyncapi
+                        </a>{" "}
+                        (<a
+                          className="underline underline-offset-2"
+                          href={`${process.env.PUBLIC_API_URL}/asyncapi`}
+                          rel="noreferrer"
+                          target="_blank"
+                        >
+                          raw
+                        </a>)
+                      </span>
                     </div>
                     <a
                       className="underline underline-offset-2 text-sm"
@@ -60,7 +75,7 @@ export default function Layout({
                       rel="noreferrer"
                       target="_blank"
                     >
-                      github
+                      source
                     </a>
                   </div>
                 </footer>

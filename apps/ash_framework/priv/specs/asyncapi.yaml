@@ -1,0 +1,352 @@
+asyncapi: 3.0.0
+info:
+  title: Moda Async API
+  version: 1.0.0
+  description: >
+    Real-time collaborative document editing over Phoenix Channels using Yjs
+    CRDT.
+
+    Documents are synchronized via binary Yjs protocol messages over WebSocket.
+  tags:
+    - name: yjs
+      description: Collaborative editing transport over Phoenix Channels
+  license:
+    name: MIT
+servers:
+  production:
+    host: "{domain}:{port}"
+    pathname: "/socket/websocket"
+    protocol: wss
+    description: Phoenix WebSocket endpoint
+    variables:
+      domain:
+        $ref: "#/components/serverVariables/domain"
+      port:
+        default: "443"
+    bindings:
+      ws:
+        method: GET
+        query:
+          $ref: "#/components/schemas/socketConnectQuery"
+        bindingVersion: 0.1.0
+  development:
+    host: "{domain}:{port}"
+    pathname: "/socket/websocket"
+    protocol: ws
+    description: Local development server
+    variables:
+      domain:
+        default: localhost
+      port:
+        default: "4001"
+        description: >
+          Phoenix dev server port. Configured via PORT env var in
+          phoenix_framework/config/dev.exs.
+    bindings:
+      ws:
+        method: GET
+        query:
+          $ref: "#/components/schemas/socketConnectQuery"
+        bindingVersion: 0.1.0
+defaultContentType: application/octet-stream
+channels:
+  yDocRoom:
+    address: "y_doc_room:{docName}"
+    title: Yjs Document Room
+    description: >
+      Phoenix Channel for collaborative document editing.
+
+      Each document has its own room identified by `docName`.
+
+      Example topics: `y_doc_room:excalidraw:my-board`,
+      `y_doc_room:notes:draft`.
+    parameters:
+      docName:
+        description: >
+          Unique document identifier. Can be hierarchical (e.g.
+          `excalidraw:board-1`). Expected format: `[A-Za-z0-9:_-]+`, length
+          1..255. Example values: `excalidraw:default`, `excalidraw:board-1`,
+          `notes:draft`.
+    messages:
+      yjsSyncIn:
+        $ref: "#/components/messages/yjsSyncIn"
+      yjsUpdateIn:
+        $ref: "#/components/messages/yjsUpdateIn"
+      yjsUpdateOut:
+        $ref: "#/components/messages/yjsUpdateOut"
+      phxJoin:
+        $ref: "#/components/messages/phxJoin"
+      phxJoinReply:
+        $ref: "#/components/messages/phxJoinReply"
+      phxError:
+        $ref: "#/components/messages/phxError"
+      phxClose:
+        $ref: "#/components/messages/phxClose"
+    bindings:
+      ws:
+        method: GET
+        bindingVersion: 0.1.0
+operations:
+  joinRoom:
+    action: send
+    channel:
+      $ref: "#/channels/yDocRoom"
+    summary: Join a document room
+    description: |
+      Client joins a Yjs document room. Server initializes or looks up
+      the SharedDoc process via DynamicSupervisor and subscribes to PubSub.
+    messages:
+      - $ref: "#/channels/yDocRoom/messages/phxJoin"
+    reply:
+      channel:
+        $ref: "#/channels/yDocRoom"
+      messages:
+        - $ref: "#/channels/yDocRoom/messages/phxJoinReply"
+  sendYjsSync:
+    action: send
+    channel:
+      $ref: "#/channels/yDocRoom"
+    summary: Initiate Yjs sync handshake
+    description: |
+      Client sends a Yjs sync step (step1 or step2) as binary data.
+      The server forwards it to the SharedDoc GenServer which responds
+      with the appropriate sync reply via `handle_info`.
+    messages:
+      - $ref: "#/channels/yDocRoom/messages/yjsSyncIn"
+  sendYjsUpdate:
+    action: send
+    channel:
+      $ref: "#/channels/yDocRoom"
+    summary: Send a Yjs document update
+    description: |
+      Client sends a Yjs update (awareness or doc mutation) as binary data.
+      The server applies it to the SharedDoc and broadcasts to all other
+      clients in the room via Phoenix.PubSub.
+    messages:
+      - $ref: "#/channels/yDocRoom/messages/yjsUpdateIn"
+  receiveYjsUpdate:
+    action: receive
+    channel:
+      $ref: "#/channels/yDocRoom"
+    summary: Receive a Yjs document update
+    description: |
+      Server pushes Yjs updates to the client. Sources:
+      - PubSub broadcast from another client's update (`{:yjs_update, chunk}`)
+      - Direct message from SharedDoc process (`{:yjs, chunk, pid}`)
+    messages:
+      - $ref: "#/channels/yDocRoom/messages/yjsUpdateOut"
+  receiveChannelError:
+    action: receive
+    channel:
+      $ref: "#/channels/yDocRoom"
+    summary: Receive channel-level error event
+    description: |
+      Phoenix protocol-level channel failure event.
+      Can happen on transport disruption or internal channel crashes.
+    messages:
+      - $ref: "#/channels/yDocRoom/messages/phxError"
+  receiveChannelClose:
+    action: receive
+    channel:
+      $ref: "#/channels/yDocRoom"
+    summary: Receive channel close event
+    description: |
+      Phoenix protocol-level close event signaling channel shutdown
+      or explicit leave.
+    messages:
+      - $ref: "#/channels/yDocRoom/messages/phxClose"
+components:
+  serverVariables:
+    domain:
+      description: Server hostname. Set via PHX_HOST env var.
+    port:
+      default: "4001"
+      description: Server port. Set via PORT env var.
+  messages:
+    phxJoin:
+      name: phx_join
+      title: Join Room
+      summary: Request to join a Yjs document room
+      description: |
+        Phoenix Channel join event. The `docName` from the topic
+        is used to look up or start a SharedDoc GenServer.
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/joinPayload"
+      bindings:
+        ws:
+          bindingVersion: 0.1.0
+      examples:
+        - name: join-with-empty-payload
+          summary: Typical join without additional params
+          payload: {}
+        - name: join-with-meta
+          summary: Join with optional client metadata
+          payload:
+            client:
+              name: web-nextjs
+    phxJoinReply:
+      name: phx_reply
+      title: Join Reply
+      summary: Server confirms or rejects the join
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/joinReply"
+      examples:
+        - name: join-ok
+          summary: Successful join response
+          payload:
+            status: ok
+            response: {}
+        - name: join-error
+          summary: Join rejected by channel
+          payload:
+            status: error
+            response:
+              reason: failed to initialize document
+    phxError:
+      name: phx_error
+      title: Channel Error
+      summary: Channel-level error event from Phoenix protocol
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/phxSystemPayload"
+      examples:
+        - name: channel-error
+          payload:
+            reason: internal_error
+    phxClose:
+      name: phx_close
+      title: Channel Closed
+      summary: Channel close event from Phoenix protocol
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/phxSystemPayload"
+      examples:
+        - name: channel-close
+          payload:
+            reason: closed
+    yjsSyncIn:
+      name: yjs_sync
+      title: Yjs Sync Message (Client to Server)
+      summary: Binary Yjs sync protocol message
+      description: |
+        Yjs sync frame encoded with lib0 varUint format.
+        Top-level type is `0` (sync), followed by nested sync subtype:
+        - `0`: Sync Step 1 (state vector)
+        - `1`: Sync Step 2 (delta for given vector)
+        - `2`: Document update
+      contentType: application/octet-stream
+      payload:
+        $ref: "#/components/schemas/yjsBinaryPayload"
+      examples:
+        - name: sync-step1-base64
+          summary: Example binary frame encoded as base64 for documentation
+          payload: AAE=
+    yjsUpdateIn:
+      name: yjs
+      title: Yjs Update (Client to Server)
+      summary: Binary Yjs document update or awareness message
+      description: |
+        Binary Yjs frame encoded with lib0 varUint format.
+        Top-level type can be:
+        - `0`: sync message (including update subtype `2`)
+        - `1`: awareness update
+        - `3`: awareness query
+        The payload is applied to SharedDoc for CRDT merge and persistence.
+        Broadcast to all other clients via Phoenix.PubSub.
+        Persisted to `yjs_records` table via Yex persistence layer.
+      contentType: application/octet-stream
+      payload:
+        $ref: "#/components/schemas/yjsBinaryPayload"
+      examples:
+        - name: awareness-update-base64
+          summary: Example binary frame encoded as base64 for documentation
+          payload: AQID
+    yjsUpdateOut:
+      name: yjs
+      title: Yjs Update (Server to Client)
+      summary: Binary Yjs document update pushed to client
+      description: |
+        Binary Yjs frame in the same format as incoming `yjs` event.
+        Originates from another collaborator, SharedDoc sync response,
+        or awareness propagation.
+      contentType: application/octet-stream
+      payload:
+        $ref: "#/components/schemas/yjsBinaryPayload"
+      examples:
+        - name: sync-reply-base64
+          summary: Example binary frame encoded as base64 for documentation
+          payload: AAECAw==
+  schemas:
+    socketConnectQuery:
+      type: object
+      properties:
+        vsn:
+          type: string
+          description: Phoenix serializer version
+          const: "2.0.0"
+        token:
+          type: string
+          description: Optional auth token for socket connect
+      required:
+        - vsn
+      additionalProperties: true
+    yjsBinaryPayload:
+      type: string
+      format: binary
+      description: |
+        Yjs frame serialized in binary.
+        Encoding uses varUint message prefixes (not JSON arrays):
+        - Top-level `0` => sync protocol message
+        - Top-level `1` => awareness protocol update
+        - Top-level `3` => awareness query
+        For sync messages, nested sync subtypes are:
+        - `0` => sync step 1
+        - `1` => sync step 2
+        - `2` => update
+        See https://github.com/yjs/y-protocols for encoding details.
+    joinPayload:
+      type: object
+      description: Optional join payload accepted by Phoenix channel join
+      additionalProperties: true
+    joinReply:
+      oneOf:
+        - type: object
+          properties:
+            status:
+              const: ok
+            response:
+              type: object
+              additionalProperties: true
+          required:
+            - status
+            - response
+        - type: object
+          properties:
+            status:
+              const: error
+            response:
+              type: object
+              properties:
+                reason:
+                  type: string
+                  description:
+                    Error reason (e.g. "failed to initialize document")
+              required:
+                - reason
+          required:
+            - status
+            - response
+    phxSystemPayload:
+      type: object
+      description: Phoenix protocol payload for channel lifecycle events
+      additionalProperties: true
+  securitySchemes:
+    socketToken:
+      type: httpApiKey
+      name: token
+      in: query
+      description: |
+        Optional token passed as query parameter during WebSocket connect.
+        Currently unused (socket.connect returns {:ok, socket} unconditionally).
