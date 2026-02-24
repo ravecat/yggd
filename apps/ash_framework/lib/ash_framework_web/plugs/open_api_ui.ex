@@ -1,4 +1,4 @@
-defmodule AshFrameworkWeb.Plugs.ScalarUI do
+defmodule AshFrameworkWeb.Plugs.OpenApiUI do
   @behaviour Plug
 
   @impl true

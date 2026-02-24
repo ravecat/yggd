@@ -32,7 +32,9 @@ defmodule AshFrameworkWeb.Router do
   scope "/api" do
     pipe_through [:api]
 
-    forward "/openapi/ui", AshFrameworkWeb.Plugs.ScalarUI, spec_url: "/api/openapi"
+    forward "/openapi/ui", AshFrameworkWeb.Plugs.OpenApiUI, spec_url: "/api/openapi"
+    forward "/asyncapi/ui", AshFrameworkWeb.Plugs.AsyncApiUI, spec_url: "/api/asyncapi"
+    forward "/asyncapi", AshFrameworkWeb.Plugs.AsyncApiSpec
     forward "/", AshFrameworkWeb.AshJsonApiRouter
   end
 
