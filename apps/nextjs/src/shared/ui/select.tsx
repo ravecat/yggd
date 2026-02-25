@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import * as SelectPrimitive from "@radix-ui/react-select"
-import { ChevronDownIcon, ChevronUpIcon, CheckIcon } from "lucide-react"
-import { cn } from "~/shared/lib/component"
+import * as React from "react";
+import * as SelectPrimitive from "@radix-ui/react-select";
+import { ChevronDownIcon, ChevronUpIcon, CheckIcon } from "lucide-react";
+import { cn } from "~/shared/lib/component";
 
 function Select({
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Root>) {
-  return <SelectPrimitive.Root data-slot="select" {...props} />
+  return <SelectPrimitive.Root data-slot="select" {...props} />;
 }
 
 function SelectTrigger({
@@ -34,7 +34,7 @@ function SelectTrigger({
         <ChevronDownIcon className="h-4 w-4 opacity-50" />
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
-  )
+  );
 }
 
 function SelectContent({
@@ -70,7 +70,7 @@ function SelectContent({
         <SelectScrollDownButton />
       </SelectPrimitive.Content>
     </SelectPrimitive.Portal>
-  )
+  );
 }
 
 function SelectItem({
@@ -96,13 +96,13 @@ function SelectItem({
       </span>
       <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
     </SelectPrimitive.Item>
-  )
+  );
 }
 
 function SelectValue({
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Value>) {
-  return <SelectPrimitive.Value data-slot="select-value" {...props} />
+  return <SelectPrimitive.Value data-slot="select-value" {...props} />;
 }
 
 function SelectScrollUpButton({
@@ -120,7 +120,7 @@ function SelectScrollUpButton({
     >
       <ChevronUpIcon className="h-4 w-4" />
     </SelectPrimitive.ScrollUpButton>
-  )
+  );
 }
 
 function SelectScrollDownButton({
@@ -138,7 +138,7 @@ function SelectScrollDownButton({
     >
       <ChevronDownIcon className="h-4 w-4" />
     </SelectPrimitive.ScrollDownButton>
-  )
+  );
 }
 
 export {
@@ -149,4 +149,4 @@ export {
   SelectScrollUpButton,
   SelectTrigger,
   SelectValue,
-}
+};

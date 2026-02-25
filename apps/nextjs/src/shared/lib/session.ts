@@ -1,32 +1,34 @@
-import 'server-only';
-import { cache } from 'react';
-import { cookies } from 'next/headers';
-import { jwtVerify, type JWTPayload } from 'jose';
+import "server-only";
+import { cache } from "react";
+import { cookies } from "next/headers";
+import { jwtVerify, type JWTPayload } from "jose";
 
 const TOKEN_SIGNING_KEY = new TextEncoder().encode(
-  process.env.TOKEN_SIGNING_SECRET
+  process.env.TOKEN_SIGNING_SECRET,
 );
 
-export async function verifyToken(token: string | undefined = ''): Promise<JWTPayload | null> {
+export async function verifyToken(
+  token: string | undefined = "",
+): Promise<JWTPayload | null> {
   if (!token) {
     return null;
   }
 
   try {
     const { payload } = await jwtVerify(token, TOKEN_SIGNING_KEY, {
-      algorithms: ['HS256'],
+      algorithms: ["HS256"],
     });
 
     return payload;
   } catch (error) {
-    console.error('Failed to verify token:', error);
+    console.error("Failed to verify token:", error);
     return null;
   }
 }
 
 export const assigns = cache(async () => {
   const cookieStore = await cookies();
-  const token = cookieStore.get('auth_token')?.value;
+  const token = cookieStore.get("auth_token")?.value;
 
   const session = await verifyToken(token);
 

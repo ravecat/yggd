@@ -1,16 +1,17 @@
 @import "tailwindcss";
 @import "@rvct/shared/tokens.css";
+@import "uplot/dist/uPlot.min.css";
 
 @layer base {
   * {
     @apply border-border;
   }
-  
+
   html,
   body {
     @apply h-full;
   }
-  
+
   body {
     @apply bg-background text-foreground;
   }
