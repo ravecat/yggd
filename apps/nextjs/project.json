@@ -57,10 +57,7 @@
     },
     "build": {
       "cache": true,
-      "outputs": [
-        "{projectRoot}/.next",
-        "!{projectRoot}/.next/standalone"
-      ]
+      "outputs": ["{projectRoot}/.next", "!{projectRoot}/.next/standalone"]
     }
   },
   "tags": []

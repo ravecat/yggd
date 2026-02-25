@@ -41,14 +41,16 @@ export default function Layout({
                         >
                           openapi
                         </a>{" "}
-                        (<a
+                        (
+                        <a
                           className="underline underline-offset-2"
                           href={`${process.env.PUBLIC_API_URL}/openapi`}
                           rel="noreferrer"
                           target="_blank"
                         >
                           raw
-                        </a>)
+                        </a>
+                        )
                       </span>
                       <span>
                         <a
@@ -59,14 +61,16 @@ export default function Layout({
                         >
                           asyncapi
                         </a>{" "}
-                        (<a
+                        (
+                        <a
                           className="underline underline-offset-2"
                           href={`${process.env.PUBLIC_API_URL}/asyncapi`}
                           rel="noreferrer"
                           target="_blank"
                         >
                           raw
-                        </a>)
+                        </a>
+                        )
                       </span>
                     </div>
                     <a

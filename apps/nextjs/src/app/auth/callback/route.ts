@@ -1,6 +1,6 @@
 /**
  * OAuth callback handler
- * 
+ *
  * This Route Handler receives the authorization code from Ash Framework
  * after successful Google OAuth authentication.
  */
@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
   if (error) {
     console.error("OAuth error:", error);
     return NextResponse.redirect(
-      new URL(`/?error=${encodeURIComponent(error)}`, appUrl)
+      new URL(`/?error=${encodeURIComponent(error)}`, appUrl),
     );
   }
 
@@ -36,9 +36,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(new URL("/", appUrl));
   } catch (error) {
     console.error("Token exchange error:", error);
-    return NextResponse.redirect(
-      new URL("/?error=exchange_failed", appUrl)
-    );
+    return NextResponse.redirect(new URL("/?error=exchange_failed", appUrl));
   }
 }
-

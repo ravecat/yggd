@@ -3,7 +3,7 @@
 import { createContext, useContext, ReactNode } from "react";
 
 const EnvContext = createContext<Record<string, string | undefined> | null>(
-  null
+  null,
 );
 
 export function Environment({

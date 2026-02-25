@@ -1,4 +1,4 @@
-import { TextEncoder, TextDecoder } from 'util';
+import { TextEncoder, TextDecoder } from "util";
 
 // @ts-expect-error - polyfill for jose
 global.TextEncoder = TextEncoder;
