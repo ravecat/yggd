@@ -26,7 +26,10 @@ defmodule PhoenixFramework.Yjs.Persistence do
 
   @impl true
   def update_v1(_state, update, doc_name, _doc) do
-    Logger.info("[YJS:Persistence] Saving update for #{doc_name}, size: #{byte_size(update)} bytes")
+    Logger.info(
+      "[YJS:Persistence] Saving update for #{doc_name}, size: #{byte_size(update)} bytes"
+    )
+
     PhoenixFramework.MyYEcto.insert_update(doc_name, update)
     :ok
   end
