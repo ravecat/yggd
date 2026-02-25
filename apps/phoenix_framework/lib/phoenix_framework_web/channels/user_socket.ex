@@ -9,6 +9,7 @@ defmodule PhoenixFrameworkWeb.UserSocket do
 
   # Channels
   channel "y_doc_room:*", PhoenixFrameworkWeb.SharedDocChannel
+  channel "telemetry:metrics", PhoenixFrameworkWeb.TelemetryChannel
 
   @impl true
   def connect(params, socket, _connect_info) do

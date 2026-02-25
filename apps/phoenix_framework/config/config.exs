@@ -60,6 +60,21 @@ config :logger, :default_formatter,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+# Disable span exporter - we only use metrics, not tracing.
+config :opentelemetry, traces_exporter: :none
+
+# OTel metrics: periodic reader calls ChannelMetricsExporter every 2s
+config :opentelemetry_experimental,
+  readers: [
+    %{
+      module: :otel_metric_reader,
+      config: %{
+        export_interval_ms: 500,
+        exporter: {PhoenixFramework.ChannelMetricsExporter, %{topic: "telemetry:metrics"}}
+      }
+    }
+  ]
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
