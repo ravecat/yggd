@@ -184,9 +184,8 @@ appears in list. On validation error, field-level errors shown.
 
 Collaborative whiteboard powered by Excalidraw + Yjs CRDT over Phoenix WebSocket channels.
 
-Excalidraw canvas renders in the main content area with grid mode enabled.
-Multiple users can draw simultaneously with real-time sync.
-Canvas state persists via IndexedDB and syncs on reconnect.
+Excalidraw canvas renders in the main content area with grid mode enabled. Multiple users can draw simultaneously with
+real-time sync. Canvas state persists via IndexedDB and syncs on reconnect.
 
 **Integration:**
 
@@ -209,10 +208,10 @@ Canvas state persists via IndexedDB and syncs on reconnect.
 > Phoenix WebSocket channels.
 
 BEAM runtime and host system metrics dashboard with real-time updates. Data pushed from server via Phoenix channel in
-[OTLP JSON](https://opentelemetry.io/docs/specs/otlp/) format (OpenTelemetry Metrics Data Model + semantic
-conventions, no SDK - see ADR-010). Backend collects metrics via Erlang `:telemetry` + `:os_mon`. Charts rendered via
-[uPlot](https://github.com/leeoniya/uPlot) - vanilla JS, framework-agnostic, ~45KB. No persistence - dashboard
-shows a rolling window from the moment the client connects.
+[OTLP JSON](https://opentelemetry.io/docs/specs/otlp/) format (OpenTelemetry Metrics Data Model + semantic conventions,
+no SDK - see ADR-010). Backend collects metrics via Erlang `:telemetry` + `:os_mon`. Charts rendered via
+[uPlot](https://github.com/leeoniya/uPlot) - vanilla JS, framework-agnostic, ~45KB. No persistence - dashboard shows a
+rolling window from the moment the client connects.
 
 Metrics:
 
@@ -220,7 +219,6 @@ Metrics:
 - **Memory usage** (`system.memory.usage`) - big number + sparkline, formatted as GB
 - **BEAM process count** (`process.runtime.beam.process_count`) - big number + sparkline
 - **BEAM memory** (`process.runtime.beam.memory.total`) - big number + sparkline, formatted as MB
-- **HTTP request latency** (`http.server.request.duration`) - line chart, two series (p50/p95), Y-axis in ms
 - **WebSocket connections** (`phoenix.channel.connection.count`) - big number + sparkline
 
 **Integration:**
@@ -231,12 +229,11 @@ Metrics:
 
 **AC:**
 
-- [ ] Dashboard renders six metric widgets on page load
+- [ ] Dashboard renders five metric widgets on page load
 - [ ] CPU load average displays current value with sparkline
 - [ ] Memory usage displays current value with sparkline, formatted as GB
 - [ ] BEAM process count displays current value as big number with sparkline
 - [ ] BEAM memory displays current value with sparkline, formatted as MB
-- [ ] HTTP latency chart shows p50 and p95 as two distinct series
 - [ ] WebSocket connections widget shows current count with sparkline
 - [ ] All metrics update in real-time without page refresh
 - [ ] Connection loss shows a disconnected state; metrics resume on reconnect

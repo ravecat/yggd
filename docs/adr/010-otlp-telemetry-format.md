@@ -3,7 +3,7 @@
 ## Metadata
 
 - ID: ADR-010
-- Status: accepted (refined 2026-02-25)
+- Status: accepted (revised 2026-02-25)
 - Date: 2026-02-21
 - Deciders: Max
 
@@ -17,83 +17,78 @@ and an industry standard.
 
 - Standardization: use a well-known format so any client can parse without custom documentation.
 - Erlang ecosystem fit: the format should integrate naturally with Erlang `:telemetry` and OTP observability tooling.
-- Learning value: exposure to industry-standard observability protocols.
+- Learning value: exposure to industry-standard observability protocols and SDK internals.
 - Lightweight: the format must be serializable as JSON for transport over Phoenix channels (no protobuf requirement).
+- Extensibility: adding a real OTLP collector later should require minimal code changes.
 
 ## Considered options
 
-### Option A (original)
+### Option A (original - revised to chosen)
 
-- Description: OTLP JSON encoding via `opentelemetry_erlang` SDK
+- Description: OTLP JSON encoding via `opentelemetry_erlang` SDK with a custom channel exporter.
 - Good, because CNCF standard - widely adopted across observability ecosystem.
 - Good, because `opentelemetry_erlang` SDK subscribes to Erlang `:telemetry` events natively (via bridge libraries).
 - Good, because OTLP has a JSON encoding - no protobuf/gRPC needed on the client.
 - Good, because structured envelope (`resourceMetrics` -> `scopeMetrics` -> `metrics`) is self-describing.
-- Bad, because `opentelemetry_erlang` metrics API is experimental - the SDK is mature for traces, not metrics.
-- Bad, because the SDK is designed for collector export (gRPC/HTTP), not Phoenix channel push - would require a
-  custom exporter to bridge SDK output to PubSub.
-- Bad, because adds `opentelemetry`, `opentelemetry_api`, `opentelemetry_exporter` dependencies for a feature that
-  needs only the JSON format, not the full pipeline.
+- Good, because SDK provides real histogram aggregation (true p50/p95) vs manual EMA approximation.
+- Good, because Observable Gauge API cleanly separates metric definition from collection logic.
+- Good, because if a collector/backend is added later, only the exporter changes - instrumentation stays.
+- Good, because deepens understanding of real-world OTel SDK architecture (instruments, readers, exporters).
+- Bad, because `opentelemetry_erlang` metrics API is marked experimental (stable for traces, experimental for metrics).
+- Bad, because adds `opentelemetry_api`, `opentelemetry`, `opentelemetry_phoenix` dependencies.
+- Bad, because requires a custom exporter to bridge SDK output to PubSub (no off-the-shelf channel exporter exists).
 
-### Option A' (refined)
+### Option A' (previously chosen, now superseded)
 
 - Description: OTLP JSON encoding (data model + semantic conventions) without `opentelemetry_erlang` SDK. Collection
   via native Erlang `:telemetry` + `:os_mon`. Manual OTLP JSON formatting.
-- Good, because same CNCF standard payload format - any OTel-compatible tool can consume it.
 - Good, because zero new Hex dependencies (`:os_mon` is OTP built-in, `jason` already present).
 - Good, because building the OTLP envelope manually teaches the data model deeper than SDK abstraction.
-- Good, because direct `:telemetry.attach` + `telemetry_poller` are already set up in the project.
-- Good, because no custom exporter needed - format JSON, broadcast via PubSub, done.
-- Bad, because manual OTLP JSON construction must stay in sync with spec (low risk - format is stable).
-- Bad, because no automatic instrumentation (must explicitly subscribe to each `:telemetry` event).
+- Bad, because HTTP latency percentiles require EMA approximation instead of real histogram aggregation.
+- Bad, because misses SDK architecture internals (instruments, readers, exporters) as a learning experience.
+- Bad, because adding a real OTLP collector later requires rewriting the entire collection layer.
 
 ### Option B
 
 - Description: Custom JSON format (ad-hoc `{ metric, value, timestamp }`)
-- Good, because minimal payload size.
-- Good, because zero additional dependencies.
 - Bad, because no standard - every client must know the custom schema.
-- Bad, because no ecosystem tooling (no validation, no codegen, no compatibility with external systems).
+- Bad, because no ecosystem tooling.
 - Bad, because misses the learning opportunity.
 
 ### Option C
 
 - Description: Prometheus exposition format over HTTP endpoint
-- Good, because widely adopted for metrics scraping.
-- Bad, because pull-based (requires polling), contradicts server-push architecture of F3.
+- Bad, because pull-based, contradicts server-push architecture of F3.
 - Bad, because text-based format is harder to parse in browser JS than JSON.
-- Bad, because does not use Phoenix channels - breaks the integration pattern goal.
 
 ## Decision outcome
 
-Chosen option: "Option A' (refined): OTLP JSON data model without SDK", because it preserves the CNCF-standard
-payload format while eliminating the SDK dependency that does not fit the channel-push architecture. The
-`opentelemetry_erlang` SDK is designed for trace export to collectors - its metrics API is experimental, and pushing
-to a Phoenix channel would require a custom exporter that negates the SDK's value. Manual OTLP JSON formatting via
-`:telemetry` + `:os_mon` + `jason` is simpler, has zero new dependencies, and provides deeper learning of the OTel
-data model.
+Chosen option: "Option A (revised): OTel SDK with custom channel exporter", because it uses the full OTel SDK
+pipeline (instruments → reader → exporter) which is the production-standard approach, provides real histogram
+aggregation for HTTP latency percentiles, and offers better extensibility - if a Grafana/Datadog backend is added
+later, only the exporter module changes. The custom `ChannelMetricsExporter` implements `otel_metrics_exporter`
+behaviour and broadcasts to Phoenix.PubSub. The experimental status of the metrics API is an acceptable risk for
+a learning project.
 
-Data flow: `:telemetry` events + `:os_mon` -> `MetricsBroadcaster` -> OTLP JSON via `jason` -> PubSub -> Phoenix
-channel push -> browser parse -> uPlot.
+Data flow: Observable Gauge callbacks + HTTP Histogram → OTel SDK MetricReader (2s) → `ChannelMetricsExporter` →
+PubSub → Phoenix channel push → browser parse → uPlot.
 
 ### Positive consequences
 
-- Metrics payload follows an open standard - any OTel-compatible tool can consume it.
-- Zero new Hex dependencies - uses only OTP built-ins and existing project deps.
-- Manual envelope construction teaches OTel Metrics Data Model internals (resource, scope, metric types, data points,
-  attributes, units, semantic conventions).
-- Consistent standards approach: JSON:API for HTTP, AsyncAPI for channel spec, OTLP for metrics payload.
-- Future extensibility: adding new metrics requires no client-side format changes.
-- If a collector/backend is added later, the payload format is already OTLP-compatible.
+- Real OTel SDK pipeline - instruments, periodic reader, custom exporter.
+- True histogram percentiles for HTTP latency (no EMA heuristic).
+- Observable Gauge API: metric definition and collection are separated cleanly.
+- Future extensibility: swap exporter to send to Grafana Cloud without touching instrumentation code.
+- Three new dependencies justify the learning value.
 
 ### Negative consequences
 
-- OTLP JSON envelope is heavier than a flat custom format (~2-3x payload size for nine metrics).
-- Frontend must parse nested OTLP structure to extract metric values for uPlot.
-- Manual OTLP JSON construction is a small maintenance surface (~50 lines of Elixir).
+- `opentelemetry_erlang` metrics API is experimental - may change between SDK versions.
+- Three new Hex dependencies: `opentelemetry_api`, `opentelemetry`, `opentelemetry_phoenix`.
+- Custom exporter adds ~50 lines that must implement Erlang behaviour correctly.
+- OTLP JSON envelope is heavier than a flat custom format (~2-3x payload size for six metrics).
 
 ## Links
 
-- Related ADRs: ADR-003 (Phoenix channels), ADR-009 (AsyncAPI)
-- Design doc: [telemetry-design.md](../telemetry-design.md)
+- Related ADRs: ADR-003 (Phoenix channels), ADR-009 (AsyncAPI), ADR-011 (uPlot)
 - After-action review: 2026-03-21
