@@ -261,14 +261,13 @@ components:
         - process.runtime.beam.memory.ets (gauge)
         - process.runtime.beam.process_count (gauge)
         - process.runtime.beam.run_queue (gauge)
-        - http.server.request.duration (gauge with quantile attribute, p50/p95)
         - phoenix.channel.connection.count (gauge)
       contentType: application/json
       payload:
         $ref: "#/components/schemas/otlpMetricsPayload"
       examples:
         - name: metrics-push
-          summary: Single metrics push with CPU, process count, and HTTP latency
+          summary: Single metrics push with CPU and process count
           payload:
             resourceMetrics:
               - resource:
@@ -298,22 +297,6 @@ components:
                             - timeUnixNano: "1740441600000000000"
                               asInt: "847"
                               attributes: []
-                      - name: http.server.request.duration
-                        unit: ms
-                        gauge:
-                          dataPoints:
-                            - timeUnixNano: "1740441600000000000"
-                              asDouble: 12.5
-                              attributes:
-                                - key: quantile
-                                  value:
-                                    doubleValue: 0.5
-                            - timeUnixNano: "1740441600000000000"
-                              asDouble: 45.2
-                              attributes:
-                                - key: quantile
-                                  value:
-                                    doubleValue: 0.95
     phxJoin:
       name: phx_join
       title: Join Room

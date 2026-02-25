@@ -3,8 +3,8 @@
 * Do not edit manually.
 */
 
-import fetch from "../../client";
-import type { RequestConfig, ResponseErrorConfig } from "../../client";
+import fetch from "../../lib/client";
+import type { RequestConfig, ResponseErrorConfig } from "../../lib/client";
 import type { PostTodosMutationRequest, PostTodosMutationResponse, PostTodosQueryParams } from "../models/PostTodos";
 
 function getPostTodosUrl() {
