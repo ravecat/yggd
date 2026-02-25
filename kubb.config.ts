@@ -10,7 +10,7 @@ export default defineConfig({
     path: "./apps/ash_framework/priv/specs/openapi.json",
   },
   output: {
-    path: "./packages/shared/src/api/generated",
+    path: "./packages/shared/src/api",
     clean: true,
     extension: {
       ".ts": "",
@@ -33,7 +33,7 @@ export default defineConfig({
       },
       dataReturnType: "data",
       pathParamsType: "inline",
-      importPath: "../../client",
+      importPath: "../../lib/client",
     }),
     pluginZod({
       output: {
