@@ -475,7 +475,7 @@ describe("serializeQueryParams", () => {
       const parsed = deserializeQueryParams(original);
       const serialized = serializeQueryParams(parsed);
       const reParsed = deserializeQueryParams(
-        Object.fromEntries(serialized) as Record<string, string>
+        Object.fromEntries(serialized) as Record<string, string>,
       );
 
       expect(reParsed).toEqual(parsed);
@@ -486,7 +486,7 @@ describe("serializeQueryParams", () => {
       const parsed = deserializeQueryParams(original);
       const serialized = serializeQueryParams(parsed);
       const reParsed = deserializeQueryParams(
-        Object.fromEntries(serialized) as Record<string, string>
+        Object.fromEntries(serialized) as Record<string, string>,
       );
 
       expect(reParsed).toEqual(parsed);
@@ -499,7 +499,7 @@ describe("serializeQueryParams", () => {
       };
       const serialized = serializeQueryParams(original);
       const parsed = deserializeQueryParams(
-        Object.fromEntries(serialized) as Record<string, string>
+        Object.fromEntries(serialized) as Record<string, string>,
       );
 
       expect(parsed).toEqual(original);

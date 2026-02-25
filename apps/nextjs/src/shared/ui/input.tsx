@@ -1,5 +1,5 @@
-import * as React from "react"
-import { cn } from "~/shared/lib/component"
+import * as React from "react";
+import { cn } from "~/shared/lib/component";
 
 function Input({
   className,
@@ -20,7 +20,7 @@ function Input({
       )}
       {...props}
     />
-  )
+  );
 }
 
-export { Input }
+export { Input };

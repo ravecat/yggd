@@ -18,7 +18,7 @@
  */
 export function generatePageNumbers(
   currentPage: number,
-  totalPages: number
+  totalPages: number,
 ): number[] {
   if (totalPages <= 0) {
     return [];

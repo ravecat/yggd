@@ -1,10 +1,7 @@
-import * as React from "react"
-import { cn } from "~/shared/lib/component"
+import * as React from "react";
+import { cn } from "~/shared/lib/component";
 
-function Label({
-  className,
-  ...props
-}: React.ComponentProps<"label">) {
+function Label({ className, ...props }: React.ComponentProps<"label">) {
   return (
     <label
       data-slot="label"
@@ -14,7 +11,7 @@ function Label({
       )}
       {...props}
     />
-  )
+  );
 }
 
-export { Label }
+export { Label };
