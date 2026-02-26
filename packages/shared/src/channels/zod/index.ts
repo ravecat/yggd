@@ -12,3 +12,5 @@ export { resourceMetricsSchema } from "./resourceMetricsSchema.js";
 export { metricSchema } from "./metricSchema.js";
 export { dataPointSchema } from "./dataPointSchema.js";
 export { keyValueSchema } from "./keyValueSchema.js";
+export { priceTickSchema } from "./priceTickSchema.js";
+export { chartJoinReplySchema } from "./chartJoinReplySchema.js";

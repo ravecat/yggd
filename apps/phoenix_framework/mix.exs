@@ -71,6 +71,7 @@ defmodule PhoenixFramework.MixProject do
       {:dns_cluster, "~> 0.2.0"},
       {:bandit, "~> 1.5"},
       {:y_ex, "~> 0.6"},
+      {:websockex, "~> 0.4"},
       {:repatch, "~> 1.5", only: :test}
     ]
   end
