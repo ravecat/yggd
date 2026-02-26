@@ -13,3 +13,5 @@ export type { ResourceMetrics } from "./ResourceMetrics.js";
 export type { Metric } from "./Metric.js";
 export type { DataPoint } from "./DataPoint.js";
 export type { KeyValue } from "./KeyValue.js";
+export type { PriceTick } from "./PriceTick.js";
+export type { ChartJoinReply } from "./ChartJoinReply.js";

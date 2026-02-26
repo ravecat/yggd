@@ -4,15 +4,15 @@ info:
   version: 1.0.0
   description: >
     Real-time async API over Phoenix Channels. Covers collaborative document
-    editing via Yjs CRDT and server-push BEAM/host telemetry metrics via OTLP JSON.
-
-    Documents are synchronized via binary Yjs protocol messages over WebSocket.
-    Telemetry metrics are pushed as OTLP JSON payloads at fixed intervals.
+    editing via Yjs CRDT, server-push BEAM/host telemetry metrics via OTLP JSON,
+    etc.
   tags:
     - name: yjs
       description: Collaborative editing transport over Phoenix Channels
     - name: telemetry
       description: Real-time BEAM and host metrics server-push
+    - name: chart
+      description: Live crypto price streaming via CoinCap proxy
   license:
     name: MIT
 servers:
@@ -94,11 +94,11 @@ channels:
     title: Telemetry Metrics Stream
     description: >
       Server-push Phoenix Channel for real-time BEAM runtime and host system
-      metrics. Server pushes OTLP JSON payloads at a fixed interval (default 2s).
-      No client-to-server data messages - pure server-push pattern.
+      metrics. Server pushes OTLP JSON payloads at a fixed interval (default
+      2s). No client-to-server data messages - pure server-push pattern.
 
-      Metrics include host CPU/memory, BEAM process count/memory/run queue,
-      HTTP request latency percentiles, and WebSocket connection count.
+      Metrics include host CPU/memory, BEAM process count/memory/run queue, HTTP
+      request latency percentiles, and WebSocket connection count.
     messages:
       metricsOut:
         $ref: "#/components/messages/metricsOut"
@@ -106,6 +106,29 @@ channels:
         $ref: "#/components/messages/telemetryJoin"
       telemetryJoinReply:
         $ref: "#/components/messages/telemetryJoinReply"
+      phxError:
+        $ref: "#/components/messages/phxError"
+      phxClose:
+        $ref: "#/components/messages/phxClose"
+    bindings:
+      ws:
+        method: GET
+        bindingVersion: 0.1.0
+  chartPrices:
+    address: "chart:prices"
+    title: Crypto Price Stream
+    description: >
+      Server-push Phoenix Channel for live crypto price data. Backend proxies
+      CoinCap WebSocket (wss://ws.coincap.io/prices?assets=bitcoin,ethereum) and
+      pushes price ticks as JSON. On join, server replies with buffered history
+      (last 300 points) so late joiners see the chart immediately.
+    messages:
+      priceTickOut:
+        $ref: "#/components/messages/priceTickOut"
+      chartJoin:
+        $ref: "#/components/messages/chartJoin"
+      chartJoinReply:
+        $ref: "#/components/messages/chartJoinReply"
       phxError:
         $ref: "#/components/messages/phxError"
       phxClose:
@@ -213,6 +236,34 @@ operations:
       - $ref: "#/info/tags/1"
     messages:
       - $ref: "#/channels/telemetryMetrics/messages/metricsOut"
+  joinChart:
+    action: send
+    channel:
+      $ref: "#/channels/chartPrices"
+    summary: Join the crypto price stream channel
+    description: |
+      Client joins the chart prices channel. No authentication required.
+      Server replies with buffered price history (last 300 points).
+      After join, server pushes price_tick events on each CoinCap tick (~1s).
+    messages:
+      - $ref: "#/channels/chartPrices/messages/chartJoin"
+    reply:
+      channel:
+        $ref: "#/channels/chartPrices"
+      messages:
+        - $ref: "#/channels/chartPrices/messages/chartJoinReply"
+  receivePriceTick:
+    action: receive
+    channel:
+      $ref: "#/channels/chartPrices"
+    summary: Receive a crypto price tick
+    description: |
+      Server pushes a price tick on each CoinCap update (~1s interval).
+      Each tick contains Unix timestamp and BTC/ETH prices in USD.
+    tags:
+      - $ref: "#/info/tags/2"
+    messages:
+      - $ref: "#/channels/chartPrices/messages/priceTickOut"
 components:
   serverVariables:
     domain:
@@ -221,6 +272,85 @@ components:
       default: "4001"
       description: Server port. Set via PORT env var.
   messages:
+    chartJoin:
+      name: phx_join
+      title: Join Chart Prices Channel
+      summary: Request to join the crypto price stream channel
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/joinPayload"
+      examples:
+        - name: chart-join
+          summary: Join chart prices channel
+          payload: {}
+    chartJoinReply:
+      name: phx_reply
+      title: Chart Join Reply
+      summary: Server confirms chart channel join with buffered history
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/chartJoinReplyPayload"
+      examples:
+        - name: chart-join-ok
+          summary: Successful join with history
+          payload:
+            status: ok
+            response:
+              history:
+                - e: 24hrMiniTicker
+                  E: 1740441600123
+                  s: BTCUSDT
+                  c: "96543.21"
+                  o: "96000.00"
+                  h: "97000.00"
+                  l: "95500.00"
+                  v: "12345.678"
+                  q: "1190123456.78"
+                - e: 24hrMiniTicker
+                  E: 1740441600456
+                  s: ETHUSDT
+                  c: "3421.56"
+                  o: "3400.00"
+                  h: "3480.00"
+                  l: "3390.00"
+                  v: "98765.432"
+                  q: "340123456.78"
+    priceTickOut:
+      name: price_tick
+      title: Price Tick
+      summary: Server-push crypto price update
+      description: |
+        Real-time price update from Binance WebSocket proxy.
+        Pushed on each miniTicker update (~1s per symbol).
+        Raw Binance 24hr miniTicker event forwarded as-is.
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/priceTick"
+      examples:
+        - name: price-tick-btc
+          summary: BTC miniTicker event
+          payload:
+            e: 24hrMiniTicker
+            E: 1740441600123
+            s: BTCUSDT
+            c: "96543.21"
+            o: "96000.00"
+            h: "97000.00"
+            l: "95500.00"
+            v: "12345.678"
+            q: "1190123456.78"
+        - name: price-tick-eth
+          summary: ETH miniTicker event
+          payload:
+            e: 24hrMiniTicker
+            E: 1740441600456
+            s: ETHUSDT
+            c: "3421.56"
+            o: "3400.00"
+            h: "3480.00"
+            l: "3390.00"
+            v: "98765.432"
+            q: "340123456.78"
     telemetryJoin:
       name: phx_join
       title: Join Telemetry Channel
@@ -476,6 +606,68 @@ components:
       type: object
       description: Phoenix protocol payload for channel lifecycle events
       additionalProperties: true
+    priceTick:
+      type: object
+      description: |
+        Binance 24hr miniTicker event forwarded as-is.
+        See https://developers.binance.com/docs/binance-spot-api-docs/web-socket-streams#individual-symbol-mini-ticker-stream
+      required:
+        - e
+        - E
+        - s
+        - c
+        - o
+        - h
+        - l
+        - v
+        - q
+      properties:
+        e:
+          type: string
+          description: Event type (always "24hrMiniTicker")
+        E:
+          type: integer
+          description: Event time in milliseconds since epoch
+        s:
+          type: string
+          description: Symbol (e.g. "BTCUSDT", "ETHUSDT")
+        c:
+          type: string
+          description: Close price (current price)
+        o:
+          type: string
+          description: Open price (24h)
+        h:
+          type: string
+          description: High price (24h)
+        l:
+          type: string
+          description: Low price (24h)
+        v:
+          type: string
+          description: Total traded base asset volume
+        q:
+          type: string
+          description: Total traded quote asset volume
+    chartJoinReplyPayload:
+      type: object
+      properties:
+        status:
+          const: ok
+        response:
+          type: object
+          properties:
+            history:
+              type: array
+              items:
+                $ref: "#/components/schemas/priceTick"
+              description:
+                Buffered price history (last 300 points, oldest first)
+          required:
+            - history
+      required:
+        - status
+        - response
     otlpMetricsPayload:
       type: object
       description: |
@@ -553,13 +745,15 @@ components:
       properties:
         timeUnixNano:
           type: string
-          description: Timestamp as nanoseconds since Unix epoch, encoded as string
+          description:
+            Timestamp as nanoseconds since Unix epoch, encoded as string
         asDouble:
           type: number
           description: Floating-point metric value
         asInt:
           type: string
-          description: Integer metric value, encoded as string per OTLP convention
+          description:
+            Integer metric value, encoded as string per OTLP convention
         attributes:
           type: array
           items:
@@ -575,7 +769,8 @@ components:
           type: string
         value:
           type: object
-          description: Typed value (stringValue, intValue, doubleValue, boolValue)
+          description:
+            Typed value (stringValue, intValue, doubleValue, boolValue)
           properties:
             stringValue:
               type: string
