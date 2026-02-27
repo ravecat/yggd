@@ -1,47 +1,37 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSocket } from "@rvct/shared/react";
 import type { PriceTick } from "@rvct/shared";
 import type { Channel } from "phoenix";
-import { TimeSeriesChart, type ChartData } from "~/components/ui/time-series-chart";
-
-const MAX_POINTS = 300;
+import {
+  TimeSeriesChart,
+  type ChartRef,
+} from "~/components/ui/time-series-chart";
 
 type ConnectionStatus = "connecting" | "connected" | "disconnected";
 
-type Buffers = Record<string, ChartData>;
-
-function appendToBuffer(prev: Buffers, tick: PriceTick): Buffers {
-  const symbol = tick.s;
-  const ts = Math.floor(tick.E / 1000);
-  const price = parseFloat(tick.c);
-  if (!symbol || isNaN(price)) return prev;
-
-  const buf = prev[symbol] ?? [[], []];
-  const nextTs = [...(buf[0] as number[]), ts];
-  const nextValues = [...(buf[1] as number[]), price];
-  if (nextTs.length > MAX_POINTS) {
-    nextTs.splice(0, 1);
-    nextValues.splice(0, 1);
-  }
-
-  return { ...prev, [symbol]: [nextTs, nextValues] };
-}
-
 export default function ChartPage() {
   const socket = useSocket();
-  const [buffers, setBuffers] = useState<Buffers>({});
-  const buffersRef = useRef<Buffers>({});
+  const [currencies, setCurrencies] = useState<string[]>([]);
+  const charts = useRef<Map<string, ChartRef>>(new Map());
   const [status, setStatus] = useState<ConnectionStatus>("connecting");
 
   useEffect(() => {
     const channel: Channel = socket.channel("chart:prices");
 
-    channel.on("price_tick", (tick: PriceTick) => {
-      const next = appendToBuffer(buffersRef.current, tick);
-      buffersRef.current = next;
-      setBuffers(next);
+    channel.on("price_tick", (payload: PriceTick) => {
+      const symbol = payload.s;
+      const ts = Math.floor(payload.E / 1000);
+      const price = parseFloat(payload.c);
+      if (!symbol || isNaN(price)) return;
+
+      setCurrencies((prev) => {
+        if (prev.includes(symbol)) return prev;
+        return [...prev, symbol];
+      });
+
+      charts.current.get(symbol)?.push([[ts], [price]]);
     });
 
     channel
@@ -61,8 +51,6 @@ export default function ChartPage() {
     };
   }, [socket]);
 
-  const symbols = useMemo(() => Object.keys(buffers), [buffers]);
-
   return (
     <div className="h-full overflow-auto">
       <div className="mx-auto flex h-full w-full max-w-6xl flex-col gap-4 px-4 py-4">
@@ -71,18 +59,22 @@ export default function ChartPage() {
             Connection lost. Attempting to reconnect...
           </div>
         )}
-        {symbols.map((symbol) => (
+        {currencies.map((symbol) => (
           <div key={symbol} className="flex-1 min-h-40">
             <TimeSeriesChart
+              ref={(chart) => {
+                if (chart) charts.current.set(symbol, chart);
+                else charts.current.delete(symbol);
+              }}
               options={{
                 title: symbol,
+                xWindowSize: 100,
                 series: [{}, { label: symbol }],
               }}
-              data={buffers[symbol]}
             />
           </div>
         ))}
-        {symbols.length === 0 && status === "connected" && (
+        {currencies.length === 0 && status === "connected" && (
           <div className="flex flex-1 items-center justify-center text-sm text-muted-foreground">
             Waiting for price data...
           </div>
