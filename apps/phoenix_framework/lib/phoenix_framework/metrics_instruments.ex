@@ -26,11 +26,12 @@ defmodule PhoenixFramework.MetricsInstruments do
   def init(_opts) do
     counter = :counters.new(1, [:atomics])
     :persistent_term.put(@ws_counter_key, counter)
-    register_gauges(counter)
+    register_runtime_gauges()
+    register_ws_gauge(counter)
     {:ok, %{}}
   end
 
-  defp register_gauges(ws_counter) do
+  defp register_runtime_gauges do
     ObservableGauge.create(
       :"system.cpu.load_average.1m",
       &cpu_load/1,
@@ -58,7 +59,9 @@ defmodule PhoenixFramework.MetricsInstruments do
       [],
       %{description: "BEAM total memory (bytes)", unit: :By}
     )
+  end
 
+  defp register_ws_gauge(ws_counter) do
     ObservableGauge.create(
       :"phoenix.channel.connection.count",
       fn _args -> [{:counters.get(ws_counter, 1), %{}}] end,

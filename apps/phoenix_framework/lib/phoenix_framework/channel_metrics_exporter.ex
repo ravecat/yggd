@@ -1,10 +1,10 @@
 defmodule PhoenixFramework.ChannelMetricsExporter do
   @moduledoc """
-  OTel metrics exporter that broadcasts OTLP JSON to Phoenix PubSub.
+  OTel metrics exporter that broadcasts per-metric OTLP JSON chunks to PubSub.
 
   Implements the `otel_exporter` behaviour (opentelemetry package).
   The OTel SDK periodic reader calls `export/4` on each collection cycle.
-  We convert SDK-internal Erlang records to an OTLP JSON envelope and
+  We convert SDK-internal Erlang records to OTLP-compatible metric maps and
   broadcast it to the "telemetry:metrics" PubSub topic.
 
   OTLP JSON spec: https://opentelemetry.io/docs/specs/otlp/#json-protobuf-encoding
@@ -47,36 +47,16 @@ defmodule PhoenixFramework.ChannelMetricsExporter do
   def init(_opts), do: {:ok, %{topic: "telemetry:metrics"}}
 
   def export(:metrics, metrics, _resource, %{topic: topic}) do
-    payload = build_otlp_payload(metrics)
-    Phoenix.PubSub.broadcast(PhoenixFramework.PubSub, topic, {:metrics, payload})
+    metrics
+    |> Enum.flat_map(&metric_to_otlp/1)
+    |> Enum.each(&Phoenix.PubSub.broadcast(PhoenixFramework.PubSub, topic, {:metric, &1}))
+
     :ok
   end
 
   def force_flush, do: :ok
 
   def shutdown(_config), do: :ok
-
-  # --- OTLP JSON construction ---
-
-  defp build_otlp_payload(metrics) do
-    %{
-      "resourceMetrics" => [
-        %{
-          "resource" => %{
-            "attributes" => [
-              %{"key" => "service.name", "value" => %{"stringValue" => "phoenix_framework"}}
-            ]
-          },
-          "scopeMetrics" => [
-            %{
-              "scope" => %{"name" => "phoenix_framework.channel_metrics_exporter"},
-              "metrics" => Enum.flat_map(metrics, &metric_to_otlp/1)
-            }
-          ]
-        }
-      ]
-    }
-  end
 
   defp metric_to_otlp(metric(name: name, unit: unit, data: data)) do
     case otlp_data(name, unit, data) do
@@ -118,7 +98,7 @@ defmodule PhoenixFramework.ChannelMetricsExporter do
   defp gauge_datapoint(datapoint(value: value, time: time, attributes: attrs)) do
     %{
       "asDouble" => value / 1,
-      "timeUnixNano" => Integer.to_string(time),
+      "timeUnixNano" => to_epoch_nano_string(time),
       "attributes" => attributes_to_otlp(attrs)
     }
   end
@@ -126,11 +106,19 @@ defmodule PhoenixFramework.ChannelMetricsExporter do
   defp quantile_datapoint(value, quantile, time) do
     %{
       "asDouble" => value / 1,
-      "timeUnixNano" => Integer.to_string(time),
+      "timeUnixNano" => to_epoch_nano_string(time),
       "attributes" => [
         %{"key" => "quantile", "value" => %{"stringValue" => quantile}}
       ]
     }
+  end
+
+  # OTel datapoint timestamps are monotonic native units and must be converted
+  # to POSIX nanoseconds for OTLP JSON `timeUnixNano`.
+  defp to_epoch_nano_string(time) do
+    time
+    |> :opentelemetry.timestamp_to_nano()
+    |> Integer.to_string()
   end
 
   # Compute approximate p50 and p95 from explicit histogram bucket counts.

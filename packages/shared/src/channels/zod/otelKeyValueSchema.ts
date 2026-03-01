@@ -5,7 +5,7 @@
 
 import { z } from "zod/v4";
 
-export const keyValueSchema = z.object({
+export const otelKeyValueSchema = z.object({
   key: z.string(),
   value: z.object({
     stringValue: z.string().optional(),

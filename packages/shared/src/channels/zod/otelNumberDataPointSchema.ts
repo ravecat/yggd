@@ -4,11 +4,11 @@
  */
 
 import { z } from "zod/v4";
-import { keyValueSchema } from "./keyValueSchema.js";
+import { otelKeyValueSchema } from "./otelKeyValueSchema.js";
 
-export const dataPointSchema = z.object({
+export const otelNumberDataPointSchema = z.object({
   timeUnixNano: z.string(),
   asDouble: z.number().optional(),
   asInt: z.string().optional(),
-  attributes: z.array(keyValueSchema).optional(),
+  attributes: z.array(otelKeyValueSchema).optional(),
 });

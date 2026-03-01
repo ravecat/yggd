@@ -4,11 +4,11 @@ defmodule PhoenixFrameworkWeb.TelemetryChannel do
   alias PhoenixFramework.MetricsInstruments
 
   @moduledoc """
-  Pushes OTLP JSON metric snapshots to connected clients every second.
+  Pushes per-metric OTLP JSON chunks to connected clients.
 
   On join, subscribes to the "telemetry:metrics" PubSub topic.
-  Each broadcast from ChannelMetricsExporter arrives as {:metrics, payload}
-  and is forwarded to the client as a "metrics" channel event.
+  Each broadcast from ChannelMetricsExporter arrives as {:metric, payload}
+  and is forwarded to the client as a "metric" channel event.
   """
 
   @impl true
@@ -19,8 +19,8 @@ defmodule PhoenixFrameworkWeb.TelemetryChannel do
   end
 
   @impl true
-  def handle_info({:metrics, payload}, socket) do
-    push(socket, "metrics", payload)
+  def handle_info({:metric, payload}, socket) do
+    push(socket, "metric", payload)
     {:noreply, socket}
   end
 

@@ -4,12 +4,12 @@
  */
 
 import { z } from "zod/v4";
-import { keyValueSchema } from "./keyValueSchema.js";
-import { metricSchema } from "./metricSchema.js";
+import { otelKeyValueSchema } from "./otelKeyValueSchema.js";
+import { otelMetricSchema } from "./otelMetricSchema.js";
 
-export const resourceMetricsSchema = z.object({
+export const otelResourceMetricsSchema = z.object({
   resource: z.object({
-    attributes: z.array(keyValueSchema).optional(),
+    attributes: z.array(otelKeyValueSchema).optional(),
   }),
   scopeMetrics: z.array(
     z.object({
@@ -19,7 +19,7 @@ export const resourceMetricsSchema = z.object({
           version: z.string().optional(),
         })
         .optional(),
-      metrics: z.array(metricSchema).optional(),
+      metrics: z.array(otelMetricSchema).optional(),
     }),
   ),
 });
