@@ -3,11 +3,11 @@
  * Do not edit manually.
  */
 
-import type { KeyValue } from "./KeyValue.js";
+import type { OtelKeyValue } from "./OtelKeyValue.js";
 
-export interface DataPoint {
+export interface OtelNumberDataPoint {
   timeUnixNano: string;
   asDouble?: number;
   asInt?: string;
-  attributes?: KeyValue[];
+  attributes?: OtelKeyValue[];
 }

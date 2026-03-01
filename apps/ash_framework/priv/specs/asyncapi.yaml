@@ -94,14 +94,15 @@ channels:
     title: Telemetry Metrics Stream
     description: >
       Server-push Phoenix Channel for real-time BEAM runtime and host system
-      metrics. Server pushes OTLP JSON payloads at a fixed interval (default
-      2s). No client-to-server data messages - pure server-push pattern.
+      metrics. Server pushes one OTLP metric chunk per event at a fixed interval
+      (default 2s). No client-to-server data messages - pure server-push
+      pattern.
 
       Metrics include host CPU/memory, BEAM process count/memory/run queue, HTTP
       request latency percentiles, and WebSocket connection count.
     messages:
-      metricsOut:
-        $ref: "#/components/messages/metricsOut"
+      metricOut:
+        $ref: "#/components/messages/metricOut"
       telemetryJoin:
         $ref: "#/components/messages/telemetryJoin"
       telemetryJoinReply:
@@ -213,7 +214,7 @@ operations:
     summary: Join the telemetry metrics channel
     description: |
       Client joins the telemetry metrics channel. No authentication required.
-      Server begins pushing OTLP JSON metrics payloads immediately after join reply.
+      Server begins pushing metric chunks immediately after join reply.
       No catch-up or historical data - stream starts from the moment of join.
     messages:
       - $ref: "#/channels/telemetryMetrics/messages/telemetryJoin"
@@ -226,16 +227,15 @@ operations:
     action: receive
     channel:
       $ref: "#/channels/telemetryMetrics"
-    summary: Receive OTLP metrics payload
+    summary: Receive telemetry metric chunk
     description: |
-      Server pushes an OTLP JSON metrics payload at a fixed interval (default 2s).
-      The payload follows the OpenTelemetry Metrics Data Model with
-      `resourceMetrics` -> `scopeMetrics` -> `metrics` envelope structure.
-      Each metric contains `name`, `unit`, and typed data points (gauge values).
+      Server pushes one OTLP metric chunk per event at a fixed interval
+      (default 2s). Each chunk contains a single metric with `name`, `unit`,
+      and typed data points (gauge values).
     tags:
       - $ref: "#/info/tags/1"
     messages:
-      - $ref: "#/channels/telemetryMetrics/messages/metricsOut"
+      - $ref: "#/channels/telemetryMetrics/messages/metricOut"
   joinChart:
     action: send
     channel:
@@ -375,13 +375,14 @@ components:
           payload:
             status: ok
             response: {}
-    metricsOut:
-      name: metrics
-      title: OTLP Metrics Payload
-      summary: Server-push OTLP JSON metrics
+    metricOut:
+      name: metric
+      title: Telemetry Metric Chunk
+      summary: Server-push single OTLP metric chunk
       description: |
-        Periodic server-push event containing BEAM runtime and host system
-        metrics formatted as OTLP JSON. Pushed every 2 seconds (configurable).
+        Periodic server-push event containing a single BEAM runtime or host
+        system metric formatted as OTLP JSON. Pushed every 2 seconds
+        (configurable).
 
         Metrics included:
         - system.cpu.load_average.1m (gauge)
@@ -394,39 +395,18 @@ components:
         - phoenix.channel.connection.count (gauge)
       contentType: application/json
       payload:
-        $ref: "#/components/schemas/otlpMetricsPayload"
+        $ref: "#/components/schemas/otelMetric"
       examples:
-        - name: metrics-push
-          summary: Single metrics push with CPU and process count
+        - name: metric-chunk-cpu
+          summary: Single metric chunk for CPU load average
           payload:
-            resourceMetrics:
-              - resource:
-                  attributes:
-                    - key: service.name
-                      value:
-                        stringValue: phoenix_framework
-                    - key: host.name
-                      value:
-                        stringValue: moda-host
-                scopeMetrics:
-                  - scope:
-                      name: moda.telemetry
-                      version: 1.0.0
-                    metrics:
-                      - name: system.cpu.load_average.1m
-                        unit: "1"
-                        gauge:
-                          dataPoints:
-                            - timeUnixNano: "1740441600000000000"
-                              asDouble: 0.42
-                              attributes: []
-                      - name: process.runtime.beam.process_count
-                        unit: "{process}"
-                        gauge:
-                          dataPoints:
-                            - timeUnixNano: "1740441600000000000"
-                              asInt: "847"
-                              attributes: []
+            name: system.cpu.load_average.1m
+            unit: "1"
+            gauge:
+              dataPoints:
+                - timeUnixNano: "1740441600000000000"
+                  asDouble: 0.42
+                  attributes: []
     phxJoin:
       name: phx_join
       title: Join Room
@@ -668,7 +648,7 @@ components:
       required:
         - status
         - response
-    otlpMetricsPayload:
+    otelExportMetricsServiceRequest:
       type: object
       description: |
         OTLP JSON metrics payload following the OpenTelemetry Metrics Data Model.
@@ -679,8 +659,8 @@ components:
         resourceMetrics:
           type: array
           items:
-            $ref: "#/components/schemas/resourceMetrics"
-    resourceMetrics:
+            $ref: "#/components/schemas/otelResourceMetrics"
+    otelResourceMetrics:
       type: object
       required:
         - resource
@@ -692,7 +672,7 @@ components:
             attributes:
               type: array
               items:
-                $ref: "#/components/schemas/keyValue"
+                $ref: "#/components/schemas/otelKeyValue"
         scopeMetrics:
           type: array
           items:
@@ -708,8 +688,8 @@ components:
               metrics:
                 type: array
                 items:
-                  $ref: "#/components/schemas/metric"
-    metric:
+                  $ref: "#/components/schemas/otelMetric"
+    otelMetric:
       type: object
       description: |
         A single metric in OTLP format. Contains name, unit, and one of
@@ -736,8 +716,8 @@ components:
             dataPoints:
               type: array
               items:
-                $ref: "#/components/schemas/dataPoint"
-    dataPoint:
+                $ref: "#/components/schemas/otelNumberDataPoint"
+    otelNumberDataPoint:
       type: object
       description: A single data point within a metric
       required:
@@ -757,8 +737,8 @@ components:
         attributes:
           type: array
           items:
-            $ref: "#/components/schemas/keyValue"
-    keyValue:
+            $ref: "#/components/schemas/otelKeyValue"
+    otelKeyValue:
       type: object
       description: OTel key-value attribute pair
       required:

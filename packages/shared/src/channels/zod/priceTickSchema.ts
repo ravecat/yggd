@@ -7,7 +7,7 @@ import { z } from "zod/v4";
 
 export const priceTickSchema = z.object({
   e: z.string(),
-  E: z.int(),
+  E: z.number(),
   s: z.string(),
   c: z.string(),
   o: z.string(),

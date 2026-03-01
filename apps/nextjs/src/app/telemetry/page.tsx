@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useSocket } from "@rvct/shared/react";
-import type { OtlpMetricsPayload } from "@rvct/shared";
+import type { OtelMetric, OtelNumberDataPoint } from "@rvct/shared";
 import type { Channel } from "phoenix";
 import {
   TimeSeriesChart,
@@ -11,6 +11,22 @@ import {
 
 interface MetricMeta {
   labels: string[];
+}
+
+function toUnixSeconds(
+  timeUnixNano: OtelNumberDataPoint["timeUnixNano"],
+): number | null {
+  const value = timeUnixNano.trim();
+  if (!value) return null;
+
+  let nanos: bigint;
+  try {
+    nanos = BigInt(value);
+  } catch {
+    return null;
+  }
+
+  return Number(nanos / 1_000_000_000n) + Number(nanos % 1_000_000_000n) / 1e9;
 }
 
 export default function TelemetryPage() {
@@ -22,42 +38,40 @@ export default function TelemetryPage() {
   useEffect(() => {
     const channel: Channel = socket.channel("telemetry:metrics");
 
-    channel.on("metrics", (payload: OtlpMetricsPayload) => {
-      const rawMetrics =
-        payload?.resourceMetrics?.[0]?.scopeMetrics?.[0]?.metrics ?? [];
-      let metaChanged = false;
-      const nextMeta = { ...knownMetrics.current };
+    channel.on("metric", (metric: OtelMetric) => {
+      const dataPoints = metric.gauge?.dataPoints ?? [];
+      if (!dataPoints.length) return;
 
-      for (const m of rawMetrics) {
-        const dps = m.gauge?.dataPoints ?? [];
-        if (!dps.length) continue;
+      const ts = toUnixSeconds(dataPoints[0].timeUnixNano);
+      if (ts == null || !Number.isFinite(ts)) return;
 
-        const ts = parseInt(dps[0].timeUnixNano) / 1e9;
-
-        const points: Record<string, number> = {};
-        for (const dp of dps) {
-          const key =
-            dp.attributes?.find((a) => a.key === "quantile")?.value
-              ?.stringValue ?? "value";
-          points[key] = dp.asDouble ?? Number(dp.asInt);
-        }
-
-        const existing = nextMeta[m.name];
-        const allLabels = [...(existing?.labels ?? [])];
-        for (const key of Object.keys(points)) {
-          if (!allLabels.includes(key)) {
-            allLabels.push(key);
-            metaChanged = true;
-          }
-        }
-
-        if (!existing) metaChanged = true;
-        nextMeta[m.name] = { labels: allLabels };
-
-        charts.current
-          .get(m.name)
-          ?.push([[ts], ...allLabels.map((label) => [points[label] ?? NaN])]);
+      const points: Record<string, number> = {};
+      for (const dataPoint of dataPoints) {
+        const label =
+          dataPoint.attributes?.find(
+            (attribute) => attribute.key === "quantile",
+          )?.value?.stringValue ?? "value";
+        points[label] = dataPoint.asDouble ?? Number(dataPoint.asInt);
       }
+
+      const existing = knownMetrics.current[metric.name];
+      const allLabels = [...(existing?.labels ?? [])];
+      let metaChanged = !existing;
+
+      for (const label of Object.keys(points)) {
+        if (!allLabels.includes(label)) {
+          allLabels.push(label);
+          metaChanged = true;
+        }
+      }
+
+      const nextMeta = {
+        ...knownMetrics.current,
+        [metric.name]: { labels: allLabels },
+      };
+      charts.current
+        .get(metric.name)
+        ?.push([[ts], ...allLabels.map((label) => [points[label] ?? NaN])]);
 
       if (metaChanged) {
         knownMetrics.current = nextMeta;

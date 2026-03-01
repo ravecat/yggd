@@ -4,12 +4,12 @@
  */
 
 import { z } from "zod/v4";
-import { dataPointSchema } from "./dataPointSchema.js";
+import { otelNumberDataPointSchema } from "./otelNumberDataPointSchema.js";
 
-export const metricSchema = z.object({
+export const otelMetricSchema = z.object({
   name: z.string(),
   unit: z.string().optional(),
   gauge: z.object({
-    dataPoints: z.array(dataPointSchema).optional(),
+    dataPoints: z.array(otelNumberDataPointSchema).optional(),
   }),
 });

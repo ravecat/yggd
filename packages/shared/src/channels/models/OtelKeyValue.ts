@@ -3,7 +3,7 @@
  * Do not edit manually.
  */
 
-export interface KeyValue {
+export interface OtelKeyValue {
   key: string;
   value: {
     stringValue?: string;
