@@ -1,0 +1,23 @@
+{
+  "name": "asyncapi-codegen",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/asyncapi-codegen/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm pack --dry-run",
+        "cwd": "packages/asyncapi-codegen"
+      }
+    },
+    "codegen": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node packages/asyncapi-codegen/src/cli.mjs",
+        "forwardAllArgs": true
+      }
+    }
+  },
+  "tags": []
+}

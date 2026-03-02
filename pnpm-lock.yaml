@@ -286,6 +286,21 @@ importers:
         specifier: ~5.9.2
         version: 5.9.3
 
+  packages/asyncapi-codegen:
+    dependencies:
+      '@asyncapi/parser':
+        specifier: ^3.6.0
+        version: 3.6.0(encoding@0.1.13)
+      json-schema-to-typescript:
+        specifier: ^15.0.4
+        version: 15.0.4
+      json-schema-to-zod:
+        specifier: ^2.7.0
+        version: 2.7.0
+      prettier:
+        specifier: ^3.6.2
+        version: 3.7.3
+
   packages/shared:
     dependencies:
       axios:
