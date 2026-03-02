@@ -63,14 +63,14 @@ config :phoenix, :json_library, Jason
 # Disable span exporter - we only use metrics, not tracing.
 config :opentelemetry, traces_exporter: :none
 
-# OTel metrics: periodic reader calls ChannelMetricsExporter every 2s
+# OTel metrics: periodic reader calls Metric.ChannelExporter every 2s
 config :opentelemetry_experimental,
   readers: [
     %{
       module: :otel_metric_reader,
       config: %{
         export_interval_ms: 500,
-        exporter: {PhoenixFramework.ChannelMetricsExporter, %{topic: "telemetry:metrics"}}
+        exporter: {PhoenixFramework.Metric.ChannelExporter, %{topic: "telemetry:metrics"}}
       }
     }
   ]

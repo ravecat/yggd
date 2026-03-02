@@ -94,15 +94,15 @@ channels:
     title: Telemetry Metrics Stream
     description: >
       Server-push Phoenix Channel for real-time BEAM runtime and host system
-      metrics. Server pushes one OTLP metric chunk per event at a fixed interval
-      (default 2s). No client-to-server data messages - pure server-push
-      pattern.
+      metrics. Server pushes one chart-ready metric point per event at a fixed
+      interval (default 2s). No client-to-server data messages - pure
+      server-push pattern.
 
       Metrics include host CPU/memory, BEAM process count/memory/run queue, HTTP
       request latency percentiles, and WebSocket connection count.
     messages:
-      metricOut:
-        $ref: "#/components/messages/metricOut"
+      metric:
+        $ref: "#/components/messages/metric"
       telemetryJoin:
         $ref: "#/components/messages/telemetryJoin"
       telemetryJoinReply:
@@ -229,13 +229,13 @@ operations:
       $ref: "#/channels/telemetryMetrics"
     summary: Receive telemetry metric chunk
     description: |
-      Server pushes one OTLP metric chunk per event at a fixed interval
-      (default 2s). Each chunk contains a single metric with `name`, `unit`,
-      and typed data points (gauge values).
+      Server pushes one chart-ready telemetry metric point per event at a fixed
+      interval (default 2s). Each payload includes metric identity, unit,
+      normalized Unix timestamp, and series values for rendering.
     tags:
       - $ref: "#/info/tags/1"
     messages:
-      - $ref: "#/channels/telemetryMetrics/messages/metricOut"
+      - $ref: "#/channels/telemetryMetrics/messages/metric"
   joinChart:
     action: send
     channel:
@@ -375,38 +375,44 @@ components:
           payload:
             status: ok
             response: {}
-    metricOut:
+    metric:
       name: metric
-      title: Telemetry Metric Chunk
-      summary: Server-push single OTLP metric chunk
+      title: Telemetry Metric UI Point
+      summary: Server-push single chart-ready telemetry metric point
       description: |
         Periodic server-push event containing a single BEAM runtime or host
-        system metric formatted as OTLP JSON. Pushed every 2 seconds
-        (configurable).
+        system metric formatted for frontend chart rendering. Pushed every
+        500ms (configurable).
 
         Metrics included:
-        - system.cpu.load_average.1m (gauge)
-        - system.memory.usage (gauge, total/free/used)
-        - process.runtime.beam.memory.total (gauge)
-        - process.runtime.beam.memory.processes (gauge)
-        - process.runtime.beam.memory.ets (gauge)
-        - process.runtime.beam.process_count (gauge)
-        - process.runtime.beam.run_queue (gauge)
-        - phoenix.channel.connection.count (gauge)
+        - system.cpu.load_average.1m
+        - system.memory.usage
+        - process.runtime.beam.memory.total
+        - process.runtime.beam.process_count
       contentType: application/json
       payload:
-        $ref: "#/components/schemas/otelMetric"
+        $ref: "#/components/schemas/telemetryMetricPoint"
       examples:
-        - name: metric-chunk-cpu
-          summary: Single metric chunk for CPU load average
+        - name: metric-ui-cpu
+          summary: Single metric point for CPU load average
           payload:
             name: system.cpu.load_average.1m
-            unit: "1"
-            gauge:
-              dataPoints:
-                - timeUnixNano: "1740441600000000000"
-                  asDouble: 0.42
-                  attributes: []
+            unit: ""
+            tsUnixSec: 1740441600.0
+            series:
+              - key: value
+                value: 0.42
+        - name: metric-ui-http-latency
+          summary: Latency percentiles projected as two chart series
+          payload:
+            name: http.server.duration
+            unit: ms
+            tsUnixSec: 1740441600.12
+            series:
+              - key: p50
+                value: 12.3
+              - key: p95
+                value: 45.8
     phxJoin:
       name: phx_join
       title: Join Room
@@ -689,6 +695,43 @@ components:
                 type: array
                 items:
                   $ref: "#/components/schemas/otelMetric"
+    telemetryMetricPoint:
+      type: object
+      description: |
+        Chart-ready telemetry payload used by frontend clients. This shape is
+        a UI projection and does not expose OTLP datapoint internals.
+      required:
+        - name
+        - unit
+        - tsUnixSec
+        - series
+      properties:
+        name:
+          type: string
+          description: Metric name used for chart routing and widget identity.
+        unit:
+          type: string
+          description: Unit string used for display formatting. Empty for dimensionless metrics.
+        tsUnixSec:
+          type: number
+          description: Unix timestamp in seconds as a JS-safe numeric value.
+        series:
+          type: array
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/telemetrySeriesPoint"
+    telemetrySeriesPoint:
+      type: object
+      required:
+        - key
+        - value
+      properties:
+        key:
+          type: string
+          description: Series key (for example value, p50, p95).
+        value:
+          type: number
+          description: Numeric value for the series at tsUnixSec.
     otelMetric:
       type: object
       description: |
