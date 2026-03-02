@@ -1,0 +1,20 @@
+/**
+ * Generated from AsyncAPI spec (asyncapi.yaml).
+ * Do not edit manually.
+ */
+
+import { z } from "zod/v4";
+
+export const otelKeyValue = z
+  .object({
+    key: z.string(),
+    value: z
+      .object({
+        stringValue: z.string().optional(),
+        intValue: z.string().optional(),
+        doubleValue: z.number().optional(),
+        boolValue: z.boolean().optional(),
+      })
+      .describe("Typed value (stringValue, intValue, doubleValue, boolValue)"),
+  })
+  .describe("OTel key-value attribute pair");
