@@ -11,6 +11,8 @@ export { priceTickSchema } from "./priceTickSchema.js";
 export { chartJoinReplyPayloadSchema } from "./chartJoinReplyPayloadSchema.js";
 export { otelExportMetricsServiceRequestSchema } from "./otelExportMetricsServiceRequestSchema.js";
 export { otelResourceMetricsSchema } from "./otelResourceMetricsSchema.js";
+export { telemetryMetricPointSchema } from "./telemetryMetricPointSchema.js";
+export { telemetrySeriesPointSchema } from "./telemetrySeriesPointSchema.js";
 export { otelMetricSchema } from "./otelMetricSchema.js";
 export { otelNumberDataPointSchema } from "./otelNumberDataPointSchema.js";
 export { otelKeyValueSchema } from "./otelKeyValueSchema.js";

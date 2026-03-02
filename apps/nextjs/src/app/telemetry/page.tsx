@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useSocket } from "@rvct/shared/react";
-import type { OtelMetric, OtelNumberDataPoint } from "@rvct/shared";
+import type { TelemetryMetricPoint } from "@rvct/shared";
 import type { Channel } from "phoenix";
 import {
   TimeSeriesChart,
@@ -11,22 +11,7 @@ import {
 
 interface MetricMeta {
   labels: string[];
-}
-
-function toUnixSeconds(
-  timeUnixNano: OtelNumberDataPoint["timeUnixNano"],
-): number | null {
-  const value = timeUnixNano.trim();
-  if (!value) return null;
-
-  let nanos: bigint;
-  try {
-    nanos = BigInt(value);
-  } catch {
-    return null;
-  }
-
-  return Number(nanos / 1_000_000_000n) + Number(nanos % 1_000_000_000n) / 1e9;
+  unit: string;
 }
 
 export default function TelemetryPage() {
@@ -38,24 +23,20 @@ export default function TelemetryPage() {
   useEffect(() => {
     const channel: Channel = socket.channel("telemetry:metrics");
 
-    channel.on("metric", (metric: OtelMetric) => {
-      const dataPoints = metric.gauge?.dataPoints ?? [];
-      if (!dataPoints.length) return;
-
-      const ts = toUnixSeconds(dataPoints[0].timeUnixNano);
-      if (ts == null || !Number.isFinite(ts)) return;
+    channel.on("metric", (metric: TelemetryMetricPoint) => {
+      const ts = metric.tsUnixSec;
+      if (!Number.isFinite(ts)) return;
 
       const points: Record<string, number> = {};
-      for (const dataPoint of dataPoints) {
-        const label =
-          dataPoint.attributes?.find(
-            (attribute) => attribute.key === "quantile",
-          )?.value?.stringValue ?? "value";
-        points[label] = dataPoint.asDouble ?? Number(dataPoint.asInt);
+      for (const seriesPoint of metric.series) {
+        if (!seriesPoint?.key) continue;
+        points[seriesPoint.key] = seriesPoint.value;
       }
+      if (Object.keys(points).length === 0) return;
 
       const existing = knownMetrics.current[metric.name];
       const allLabels = [...(existing?.labels ?? [])];
+      const unit = metric.unit?.trim() || "";
       let metaChanged = !existing;
 
       for (const label of Object.keys(points)) {
@@ -64,10 +45,11 @@ export default function TelemetryPage() {
           metaChanged = true;
         }
       }
+      if (existing?.unit !== unit) metaChanged = true;
 
       const nextMeta = {
         ...knownMetrics.current,
-        [metric.name]: { labels: allLabels },
+        [metric.name]: { labels: allLabels, unit },
       };
       charts.current
         .get(metric.name)
@@ -98,7 +80,7 @@ export default function TelemetryPage() {
                   else charts.current.delete(name);
                 }}
                 options={{
-                  title: name,
+                  title: `${name} ${meta.unit}`,
                   xWindowSize: 50,
                   series: [{}, ...meta.labels.map((label) => ({ label }))],
                   ...(meta.labels.length > 1 && { legend: { show: true } }),
