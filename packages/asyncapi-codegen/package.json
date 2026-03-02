@@ -1,0 +1,34 @@
+{
+  "name": "@rvct/asyncapi-codegen",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "AsyncAPI to TypeScript and Zod v4 code generator",
+  "main": "./src/index.mjs",
+  "module": "./src/index.mjs",
+  "exports": {
+    ".": "./src/index.mjs",
+    "./cli": "./src/cli.mjs"
+  },
+  "bin": {
+    "asyncapi-codegen": "./src/cli.mjs"
+  },
+  "files": [
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ravecat/moda"
+  },
+  "keywords": [
+    "asyncapi",
+    "codegen",
+    "typescript",
+    "zod"
+  ],
+  "dependencies": {
+    "@asyncapi/parser": "^3.6.0",
+    "json-schema-to-typescript": "^15.0.4",
+    "json-schema-to-zod": "^2.7.0",
+    "prettier": "^3.6.2"
+  }
+}
