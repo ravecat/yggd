@@ -35,10 +35,10 @@
       "inputs": ["production", "^production"],
       "outputs": ["{projectRoot}/dist"]
     },
-    "generate-channels": {
+    "codegen": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "node scripts/generate-asyncapi-types.mjs"
+        "command": "node scripts/asyncapi-codegen.mjs --input apps/ash_framework/priv/specs/asyncapi.yaml --out packages/shared/src/asyncapi"
       }
     }
   },
