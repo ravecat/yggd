@@ -150,7 +150,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pnpm exec nx run-many -t build -p ${{ join(fromJson(needs.metadata.outputs.affected_packages), ',') }} --parallel
-          pnpm exec nx release --projects=${{ join(fromJson(needs.metadata.outputs.affected_packages), ',') }} --skip-publish --yes
+          pnpm exec nx release --projects=${{ join(fromJson(needs.metadata.outputs.affected_packages), ',') }} --skip-publish
 
       - name: Release apps
         if: |-
@@ -161,7 +161,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run:
           pnpm exec nx release --projects=${{
-          needs.metadata.outputs.affected_apps }} --skip-publish --yes
+          needs.metadata.outputs.affected_apps }} --skip-publish
 
   publish-packages:
     name: Publish ${{ matrix.package }} to npm
