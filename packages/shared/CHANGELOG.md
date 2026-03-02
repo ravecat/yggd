@@ -1,3 +1,9 @@
+## 0.2.0 (2026-03-02)
+
+### 🚀 Features
+
+- **shared:** generate TypeScript types and Zod schemas from AsyncAPI spec ([018d430c](https://github.com/ravecat/moda/commit/018d430c))
+
 ## 0.1.3 (2025-12-02)
 
 ### 🩹 Fixes
