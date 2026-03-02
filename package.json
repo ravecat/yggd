@@ -8,6 +8,7 @@
     "apps/*"
   ],
   "devDependencies": {
+    "@asyncapi/parser": "^3.6.0",
     "@eslint/compat": "^1.1.1",
     "@eslint/eslintrc": "^2.1.1",
     "@eslint/js": "^9.8.0",
@@ -54,6 +55,8 @@
     "jest-environment-jsdom": "^30.0.2",
     "jest-environment-node": "^30.0.2",
     "jest-util": "^30.0.2",
+    "json-schema-to-typescript": "^15.0.4",
+    "json-schema-to-zod": "^2.7.0",
     "jsonc-eslint-parser": "^2.1.0",
     "nx": "22.1.0",
     "postcss": "^8.5.6",
