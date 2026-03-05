@@ -4,7 +4,7 @@ export default function CanvasPage() {
   return (
     <div className="flex h-full min-h-0 flex-col">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-4 py-4">
-        <p className="text-sm text-muted-foreground">
+        <p className="py-2 text-sm text-muted-foreground">
           Collaborative whiteboard with real-time shared state (CRDT, Phoenix
           Channels)
         </p>

@@ -2,17 +2,11 @@ import {
   getTodos,
   type GetTodosQueryParams,
   serializeQueryParams,
+  type Todo,
 } from "@rvct/shared";
 import Link from "next/link";
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon, PlusIcon } from "lucide-react";
 import { ScrollArea } from "~/shared/ui/scroll-area";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "~/shared/ui/card";
 import {
   Pagination,
   PaginationContent,
@@ -29,7 +23,13 @@ type TodosResponseWithMeta = Awaited<ReturnType<typeof getTodos>> & {
     page?: {
       total?: number;
     };
+    statuses?: unknown;
   };
+};
+
+type TodoStatusColumn = {
+  key: string;
+  todos: Todo[];
 };
 
 export async function TodosList({
@@ -87,11 +87,18 @@ export async function TodosList({
     return `/?${new URLSearchParams(queryParams).toString()}`;
   };
 
-  if (todos.length === 0) {
+  const statusColumns = getStatusColumns(todos, response.meta?.statuses);
+  const hasTasks = todos.length > 0;
+  const columnCount = Math.max(statusColumns.length, 1);
+  const columnsStyle = {
+    gridTemplateColumns: `repeat(${columnCount}, minmax(0, 1fr))`,
+  };
+
+  if (statusColumns.length === 0 && !hasTasks) {
     const { userId } = await assigns();
 
     return (
-      <div className="flex min-h-[320px] flex-1 items-center justify-center rounded-lg border border-dashed border-border bg-muted/20 px-6 text-center">
+      <div className="flex min-h-80 flex-1 items-center justify-center rounded-lg border border-dashed border-border bg-muted/20 px-6 text-center">
         <div className="space-y-2">
           <p className="text-lg font-medium text-foreground">No tasks yet</p>
           {userId ? (
@@ -111,44 +118,73 @@ export async function TodosList({
   }
 
   return (
-    <div className="flex-1 flex flex-col min-h-0 gap-2">
-      <ScrollArea className="flex-1 h-0">
-        <div className="flex flex-col gap-4">
-          {todos.map((todo) => (
-            <Link key={todo.id} href={`/todo/${todo.id}`}>
-              <Card className="cursor-pointer hover:shadow-md transition-shadow">
-                <CardHeader>
-                  <CardTitle className="text-xl">
-                    {todo.attributes?.title || "Untitled"}
-                  </CardTitle>
-                  <CardDescription>
+    <div className="flex min-h-0 flex-1 flex-col gap-3">
+      <div className="grid gap-4" style={columnsStyle}>
+        {statusColumns.map((column) => (
+          <header
+            key={column.key}
+            className="flex items-center justify-between border-b border-border py-2"
+          >
+            <span className="text-sm font-semibold leading-5 text-foreground">
+              {column.key}
+            </span>
+
+            <div className="flex items-center gap-0.5 text-muted-foreground">
+              <button
+                aria-label={`Add task in ${column.key}`}
+                className="inline-flex size-6 items-center justify-center rounded-sm transition hover:bg-accent hover:text-foreground"
+                type="button"
+              >
+                <PlusIcon className="size-3.5" />
+              </button>
+            </div>
+          </header>
+        ))}
+      </div>
+
+      <ScrollArea className="h-0 flex-1">
+        <div className="grid min-h-full gap-4" style={columnsStyle}>
+          {statusColumns.map((column) => (
+            <section
+              key={column.key}
+              className="flex h-full min-h-full flex-col"
+            >
+              <div className="flex flex-1 flex-col gap-2.5">
+                {column.todos.map((todo) => (
+                  <Link
+                    key={todo.id}
+                    href={`/todo/${todo.id}`}
+                    className="rounded-lg border border-border bg-card p-3 shadow-sm transition hover:border-primary/30 hover:shadow-md"
+                  >
+                    <div className="mb-2 flex items-start justify-between gap-2">
+                      <h3 className="line-clamp-2 text-sm font-semibold text-foreground">
+                        {todo.attributes?.title || "Untitled"}
+                      </h3>
+                      <span className="shrink-0 rounded-md border border-border bg-muted px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+                        {formatTodoPriority(todo.attributes?.priority)}
+                      </span>
+                    </div>
+
+                    {todo.attributes?.content && (
+                      <p className="mb-3 line-clamp-3 text-xs leading-relaxed text-muted-foreground">
+                        {todo.attributes.content}
+                      </p>
+                    )}
+
                     {todo.attributes?.created_at && (
-                      <>
-                        <span className="uppercase tracking-wide text-xs mr-2">
-                          {todo.attributes?.status || "todo"}
-                        </span>
-                        <span className="uppercase tracking-wide text-xs mr-2">
-                          {todo.attributes?.priority || "medium"}
-                        </span>
+                      <time className="block text-[11px] text-muted-foreground">
                         {new Date(
                           todo.attributes.created_at,
-                        ).toLocaleDateString()}
-                      </>
+                        ).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                        })}
+                      </time>
                     )}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="leading-normal text-sm text-gray-700">
-                    {todo.attributes?.content ? (
-                      <>
-                        {todo.attributes.content.substring(0, 200)}
-                        {todo.attributes.content.length > 200 ? "..." : ""}
-                      </>
-                    ) : null}
-                  </p>
-                </CardContent>
-              </Card>
-            </Link>
+                  </Link>
+                ))}
+              </div>
+            </section>
           ))}
         </div>
       </ScrollArea>
@@ -161,8 +197,8 @@ export async function TodosList({
               aria-label="Go to previous page"
               aria-disabled={!hasPrevPage}
               className={cn(
-                buttonVariants({ variant: "ghost", size: "default" }),
-                "gap-1 px-2.5 sm:pl-2.5",
+                buttonVariants({ variant: "ghost", size: "icon" }),
+                "size-9",
                 !hasPrevPage && "pointer-events-none opacity-50",
               )}
             >
@@ -181,6 +217,7 @@ export async function TodosList({
                     variant: pageNum === currentPage ? "outline" : "ghost",
                     size: "icon",
                   }),
+                  "size-9",
                 )}
               >
                 {pageNum}
@@ -194,8 +231,8 @@ export async function TodosList({
               aria-label="Go to next page"
               aria-disabled={!hasNextPage}
               className={cn(
-                buttonVariants({ variant: "ghost", size: "default" }),
-                "gap-1 px-2.5 sm:pr-2.5",
+                buttonVariants({ variant: "ghost", size: "icon" }),
+                "size-9",
                 !hasNextPage && "pointer-events-none opacity-50",
               )}
             >
@@ -206,6 +243,40 @@ export async function TodosList({
       </Pagination>
     </div>
   );
+}
+
+function getStatusColumns(
+  todos: Todo[],
+  metaStatuses: unknown,
+): TodoStatusColumn[] {
+  const statusesFromMeta = Array.isArray(metaStatuses)
+    ? metaStatuses.filter(
+        (status): status is string => typeof status === "string",
+      )
+    : [];
+  const todosByStatus = new Map<string, Todo[]>(
+    statusesFromMeta.map((status) => [status, []]),
+  );
+
+  for (const todo of todos) {
+    const status = todo.attributes?.status;
+    if (typeof status !== "string") {
+      continue;
+    }
+
+    const bucket = todosByStatus.get(status);
+    if (bucket) {
+      bucket.push(todo);
+      continue;
+    }
+
+    todosByStatus.set(status, [todo]);
+  }
+
+  return Array.from(todosByStatus.entries()).map(([key, bucket]) => ({
+    key,
+    todos: bucket,
+  }));
 }
 
 function getPositiveInteger(value: unknown): number | undefined {
@@ -257,4 +328,12 @@ function getPageObject(
   }
 
   return value as GetTodosQueryParams["page"];
+}
+
+function formatTodoPriority(priority: unknown): string {
+  if (typeof priority !== "string" || priority.trim().length === 0) {
+    return "MEDIUM";
+  }
+
+  return priority.replace(/[_\s]+/g, " ").toUpperCase();
 }

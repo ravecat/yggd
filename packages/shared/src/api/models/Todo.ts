@@ -14,9 +14,12 @@ export const attributesPriorityEnum = {
 export type AttributesPriorityEnum = (typeof attributesPriorityEnum)[keyof typeof attributesPriorityEnum];
 
 export const attributesStatusEnum = {
-    "todo": "todo",
+    "blocked": "blocked",
+    "backlog": "backlog",
     "in_progress": "in_progress",
-    "completed": "completed"
+    "review": "review",
+    "done": "done",
+    "rejected": "rejected"
 } as const;
 
 export type AttributesStatusEnum = (typeof attributesStatusEnum)[keyof typeof attributesStatusEnum];

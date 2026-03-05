@@ -15,10 +15,10 @@ export default async function Index({
   const query = deserializeQueryParams<GetTodosQueryParams>(params);
 
   return (
-    <div className="h-full overflow-auto">
-      <div className="mx-auto flex min-h-full w-full max-w-6xl flex-col gap-4 px-4 py-4">
-        <p className="text-sm text-muted-foreground">
-          Fixed board grouped by status for daily task tracking (JSON:API)
+    <div className="h-full overflow-hidden">
+      <div className="mx-auto flex h-full min-h-0 w-full max-w-6xl flex-col gap-2 px-4">
+        <p className="py-2 text-sm text-muted-foreground">
+          Dynamic board grouped by status for daily task tracking (JSON:API)
         </p>
         <Suspense fallback={<ControlPanelSkeleton />}>
           <ControlPanel query={query} />
