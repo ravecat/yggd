@@ -17,19 +17,19 @@
 
 ## Summary
 
-Moda is a learning project whose goal is to cover as many frontend frameworks as practical by building the same tabbed
-app in each. The app has four tabs - Tasks (TODO CRUD), Canvas (collaborative whiteboard), Telemetry (BEAM VM metrics dashboard),
-Chart (market data) - chosen to exercise distinct integration patterns: HTTP request-response (JSON:API),
-bidirectional CRDT sync (AsyncAPI), and server-push streaming (AsyncAPI + OTLP). The initial framework set like Next.js, SvelteKit, Nuxt, Qwik, and SolidStart, with no fixed
-upper limit on how many frameworks can be added over time, using a shared Ash/Phoenix backend and TypeScript API client
-in an Nx monorepo. The design keeps shared infrastructure framework-agnostic so each app implements its own integration
-patterns, maximizing per-framework learning.
+Moda is a multi-framework application that implements the same tabbed product surface in each frontend stack. The app
+has four tabs - Tasks (TODO CRUD + fixed board grouped by status), Canvas (collaborative whiteboard), Telemetry (BEAM VM
+metrics dashboard), Chart (market data) - chosen to cover distinct integration patterns: HTTP request-response
+(JSON:API), bidirectional CRDT sync (AsyncAPI), and server-push streaming (AsyncAPI + OTLP). The initial framework set
+includes Next.js, SvelteKit, Nuxt, Qwik, and SolidStart, with no fixed upper limit on how many frameworks can be added
+over time, using a shared Ash/Phoenix backend and TypeScript API client in an Nx monorepo. The design keeps shared
+infrastructure framework-agnostic so each app implements the same integration contracts with minimal coupling.
 
 ## Context and scope
 
-- Problem: Isolated toy apps miss the integration friction (auth, WebSocket, codegen, monorepo) that determines real
-  framework viability. See [project overview](README.md).
-- Goals: Functional parity across the current framework set, apples-to-apples comparison.
+- Problem: Isolated single-framework prototypes miss integration friction across auth, WebSocket, codegen, and monorepo
+  workflows. See [project overview](README.md).
+- Goals: Functional parity across the current framework set with shared backend and contract consistency.
 - Non-goals: Production quality, pixel-perfect UI consistency, backend optimization.
 - System context: Nx monorepo with two Elixir backends, one shared TS package, and a growing set of frontend apps.
 
@@ -191,16 +191,16 @@ sequenceDiagram
 
 #### Todo
 
-| Field      | Type     | Constraints                                                                       | Notes            |
-| ---------- | -------- | --------------------------------------------------------------------------------- | ---------------- |
-| id         | UUID     | required                                                                          | primary key      |
-| user_id    | UUID     | required, fk -> User.id                                                           | owner            |
-| title      | string   | required                                                                          | task title       |
-| content    | string   | required                                                                          | task body        |
-| status     | string   | required, enum(`todo`, `in_progress`, `in_review`, `completed`), default `todo`   | workflow status  |
-| priority   | string   | required, enum(`low`, `medium`, `high`, `urgent`), default `medium`               | urgency level    |
-| created_at | datetime | required                                                                          | creation time    |
-| updated_at | datetime | required                                                                          | last update time |
+| Field      | Type     | Constraints                                                                     | Notes            |
+| ---------- | -------- | ------------------------------------------------------------------------------- | ---------------- |
+| id         | UUID     | required                                                                        | primary key      |
+| user_id    | UUID     | required, fk -> User.id                                                         | owner            |
+| title      | string   | required                                                                        | task title       |
+| content    | string   | required                                                                        | task body        |
+| status     | string   | required, enum(`todo`, `in_progress`, `in_review`, `completed`), default `todo` | workflow status  |
+| priority   | string   | required, enum(`low`, `medium`, `high`, `urgent`), default `medium`             | urgency level    |
+| created_at | datetime | required                                                                        | creation time    |
+| updated_at | datetime | required                                                                        | last update time |
 
 ### Relationships
 
@@ -261,10 +261,10 @@ implementation artifacts (OpenAPI and contract tests).
 
 All async channels are described via [AsyncAPI](https://www.asyncapi.com/) specification.
 
-| Stream/topic         | Producer -> consumer                     | Purpose                             | Data format | Guarantees (planning-level)                        | Status   | Evidence              |
-| -------------------- | ---------------------------------------- | ----------------------------------- | ----------- | -------------------------------------------------- | -------- | --------------------- |
-| `y_doc_room:*`       | Frontend clients <-> `phoenix_framework` | Collaborative Yjs document sync     | Yjs binary  | Realtime propagation and eventual CRDT convergence | verified | channel impl + router |
-| `telemetry:metrics`  | `phoenix_framework` -> frontend clients  | BEAM VM metrics server-push stream  | OTLP JSON   | Best-effort push with client-tolerant rendering    | assumed  | requirements          |
+| Stream/topic        | Producer -> consumer                     | Purpose                            | Data format | Guarantees (planning-level)                        | Status   | Evidence              |
+| ------------------- | ---------------------------------------- | ---------------------------------- | ----------- | -------------------------------------------------- | -------- | --------------------- |
+| `y_doc_room:*`      | Frontend clients <-> `phoenix_framework` | Collaborative Yjs document sync    | Yjs binary  | Realtime propagation and eventual CRDT convergence | verified | channel impl + router |
+| `telemetry:metrics` | `phoenix_framework` -> frontend clients  | BEAM VM metrics server-push stream | OTLP JSON   | Best-effort push with client-tolerant rendering    | assumed  | requirements          |
 
 Detailed payload schemas, ordering, retry semantics, and event versioning are defined in `asyncapi.yaml` and contract
 tests.
@@ -308,8 +308,7 @@ See individual ADRs for per-decision alternatives. Key cross-cutting alternative
 **Alternative: Micro-frontend architecture (Module Federation)**
 
 - Would allow embedding framework components inside a shell app.
-- Rejected because: adds significant infrastructure complexity, obscures per-framework DX comparison, and is a separate
-  learning topic.
+- Rejected because: adds significant infrastructure complexity and obscures independent framework behavior.
 
 **Prior art:**
 
@@ -318,15 +317,15 @@ See individual ADRs for per-decision alternatives. Key cross-cutting alternative
 - [RealWorld](https://github.com/gothinkster/realworld) - Full-stack implementations across frameworks with standardized
   API, but each implementation is a separate repo.
 
-Moda combines the TodoMVC comparison approach with RealWorld's full-stack depth, adds real-time features (CRDT canvas,
-live chart), and puts everything in a single monorepo for build tooling comparison.
+Moda combines TodoMVC-style parity constraints with RealWorld-style full-stack scope, adds real-time features (CRDT
+canvas, live chart), and keeps implementation in a single monorepo.
 
 ## Cross-cutting concerns
 
 - Security: Auth tokens stored in HTTP-only cookies where possible. CSRF protection via SameSite cookies. No sensitive
   data in client state.
 - Real-time channels are public in MVP and do not require token validation on join.
-- Privacy: N/A - learning project, no real user data.
+- Privacy: no production user data is expected in current environments.
 - Observability: BEAM and host metrics exposed via OTLP JSON over Phoenix channels (Telemetry tab). Collection via
   Erlang `:telemetry` + `:os_mon`, formatted as OTLP JSON following OTel semantic conventions (no OTel SDK - format
   only, see ADR-010). Console logging for debugging.
@@ -340,20 +339,20 @@ live chart), and puts everything in a single monorepo for build tooling comparis
 - Integration: API client tests in `packages/shared` against mock server or recorded responses.
 - E2E: Optional Playwright tests that run the same scenario across the current framework app set to verify functional
   parity.
-- What cannot be tested automatically: subjective DX comparison, bundle size analysis, SSR behavior differences.
+- What cannot be tested automatically: subjective DX assessments, bundle size analysis, SSR behavior differences.
 
 ## Decision log and ADRs
 
-| Decision                                     | Rationale                                                        | ADR link                                      |
-| -------------------------------------------- | ---------------------------------------------------------------- | --------------------------------------------- |
-| Nx as monorepo tool                          | Broadest plugin ecosystem, polyglot support, computation caching | [ADR-001](adr/001-monorepo-tooling.md)        |
-| Ash as API backend                           | Plugin system enables rapid CRUD + auth prototyping              | [ADR-002](adr/002-ash-backend.md)             |
-| Phoenix for real-time                        | Familiar environment, existing Yjs infra, fallback backend       | [ADR-003](adr/003-phoenix-channels.md)        |
-| JSON:API via Ash + OpenAPI codegen           | Standards-based, type-safe, framework-agnostic client            | [ADR-004](adr/004-api-contract.md)            |
-| Shared CSS tokens + framework-native styling | Visual consistency without coupling implementations              | [ADR-005](adr/005-styling-approach.md)        |
-| Todo as canonical task resource               | Removes `Post` ambiguity and stabilizes TODO contract            | [ADR-006](adr/006-todo-canonical-resource.md) |
-| Zod runtime validation from OpenAPI          | Single source of truth for compile-time and runtime contracts    | [ADR-007](adr/007-zod-runtime-validation.md)  |
-| Simplified API filter surface                | YAGNI - remove unused filter complexity, reduce generated code   | [ADR-008](adr/008-simplified-filter-surface.md) |
+| Decision                                     | Rationale                                                        | ADR link                                         |
+| -------------------------------------------- | ---------------------------------------------------------------- | ------------------------------------------------ |
+| Nx as monorepo tool                          | Broadest plugin ecosystem, polyglot support, computation caching | [ADR-001](adr/001-monorepo-tooling.md)           |
+| Ash as API backend                           | Plugin system enables rapid CRUD + auth prototyping              | [ADR-002](adr/002-ash-backend.md)                |
+| Phoenix for real-time                        | Familiar environment, existing Yjs infra, fallback backend       | [ADR-003](adr/003-phoenix-channels.md)           |
+| JSON:API via Ash + OpenAPI codegen           | Standards-based, type-safe, framework-agnostic client            | [ADR-004](adr/004-api-contract.md)               |
+| Shared CSS tokens + framework-native styling | Visual consistency without coupling implementations              | [ADR-005](adr/005-styling-approach.md)           |
+| Todo as canonical task resource              | Removes `Post` ambiguity and stabilizes TODO contract            | [ADR-006](adr/006-todo-canonical-resource.md)    |
+| Zod runtime validation from OpenAPI          | Single source of truth for compile-time and runtime contracts    | [ADR-007](adr/007-zod-runtime-validation.md)     |
+| Simplified API filter surface                | YAGNI - remove unused filter complexity, reduce generated code   | [ADR-008](adr/008-simplified-filter-surface.md)  |
 | AsyncAPI for async channel contracts         | Standards-based machine-readable spec for WebSocket channels     | [ADR-009](adr/009-asyncapi-channel-contracts.md) |
-| OTLP JSON for telemetry data format          | CNCF standard, integrates with Erlang `:telemetry` natively      | [ADR-010](adr/010-otlp-telemetry-format.md)     |
+| OTLP JSON for telemetry data format          | CNCF standard, integrates with Erlang `:telemetry` natively      | [ADR-010](adr/010-otlp-telemetry-format.md)      |
 | uPlot for charting                           | Smallest bundle (~45KB), fastest real-time, vanilla JS API       | [ADR-011](adr/011-uplot-charting.md)             |

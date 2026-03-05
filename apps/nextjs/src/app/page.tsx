@@ -17,6 +17,9 @@ export default async function Index({
   return (
     <div className="h-full overflow-auto">
       <div className="mx-auto flex min-h-full w-full max-w-6xl flex-col gap-4 px-4 py-4">
+        <p className="text-sm text-muted-foreground">
+          Fixed board grouped by status for daily task tracking (JSON:API)
+        </p>
         <Suspense fallback={<ControlPanelSkeleton />}>
           <ControlPanel query={query} />
         </Suspense>

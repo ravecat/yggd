@@ -23,10 +23,10 @@ Each framework app is a tabbed interface with three independent features:
 
 ## Non-goals
 
-- Product quality - app quality is irrelevant, framework comparison is the point
+- Production-hardening and enterprise readiness
 - Pixel-perfect consistency - functional parity is sufficient
-- Backend optimization - backend is a means, not a learning target
-- Deep-diving into one framework - breadth over depth
+- Advanced backend optimization beyond current functional requirements
+- Framework-specific micro-optimizations that reduce cross-app parity
 
 ## Documentation
 

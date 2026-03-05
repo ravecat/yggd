@@ -9,14 +9,14 @@
 
 ## Context and problem statement
 
-The project needs an API backend for CRUD operations and authentication. The backend is not a learning target - client
-frameworks are - so the API layer should require minimal code while providing a type-safe, standards-compliant contract.
+The project needs an API backend for CRUD operations and authentication. The API layer should require minimal code while
+providing a type-safe, standards-compliant contract.
 
 ## Decision drivers
 
 - Rapid prototyping: plugin system should generate CRUD + auth with minimal handwritten code.
 - Standards compliance: API should follow a recognized spec for codegen and tooling.
-- Minimize backend work: frontend frameworks are the learning focus.
+- Minimize backend work: keep backend implementation effort proportional to current product scope.
 - Existing code: `apps/ash_framework` is already functional with basic resources.
 
 ## Considered options
@@ -27,7 +27,7 @@ frameworks are - so the API layer should require minimal code while providing a 
 - Good, because plugin system generates CRUD + auth from declarations.
 - Good, because JSON:API compliance enables standard tooling.
 - Good, because already implemented and functional.
-- Bad, because Ash DSL has its own learning curve.
+- Bad, because Ash DSL has onboarding cost for contributors unfamiliar with it.
 - Bad, because smaller community than vanilla Phoenix.
 
 ### Option B
@@ -59,7 +59,7 @@ a minimum while producing a standards-based contract suitable for OpenAPI codege
 
 ### Negative consequences
 
-- Ash has a learning curve of its own (DSL, resource patterns).
+- Ash has onboarding cost of its own (DSL, resource patterns).
 - Less community adoption than Phoenix controllers - harder to debug edge cases.
 - If Ash proves limiting, fallback to Phoenix controllers is possible (see ADR-003).
 

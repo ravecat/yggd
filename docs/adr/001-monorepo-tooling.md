@@ -69,7 +69,7 @@ parallel task execution.
 
 ### Negative consequences
 
-- Nx has its own learning curve and configuration surface.
+- Nx has onboarding cost and a larger configuration surface.
 - Some framework plugins (Qwik, SolidStart) are community-maintained or require manual `project.json`.
 - Nx version upgrades can require migration scripts.
 

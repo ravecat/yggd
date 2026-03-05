@@ -71,6 +71,10 @@ export default function TelemetryPage() {
   return (
     <div className="h-full overflow-auto">
       <div className="mx-auto flex h-full w-full max-w-6xl flex-col gap-4 px-4 py-4">
+        <p className="text-sm text-muted-foreground">
+          Live runtime metrics dashboard for BEAM and host signals
+          (OpenTelemetry OTLP, Erlang :telemetry, :os_mon, Phoenix Channels)
+        </p>
         <div className="grid flex-1 auto-rows-fr grid-cols-1 gap-4 min-h-0 sm:grid-cols-2">
           {Object.entries(metrics).map(([name, meta]) => (
             <div key={name} className="h-full">
