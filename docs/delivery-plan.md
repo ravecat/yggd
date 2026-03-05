@@ -18,14 +18,14 @@
 
 ## Release increments
 
-| Increment | Outcome                                   | Included slices or features                                                      | Dependencies            | Owner | Target date | Exit criteria                                                          |
-| --------- | ----------------------------------------- | -------------------------------------------------------------------------------- | ----------------------- | ----- | ----------- | ---------------------------------------------------------------------- |
-| R0        | Backend foundation ready                  | Canonical Todo contract, simplified filters, auth exchange, canvas, activity push | -                       | Max   | TBD         | OpenAPI exposes canonical `Todo`; filters simplified; build pass        |
-| R1        | Shared frontend foundation ready          | React-free API client, generated types + Zod schemas, design tokens              | R0 (contract stability) | Max   | TBD         | `packages/shared` builds, tests pass, Zod schemas generated            |
-| R2        | Reference implementation aligned          | Next.js app adopts Todo contract, verifies Tasks, Canvas, Activity               | R0, R1                  | Max   | TBD         | Next.js build passes and all 3 tabs + auth flow work                   |
-| R3        | Trail-blazer for non-React pattern        | SvelteKit app with all 3 tabs + auth                                             | R0, R1, R2 patterns     | Max   | TBD         | SvelteKit build passes and parity checks succeed                       |
-| R4        | Framework expansion complete              | Nuxt, Qwik, SolidStart parity implementation                                     | R0, R1, R3 recommended  | Max   | TBD         | Nuxt, Qwik, SolidStart builds pass and parity checks succeed           |
-| R5        | Comparison and release readiness complete | Cross-framework comparison report (DX, bundle size, SSR, realtime, code sharing) | R2, R3, R4              | Max   | TBD         | Comparison doc published and launch gate checks pass                   |
+| Increment | Outcome                            | Included slices or features                                                       | Dependencies            | Owner | Target date | Exit criteria                                                    |
+| --------- | ---------------------------------- | --------------------------------------------------------------------------------- | ----------------------- | ----- | ----------- | ---------------------------------------------------------------- |
+| R0        | Backend foundation ready           | Canonical Todo contract, simplified filters, auth exchange, canvas, activity push | -                       | Max   | TBD         | OpenAPI exposes canonical `Todo`; filters simplified; build pass |
+| R1        | Shared frontend foundation ready   | React-free API client, generated types + Zod schemas, design tokens               | R0 (contract stability) | Max   | TBD         | `packages/shared` builds, tests pass, Zod schemas generated      |
+| R2        | Reference implementation aligned   | Next.js app adopts Todo contract, verifies Tasks, Canvas, Activity                | R0, R1                  | Max   | TBD         | Next.js build passes and all 3 tabs + auth flow work             |
+| R3        | Trail-blazer for non-React pattern | SvelteKit app with all 3 tabs + auth                                              | R0, R1, R2 patterns     | Max   | TBD         | SvelteKit build passes and parity checks succeed                 |
+| R4        | Framework expansion complete       | Nuxt, Qwik, SolidStart parity implementation                                      | R0, R1, R3 recommended  | Max   | TBD         | Nuxt, Qwik, SolidStart builds pass and parity checks succeed     |
+| R5        | Release readiness complete         | Cross-app readiness report (DX, bundle size, SSR, realtime, code sharing)         | R2, R3, R4              | Max   | TBD         | Readiness report published and launch gate checks pass           |
 
 ## Sequencing and critical path
 
@@ -74,7 +74,7 @@
     and test checks pass.
 - Gate 2: Cross-framework parity readiness
   - Entry criteria: R2, R3, R4 implementations complete.
-  - Exit criteria: all 5 apps pass build, parity checks, auth checks, and comparison document is completed.
+  - Exit criteria: all 5 apps pass build, parity checks, auth checks, and readiness document is completed.
 
 ## Launch criteria and rollback
 
@@ -84,7 +84,7 @@
   - All 5 apps: Google OAuth + PKCE token exchange auth flow works.
   - All 5 apps: shared design tokens from `packages/shared` are applied.
 - Product:
-  - Comparison document is published with apples-to-apples framework evaluation.
+  - Readiness document is published with cross-app evaluation.
 - Rollback trigger:
   - Canonical Todo contract causes blocking regression in 2 or more frontend apps.
   - Realtime sync instability causes data loss or persistent desync in canvas flow.
