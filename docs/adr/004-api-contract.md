@@ -66,7 +66,7 @@ zero additional backend work.
 
 - JSON:API response envelope (`data`, `included`, `relationships`) is more verbose than plain REST.
 - Axios dependency may be unnecessary for frameworks with built-in fetch (Qwik, SolidStart). Acceptable tradeoff for
-  learning project.
+  current requirements.
 - No real-time data (WebSocket/channels handled separately by `phoenix_framework`).
 
 ## Links

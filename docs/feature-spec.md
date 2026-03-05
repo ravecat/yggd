@@ -81,27 +81,35 @@ Active tab is visually highlighted. Navigation does not cause full page reload w
 
 ## F1 - Tasks (`/`)
 
+**Page brief**
+
+- What: Fixed task board grouped by workflow status.
+- Why: Provide a clear operational surface for creating, prioritizing, and tracking work.
+- Built with: JSON:API over HTTP via `@rvct/shared`, board grouping by `status`.
+
 > **Protocol:** JSON:API - all HTTP operations follow the [JSON:API](https://jsonapi.org/) specification.
 
-User sees a list of tasks fetched from the server. Each task shows: title, status badge, priority, formatted creation
-date. Status is an enum: `todo`, `in_progress`, `in_review`, `completed`. Priority is an enum: `low`, `medium`, `high`,
-`urgent`. Empty state shown when no tasks exist. Unauthenticated users see a different empty state message. Loading
-state (skeleton or spinner) while fetching.
+User sees tasks fetched from the server in a fixed board grouped by status. Columns are predefined: `todo`,
+`in_progress`, `in_review`, `completed`. Each task card shows title, priority, and formatted creation date. Empty state
+shown when no tasks exist. Unauthenticated users see a different empty state message. Loading state (skeleton or
+spinner) while fetching.
 
 **Integration:** `getTodos(params)` from `@rvct/shared`
 
 **AC:**
 
-- [ ] Task list renders on page load
-- [ ] Each item shows title, status, and date
-- [ ] Empty state visible when list is empty
+- [ ] Task board renders on page load
+- [ ] Board renders one column per allowed status (`todo`, `in_progress`, `in_review`, `completed`)
+- [ ] Each card shows title, priority, and date
+- [ ] Empty state visible when board is empty
 - [ ] Loading state visible during fetch
+- [ ] Empty columns are visible with zero-state placeholder
 
 ---
 
 ### F1.1 - Sort by updated_at
 
-User can sort the task list by `updated_at` field, ascending or descending.
+User can sort tasks by `updated_at` field, ascending or descending.
 
 **Integration:** `getTodos({ sort: "-updated_at" })` - prefix `-` for descending
 
@@ -115,7 +123,7 @@ User can sort the task list by `updated_at` field, ascending or descending.
 
 ### F1.2 - Sort by status
 
-User can sort the task list by `status` field, ascending or descending.
+User can sort tasks by `status` field, ascending or descending.
 
 **Integration:** `getTodos({ sort: "status" })`
 
@@ -129,7 +137,7 @@ User can sort the task list by `status` field, ascending or descending.
 
 ### F1.3 - Sort by priority
 
-User can sort the task list by `priority` field, ascending or descending.
+User can sort tasks by `priority` field, ascending or descending.
 
 **Integration:** `getTodos({ sort: "priority" })`
 
@@ -145,7 +153,7 @@ User can sort the task list by `priority` field, ascending or descending.
 
 User can page through tasks when total exceeds page size.
 
-Previous/Next controls and page indicators visible below the list. Active page reflected in URL (`?page[offset]=N`).
+Previous/Next controls and page indicators visible below the board. Active page reflected in URL (`?page[offset]=N`).
 
 **Integration:** `getTodos({ page: { limit, offset } })` - response includes `links.prev`, `links.next`,
 `meta.page.total`
@@ -164,7 +172,7 @@ Previous/Next controls and page indicators visible below the list. Active page r
 Authenticated user can create a new task.
 
 Form with fields: `title` (required), `content` (optional), `priority` (optional, default: `medium`). On success task
-appears in list. On validation error, field-level errors shown.
+appears on board. On validation error, field-level errors shown.
 
 **Integration:** `postTodos(data)` from `@rvct/shared` - JSON:API envelope
 
@@ -172,12 +180,18 @@ appears in list. On validation error, field-level errors shown.
 
 - [ ] Create button hidden when not authenticated
 - [ ] Form opens on button click
-- [ ] Valid submission creates task and updates list
+- [ ] Valid submission creates task and updates board
 - [ ] Invalid submission shows field-level errors
 
 ---
 
 ## F2 - Canvas (`/canvas`)
+
+**Page brief**
+
+- What: Multi-user collaborative whiteboard with shared state.
+- Why: Support concurrent visual collaboration and quick ideation.
+- Built with: Excalidraw + Yjs CRDT + Phoenix Channels (`canvas:{document_id}`).
 
 > **Protocol:** AsyncAPI - real-time operations follow [AsyncAPI](https://www.asyncapi.com/) conventions over Phoenix
 > WebSocket channels.
@@ -203,6 +217,12 @@ real-time sync. Canvas state persists via IndexedDB and syncs on reconnect.
 ---
 
 ## F3 - Telemetry (`/telemetry`)
+
+**Page brief**
+
+- What: Live runtime telemetry dashboard for BEAM and host metrics.
+- Why: Monitor system behavior and detect regressions in near real time.
+- Built with: Erlang `:telemetry` + `:os_mon`, OTLP JSON payloads, Phoenix Channels, uPlot.
 
 > **Protocol:** AsyncAPI - real-time operations described via [AsyncAPI](https://www.asyncapi.com/) specification over
 > Phoenix WebSocket channels.
@@ -242,31 +262,39 @@ Metrics:
 
 ## F4 - Chart (`/chart`)
 
+**Page brief**
+
+- What: Real-time crypto price chart for BTC and ETH.
+- Why: Validate streaming UI updates and time-series rendering behavior.
+- Built with: Binance miniTicker stream proxied through Phoenix Channel (`chart:prices`) + uPlot.
+
 > **Protocol:** AsyncAPI - real-time operations over Phoenix WebSocket channels.
 
-Live crypto price chart. Backend proxies [CoinCap WebSocket](https://docs.coincap.io/) (`wss://ws.coincap.io/prices`)
-via a Phoenix channel. Frontend renders a dual-series time-series line chart (BTC + ETH) with uPlot using a sliding
-window buffer.
+Live crypto price chart. Backend proxies the
+[Binance miniTicker WebSocket stream](https://developers.binance.com/docs/binance-spot-api-docs/web-socket-streams#individual-symbol-mini-ticker-stream)
+via a Phoenix channel. Frontend renders real-time time-series charts for BTC and ETH with a sliding window buffer.
 
 **Integration:**
 
-- Phoenix channel `chart:prices` - server pushes `{ ts, btc, eth }` on each CoinCap tick (~1s)
-- Backend: GenServer connects to CoinCap WS, broadcasts to channel subscribers, keeps last 300 points for late joiners
-- Frontend: sliding window buffer (300 points), `chart.setData(buf)` on each push
-- Chart: uPlot dual-series, left Y-axis BTC ($), right Y-axis ETH ($), shared X-axis (time)
+- Phoenix channel `chart:prices` - server pushes raw `price_tick` payloads from Binance `24hrMiniTicker`
+- Backend: WebSocket client connects to
+  `wss://stream.binance.com:9443/stream?streams=btcusdt@miniTicker/ethusdt@miniTicker` and broadcasts events to channel
+  subscribers
+- Frontend: parses `E` (event time), `s` (symbol), and `c` (close price), then appends to a sliding window buffer
+- Chart: uPlot renders one real-time chart per symbol
 
 **AC:**
 
 - [ ] Chart renders with BTC and ETH series on page load
-- [ ] Prices update in real-time from CoinCap via Phoenix channel
-- [ ] Chart uses sliding window buffer (last ~5 min of data)
+- [ ] Prices update in real-time from Binance via Phoenix channel
+- [ ] Chart uses a sliding window buffer for recent points
 - [ ] Connection loss shows disconnected state; chart resumes on reconnect
 
 ---
 
 ## Status matrix
 
-`✅` done | `⬜` not bootstrapped | empty = not done
+`✅` done | `⬜` not done
 
 | Feature / AC                              | nextjs | sveltekit | nuxt | qwik | solidstart |
 | ----------------------------------------- | :----: | :-------: | :--: | :--: | :--------: |
@@ -275,19 +303,21 @@ window buffer.
 | OAuth flow completes                      |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
 | Navbar reflects auth state                |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
 | Sign-out clears session                   |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| Auth-gated controls hidden                |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Auth-gated controls hidden                |   ⬜   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
 | **F0.2 Framework switching**              |  1/3   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
 | Lists all framework apps                  |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| Current framework indicated               |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| Navigates to corresponding subdomain      |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Current framework indicated               |   ⬜   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Navigates to corresponding subdomain      |   ⬜   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
 | **F0.3 Navbar page switching**            |  2/2   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
 | Tab navigates to page                     |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
 | Active tab indicated                      |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| **F1 Task list**                          |  4/4   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| List renders on page load                 |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| Shows title, status, date                 |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| Empty state visible                       |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| Loading state visible                     |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| **F1 Tasks (fixed board by status)**      |  0/6   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Board renders on page load                |   ⬜   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Column per allowed status                 |   ⬜   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Card shows title, priority, and date      |   ⬜   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Empty state visible                       |   ⬜   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Loading state visible                     |   ⬜   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Empty columns show placeholder            |   ⬜   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
 | **F1.1 Sort by updated_at**               |  3/3   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
 | Sort available                            |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
 | Clicking toggles direction                |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
@@ -297,9 +327,9 @@ window buffer.
 | Clicking toggles direction                |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
 | Sort reflected in URL                     |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
 | **F1.3 Sort by priority**                 |  0/3   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| Sort available                            |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| Clicking toggles direction                |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| Sort reflected in URL                     |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Sort available                            |   ⬜   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Clicking toggles direction                |   ⬜   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Sort reflected in URL                     |   ⬜   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
 | **F1.4 Pagination**                       |  4/4   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
 | Controls render when total > page size    |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
 | Next/Previous load correct pages          |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
@@ -317,20 +347,20 @@ window buffer.
 | State survives reload                     |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
 | Offline drawing syncs on reconnect        |   ✅   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
 | **F3 Telemetry**                          |  0/9   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| Six metric widgets render                 |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| CPU load average + sparkline              |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| Memory usage + sparkline (GB)             |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| BEAM process count big number + sparkline |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| BEAM memory + sparkline (MB)              |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| HTTP latency p50/p95 chart                |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| WebSocket connections + sparkline         |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| Real-time updates without refresh         |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| Disconnected state; resume on reconnect   |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Six metric widgets render                 |   ⬜   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| CPU load average + sparkline              |   ⬜   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Memory usage + sparkline (GB)             |   ⬜   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| BEAM process count big number + sparkline |   ⬜   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| BEAM memory + sparkline (MB)              |   ⬜   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| HTTP latency p50/p95 chart                |   ⬜   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| WebSocket connections + sparkline         |   ⬜   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Real-time updates without refresh         |   ⬜   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Disconnected state; resume on reconnect   |   ⬜   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
 | **F4 Chart**                              |  0/4   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| BTC + ETH chart renders                   |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| Prices update real-time via channel       |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| Sliding window buffer (~5 min)            |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
-| Disconnected state; resume on reconnect   |        |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| BTC + ETH chart renders                   |   ⬜   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Prices update real-time via channel       |   ⬜   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Sliding window buffer (~5 min)            |   ⬜   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
+| Disconnected state; resume on reconnect   |   ⬜   |    ⬜     |  ⬜  |  ⬜  |     ⬜     |
 
 ---
 
