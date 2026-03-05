@@ -47,7 +47,7 @@ export const patchTodosIdMutationRequestSchema = z.object({
     "attributes": z.object({
     "content": z.union([z.string(), z.null()]).optional(),
 "priority": z.union([z.enum(["low", "medium", "high", "urgent"]), z.null()]).optional(),
-"status": z.union([z.enum(["todo", "in_progress", "completed"]), z.null()]).optional(),
+"status": z.union([z.enum(["blocked", "backlog", "in_progress", "review", "done", "rejected"]), z.null()]).optional(),
 "title": z.union([z.string(), z.null()]).optional()
     }).optional(),
 "id": z.string(),

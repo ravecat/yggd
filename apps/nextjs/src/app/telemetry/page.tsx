@@ -71,7 +71,7 @@ export default function TelemetryPage() {
   return (
     <div className="h-full overflow-auto">
       <div className="mx-auto flex h-full w-full max-w-6xl flex-col gap-4 px-4 py-4">
-        <p className="text-sm text-muted-foreground">
+        <p className="py-2 text-sm text-muted-foreground">
           Live runtime metrics dashboard for BEAM and host signals
           (OpenTelemetry OTLP, Erlang :telemetry, :os_mon, Phoenix Channels)
         </p>
