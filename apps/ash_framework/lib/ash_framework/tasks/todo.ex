@@ -14,7 +14,16 @@ defmodule AshFramework.Tasks.Todo do
     routes do
       base "/todos"
       get :read
-      index :read
+
+      index :read,
+        metadata: fn _subject, _result, _request ->
+          %{
+            statuses:
+              AshFramework.Tasks.TodoStatus.values()
+              |> Enum.map(&to_string/1)
+          }
+        end
+
       post :create
       patch :update
       delete :destroy
@@ -34,6 +43,8 @@ defmodule AshFramework.Tasks.Todo do
     defaults [:destroy]
 
     read :read do
+      primary? true
+
       pagination offset?: true,
                  keyset?: true,
                  required?: true,
@@ -85,7 +96,7 @@ defmodule AshFramework.Tasks.Todo do
 
     attribute :status, AshFramework.Tasks.TodoStatus do
       allow_nil? false
-      default :todo
+      default :backlog
       public? true
     end
 

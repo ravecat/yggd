@@ -20,14 +20,14 @@ defmodule AshFramework.Tasks.TodoTest do
         |> Ash.Changeset.for_create(:create, %{
           title: "Test Todo",
           content: "This is a test todo content",
-          status: "todo",
+          status: "backlog",
           user_id: user.id
         })
         |> Ash.create!()
 
       assert todo.title == "Test Todo"
       assert todo.content == "This is a test todo content"
-      assert todo.status == :todo
+      assert todo.status == :backlog
       assert todo.user_id == user.id
       assert todo.created_at
       assert todo.updated_at
@@ -59,7 +59,7 @@ defmodule AshFramework.Tasks.TodoTest do
       end
     end
 
-    test "defaults todo status to todo" do
+    test "defaults todo status to backlog" do
       user = create_test_user("test@example.com")
 
       todo =
@@ -71,7 +71,7 @@ defmodule AshFramework.Tasks.TodoTest do
         })
         |> Ash.create!()
 
-      assert todo.status == :todo
+      assert todo.status == :backlog
     end
 
     test "fails to create todo with invalid status" do
@@ -110,7 +110,7 @@ defmodule AshFramework.Tasks.TodoTest do
         |> Ash.Changeset.for_create(:create, %{
           title: "Todo 1",
           content: "Content 1",
-          status: "todo",
+          status: "backlog",
           user_id: user.id
         })
         |> Ash.create!()
@@ -125,7 +125,8 @@ defmodule AshFramework.Tasks.TodoTest do
         })
         |> Ash.create!()
 
-      todos = Todo |> Ash.read!()
+      page = Todo |> Ash.read!()
+      todos = page.results
 
       assert length(todos) == 2
       assert Enum.any?(todos, &(&1.id == todo1.id))
@@ -140,7 +141,7 @@ defmodule AshFramework.Tasks.TodoTest do
         |> Ash.Changeset.for_create(:create, %{
           title: "Todo with user",
           content: "Content",
-          status: "todo",
+          status: "backlog",
           user_id: user.id
         })
         |> Ash.create!()
@@ -161,7 +162,7 @@ defmodule AshFramework.Tasks.TodoTest do
         |> Ash.Changeset.for_create(:create, %{
           title: "Original Title",
           content: "Original Content",
-          status: "todo",
+          status: "backlog",
           user_id: user.id
         })
         |> Ash.create!()
@@ -171,13 +172,13 @@ defmodule AshFramework.Tasks.TodoTest do
         |> Ash.Changeset.for_update(:update, %{
           title: "Updated Title",
           content: "Updated Content",
-          status: "completed"
+          status: "done"
         })
         |> Ash.update!()
 
       assert updated_todo.title == "Updated Title"
       assert updated_todo.content == "Updated Content"
-      assert updated_todo.status == :completed
+      assert updated_todo.status == :done
       assert updated_todo.user_id == user.id
     end
   end

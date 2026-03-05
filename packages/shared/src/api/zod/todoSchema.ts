@@ -13,7 +13,7 @@ export const todoSchema = z.object({
     "content": z.string().describe("Field included by default."),
 "created_at": z.any(),
 "priority": z.enum(["low", "medium", "high", "urgent"]).describe("Field included by default."),
-"status": z.enum(["todo", "in_progress", "completed"]).describe("Field included by default."),
+"status": z.enum(["blocked", "backlog", "in_progress", "review", "done", "rejected"]).describe("Field included by default."),
 "title": z.string().describe("Field included by default."),
 "updated_at": z.any(),
 "user_id": z.uuid().describe("Field included by default.")

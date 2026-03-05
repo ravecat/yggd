@@ -100,9 +100,12 @@
               "status": {
                 "description": "Field included by default.",
                 "enum": [
-                  "todo",
+                  "blocked",
+                  "backlog",
                   "in_progress",
-                  "completed"
+                  "review",
+                  "done",
+                  "rejected"
                 ],
                 "type": "string"
               },
@@ -476,9 +479,12 @@
                             "anyOf": [
                               {
                                 "enum": [
-                                  "todo",
+                                  "blocked",
+                                  "backlog",
                                   "in_progress",
-                                  "completed"
+                                  "review",
+                                  "done",
+                                  "rejected"
                                 ],
                                 "type": "string"
                               },
@@ -804,9 +810,12 @@
                             "anyOf": [
                               {
                                 "enum": [
-                                  "todo",
+                                  "blocked",
+                                  "backlog",
                                   "in_progress",
-                                  "completed"
+                                  "review",
+                                  "done",
+                                  "rejected"
                                 ],
                                 "type": "string"
                               },

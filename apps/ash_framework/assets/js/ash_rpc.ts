@@ -36,7 +36,7 @@ export type TodoResourceSchema = {
   id: UUID;
   title: string;
   content: string;
-  status: "todo" | "in_progress" | "completed";
+  status: "blocked" | "backlog" | "in_progress" | "review" | "done" | "rejected";
   priority: "low" | "medium" | "high" | "urgent";
   createdAt: UtcDateTimeUsec;
   updatedAt: UtcDateTimeUsec;
@@ -52,7 +52,7 @@ export type TodoAttributesOnlySchema = {
   id: UUID;
   title: string;
   content: string;
-  status: "todo" | "in_progress" | "completed";
+  status: "blocked" | "backlog" | "in_progress" | "review" | "done" | "rejected";
   priority: "low" | "medium" | "high" | "urgent";
   createdAt: UtcDateTimeUsec;
   updatedAt: UtcDateTimeUsec;
@@ -113,9 +113,9 @@ export type TodoFilterInput = {
   };
 
   status?: {
-    eq?: "todo" | "in_progress" | "completed";
-    notEq?: "todo" | "in_progress" | "completed";
-    in?: Array<"todo" | "in_progress" | "completed">;
+    eq?: "blocked" | "backlog" | "in_progress" | "review" | "done" | "rejected";
+    notEq?: "blocked" | "backlog" | "in_progress" | "review" | "done" | "rejected";
+    in?: Array<"blocked" | "backlog" | "in_progress" | "review" | "done" | "rejected">;
   };
 
   priority?: {
@@ -1049,7 +1049,7 @@ export async function validateListTodos(
 export type CreateTodoInput = {
   title: string;
   content: string;
-  status?: "todo" | "in_progress" | "completed";
+  status?: "blocked" | "backlog" | "in_progress" | "review" | "done" | "rejected";
   priority?: "low" | "medium" | "high" | "urgent";
   userId: UUID;
 };
@@ -1125,7 +1125,7 @@ export async function validateCreateTodo(
 export type UpdateTodoInput = {
   title?: string;
   content?: string;
-  status?: "todo" | "in_progress" | "completed";
+  status?: "blocked" | "backlog" | "in_progress" | "review" | "done" | "rejected";
   priority?: "low" | "medium" | "high" | "urgent";
 };
 

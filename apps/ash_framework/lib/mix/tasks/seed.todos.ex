@@ -18,14 +18,13 @@ defmodule Mix.Tasks.Seed.Todos do
 
   alias AshFramework.Accounts.User
   alias AshFramework.Tasks.Todo
+  alias AshFramework.Tasks.TodoStatus
 
   @shortdoc "Seeds 100 todos with fake data"
   @requirements ["app.start"]
 
   @todos_count 100
   @default_users_count 3
-  @statuses ["todo", "in_progress", "completed"]
-
   def run(_args) do
     Mix.Task.run("app.config")
 
@@ -74,7 +73,7 @@ defmodule Mix.Tasks.Seed.Todos do
         %{
           title: Faker.Lorem.sentence(3..8),
           content: generate_content(),
-          status: Enum.random(@statuses),
+          status: Enum.random(TodoStatus.values()),
           user_id: user.id
         }
         |> tap(fn _ ->
