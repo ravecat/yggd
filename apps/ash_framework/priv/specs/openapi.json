@@ -18,15 +18,21 @@
         "properties": {
           "code": {
             "description": "An application-specific error code, expressed as a string value.",
-            "type": "string"
+            "type": "string",
+            "x-struct": null,
+            "x-validate": null
           },
           "detail": {
             "description": "A human-readable explanation specific to this occurrence of the problem.",
-            "type": "string"
+            "type": "string",
+            "x-struct": null,
+            "x-validate": null
           },
           "id": {
             "description": "A unique identifier for this particular occurrence of the problem.",
-            "type": "string"
+            "type": "string",
+            "x-struct": null,
+            "x-validate": null
           },
           "links": {
             "$ref": "#/components/schemas/links"
@@ -35,42 +41,60 @@
             "properties": {
               "parameter": {
                 "description": "A string indicating which query parameter caused the error.",
-                "type": "string"
+                "type": "string",
+                "x-struct": null,
+                "x-validate": null
               },
               "pointer": {
                 "description": "A JSON Pointer [RFC6901] to the associated entity in the request document [e.g. \"/data\" for a primary data object, or \"/data/attributes/title\" for a specific attribute].",
-                "type": "string"
+                "type": "string",
+                "x-struct": null,
+                "x-validate": null
               }
             },
-            "type": "object"
+            "type": "object",
+            "x-struct": null,
+            "x-validate": null
           },
           "status": {
             "description": "The HTTP status code applicable to this problem, expressed as a string value.",
-            "type": "string"
+            "type": "string",
+            "x-struct": null,
+            "x-validate": null
           },
           "title": {
             "description": "A short, human-readable summary of the problem. It SHOULD NOT change from occurrence to occurrence of the problem, except for purposes of localization.",
-            "type": "string"
+            "type": "string",
+            "x-struct": null,
+            "x-validate": null
           }
         },
-        "type": "object"
+        "type": "object",
+        "x-struct": null,
+        "x-validate": null
       },
       "errors": {
         "items": {
           "$ref": "#/components/schemas/error"
         },
         "type": "array",
-        "uniqueItems": true
+        "uniqueItems": true,
+        "x-struct": null,
+        "x-validate": null
       },
       "link": {
         "description": "A link MUST be represented as either: a string containing the link's URL or a link object.",
-        "type": "string"
+        "type": "string",
+        "x-struct": null,
+        "x-validate": null
       },
       "links": {
         "additionalProperties": {
           "$ref": "#/components/schemas/link"
         },
-        "type": "object"
+        "type": "object",
+        "x-struct": null,
+        "x-validate": null
       },
       "todo": {
         "additionalProperties": false,
@@ -82,10 +106,14 @@
             "properties": {
               "content": {
                 "description": "Field included by default.",
-                "type": "string"
+                "type": "string",
+                "x-struct": null,
+                "x-validate": null
               },
               "created_at": {
-                "description": "Field included by default."
+                "description": "Field included by default.",
+                "x-struct": null,
+                "x-validate": null
               },
               "priority": {
                 "description": "Field included by default.",
@@ -95,7 +123,9 @@
                   "high",
                   "urgent"
                 ],
-                "type": "string"
+                "type": "string",
+                "x-struct": null,
+                "x-validate": null
               },
               "status": {
                 "description": "Field included by default.",
@@ -107,19 +137,27 @@
                   "done",
                   "rejected"
                 ],
-                "type": "string"
+                "type": "string",
+                "x-struct": null,
+                "x-validate": null
               },
               "title": {
                 "description": "Field included by default.",
-                "type": "string"
+                "type": "string",
+                "x-struct": null,
+                "x-validate": null
               },
               "updated_at": {
-                "description": "Field included by default."
+                "description": "Field included by default.",
+                "x-struct": null,
+                "x-validate": null
               },
               "user_id": {
                 "description": "Field included by default.",
                 "format": "uuid",
-                "type": "string"
+                "type": "string",
+                "x-struct": null,
+                "x-validate": null
               }
             },
             "required": [
@@ -131,7 +169,9 @@
               "updated_at",
               "user_id"
             ],
-            "type": "object"
+            "type": "object",
+            "x-struct": null,
+            "x-validate": null
           },
           "id": {
             "type": "string"
@@ -148,36 +188,52 @@
                     "nullable": true,
                     "properties": {
                       "id": {
-                        "type": "string"
+                        "type": "string",
+                        "x-struct": null,
+                        "x-validate": null
                       },
                       "meta": {
                         "additionalProperties": true,
-                        "type": "object"
+                        "type": "object",
+                        "x-struct": null,
+                        "x-validate": null
                       },
                       "type": {
-                        "type": "string"
+                        "type": "string",
+                        "x-struct": null,
+                        "x-validate": null
                       }
                     },
                     "required": [
                       "type",
                       "id"
                     ],
-                    "type": "object"
+                    "type": "object",
+                    "x-struct": null,
+                    "x-validate": null
                   }
-                }
+                },
+                "x-struct": null,
+                "x-validate": null
               }
             },
-            "type": "object"
+            "type": "object",
+            "x-struct": null,
+            "x-validate": null
           },
           "type": {
-            "type": "string"
+            "type": "string",
+            "x-struct": null,
+            "x-validate": null
           }
         },
         "required": [
           "type",
           "id"
         ],
-        "type": "object"
+        "type": "object",
+        "x-struct": null,
+        "x-validate": null
       },
       "user": {
         "additionalProperties": false,
@@ -189,13 +245,17 @@
             "properties": {
               "email": {
                 "description": "Field included by default.",
-                "type": "string"
+                "type": "string",
+                "x-struct": null,
+                "x-validate": null
               },
               "name": {
                 "anyOf": [
                   {
                     "nullable": true,
-                    "type": "string"
+                    "type": "string",
+                    "x-struct": null,
+                    "x-validate": null
                   },
                   {
                     "type": "null"
@@ -207,7 +267,9 @@
             "required": [
               "email"
             ],
-            "type": "object"
+            "type": "object",
+            "x-struct": null,
+            "x-validate": null
           },
           "id": {
             "type": "string"
@@ -225,14 +287,20 @@
                       "description": "Resource identifiers for todos",
                       "properties": {
                         "id": {
-                          "type": "string"
+                          "type": "string",
+                          "x-struct": null,
+                          "x-validate": null
                         },
                         "meta": {
                           "additionalProperties": true,
-                          "type": "object"
+                          "type": "object",
+                          "x-struct": null,
+                          "x-validate": null
                         },
                         "type": {
-                          "type": "string"
+                          "type": "string",
+                          "x-struct": null,
+                          "x-validate": null
                         }
                       },
                       "required": [
@@ -242,22 +310,32 @@
                       "type": "object"
                     },
                     "type": "array",
-                    "uniqueItems": true
+                    "uniqueItems": true,
+                    "x-struct": null,
+                    "x-validate": null
                   }
-                }
+                },
+                "x-struct": null,
+                "x-validate": null
               }
             },
-            "type": "object"
+            "type": "object",
+            "x-struct": null,
+            "x-validate": null
           },
           "type": {
-            "type": "string"
+            "type": "string",
+            "x-struct": null,
+            "x-validate": null
           }
         },
         "required": [
           "type",
           "id"
         ],
-        "type": "object"
+        "type": "object",
+        "x-struct": null,
+        "x-validate": null
       }
     },
     "securitySchemes": {
@@ -289,7 +367,9 @@
             "required": false,
             "schema": {
               "pattern": "^(id|-id|\\+\\+id|--id|title|-title|\\+\\+title|--title|content|-content|\\+\\+content|--content|status|-status|\\+\\+status|--status|priority|-priority|\\+\\+priority|--priority|created_at|-created_at|\\+\\+created_at|--created_at|updated_at|-updated_at|\\+\\+updated_at|--updated_at|user_id|-user_id|\\+\\+user_id|--user_id)(,(id|-id|\\+\\+id|--id|title|-title|\\+\\+title|--title|content|-content|\\+\\+content|--content|status|-status|\\+\\+status|--status|priority|-priority|\\+\\+priority|--priority|created_at|-created_at|\\+\\+created_at|--created_at|updated_at|-updated_at|\\+\\+updated_at|--updated_at|user_id|-user_id|\\+\\+user_id|--user_id))*$",
-              "type": "string"
+              "type": "string",
+              "x-struct": null,
+              "x-validate": null
             },
             "style": "form"
           },
@@ -304,25 +384,37 @@
               },
               "properties": {
                 "after": {
-                  "type": "string"
+                  "type": "string",
+                  "x-struct": null,
+                  "x-validate": null
                 },
                 "before": {
-                  "type": "string"
+                  "type": "string",
+                  "x-struct": null,
+                  "x-validate": null
                 },
                 "count": {
                   "default": false,
-                  "type": "boolean"
+                  "type": "boolean",
+                  "x-struct": null,
+                  "x-validate": null
                 },
                 "limit": {
                   "minimum": 1,
-                  "type": "integer"
+                  "type": "integer",
+                  "x-struct": null,
+                  "x-validate": null
                 },
                 "offset": {
                   "minimum": 0,
-                  "type": "integer"
+                  "type": "integer",
+                  "x-struct": null,
+                  "x-validate": null
                 }
               },
-              "type": "object"
+              "type": "object",
+              "x-struct": null,
+              "x-validate": null
             },
             "style": "deepObject"
           },
@@ -334,7 +426,9 @@
             "required": false,
             "schema": {
               "pattern": "^(user)(,(user))*$",
-              "type": "string"
+              "type": "string",
+              "x-struct": null,
+              "x-validate": null
             },
             "style": "form"
           },
@@ -352,10 +446,14 @@
                 "todo": {
                   "description": "Comma separated field names for todo",
                   "example": "id,title,content,status,priority,created_at,updated_at,user_id",
-                  "type": "string"
+                  "type": "string",
+                  "x-struct": null,
+                  "x-validate": null
                 }
               },
-              "type": "object"
+              "type": "object",
+              "x-struct": null,
+              "x-validate": null
             },
             "style": "deepObject"
           }
@@ -373,7 +471,9 @@
                         "$ref": "#/components/schemas/todo"
                       },
                       "type": "array",
-                      "uniqueItems": true
+                      "uniqueItems": true,
+                      "x-struct": null,
+                      "x-validate": null
                     },
                     "included": {
                       "items": {
@@ -381,17 +481,45 @@
                           {
                             "$ref": "#/components/schemas/user"
                           }
-                        ]
+                        ],
+                        "x-struct": null,
+                        "x-validate": null
                       },
                       "type": "array",
-                      "uniqueItems": true
+                      "uniqueItems": true,
+                      "x-struct": null,
+                      "x-validate": null
                     },
                     "meta": {
                       "additionalProperties": true,
-                      "type": "object"
+                      "properties": {
+                        "statuses": {
+                          "items": {
+                            "enum": [
+                              "blocked",
+                              "backlog",
+                              "in_progress",
+                              "review",
+                              "done",
+                              "rejected"
+                            ],
+                            "type": "string",
+                            "x-struct": null,
+                            "x-validate": null
+                          },
+                          "type": "array",
+                          "x-struct": null,
+                          "x-validate": null
+                        }
+                      },
+                      "type": "object",
+                      "x-struct": null,
+                      "x-validate": null
                     }
                   },
-                  "type": "object"
+                  "type": "object",
+                  "x-struct": null,
+                  "x-validate": null
                 }
               }
             },
@@ -418,7 +546,9 @@
             "required": false,
             "schema": {
               "pattern": "^(user)(,(user))*$",
-              "type": "string"
+              "type": "string",
+              "x-struct": null,
+              "x-validate": null
             },
             "style": "form"
           },
@@ -436,10 +566,14 @@
                 "todo": {
                   "description": "Comma separated field names for todo",
                   "example": "id,title,content,status,priority,created_at,updated_at,user_id",
-                  "type": "string"
+                  "type": "string",
+                  "x-struct": null,
+                  "x-validate": null
                 }
               },
-              "type": "object"
+              "type": "object",
+              "x-struct": null,
+              "x-validate": null
             },
             "style": "deepObject"
           }
@@ -457,7 +591,9 @@
                         "additionalProperties": false,
                         "properties": {
                           "content": {
-                            "type": "string"
+                            "type": "string",
+                            "x-struct": null,
+                            "x-validate": null
                           },
                           "priority": {
                             "anyOf": [
@@ -468,7 +604,9 @@
                                   "high",
                                   "urgent"
                                 ],
-                                "type": "string"
+                                "type": "string",
+                                "x-struct": null,
+                                "x-validate": null
                               },
                               {
                                 "type": "null"
@@ -486,7 +624,9 @@
                                   "done",
                                   "rejected"
                                 ],
-                                "type": "string"
+                                "type": "string",
+                                "x-struct": null,
+                                "x-validate": null
                               },
                               {
                                 "type": "null"
@@ -494,11 +634,15 @@
                             ]
                           },
                           "title": {
-                            "type": "string"
+                            "type": "string",
+                            "x-struct": null,
+                            "x-validate": null
                           },
                           "user_id": {
                             "format": "uuid",
-                            "type": "string"
+                            "type": "string",
+                            "x-struct": null,
+                            "x-validate": null
                           }
                         },
                         "required": [
@@ -506,26 +650,36 @@
                           "content",
                           "user_id"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-struct": null,
+                        "x-validate": null
                       },
                       "relationships": {
                         "additionalProperties": false,
                         "properties": {},
-                        "type": "object"
+                        "type": "object",
+                        "x-struct": null,
+                        "x-validate": null
                       },
                       "type": {
                         "enum": [
                           "todo"
-                        ]
+                        ],
+                        "x-struct": null,
+                        "x-validate": null
                       }
                     },
-                    "type": "object"
+                    "type": "object",
+                    "x-struct": null,
+                    "x-validate": null
                   }
                 },
                 "required": [
                   "data"
                 ],
-                "type": "object"
+                "type": "object",
+                "x-struct": null,
+                "x-validate": null
               }
             }
           },
@@ -548,16 +702,24 @@
                           {
                             "$ref": "#/components/schemas/user"
                           }
-                        ]
+                        ],
+                        "x-struct": null,
+                        "x-validate": null
                       },
                       "type": "array",
-                      "uniqueItems": true
+                      "uniqueItems": true,
+                      "x-struct": null,
+                      "x-validate": null
                     },
                     "meta": {
                       "additionalProperties": true,
-                      "type": "object"
+                      "type": "object",
+                      "x-struct": null,
+                      "x-validate": null
                     }
-                  }
+                  },
+                  "x-struct": null,
+                  "x-validate": null
                 }
               }
             },
@@ -583,7 +745,9 @@
             "name": "id",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "x-struct": null,
+              "x-validate": null
             },
             "style": "form"
           },
@@ -595,7 +759,9 @@
             "required": false,
             "schema": {
               "pattern": "^(user)(,(user))*$",
-              "type": "string"
+              "type": "string",
+              "x-struct": null,
+              "x-validate": null
             },
             "style": "form"
           },
@@ -613,10 +779,14 @@
                 "todo": {
                   "description": "Comma separated field names for todo",
                   "example": "id,title,content,status,priority,created_at,updated_at,user_id",
-                  "type": "string"
+                  "type": "string",
+                  "x-struct": null,
+                  "x-validate": null
                 }
               },
-              "type": "object"
+              "type": "object",
+              "x-struct": null,
+              "x-validate": null
             },
             "style": "deepObject"
           }
@@ -643,7 +813,9 @@
             "name": "id",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "x-struct": null,
+              "x-validate": null
             },
             "style": "form"
           },
@@ -655,7 +827,9 @@
             "required": false,
             "schema": {
               "pattern": "^(user)(,(user))*$",
-              "type": "string"
+              "type": "string",
+              "x-struct": null,
+              "x-validate": null
             },
             "style": "form"
           },
@@ -673,10 +847,14 @@
                 "todo": {
                   "description": "Comma separated field names for todo",
                   "example": "id,title,content,status,priority,created_at,updated_at,user_id",
-                  "type": "string"
+                  "type": "string",
+                  "x-struct": null,
+                  "x-validate": null
                 }
               },
-              "type": "object"
+              "type": "object",
+              "x-struct": null,
+              "x-validate": null
             },
             "style": "deepObject"
           }
@@ -697,16 +875,24 @@
                           {
                             "$ref": "#/components/schemas/user"
                           }
-                        ]
+                        ],
+                        "x-struct": null,
+                        "x-validate": null
                       },
                       "type": "array",
-                      "uniqueItems": true
+                      "uniqueItems": true,
+                      "x-struct": null,
+                      "x-validate": null
                     },
                     "meta": {
                       "additionalProperties": true,
-                      "type": "object"
+                      "type": "object",
+                      "x-struct": null,
+                      "x-validate": null
                     }
-                  }
+                  },
+                  "x-struct": null,
+                  "x-validate": null
                 }
               }
             },
@@ -730,7 +916,9 @@
             "name": "id",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "x-struct": null,
+              "x-validate": null
             },
             "style": "form"
           },
@@ -742,7 +930,9 @@
             "required": false,
             "schema": {
               "pattern": "^(user)(,(user))*$",
-              "type": "string"
+              "type": "string",
+              "x-struct": null,
+              "x-validate": null
             },
             "style": "form"
           },
@@ -760,10 +950,14 @@
                 "todo": {
                   "description": "Comma separated field names for todo",
                   "example": "id,title,content,status,priority,created_at,updated_at,user_id",
-                  "type": "string"
+                  "type": "string",
+                  "x-struct": null,
+                  "x-validate": null
                 }
               },
-              "type": "object"
+              "type": "object",
+              "x-struct": null,
+              "x-validate": null
             },
             "style": "deepObject"
           }
@@ -783,7 +977,9 @@
                           "content": {
                             "anyOf": [
                               {
-                                "type": "string"
+                                "type": "string",
+                                "x-struct": null,
+                                "x-validate": null
                               },
                               {
                                 "type": "null"
@@ -799,7 +995,9 @@
                                   "high",
                                   "urgent"
                                 ],
-                                "type": "string"
+                                "type": "string",
+                                "x-struct": null,
+                                "x-validate": null
                               },
                               {
                                 "type": "null"
@@ -817,7 +1015,9 @@
                                   "done",
                                   "rejected"
                                 ],
-                                "type": "string"
+                                "type": "string",
+                                "x-struct": null,
+                                "x-validate": null
                               },
                               {
                                 "type": "null"
@@ -827,7 +1027,9 @@
                           "title": {
                             "anyOf": [
                               {
-                                "type": "string"
+                                "type": "string",
+                                "x-struct": null,
+                                "x-validate": null
                               },
                               {
                                 "type": "null"
@@ -835,32 +1037,44 @@
                             ]
                           }
                         },
-                        "type": "object"
+                        "type": "object",
+                        "x-struct": null,
+                        "x-validate": null
                       },
                       "id": {
-                        "type": "string"
+                        "type": "string",
+                        "x-struct": null,
+                        "x-validate": null
                       },
                       "relationships": {
                         "additionalProperties": false,
                         "properties": {},
-                        "type": "object"
+                        "type": "object",
+                        "x-struct": null,
+                        "x-validate": null
                       },
                       "type": {
                         "enum": [
                           "todo"
-                        ]
+                        ],
+                        "x-struct": null,
+                        "x-validate": null
                       }
                     },
                     "required": [
                       "id"
                     ],
-                    "type": "object"
+                    "type": "object",
+                    "x-struct": null,
+                    "x-validate": null
                   }
                 },
                 "required": [
                   "data"
                 ],
-                "type": "object"
+                "type": "object",
+                "x-struct": null,
+                "x-validate": null
               }
             }
           },
@@ -883,16 +1097,24 @@
                           {
                             "$ref": "#/components/schemas/user"
                           }
-                        ]
+                        ],
+                        "x-struct": null,
+                        "x-validate": null
                       },
                       "type": "array",
-                      "uniqueItems": true
+                      "uniqueItems": true,
+                      "x-struct": null,
+                      "x-validate": null
                     },
                     "meta": {
                       "additionalProperties": true,
-                      "type": "object"
+                      "type": "object",
+                      "x-struct": null,
+                      "x-validate": null
                     }
-                  }
+                  },
+                  "x-struct": null,
+                  "x-validate": null
                 }
               }
             },
@@ -913,11 +1135,6 @@
       "bearerAuth": []
     }
   ],
-  "servers": [
-    {
-      "url": "http://localhost:4000",
-      "variables": {}
-    }
-  ],
+  "servers": [],
   "tags": []
 }

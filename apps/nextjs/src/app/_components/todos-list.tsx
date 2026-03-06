@@ -1,14 +1,13 @@
-import { getTodos, type GetTodosQueryParams, type Todo } from "@rvct/shared";
+import {
+  getTodos,
+  type GetTodosQueryParams,
+  type MetaStatusesEnum,
+  type Todo,
+} from "@rvct/shared";
 import Link from "next/link";
 import { PlusIcon } from "lucide-react";
 import { ScrollArea } from "~/shared/ui/scroll-area";
 import { assigns } from "~/shared/lib/session";
-
-type TodosResponseWithMeta = Awaited<ReturnType<typeof getTodos>> & {
-  meta?: {
-    statuses?: unknown;
-  };
-};
 
 type TodoStatusColumn = {
   key: string;
@@ -146,16 +145,16 @@ const TODOS_PAGE_LIMIT = 100;
 
 async function getAllTodos(
   query: TodosQueryWithFilter,
-): Promise<{ todos: Todo[]; statuses: unknown }> {
+): Promise<{ todos: Todo[]; statuses?: MetaStatusesEnum[] }> {
   const todos: Todo[] = [];
   let offset = 0;
-  let statuses: unknown;
+  let statuses: MetaStatusesEnum[] | undefined;
 
   while (true) {
-    const response = (await getTodos({
+    const response = await getTodos({
       ...query,
       page: { limit: TODOS_PAGE_LIMIT, offset },
-    })) as TodosResponseWithMeta;
+    });
     const chunk = response.data ?? [];
 
     if (statuses === undefined) {
@@ -176,14 +175,10 @@ async function getAllTodos(
 
 function getStatusColumns(
   todos: Todo[],
-  metaStatuses: unknown,
+  metaStatuses?: MetaStatusesEnum[],
 ): TodoStatusColumn[] {
-  const statusesFromMeta = Array.isArray(metaStatuses)
-    ? metaStatuses.filter(
-        (status): status is string => typeof status === "string",
-      )
-    : [];
-  const todosByStatus = new Map<string, Todo[]>(
+  const statusesFromMeta = metaStatuses ?? [];
+  const todosByStatus = new Map<MetaStatusesEnum, Todo[]>(
     statusesFromMeta.map((status) => [status, []]),
   );
 

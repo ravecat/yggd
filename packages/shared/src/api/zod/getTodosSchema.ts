@@ -34,7 +34,7 @@ get included(){
                 return z.array(userSchema).refine(items => new Set(items).size === items.length, { message: "Array entries must be unique" }).optional()
               },
 "meta": z.object({
-    
+    "statuses": z.array(z.enum(["blocked", "backlog", "in_progress", "review", "done", "rejected"])).optional()
     }).catchall(z.any()).optional()
     })
 
