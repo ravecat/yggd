@@ -1,7 +1,7 @@
 export type { DeleteTodosIdPathParams, DeleteTodosIdQueryParams, DeleteTodosId200, DeleteTodosIdError, DeleteTodosIdMutationResponse, DeleteTodosIdMutation } from "./models/DeleteTodosId";
 export type { Error } from "./models/Error";
 export type { Errors } from "./models/Errors";
-export type { GetTodosQueryParams, GetTodos200, GetTodosError, GetTodosQueryResponse, GetTodosQuery } from "./models/GetTodos";
+export type { GetTodosQueryParams, MetaStatusesEnum, GetTodos200, GetTodosError, GetTodosQueryResponse, GetTodosQuery } from "./models/GetTodos";
 export type { GetTodosIdPathParams, GetTodosIdQueryParams, GetTodosId200, GetTodosIdError, GetTodosIdQueryResponse, GetTodosIdQuery } from "./models/GetTodosId";
 export type { Link } from "./models/Link";
 export type { Links } from "./models/Links";
@@ -14,6 +14,7 @@ export { getTodos } from "./clients/getTodos";
 export { getTodosId } from "./clients/getTodosId";
 export { patchTodosId } from "./clients/patchTodosId";
 export { postTodos } from "./clients/postTodos";
+export { metaStatusesEnum } from "./models/GetTodos";
 export { attributesPriorityEnum3, attributesStatusEnum3, dataTypeEnum2 } from "./models/PatchTodosId";
 export { attributesPriorityEnum2, attributesStatusEnum2, dataTypeEnum } from "./models/PostTodos";
 export { attributesPriorityEnum, attributesStatusEnum } from "./models/Todo";
