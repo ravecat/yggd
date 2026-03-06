@@ -9,7 +9,7 @@ defmodule AshFramework.Tasks.Todo do
   json_api do
     type "todo"
     includes [:user]
-    derive_filter? false
+    derive_filter? true
 
     routes do
       base "/todos"

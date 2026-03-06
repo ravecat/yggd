@@ -3,9 +3,16 @@
 ## Metadata
 
 - ID: ADR-008
-- Status: accepted
+- Status: superseded
 - Date: 2026-02-17
 - Deciders: Max
+- Superseded on: 2026-03-06
+
+## Supersession note
+
+This ADR has been superseded by a follow-up decision to restore Ash JSON:API
+filter auto-generation (`derive_filter? true`) and rely on generated OpenAPI
+filter schemas for client models.
 
 ## Context and problem statement
 

@@ -5,9 +5,15 @@
 
 import type { Errors } from "./Errors";
 import type { Todo } from "./Todo";
+import type { TodoFilter } from "./TodoFilter";
 import type { User } from "./User";
 
 export type GetTodosQueryParams = {
+    /**
+     * @description Filters the query to results matching the given filter object
+     * @type deepObject | undefined
+    */
+    filter?: TodoFilter;
     /**
      * @description Sort order to apply to the results
      * @pattern ^(id|-id|\+\+id|--id|title|-title|\+\+title|--title|content|-content|\+\+content|--content|status|-status|\+\+status|--status|priority|-priority|\+\+priority|--priority|created_at|-created_at|\+\+created_at|--created_at|updated_at|-updated_at|\+\+updated_at|--updated_at|user_id|-user_id|\+\+user_id|--user_id)(,(id|-id|\+\+id|--id|title|-title|\+\+title|--title|content|-content|\+\+content|--content|status|-status|\+\+status|--status|priority|-priority|\+\+priority|--priority|created_at|-created_at|\+\+created_at|--created_at|updated_at|-updated_at|\+\+updated_at|--updated_at|user_id|-user_id|\+\+user_id|--user_id))*$
