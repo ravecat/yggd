@@ -63,6 +63,17 @@ export type GetTodosQueryParams = {
     };
 };
 
+export const metaStatusesEnum = {
+    "blocked": "blocked",
+    "backlog": "backlog",
+    "in_progress": "in_progress",
+    "review": "review",
+    "done": "done",
+    "rejected": "rejected"
+} as const;
+
+export type MetaStatusesEnum = (typeof metaStatusesEnum)[keyof typeof metaStatusesEnum];
+
 /**
  * @description Success
 */
@@ -80,6 +91,10 @@ export type GetTodos200 = {
      * @type object | undefined
     */
     meta?: {
+        /**
+         * @type array | undefined
+        */
+        statuses?: MetaStatusesEnum[];
         [key: string]: any;
     };
 };
