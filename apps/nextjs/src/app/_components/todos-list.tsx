@@ -1,28 +1,11 @@
-import {
-  getTodos,
-  type GetTodosQueryParams,
-  serializeQueryParams,
-  type Todo,
-} from "@rvct/shared";
+import { getTodos, type GetTodosQueryParams, type Todo } from "@rvct/shared";
 import Link from "next/link";
-import { ChevronLeftIcon, ChevronRightIcon, PlusIcon } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 import { ScrollArea } from "~/shared/ui/scroll-area";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-} from "~/shared/ui/pagination";
-import { buttonVariants } from "~/shared/ui/button";
-import { cn } from "~/shared/lib/component";
-import { generatePageNumbers } from "~/shared/lib/pagination";
 import { assigns } from "~/shared/lib/session";
 
 type TodosResponseWithMeta = Awaited<ReturnType<typeof getTodos>> & {
-  links?: Record<string, string>;
   meta?: {
-    page?: {
-      total?: number;
-    };
     statuses?: unknown;
   };
 };
@@ -57,61 +40,13 @@ export async function TodosList({
     );
   }
 
-  const page = getPageObject(query.page);
-  const todosQuery: TodosQueryWithFilter = page
-    ? {
-        ...query,
-        page: { ...page, count: true },
-        filter: { user_id: { eq: userId } },
-      }
-    : query.page === undefined
-      ? {
-          ...query,
-          page: { count: true },
-          filter: { user_id: { eq: userId } },
-        }
-      : {
-          ...query,
-          filter: { user_id: { eq: userId } },
-        };
-
-  const response = (await getTodos(todosQuery)) as TodosResponseWithMeta;
-
-  const links = response.links ?? {};
-  const todos = response.data || [];
-
-  const limit =
-    getPositiveInteger(page?.limit) ??
-    getPositiveInteger(getPageParamFromLink(links.self, "limit")) ??
-    getPositiveInteger(todos.length) ??
-    1;
-  const offset =
-    getNonNegativeInteger(page?.offset) ??
-    getNonNegativeInteger(getPageParamFromLink(links.self, "offset")) ??
-    0;
-  const sort =
-    typeof query.sort === "string" && query.sort.trim().length > 0
-      ? query.sort
-      : undefined;
-  const currentPage = Math.floor(offset / limit) + 1;
-
-  const hasPrevPage = !!links.prev;
-  const hasNextPage = !!links.next;
-
-  const totalCount = response.meta?.page?.total ?? 0;
-  const totalPages = Math.ceil(totalCount / limit);
-  const pageNumbers = generatePageNumbers(currentPage, totalPages);
-
-  const buildPageUrl = (page: number) => {
-    const queryParams = serializeQueryParams<GetTodosQueryParams>({
-      ...query,
-      page: { limit, offset: (page - 1) * limit },
-      ...(sort ? { sort } : {}),
-    });
-    return `/?${new URLSearchParams(queryParams).toString()}`;
+  const { page: _unusedPage, ...queryWithoutPage } = query;
+  const todosQuery: TodosQueryWithFilter = {
+    ...(queryWithoutPage as GetTodosQueryParams),
+    filter: { user_id: { eq: userId } },
   };
-
-  const statusColumns = getStatusColumns(todos, response.meta?.statuses);
+  const { todos, statuses } = await getAllTodos(todosQuery);
+  const statusColumns = getStatusColumns(todos, statuses);
   const hasTasks = todos.length > 0;
   const columnCount = Math.max(statusColumns.length, 1);
   const columnsStyle = {
@@ -203,61 +138,40 @@ export async function TodosList({
           ))}
         </div>
       </ScrollArea>
-
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <Link
-              href={hasPrevPage ? buildPageUrl(currentPage - 1) : "#"}
-              aria-label="Go to previous page"
-              aria-disabled={!hasPrevPage}
-              className={cn(
-                buttonVariants({ variant: "ghost", size: "icon" }),
-                "size-9",
-                !hasPrevPage && "pointer-events-none opacity-50",
-              )}
-            >
-              <ChevronLeftIcon />
-            </Link>
-          </PaginationItem>
-
-          {pageNumbers.map((pageNum) => (
-            <PaginationItem key={pageNum}>
-              <Link
-                href={buildPageUrl(pageNum)}
-                aria-current={pageNum === currentPage ? "page" : undefined}
-                aria-label={`Go to page ${pageNum}`}
-                className={cn(
-                  buttonVariants({
-                    variant: pageNum === currentPage ? "outline" : "ghost",
-                    size: "icon",
-                  }),
-                  "size-9",
-                )}
-              >
-                {pageNum}
-              </Link>
-            </PaginationItem>
-          ))}
-
-          <PaginationItem>
-            <Link
-              href={hasNextPage ? buildPageUrl(currentPage + 1) : "#"}
-              aria-label="Go to next page"
-              aria-disabled={!hasNextPage}
-              className={cn(
-                buttonVariants({ variant: "ghost", size: "icon" }),
-                "size-9",
-                !hasNextPage && "pointer-events-none opacity-50",
-              )}
-            >
-              <ChevronRightIcon />
-            </Link>
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
     </div>
   );
+}
+
+const TODOS_PAGE_LIMIT = 100;
+
+async function getAllTodos(
+  query: TodosQueryWithFilter,
+): Promise<{ todos: Todo[]; statuses: unknown }> {
+  const todos: Todo[] = [];
+  let offset = 0;
+  let statuses: unknown;
+
+  while (true) {
+    const response = (await getTodos({
+      ...query,
+      page: { limit: TODOS_PAGE_LIMIT, offset },
+    })) as TodosResponseWithMeta;
+    const chunk = response.data ?? [];
+
+    if (statuses === undefined) {
+      statuses = response.meta?.statuses;
+    }
+
+    todos.push(...chunk);
+
+    if (chunk.length < TODOS_PAGE_LIMIT) {
+      break;
+    }
+
+    offset += TODOS_PAGE_LIMIT;
+  }
+
+  return { todos, statuses };
 }
 
 function getStatusColumns(
@@ -292,57 +206,6 @@ function getStatusColumns(
     key,
     todos: bucket,
   }));
-}
-
-function getPositiveInteger(value: unknown): number | undefined {
-  if (typeof value !== "number" || !Number.isFinite(value)) {
-    return undefined;
-  }
-
-  const parsed = Math.trunc(value);
-  return parsed > 0 ? parsed : undefined;
-}
-
-function getNonNegativeInteger(value: unknown): number | undefined {
-  if (typeof value !== "number" || !Number.isFinite(value)) {
-    return undefined;
-  }
-
-  const parsed = Math.trunc(value);
-  return parsed >= 0 ? parsed : undefined;
-}
-
-function getPageParamFromLink(
-  link: unknown,
-  key: "limit" | "offset",
-): number | undefined {
-  if (typeof link !== "string" || link.trim().length === 0) {
-    return undefined;
-  }
-
-  try {
-    const url = new URL(link, "http://localhost");
-    const value = url.searchParams.get(`page[${key}]`);
-
-    if (!value) {
-      return undefined;
-    }
-
-    const parsed = Number(value);
-    return Number.isFinite(parsed) ? Math.trunc(parsed) : undefined;
-  } catch {
-    return undefined;
-  }
-}
-
-function getPageObject(
-  value: unknown,
-): GetTodosQueryParams["page"] | undefined {
-  if (!value || typeof value !== "object" || Array.isArray(value)) {
-    return undefined;
-  }
-
-  return value as GetTodosQueryParams["page"];
 }
 
 function formatTodoPriority(priority: unknown): string {
