@@ -37,6 +37,18 @@ export async function TodosList({
 }: {
   query: Partial<GetTodosQueryParams>;
 }) {
+  const { userId } = await assigns();
+
+  if (!userId) {
+    return (
+      <div className="flex min-h-80 flex-1 items-center justify-center px-6 text-center">
+        <p className="text-sm font-medium text-foreground">
+          Sign in to manage tasks.
+        </p>
+      </div>
+    );
+  }
+
   const page = getPageObject(query.page);
 
   const response = (await getTodos(
@@ -95,23 +107,14 @@ export async function TodosList({
   };
 
   if (statusColumns.length === 0 && !hasTasks) {
-    const { userId } = await assigns();
-
     return (
       <div className="flex min-h-80 flex-1 items-center justify-center rounded-lg border border-dashed border-border bg-muted/20 px-6 text-center">
         <div className="space-y-2">
           <p className="text-lg font-medium text-foreground">No tasks yet</p>
-          {userId ? (
-            <p className="text-sm text-muted-foreground">
-              <span className="font-medium text-foreground">Create task</span>{" "}
-              to add your first item.
-            </p>
-          ) : (
-            <p className="text-sm text-muted-foreground">
-              <span className="font-medium text-foreground">Sign in</span> to
-              add tasks.
-            </p>
-          )}
+          <p className="text-sm text-muted-foreground">
+            <span className="font-medium text-foreground">Create task</span> to
+            add your first item.
+          </p>
         </div>
       </div>
     );
