@@ -33,6 +33,22 @@ defmodule AshFramework.Tasks.TodoTest do
       assert todo.updated_at
     end
 
+    test "creates a todo with explicit priority" do
+      user = create_test_user("priority@example.com")
+
+      todo =
+        Todo
+        |> Ash.Changeset.for_create(:create, %{
+          title: "Priority Todo",
+          content: "Priority content",
+          priority: "urgent",
+          user_id: user.id
+        })
+        |> Ash.create!()
+
+      assert todo.priority == :urgent
+    end
+
     test "fails to create a todo without title" do
       user = create_test_user("test@example.com")
 

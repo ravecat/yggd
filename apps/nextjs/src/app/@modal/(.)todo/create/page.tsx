@@ -1,7 +1,11 @@
 "use client";
 
+import {
+  attributesPriorityEnum2,
+  type AttributesPriorityEnum2,
+} from "@rvct/shared";
 import { useRouter } from "next/navigation";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { createTodo } from "~/app/actions/todos";
 import {
   Dialog,
@@ -21,12 +25,19 @@ import {
 } from "~/shared/ui/select";
 import { Textarea } from "~/shared/ui/textarea";
 
+const PRIORITY_OPTIONS = Object.values(
+  attributesPriorityEnum2,
+) as AttributesPriorityEnum2[];
+
 export default function CreateTodoModal() {
   const router = useRouter();
   const [state, submit, pending] = useActionState(createTodo, {
     errors: {},
     message: "",
   });
+  const [priority, setPriority] = useState<AttributesPriorityEnum2>(
+    attributesPriorityEnum2.medium,
+  );
 
   return (
     <Dialog open onOpenChange={(open) => !open && router.back()}>
@@ -36,6 +47,8 @@ export default function CreateTodoModal() {
         </DialogHeader>
 
         <form action={submit} className="space-y-4">
+          <input type="hidden" name="priority" value={priority} />
+
           {state.errors?.general && state.errors.general.length > 0 && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded text-sm">
               {state.errors.general.join(", ")}
@@ -85,7 +98,13 @@ export default function CreateTodoModal() {
             <Label htmlFor="priority" className="mb-2">
               Priority
             </Label>
-            <Select name="priority" defaultValue="medium" disabled={pending}>
+            <Select
+              value={priority}
+              onValueChange={(value) =>
+                setPriority(value as AttributesPriorityEnum2)
+              }
+              disabled={pending}
+            >
               <SelectTrigger
                 id="priority"
                 aria-describedby={
@@ -95,10 +114,11 @@ export default function CreateTodoModal() {
                 <SelectValue placeholder="Select priority" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="low">Low</SelectItem>
-                <SelectItem value="medium">Medium</SelectItem>
-                <SelectItem value="high">High</SelectItem>
-                <SelectItem value="urgent">Urgent</SelectItem>
+                {PRIORITY_OPTIONS.map((value) => (
+                  <SelectItem key={value} value={value}>
+                    {value.charAt(0).toUpperCase() + value.slice(1)}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
             {state.errors?.priority && (
