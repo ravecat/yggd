@@ -3,6 +3,8 @@
 import {
   attributesPriorityEnum2,
   type AttributesPriorityEnum2,
+  attributesStatusEnum2,
+  type AttributesStatusEnum2,
 } from "@rvct/shared";
 import { useRouter } from "next/navigation";
 import { useActionState, useState } from "react";
@@ -28,6 +30,9 @@ import { Textarea } from "~/shared/ui/textarea";
 const PRIORITY_OPTIONS = Object.values(
   attributesPriorityEnum2,
 ) as AttributesPriorityEnum2[];
+const STATUS_OPTIONS = Object.values(
+  attributesStatusEnum2,
+) as AttributesStatusEnum2[];
 
 export default function CreateTodoModal() {
   const router = useRouter();
@@ -37,6 +42,9 @@ export default function CreateTodoModal() {
   });
   const [priority, setPriority] = useState<AttributesPriorityEnum2>(
     attributesPriorityEnum2.medium,
+  );
+  const [status, setStatus] = useState<AttributesStatusEnum2>(
+    attributesStatusEnum2.backlog,
   );
 
   return (
@@ -48,6 +56,7 @@ export default function CreateTodoModal() {
 
         <form action={submit} className="space-y-4">
           <input type="hidden" name="priority" value={priority} />
+          <input type="hidden" name="status" value={status} />
 
           {state.errors?.general && state.errors.general.length > 0 && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded text-sm">
@@ -94,38 +103,74 @@ export default function CreateTodoModal() {
             )}
           </div>
 
-          <div>
-            <Label htmlFor="priority" className="mb-2">
-              Priority
-            </Label>
-            <Select
-              value={priority}
-              onValueChange={(value) =>
-                setPriority(value as AttributesPriorityEnum2)
-              }
-              disabled={pending}
-            >
-              <SelectTrigger
-                id="priority"
-                aria-describedby={
-                  state.errors?.priority ? "priority-error" : undefined
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <Label htmlFor="priority" className="mb-2">
+                Priority
+              </Label>
+              <Select
+                value={priority}
+                onValueChange={(value) =>
+                  setPriority(value as AttributesPriorityEnum2)
                 }
+                disabled={pending}
               >
-                <SelectValue placeholder="Select priority" />
-              </SelectTrigger>
-              <SelectContent>
-                {PRIORITY_OPTIONS.map((value) => (
-                  <SelectItem key={value} value={value}>
-                    {value.charAt(0).toUpperCase() + value.slice(1)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {state.errors?.priority && (
-              <p id="priority-error" className="mt-1 text-sm text-red-600">
-                {state.errors.priority.join(", ")}
-              </p>
-            )}
+                <SelectTrigger
+                  id="priority"
+                  aria-describedby={
+                    state.errors?.priority ? "priority-error" : undefined
+                  }
+                >
+                  <SelectValue placeholder="Select priority" />
+                </SelectTrigger>
+                <SelectContent>
+                  {PRIORITY_OPTIONS.map((value) => (
+                    <SelectItem key={value} value={value}>
+                      {value.charAt(0).toUpperCase() + value.slice(1)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {state.errors?.priority && (
+                <p id="priority-error" className="mt-1 text-sm text-red-600">
+                  {state.errors.priority.join(", ")}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <Label htmlFor="status" className="mb-2">
+                Status
+              </Label>
+              <Select
+                value={status}
+                onValueChange={(value) =>
+                  setStatus(value as AttributesStatusEnum2)
+                }
+                disabled={pending}
+              >
+                <SelectTrigger
+                  id="status"
+                  aria-describedby={
+                    state.errors?.status ? "status-error" : undefined
+                  }
+                >
+                  <SelectValue placeholder="Select status" />
+                </SelectTrigger>
+                <SelectContent>
+                  {STATUS_OPTIONS.map((value) => (
+                    <SelectItem key={value} value={value}>
+                      {value}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {state.errors?.status && (
+                <p id="status-error" className="mt-1 text-sm text-red-600">
+                  {state.errors.status.join(", ")}
+                </p>
+              )}
+            </div>
           </div>
 
           <div className="flex justify-end gap-2 pt-4">
