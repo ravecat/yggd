@@ -32,6 +32,14 @@ type TodoStatusColumn = {
   todos: Todo[];
 };
 
+type TodosQueryWithFilter = GetTodosQueryParams & {
+  filter?: {
+    user_id?: {
+      eq?: string;
+    };
+  };
+};
+
 export async function TodosList({
   query,
 }: {
@@ -50,20 +58,24 @@ export async function TodosList({
   }
 
   const page = getPageObject(query.page);
-
-  const response = (await getTodos(
-    page
+  const todosQuery: TodosQueryWithFilter = page
+    ? {
+        ...query,
+        page: { ...page, count: true },
+        filter: { user_id: { eq: userId } },
+      }
+    : query.page === undefined
       ? {
           ...query,
-          page: { ...page, count: true },
+          page: { count: true },
+          filter: { user_id: { eq: userId } },
         }
-      : query.page === undefined
-        ? {
-            ...query,
-            page: { count: true },
-          }
-        : query,
-  )) as TodosResponseWithMeta;
+      : {
+          ...query,
+          filter: { user_id: { eq: userId } },
+        };
+
+  const response = (await getTodos(todosQuery)) as TodosResponseWithMeta;
 
   const links = response.links ?? {};
   const todos = response.data || [];
