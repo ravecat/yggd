@@ -9,11 +9,6 @@ import { PlusIcon } from "lucide-react";
 import { ScrollArea } from "~/shared/ui/scroll-area";
 import { assigns } from "~/shared/lib/session";
 
-type TodoStatusColumn = {
-  key: string;
-  todos: Todo[];
-};
-
 export async function TodosList({
   query,
 }: {
@@ -36,15 +31,15 @@ export async function TodosList({
     ...(queryWithoutPage as GetTodosQueryParams),
     filter: { user_id: { eq: userId } },
   };
-  const { todos, statuses } = await getAllTodos(todosQuery);
-  const statusColumns = getStatusColumns(todos, statuses);
+  const response = await getTodos(todosQuery);
+  const todos = response.data ?? [];
+  const todoStatusColumns = getTodoByStatusColumns(
+    todos,
+    response.meta?.statuses,
+  );
   const hasTasks = todos.length > 0;
-  const columnCount = Math.max(statusColumns.length, 1);
-  const columnsStyle = {
-    gridTemplateColumns: `repeat(${columnCount}, minmax(0, 1fr))`,
-  };
 
-  if (statusColumns.length === 0 && !hasTasks) {
+  if (!hasTasks) {
     return (
       <div className="flex min-h-80 flex-1 items-center justify-center rounded-lg border border-dashed border-border bg-muted/20 px-6 text-center">
         <div className="space-y-2">
@@ -60,8 +55,8 @@ export async function TodosList({
 
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-3">
-      <div className="grid gap-4" style={columnsStyle}>
-        {statusColumns.map((column) => (
+      <div className="grid auto-cols-fr grid-flow-col gap-4">
+        {todoStatusColumns.map((column) => (
           <header
             key={column.key}
             className="flex items-center justify-between border-b border-border py-2"
@@ -84,8 +79,8 @@ export async function TodosList({
       </div>
 
       <ScrollArea className="h-0 flex-1">
-        <div className="grid min-h-full gap-4" style={columnsStyle}>
-          {statusColumns.map((column) => (
+        <div className="grid min-h-full auto-cols-fr grid-flow-col gap-4">
+          {todoStatusColumns.map((column) => (
             <section
               key={column.key}
               className="flex h-full min-h-full flex-col"
@@ -101,8 +96,8 @@ export async function TodosList({
                       <h3 className="line-clamp-2 text-sm font-semibold text-foreground">
                         {todo.attributes?.title || "Untitled"}
                       </h3>
-                      <span className="shrink-0 rounded-md border border-border bg-muted px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
-                        {formatTodoPriority(todo.attributes?.priority)}
+                      <span className="shrink-0 rounded-md border border-border bg-muted px-1.5 py-0.5 text-[10px] font-semibold tracking-wide text-muted-foreground">
+                        {todo.attributes?.priority}
                       </span>
                     </div>
 
@@ -133,72 +128,31 @@ export async function TodosList({
   );
 }
 
-const TODOS_PAGE_LIMIT = 100;
-
-async function getAllTodos(
-  query: GetTodosQueryParams,
-): Promise<{ todos: Todo[]; statuses?: MetaStatusesEnum[] }> {
-  const todos: Todo[] = [];
-  let offset = 0;
-  let statuses: MetaStatusesEnum[] | undefined;
-
-  while (true) {
-    const response = await getTodos({
-      ...query,
-      page: { limit: TODOS_PAGE_LIMIT, offset },
-    });
-    const chunk = response.data ?? [];
-
-    if (statuses === undefined) {
-      statuses = response.meta?.statuses;
-    }
-
-    todos.push(...chunk);
-
-    if (chunk.length < TODOS_PAGE_LIMIT) {
-      break;
-    }
-
-    offset += TODOS_PAGE_LIMIT;
-  }
-
-  return { todos, statuses };
-}
-
-function getStatusColumns(
+function getTodoByStatusColumns(
   todos: Todo[],
   metaStatuses?: MetaStatusesEnum[],
-): TodoStatusColumn[] {
-  const statusesFromMeta = metaStatuses ?? [];
-  const todosByStatus = new Map<MetaStatusesEnum, Todo[]>(
-    statusesFromMeta.map((status) => [status, []]),
+) {
+  const todoByStatus = new Map<string, Todo[]>(
+    (metaStatuses ?? []).map((status) => [status, []]),
   );
 
   for (const todo of todos) {
-    const status = todo.attributes?.status;
-    if (typeof status !== "string") {
+    if (!todo.attributes) {
       continue;
     }
 
-    const bucket = todosByStatus.get(status);
+    const status = todo.attributes.status;
+    const bucket = todoByStatus.get(status);
     if (bucket) {
       bucket.push(todo);
       continue;
     }
 
-    todosByStatus.set(status, [todo]);
+    todoByStatus.set(status, [todo]);
   }
 
-  return Array.from(todosByStatus.entries()).map(([key, bucket]) => ({
+  return Array.from(todoByStatus.entries()).map(([key, bucket]) => ({
     key,
     todos: bucket,
   }));
-}
-
-function formatTodoPriority(priority: unknown): string {
-  if (typeof priority !== "string" || priority.trim().length === 0) {
-    return "MEDIUM";
-  }
-
-  return priority.replace(/[_\s]+/g, " ").toUpperCase();
 }
