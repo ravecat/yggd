@@ -14,14 +14,6 @@ type TodoStatusColumn = {
   todos: Todo[];
 };
 
-type TodosQueryWithFilter = GetTodosQueryParams & {
-  filter?: {
-    user_id?: {
-      eq?: string;
-    };
-  };
-};
-
 export async function TodosList({
   query,
 }: {
@@ -40,7 +32,7 @@ export async function TodosList({
   }
 
   const { page: _unusedPage, ...queryWithoutPage } = query;
-  const todosQuery: TodosQueryWithFilter = {
+  const todosQuery: GetTodosQueryParams = {
     ...(queryWithoutPage as GetTodosQueryParams),
     filter: { user_id: { eq: userId } },
   };
@@ -144,7 +136,7 @@ export async function TodosList({
 const TODOS_PAGE_LIMIT = 100;
 
 async function getAllTodos(
-  query: TodosQueryWithFilter,
+  query: GetTodosQueryParams,
 ): Promise<{ todos: Todo[]; statuses?: MetaStatusesEnum[] }> {
   const todos: Todo[] = [];
   let offset = 0;
