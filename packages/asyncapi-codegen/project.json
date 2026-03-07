@@ -11,7 +11,7 @@
         "cwd": "packages/asyncapi-codegen"
       }
     },
-    "codegen": {
+    "codegen:run": {
       "executor": "nx:run-commands",
       "options": {
         "command": "node packages/asyncapi-codegen/src/cli.mjs",

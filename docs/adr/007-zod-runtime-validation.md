@@ -59,7 +59,8 @@ from the spec via generated schemas.
 
 ### Positive consequences
 
-- One command (`pnpm codegen`) regenerates types and validation schemas from the same spec.
+- One command (`nx run @rvct/shared:codegen:openapi`) regenerates the OpenAPI spec, types, and validation schemas from
+  the same contract.
 - Runtime validation available at every system boundary (server actions, API route handlers, form validation).
 - Manual configuration file eliminated - fewer files to maintain, no drift.
 - Zod schemas serve as executable documentation of API contracts.

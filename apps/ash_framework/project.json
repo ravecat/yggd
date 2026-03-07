@@ -68,10 +68,7 @@
     "format": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "mix format",
-          "prettier --write assets"
-        ],
+        "commands": ["mix format", "prettier --write assets"],
         "cwd": "apps/ash_framework",
         "parallel": false
       }
@@ -79,23 +76,20 @@
     "format-check": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "mix format --check-formatted",
-          "prettier --check assets"
-        ],
+        "commands": ["mix format --check-formatted", "prettier --check assets"],
         "cwd": "apps/ash_framework",
         "parallel": false
       },
       "cache": true
     },
-    "ash-codegen": {
+    "codegen:ash": {
       "executor": "nx:run-commands",
       "options": {
         "command": "mix ash.codegen",
         "cwd": "apps/ash_framework"
       }
     },
-    "ash-typescript": {
+    "codegen:typescript": {
       "executor": "nx:run-commands",
       "options": {
         "command": "mix ash_typescript.codegen",
@@ -107,13 +101,12 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "mix openapi.spec.json --spec AshFrameworkWeb.AshJsonApiRouter && mv openapi.json ../../",
-          "mix openapi.spec.yaml --spec AshFrameworkWeb.AshJsonApiRouter && mv openapi.yaml ../../"
+          "mix openapi.spec.yaml --spec AshFrameworkWeb.AshJsonApiRouter --filename priv/specs/openapi.yaml"
         ],
         "cwd": "apps/ash_framework",
-        "parallel": true
+        "parallel": false
       },
-      "outputs": ["{workspaceRoot}/openapi.json", "{workspaceRoot}/openapi.yaml"]
+      "outputs": ["{projectRoot}/priv/specs/openapi.yaml"]
     },
     "db-reset": {
       "executor": "nx:run-commands",

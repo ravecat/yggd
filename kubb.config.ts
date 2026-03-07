@@ -7,7 +7,7 @@ import { pluginZod } from "@kubb/plugin-zod";
 export default defineConfig({
   root: ".",
   input: {
-    path: "./apps/ash_framework/priv/specs/openapi.json",
+    path: "./apps/ash_framework/priv/specs/openapi.yaml",
   },
   output: {
     path: "./packages/shared/src/api",
@@ -40,6 +40,7 @@ export default defineConfig({
         path: "zod",
       },
       dateType: "string",
+      typed: true,
       version: "4",
     }),
   ],

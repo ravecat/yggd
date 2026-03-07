@@ -1,1 +1,67 @@
-{"additionalProperties":false,"properties":{"eq":{"enum":["low","medium","high","urgent"],"type":"string","x-struct":null,"x-validate":null},"greater_than":{"enum":["low","medium","high","urgent"],"type":"string","x-struct":null,"x-validate":null},"greater_than_or_equal":{"enum":["low","medium","high","urgent"],"type":"string","x-struct":null,"x-validate":null},"in":{"items":{"enum":["low","medium","high","urgent"],"type":"string","x-struct":null,"x-validate":null},"type":"array","x-struct":null,"x-validate":null},"is_distinct_from":{"type":"string","x-struct":null,"x-validate":null},"is_nil":{"type":"boolean","x-struct":null,"x-validate":null},"is_not_distinct_from":{"type":"string","x-struct":null,"x-validate":null},"less_than":{"enum":["low","medium","high","urgent"],"type":"string","x-struct":null,"x-validate":null},"less_than_or_equal":{"enum":["low","medium","high","urgent"],"type":"string","x-struct":null,"x-validate":null},"not_eq":{"enum":["low","medium","high","urgent"],"type":"string","x-struct":null,"x-validate":null}},"type":"object","x-struct":null,"x-validate":null,"x-readme-ref-name":"todo-filter-priority"}
+{
+  "additionalProperties": false,
+  "properties": {
+    "eq": {
+      "enum": ["low", "medium", "high", "urgent"],
+      "type": "string",
+      "x-struct": null,
+      "x-validate": null
+    },
+    "greater_than": {
+      "enum": ["low", "medium", "high", "urgent"],
+      "type": "string",
+      "x-struct": null,
+      "x-validate": null
+    },
+    "greater_than_or_equal": {
+      "enum": ["low", "medium", "high", "urgent"],
+      "type": "string",
+      "x-struct": null,
+      "x-validate": null
+    },
+    "in": {
+      "items": {
+        "enum": ["low", "medium", "high", "urgent"],
+        "type": "string",
+        "x-struct": null,
+        "x-validate": null
+      },
+      "type": "array",
+      "x-struct": null,
+      "x-validate": null
+    },
+    "is_distinct_from": {
+      "type": "string",
+      "x-struct": null,
+      "x-validate": null
+    },
+    "is_nil": { "type": "boolean", "x-struct": null, "x-validate": null },
+    "is_not_distinct_from": {
+      "type": "string",
+      "x-struct": null,
+      "x-validate": null
+    },
+    "less_than": {
+      "enum": ["low", "medium", "high", "urgent"],
+      "type": "string",
+      "x-struct": null,
+      "x-validate": null
+    },
+    "less_than_or_equal": {
+      "enum": ["low", "medium", "high", "urgent"],
+      "type": "string",
+      "x-struct": null,
+      "x-validate": null
+    },
+    "not_eq": {
+      "enum": ["low", "medium", "high", "urgent"],
+      "type": "string",
+      "x-struct": null,
+      "x-validate": null
+    }
+  },
+  "type": "object",
+  "x-struct": null,
+  "x-validate": null,
+  "x-readme-ref-name": "todo-filter-priority"
+}
