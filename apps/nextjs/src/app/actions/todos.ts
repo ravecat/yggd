@@ -5,8 +5,8 @@ import { redirect } from "next/navigation";
 import {
   postTodos,
   ValidationError,
-  type AttributesPriorityEnum2,
-  type AttributesStatusEnum2,
+  type AttributesPriorityEnum2Key,
+  type AttributesStatusEnum2Key,
 } from "@rvct/shared";
 import { assigns } from "~/shared/lib/session";
 
@@ -38,8 +38,8 @@ export async function createTodo(
         attributes: {
           title: formData.get("title") as string,
           content: formData.get("content") as string,
-          priority: formData.get("priority") as AttributesPriorityEnum2,
-          status: formData.get("status") as AttributesStatusEnum2,
+          priority: formData.get("priority") as AttributesPriorityEnum2Key,
+          status: formData.get("status") as AttributesStatusEnum2Key,
           user_id: session.userId,
         },
       },

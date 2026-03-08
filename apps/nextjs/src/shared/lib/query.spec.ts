@@ -1,10 +1,11 @@
-import { deserializeQueryParams, serializeQueryParams } from "./query";
+import { getTodosQueryParamsSchema } from "@rvct/shared";
+import { parseQuery, stringifyQuery } from "./query";
 
-describe("deserializeQueryParams", () => {
+describe("parseQuery", () => {
   describe("simple keys", () => {
     test("parses simple string values", () => {
       const input = { sort: "-created_at", search: "test" };
-      const result = deserializeQueryParams(input);
+      const result = parseQuery(input);
 
       expect(result).toEqual({
         sort: "-created_at",
@@ -14,30 +15,30 @@ describe("deserializeQueryParams", () => {
 
     test("handles undefined values", () => {
       const input = { sort: "-created_at", search: undefined };
-      const result = deserializeQueryParams(input);
+      const result = parseQuery(input);
 
       expect(result).toEqual({
         sort: "-created_at",
       });
     });
 
-    test("converts numeric strings to numbers", () => {
+    test("keeps numeric strings as strings", () => {
       const input = { limit: "10", offset: "20" };
-      const result = deserializeQueryParams(input);
+      const result = parseQuery(input);
 
       expect(result).toEqual({
-        limit: 10,
-        offset: 20,
+        limit: "10",
+        offset: "20",
       });
     });
 
-    test("converts boolean strings to booleans", () => {
+    test("keeps boolean strings as strings", () => {
       const input = { active: "true", deleted: "false" };
-      const result = deserializeQueryParams(input);
+      const result = parseQuery(input);
 
       expect(result).toEqual({
-        active: true,
-        deleted: false,
+        active: "true",
+        deleted: "false",
       });
     });
   });
@@ -48,12 +49,12 @@ describe("deserializeQueryParams", () => {
         "page[number]": "1",
         "page[size]": "10",
       };
-      const result = deserializeQueryParams(input);
+      const result = parseQuery(input);
 
       expect(result).toEqual({
         page: {
-          number: 1,
-          size: 10,
+          number: "1",
+          size: "10",
         },
       });
     });
@@ -64,13 +65,13 @@ describe("deserializeQueryParams", () => {
         "page[number]": "1",
         "page[size]": "10",
       };
-      const result = deserializeQueryParams(input);
+      const result = parseQuery(input);
 
       expect(result).toEqual({
         sort: "-created_at",
         page: {
-          number: 1,
-          size: 10,
+          number: "1",
+          size: "10",
         },
       });
     });
@@ -82,7 +83,7 @@ describe("deserializeQueryParams", () => {
         "filter[title][contains]": "test",
         "filter[status][eq]": "published",
       };
-      const result = deserializeQueryParams(input);
+      const result = parseQuery(input);
 
       expect(result).toEqual({
         filter: {
@@ -100,7 +101,7 @@ describe("deserializeQueryParams", () => {
       const input = {
         "filter[author][name][like]": "John",
       };
-      const result = deserializeQueryParams(input);
+      const result = parseQuery(input);
 
       expect(result).toEqual({
         filter: {
@@ -120,12 +121,12 @@ describe("deserializeQueryParams", () => {
         "filter[title][contains]": "test",
         "filter[status][in]": "draft",
       };
-      const result = deserializeQueryParams(input);
+      const result = parseQuery(input);
 
       expect(result).toEqual({
         sort: "-created_at",
         page: {
-          number: 1,
+          number: "1",
         },
         filter: {
           title: {
@@ -144,32 +145,32 @@ describe("deserializeQueryParams", () => {
       const input = {
         "tags[]": ["javascript", "typescript"],
       };
-      const result = deserializeQueryParams(input);
+      const result = parseQuery(input);
 
       expect(result).toEqual({
         tags: ["javascript", "typescript"],
       });
     });
 
-    test("converts numeric array values", () => {
+    test("keeps numeric array values as strings", () => {
       const input = {
         "ids[]": ["1", "2", "3"],
       };
-      const result = deserializeQueryParams(input);
+      const result = parseQuery(input);
 
       expect(result).toEqual({
-        ids: [1, 2, 3],
+        ids: ["1", "2", "3"],
       });
     });
 
-    test("handles mixed array values", () => {
+    test("handles mixed array values as strings", () => {
       const input = {
         "values[]": ["true", "42", "text"],
       };
-      const result = deserializeQueryParams(input);
+      const result = parseQuery(input);
 
       expect(result).toEqual({
-        values: [true, 42, "text"],
+        values: ["true", "42", "text"],
       });
     });
   });
@@ -177,7 +178,7 @@ describe("deserializeQueryParams", () => {
   describe("edge cases", () => {
     test("handles empty string values", () => {
       const input = { search: "" };
-      const result = deserializeQueryParams(input);
+      const result = parseQuery(input);
 
       expect(result).toEqual({
         search: "",
@@ -186,7 +187,7 @@ describe("deserializeQueryParams", () => {
 
     test("handles empty object", () => {
       const input = {};
-      const result = deserializeQueryParams(input);
+      const result = parseQuery(input);
 
       expect(result).toEqual({});
     });
@@ -196,7 +197,7 @@ describe("deserializeQueryParams", () => {
         search: "hello@world.com",
         "filter[email][eq]": "test+tag@example.com",
       };
-      const result = deserializeQueryParams(input);
+      const result = parseQuery(input);
 
       expect(result).toEqual({
         search: "hello@world.com",
@@ -213,7 +214,7 @@ describe("deserializeQueryParams", () => {
         search: "hello world",
         "filter[title][contains]": "test value",
       };
-      const result = deserializeQueryParams(input);
+      const result = parseQuery(input);
 
       expect(result).toEqual({
         search: "hello world",
@@ -230,7 +231,7 @@ describe("deserializeQueryParams", () => {
         code: "123abc",
         "filter[id][eq]": "456def",
       };
-      const result = deserializeQueryParams(input);
+      const result = parseQuery(input);
 
       expect(result).toEqual({
         code: "123abc",
@@ -242,33 +243,33 @@ describe("deserializeQueryParams", () => {
       });
     });
 
-    test("handles negative numbers", () => {
+    test("keeps negative numbers as strings", () => {
       const input = {
         offset: "-10",
         "page[delta]": "-5",
       };
-      const result = deserializeQueryParams(input);
+      const result = parseQuery(input);
 
       expect(result).toEqual({
-        offset: -10,
+        offset: "-10",
         page: {
-          delta: -5,
+          delta: "-5",
         },
       });
     });
 
-    test("handles decimal numbers", () => {
+    test("keeps decimal numbers as strings", () => {
       const input = {
         price: "19.99",
         "filter[rating][gte]": "4.5",
       };
-      const result = deserializeQueryParams(input);
+      const result = parseQuery(input);
 
       expect(result).toEqual({
-        price: 19.99,
+        price: "19.99",
         filter: {
           rating: {
-            gte: 4.5,
+            gte: "4.5",
           },
         },
       });
@@ -282,13 +283,13 @@ describe("deserializeQueryParams", () => {
         "page[size]": "25",
         "page[count]": "true",
       };
-      const result = deserializeQueryParams(input);
+      const result = parseQuery(input);
 
       expect(result).toEqual({
         page: {
-          number: 2,
-          size: 25,
-          count: true,
+          number: "2",
+          size: "25",
+          count: "true",
         },
       });
     });
@@ -298,12 +299,12 @@ describe("deserializeQueryParams", () => {
         "page[limit]": "10",
         "page[offset]": "20",
       };
-      const result = deserializeQueryParams(input);
+      const result = parseQuery(input);
 
       expect(result).toEqual({
         page: {
-          limit: 10,
-          offset: 20,
+          limit: "10",
+          offset: "20",
         },
       });
     });
@@ -317,13 +318,13 @@ describe("deserializeQueryParams", () => {
         "filter[created_at][gte]": "2024-01-01",
         "filter[status][in]": "published",
       };
-      const result = deserializeQueryParams(input);
+      const result = parseQuery(input);
 
       expect(result).toEqual({
         sort: "-created_at,title",
         page: {
-          number: 1,
-          size: 10,
+          number: "1",
+          size: "10",
         },
         filter: {
           title: {
@@ -344,7 +345,7 @@ describe("deserializeQueryParams", () => {
         "fields[post]": "title,content,created_at",
         "fields[user]": "name,email",
       };
-      const result = deserializeQueryParams(input);
+      const result = parseQuery(input);
 
       expect(result).toEqual({
         fields: {
@@ -353,129 +354,126 @@ describe("deserializeQueryParams", () => {
         },
       });
     });
+
+    test("parses and validates generated query contracts via schema", () => {
+      const input = {
+        sort: "-updated_at,title",
+        include: "user",
+        "page[limit]": "10",
+        "page[offset]": "20",
+      };
+
+      const result = parseQuery(getTodosQueryParamsSchema, input);
+
+      expect(result).toEqual({
+        sort: "-updated_at,title",
+        include: "user",
+        page: {
+          count: false,
+          limit: 10,
+          offset: 20,
+        },
+      });
+    });
   });
 });
 
-describe("serializeQueryParams", () => {
+describe("stringifyQuery", () => {
   describe("simple values", () => {
     test("serializes simple string values", () => {
-      const result = serializeQueryParams({ sort: "title", search: "test" });
+      const result = stringifyQuery({ sort: "title", search: "test" });
 
-      expect(result).toEqual([
-        ["sort", "title"],
-        ["search", "test"],
-      ]);
+      expect(result).toBe("sort=title&search=test");
     });
 
     test("serializes numeric values", () => {
-      const result = serializeQueryParams({ limit: 10, offset: 20 });
+      const result = stringifyQuery({ limit: 10, offset: 20 });
 
-      expect(result).toEqual([
-        ["limit", "10"],
-        ["offset", "20"],
-      ]);
+      expect(result).toBe("limit=10&offset=20");
     });
 
     test("serializes boolean values", () => {
-      const result = serializeQueryParams({ active: true, deleted: false });
+      const result = stringifyQuery({ active: true, deleted: false });
 
-      expect(result).toEqual([
-        ["active", "true"],
-        ["deleted", "false"],
-      ]);
+      expect(result).toBe("active=true&deleted=false");
     });
 
     test("skips undefined values", () => {
-      const result = serializeQueryParams({ sort: "title", search: undefined });
+      const result = stringifyQuery({ sort: "title", search: undefined });
 
-      expect(result).toEqual([["sort", "title"]]);
+      expect(result).toBe("sort=title");
     });
 
     test("skips null values", () => {
-      const result = serializeQueryParams({ sort: "title", search: null });
+      const result = stringifyQuery({ sort: "title", search: null });
 
-      expect(result).toEqual([["sort", "title"]]);
+      expect(result).toBe("sort=title");
     });
   });
 
   describe("nested objects", () => {
     test("serializes single-level nested objects", () => {
-      const result = serializeQueryParams({
+      const result = stringifyQuery({
         page: { limit: 10, offset: 0 },
       });
 
-      expect(result).toEqual([
-        ["page[limit]", "10"],
-        ["page[offset]", "0"],
-      ]);
+      expect(result).toBe("page[limit]=10&page[offset]=0");
     });
 
     test("serializes multi-level nested objects", () => {
-      const result = serializeQueryParams({
+      const result = stringifyQuery({
         filter: { title: { contains: "test" } },
       });
 
-      expect(result).toEqual([["filter[title][contains]", "test"]]);
+      expect(result).toBe("filter[title][contains]=test");
     });
 
     test("serializes mixed simple and nested values", () => {
-      const result = serializeQueryParams({
+      const result = stringifyQuery({
         page: { limit: 10, offset: 0 },
         sort: "title",
       });
 
-      expect(result).toEqual([
-        ["page[limit]", "10"],
-        ["page[offset]", "0"],
-        ["sort", "title"],
-      ]);
+      expect(result).toBe("page[limit]=10&page[offset]=0&sort=title");
     });
   });
 
   describe("arrays", () => {
     test("serializes string arrays", () => {
-      const result = serializeQueryParams({
+      const result = stringifyQuery({
         tags: ["typescript", "react"],
       });
 
-      expect(result).toEqual([
-        ["tags[]", "typescript"],
-        ["tags[]", "react"],
-      ]);
+      expect(result).toBe("tags[0]=typescript&tags[1]=react");
     });
 
     test("serializes number arrays", () => {
-      const result = serializeQueryParams({
+      const result = stringifyQuery({
         ids: [1, 2, 3],
       });
 
-      expect(result).toEqual([
-        ["ids[]", "1"],
-        ["ids[]", "2"],
-        ["ids[]", "3"],
-      ]);
+      expect(result).toBe("ids[0]=1&ids[1]=2&ids[2]=3");
     });
 
     test("skips undefined and null values in arrays", () => {
-      const result = serializeQueryParams({
+      const result = stringifyQuery({
         tags: ["a", undefined, "b", null, "c"],
       });
 
-      expect(result).toEqual([
-        ["tags[]", "a"],
-        ["tags[]", "b"],
-        ["tags[]", "c"],
-      ]);
+      expect(result).toBe("tags[0]=a&tags[2]=b&tags[4]=c");
     });
   });
 
   describe("round-trip conversion", () => {
     test("parse -> serialize -> parse yields same result for simple values", () => {
       const original = { sort: "title", limit: "10" };
-      const parsed = deserializeQueryParams(original);
-      const serialized = serializeQueryParams(parsed);
-      const reParsed = deserializeQueryParams(
-        Object.fromEntries(serialized) as Record<string, string>,
+      const parsed = parseQuery(original);
+      const serialized = stringifyQuery(parsed);
+      const reParsed = parseQuery(
+        Object.fromEntries(new URLSearchParams(serialized).entries()) as Record<
+          string,
+          string
+        >,
       );
 
       expect(reParsed).toEqual(parsed);
@@ -483,10 +481,13 @@ describe("serializeQueryParams", () => {
 
     test("parse -> serialize -> parse yields same result for nested objects", () => {
       const original = { "page[limit]": "10", "page[offset]": "0" };
-      const parsed = deserializeQueryParams(original);
-      const serialized = serializeQueryParams(parsed);
-      const reParsed = deserializeQueryParams(
-        Object.fromEntries(serialized) as Record<string, string>,
+      const parsed = parseQuery(original);
+      const serialized = stringifyQuery(parsed);
+      const reParsed = parseQuery(
+        Object.fromEntries(new URLSearchParams(serialized).entries()) as Record<
+          string,
+          string
+        >,
       );
 
       expect(reParsed).toEqual(parsed);
@@ -497,33 +498,39 @@ describe("serializeQueryParams", () => {
         page: { limit: 10, offset: 0 },
         sort: "title",
       };
-      const serialized = serializeQueryParams(original);
-      const parsed = deserializeQueryParams(
-        Object.fromEntries(serialized) as Record<string, string>,
+      const serialized = stringifyQuery(original);
+      const parsed = parseQuery(
+        Object.fromEntries(new URLSearchParams(serialized).entries()) as Record<
+          string,
+          string
+        >,
       );
 
-      expect(parsed).toEqual(original);
+      expect(parsed).toEqual({
+        page: { limit: "10", offset: "0" },
+        sort: "title",
+      });
     });
   });
 
   describe("edge cases", () => {
     test("handles empty object", () => {
-      const result = serializeQueryParams({});
+      const result = stringifyQuery({});
 
-      expect(result).toEqual([]);
+      expect(result).toBe("");
     });
 
     test("handles object with only undefined values", () => {
-      const result = serializeQueryParams({
+      const result = stringifyQuery({
         sort: undefined,
         search: undefined,
       });
 
-      expect(result).toEqual([]);
+      expect(result).toBe("");
     });
 
     test("handles deeply nested objects", () => {
-      const result = serializeQueryParams({
+      const result = stringifyQuery({
         filter: {
           user: {
             profile: {
@@ -533,7 +540,7 @@ describe("serializeQueryParams", () => {
         },
       });
 
-      expect(result).toEqual([["filter[user][profile][age][gte]", "18"]]);
+      expect(result).toBe("filter[user][profile][age][gte]=18");
     });
   });
 });

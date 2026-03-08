@@ -7,62 +7,25 @@ import {
 } from "lucide-react";
 import { Button } from "~/shared/ui/button";
 import { Input } from "~/shared/ui/input";
-import {
-  type GetTodosQueryParams,
-  type Todo,
-  serializeQueryParams,
-} from "@rvct/shared";
+import { stringifyQuery, type GetTodosQueryParams } from "@rvct/shared";
 import { assigns } from "~/shared/lib/session";
 import { cn } from "~/shared/lib/component";
+import { todoQuery } from "~/shared/lib/todo-query";
 
 type ControlPanelProps = {
-  query: Partial<GetTodosQueryParams>;
+  query: GetTodosQueryParams;
 };
-
-type TodoSortField = keyof NonNullable<Todo["attributes"]>;
-
-const SORT_FIELDS = [
-  "title",
-  "priority",
-  "updated_at",
-] as const satisfies ReadonlyArray<TodoSortField>;
 
 export async function ControlPanel({ query }: ControlPanelProps) {
   const { userId } = await assigns();
 
-  const sort = query.sort ?? "";
+  const sortData = todoQuery.sort.build(query).map((item) => {
+    const queryString = stringifyQuery(item.nextQuery);
 
-  const sortFields = sort
-    .split(",")
-    .map((field) => field.trim())
-    .filter((field) => field.length > 0);
-
-  const getNewSortValue = (field: string) => {
-    const desc = `-${field}`;
-    let result: string[];
-
-    if (sortFields.includes(desc))
-      result = sortFields.map((f) => (f === desc ? field : f));
-    else if (sortFields.includes(field))
-      result = sortFields.filter((f) => f !== field);
-    else result = [...sortFields, desc];
-
-    return result.join(",");
-  };
-
-  const sortData = SORT_FIELDS.map((field) => {
-    const asc = sortFields.includes(field);
-    const desc = sortFields.includes(`-${field}`);
-    const active = asc || desc;
-
-    const queryParams = serializeQueryParams<GetTodosQueryParams>({
-      ...query,
-      sort: getNewSortValue(field),
-    });
-
-    const href = `/?${new URLSearchParams(queryParams).toString()}`;
-
-    return { field, asc, desc, active, href };
+    return {
+      ...item,
+      href: queryString.length > 0 ? `?${queryString}` : "?",
+    };
   });
 
   return (

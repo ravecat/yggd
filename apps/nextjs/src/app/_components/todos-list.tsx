@@ -1,7 +1,8 @@
 import {
   getTodos,
+  getTodosQueryParamsSchema,
   type GetTodosQueryParams,
-  type MetaStatusesEnum,
+  type MetaStatusesEnumKey,
   type Todo,
 } from "@rvct/shared";
 import Link from "next/link";
@@ -9,11 +10,7 @@ import { PlusIcon } from "lucide-react";
 import { ScrollArea } from "~/shared/ui/scroll-area";
 import { assigns } from "~/shared/lib/session";
 
-export async function TodosList({
-  query,
-}: {
-  query: Partial<GetTodosQueryParams>;
-}) {
+export async function TodosList({ query }: { query: GetTodosQueryParams }) {
   const { userId } = await assigns();
 
   if (!userId) {
@@ -26,11 +23,13 @@ export async function TodosList({
     );
   }
 
-  const { page: _unusedPage, ...queryWithoutPage } = query;
-  const todosQuery: GetTodosQueryParams = {
-    ...(queryWithoutPage as GetTodosQueryParams),
-    filter: { user_id: { eq: userId } },
-  };
+  const todosQuery = getTodosQueryParamsSchema.parse({
+    ...query,
+    filter: {
+      ...(query.filter ?? {}),
+      user_id: { eq: userId },
+    },
+  });
   const response = await getTodos(todosQuery);
   const todos = response.data ?? [];
   const todoStatusColumns = getTodoByStatusColumns(
@@ -130,7 +129,7 @@ export async function TodosList({
 
 function getTodoByStatusColumns(
   todos: Todo[],
-  metaStatuses?: MetaStatusesEnum[],
+  metaStatuses?: MetaStatusesEnumKey[],
 ) {
   const todoByStatus = new Map<string, Todo[]>(
     (metaStatuses ?? []).map((status) => [status, []]),

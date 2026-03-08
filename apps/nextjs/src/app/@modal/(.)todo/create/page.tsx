@@ -2,9 +2,9 @@
 
 import {
   attributesPriorityEnum2,
-  type AttributesPriorityEnum2,
+  type AttributesPriorityEnum2Key,
   attributesStatusEnum2,
-  type AttributesStatusEnum2,
+  type AttributesStatusEnum2Key,
 } from "@rvct/shared";
 import { useRouter } from "next/navigation";
 import { useActionState, useState } from "react";
@@ -29,10 +29,10 @@ import { Textarea } from "~/shared/ui/textarea";
 
 const PRIORITY_OPTIONS = Object.values(
   attributesPriorityEnum2,
-) as AttributesPriorityEnum2[];
+) as AttributesPriorityEnum2Key[];
 const STATUS_OPTIONS = Object.values(
   attributesStatusEnum2,
-) as AttributesStatusEnum2[];
+) as AttributesStatusEnum2Key[];
 
 export default function CreateTodoModal() {
   const router = useRouter();
@@ -40,10 +40,10 @@ export default function CreateTodoModal() {
     errors: {},
     message: "",
   });
-  const [priority, setPriority] = useState<AttributesPriorityEnum2>(
+  const [priority, setPriority] = useState<AttributesPriorityEnum2Key>(
     attributesPriorityEnum2.medium,
   );
-  const [status, setStatus] = useState<AttributesStatusEnum2>(
+  const [status, setStatus] = useState<AttributesStatusEnum2Key>(
     attributesStatusEnum2.backlog,
   );
 
@@ -111,7 +111,7 @@ export default function CreateTodoModal() {
               <Select
                 value={priority}
                 onValueChange={(value) =>
-                  setPriority(value as AttributesPriorityEnum2)
+                  setPriority(value as AttributesPriorityEnum2Key)
                 }
                 disabled={pending}
               >
@@ -145,7 +145,7 @@ export default function CreateTodoModal() {
               <Select
                 value={status}
                 onValueChange={(value) =>
-                  setStatus(value as AttributesStatusEnum2)
+                  setStatus(value as AttributesStatusEnum2Key)
                 }
                 disabled={pending}
               >

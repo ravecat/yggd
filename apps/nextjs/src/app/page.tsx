@@ -1,10 +1,12 @@
 import { Suspense } from "react";
+import { type GetTodosQueryParams } from "@rvct/shared";
 import { TodosList } from "./_components/todos-list";
 import { TodosSkeleton } from "./_components/todos-skeleton";
 import { ControlPanel } from "./_components/control-panel";
 import { ControlPanelSkeleton } from "./_components/control-panel-skeleton";
+import { parseQuery } from "~/shared/lib/query";
+import { todoQuery } from "~/shared/lib/todo-query";
 import type { AsyncSearchParams } from "~/shared/types";
-import { deserializeQueryParams, type GetTodosQueryParams } from "@rvct/shared";
 
 export default async function Index({
   searchParams,
@@ -12,7 +14,7 @@ export default async function Index({
   searchParams: AsyncSearchParams<GetTodosQueryParams>;
 }) {
   const params = await searchParams;
-  const query = deserializeQueryParams<GetTodosQueryParams>(params);
+  const query = parseQuery(todoQuery.schema, params);
 
   return (
     <div className="h-full overflow-hidden">
