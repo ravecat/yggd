@@ -50,7 +50,7 @@ export function SearchControl({ query }: SearchControlProps) {
   }, [value]);
 
   return (
-    <div className="relative w-full sm:min-w-0 sm:flex-1" role="search">
+    <div className="relative min-w-0 flex-1" role="search">
       <SearchIcon
         className={cn(
           "pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 transition-colors",
