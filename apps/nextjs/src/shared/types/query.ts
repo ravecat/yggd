@@ -1,9 +1,27 @@
-import type { FlattenToBracketNotation } from "@rvct/shared";
-
 /**
  * Type utilities for converting JSON:API QueryParams to Next.js searchParams format
  * with bracket notation support.
  */
+
+/**
+ * Next.js-only helper that flattens nested keys into bracket notation.
+ * Kept local to avoid coupling shared query types to framework concerns.
+ */
+type FlattenToBracketNotation<T> = {
+  [K in keyof T as K extends string
+    ? T[K] extends Record<string, unknown>
+      ? T[K] extends unknown[]
+        ? K
+        : `${K}[${Extract<keyof T[K], string>}]` | K
+      : K
+    : never]: T[K] extends Record<string, unknown>
+    ? T[K] extends unknown[]
+      ? string | string[] | undefined
+      : string | string[] | undefined
+    : string | string[] | undefined;
+};
+
+type NextFlatSearchParams = Record<string, string | string[] | undefined>;
 
 /**
  * Generic type for Next.js searchParams that accepts generated QueryParams types.
@@ -27,9 +45,7 @@ import type { FlattenToBracketNotation } from "@rvct/shared";
  * }
  */
 export type SearchParams<TQueryParams = Record<string, unknown>> =
-  FlattenToBracketNotation<TQueryParams> & {
-    [key: string]: string | string[] | undefined;
-  };
+  FlattenToBracketNotation<TQueryParams> & NextFlatSearchParams;
 
 /**
  * Async version of SearchParams for Next.js 15+ server components.
@@ -50,7 +66,7 @@ export type SearchParams<TQueryParams = Record<string, unknown>> =
  *   searchParams: AsyncSearchParams<GetTodosQueryParams>
  * }) {
  *   const params = await searchParams;
- *   const parsed = deserializeQueryParams<GetTodosQueryParams>(params);
+ *   const query = parseQuery(getTodosQueryParamsSchema, params);
  * }
  *
  * @example
