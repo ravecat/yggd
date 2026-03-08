@@ -78,9 +78,7 @@ const DEFAULTS: Partial<ChartOptions> = {
   scales: { y: { range: rangeWithPadding } },
   axes: [
     {
-      ticks: { show: false },
-      size: 24,
-      gap: 0,
+      show: false,
     },
     { size: 60 },
   ],

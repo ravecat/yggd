@@ -78,11 +78,7 @@ export const todoQuery = {
   schema: getTodosQueryParamsSchema,
   normalize: normalizeQuery,
   sort: createQuerySortPreset<GetTodosQueryParams, TodoSortField>({
-    fields: [
-      { field: "title" },
-      { field: "priority" },
-      { field: "updated_at" },
-    ],
+    fields: [{ field: "priority" }, { field: "updated_at" }],
   }),
   search: {
     fieldName: SEARCH_FIELD_NAME,

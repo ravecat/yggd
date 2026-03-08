@@ -10,17 +10,6 @@ describe("todoQuery", () => {
       }),
     ).toEqual([
       {
-        field: "title",
-        direction: null,
-        asc: false,
-        desc: false,
-        active: false,
-        nextQuery: {
-          sort: "-priority,-title",
-          page: { limit: 10 },
-        },
-      },
-      {
         field: "priority",
         direction: "desc",
         asc: false,

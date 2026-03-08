@@ -34,10 +34,10 @@ export async function ControlPanel({ query }: ControlPanelProps) {
           </Button>
         </Link>
       )}
-      <div className="flex w-full flex-col gap-2 sm:min-w-0 sm:flex-1 sm:flex-row sm:items-center">
+      <div className="flex w-full flex-col gap-2 sm:min-w-0 sm:flex-1 sm:flex-row sm:items-stretch">
         <SearchControl query={normalizedQuery} />
 
-        <div className="grid w-full grid-cols-3 gap-2 sm:w-auto">
+        <div className="grid w-full grid-cols-2 gap-2 sm:w-auto sm:shrink-0">
           {sortData.map((data) => (
             <Link
               key={data.field}
