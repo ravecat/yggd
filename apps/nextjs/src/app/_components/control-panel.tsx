@@ -1,16 +1,11 @@
 import Link from "next/link";
-import {
-  ChevronUpIcon,
-  ChevronDownIcon,
-  PlusIcon,
-  SearchIcon,
-} from "lucide-react";
+import { ChevronUpIcon, ChevronDownIcon, PlusIcon } from "lucide-react";
 import { Button } from "~/shared/ui/button";
-import { Input } from "~/shared/ui/input";
 import { stringifyQuery, type GetTodosQueryParams } from "@rvct/shared";
 import { assigns } from "~/shared/lib/session";
 import { cn } from "~/shared/lib/component";
 import { todoQuery } from "~/shared/lib/todo-query";
+import { SearchControl } from "./search-control";
 
 type ControlPanelProps = {
   query: GetTodosQueryParams;
@@ -18,8 +13,9 @@ type ControlPanelProps = {
 
 export async function ControlPanel({ query }: ControlPanelProps) {
   const { userId } = await assigns();
+  const normalizedQuery = todoQuery.normalize(query);
 
-  const sortData = todoQuery.sort.build(query).map((item) => {
+  const sortData = todoQuery.sort.build(normalizedQuery).map((item) => {
     const queryString = stringifyQuery(item.nextQuery);
 
     return {
@@ -39,15 +35,7 @@ export async function ControlPanel({ query }: ControlPanelProps) {
         </Link>
       )}
       <div className="flex w-full flex-col gap-2 sm:min-w-0 sm:flex-1 sm:flex-row sm:items-center">
-        <div className="relative w-full sm:min-w-0 sm:flex-1">
-          <SearchIcon className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            aria-label="Search tasks"
-            className="w-full pl-9"
-            placeholder="search (in progress)"
-            type="search"
-          />
-        </div>
+        <SearchControl query={normalizedQuery} />
 
         <div className="grid w-full grid-cols-3 gap-2 sm:w-auto">
           {sortData.map((data) => (
