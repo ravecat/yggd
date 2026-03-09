@@ -149,6 +149,41 @@ defmodule AshFramework.Tasks.TodoTest do
       assert Enum.any?(todos, &(&1.id == todo2.id))
     end
 
+    test "sorts todos by priority using business order" do
+      user = create_test_user("priority-sort@example.com")
+
+      for {title, priority} <- [
+            {"Low", "low"},
+            {"Medium", "medium"},
+            {"High", "high"},
+            {"Urgent", "urgent"}
+          ] do
+        Todo
+        |> Ash.Changeset.for_create(:create, %{
+          title: title,
+          content: "#{title} priority",
+          priority: priority,
+          user_id: user.id
+        })
+        |> Ash.create!()
+      end
+
+      ascending =
+        Todo
+        |> Ash.Query.sort(priority: :asc)
+        |> Ash.read!()
+        |> Map.fetch!(:results)
+
+      descending =
+        Todo
+        |> Ash.Query.sort(priority: :desc)
+        |> Ash.read!()
+        |> Map.fetch!(:results)
+
+      assert Enum.map(ascending, & &1.priority) == [:low, :medium, :high, :urgent]
+      assert Enum.map(descending, & &1.priority) == [:urgent, :high, :medium, :low]
+    end
+
     test "loads user relationship" do
       user = create_test_user("user@example.com")
 
