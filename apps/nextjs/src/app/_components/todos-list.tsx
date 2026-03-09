@@ -1,38 +1,56 @@
-import {
-  getTodos,
-  getTodosQueryParamsSchema,
-  type GetTodosQueryParams,
-} from "@rvct/shared";
+"use client";
+
+import type { Todo } from "@rvct/shared";
 import Link from "next/link";
 import { ChevronDownIcon } from "lucide-react";
+import { useTodosContext } from "~/contexts/todos";
 import { ScrollArea } from "~/shared/ui/scroll-area";
-import { assigns } from "~/shared/lib/session";
 
-export async function TodosList({ query }: { query: GetTodosQueryParams }) {
-  const { userId } = await assigns();
+export function TodosList() {
+  const { hasLoadingError, isLoading, searchValue, statuses, todos } =
+    useTodosContext();
 
-  if (!userId) {
+  if (hasLoadingError) {
     return (
-      <div className="flex min-h-80 flex-1 items-center justify-center px-6 text-center">
-        <p className="text-sm font-medium text-foreground">
-          Sign in to manage tasks.
-        </p>
+      <div className="flex min-h-80 flex-1 items-center justify-center rounded-lg border border-dashed border-destructive/40 bg-destructive/5 px-6 text-center">
+        <div className="space-y-2">
+          <p className="text-lg font-medium text-foreground">
+            Failed to load tasks
+          </p>
+          <p className="text-sm text-muted-foreground">
+            Please retry by changing search or sort.
+          </p>
+        </div>
       </div>
     );
   }
 
-  const todosQuery = getTodosQueryParamsSchema.parse({
-    ...query,
-    filter: {
-      ...(query.filter ?? {}),
-      user_id: { eq: userId },
-    },
-  });
-  const response = await getTodos(todosQuery);
-  const todos = response.data ?? [];
-  const columns = new Map<string, typeof todos>();
+  const hasTasks = todos.length > 0;
 
-  for (const status of response.meta?.statuses ?? []) {
+  if (!hasTasks) {
+    const searchActive = searchValue.trim().length > 0;
+    const emptyTitle = isLoading
+      ? "Loading tasks"
+      : searchActive
+        ? "No matching tasks"
+        : "No tasks yet";
+    const emptyMessage = searchActive
+      ? "Adjust search or sorting to see results."
+      : "Create task to add your first item.";
+
+    return (
+      <div className="flex min-h-80 flex-1 items-center justify-center rounded-lg border border-dashed border-border bg-muted/20 px-6 text-center">
+        <div className="space-y-2">
+          <p className="text-lg font-medium text-foreground">{emptyTitle}</p>
+          <p className="text-sm text-muted-foreground">{emptyMessage}</p>
+        </div>
+      </div>
+    );
+  }
+
+  const columns = new Map<string, Todo[]>();
+
+  for (const status of statuses) {
     columns.set(status, []);
   }
 
@@ -56,21 +74,6 @@ export async function TodosList({ query }: { query: GetTodosQueryParams }) {
     key,
     todos: items,
   }));
-  const hasTasks = todos.length > 0;
-
-  if (!hasTasks) {
-    return (
-      <div className="flex min-h-80 flex-1 items-center justify-center rounded-lg border border-dashed border-border bg-muted/20 px-6 text-center">
-        <div className="space-y-2">
-          <p className="text-lg font-medium text-foreground">No tasks yet</p>
-          <p className="text-sm text-muted-foreground">
-            <span className="font-medium text-foreground">Create task</span> to
-            add your first item.
-          </p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
@@ -95,7 +98,7 @@ export async function TodosList({ query }: { query: GetTodosQueryParams }) {
                 {column.todos.map((todo) => (
                   <Link
                     key={todo.id}
-                    href={`/todo/${todo.id}`}
+                    href={`/todo/${encodeURIComponent(todo.id)}`}
                     className="rounded-lg border border-border bg-card p-3 shadow-sm transition hover:border-primary/30 hover:shadow-md"
                   >
                     <div className="mb-2 flex items-start justify-between gap-2">
@@ -160,7 +163,7 @@ export async function TodosList({ query }: { query: GetTodosQueryParams }) {
                   {column.todos.map((todo) => (
                     <Link
                       key={todo.id}
-                      href={`/todo/${todo.id}`}
+                      href={`/todo/${encodeURIComponent(todo.id)}`}
                       className="rounded-lg border border-border bg-card p-3 shadow-sm transition hover:border-primary/30 hover:shadow-md"
                     >
                       <div className="mb-2 flex items-start justify-between gap-2">

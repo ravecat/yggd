@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "composite": false,
+    "composite": true,
     "declarationMap": true,
     "sourceMap": false,
     "importHelpers": true,
@@ -23,16 +23,10 @@
     "declaration": true,
     "emitDeclarationOnly": false,
     "forceConsistentCasingInFileNames": true,
-    "types": [
-      "node",
-      "react"
-    ],
-    "jsx": "react-jsx",
+    "types": ["node", "react"],
+    "jsx": "react-jsx"
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx"
-  ],
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
   "references": [],
   "exclude": [
     "jest.config.ts",

@@ -8,7 +8,12 @@ import {
   type AttributesPriorityEnum2Key,
   type AttributesStatusEnum2Key,
 } from "@rvct/shared";
+import type { GetTodosQueryParams } from "@rvct/shared";
 import { assigns } from "~/shared/lib/session";
+import {
+  fetchCurrentUserTodos,
+  type FetchTodosResult,
+} from "~/shared/lib/todos";
 
 export type CreateTodoState = {
   errors?: {
@@ -20,6 +25,12 @@ export type CreateTodoState = {
   };
   message?: string;
 };
+
+export async function fetchTodosAction(
+  query: GetTodosQueryParams = {},
+): Promise<FetchTodosResult> {
+  return fetchCurrentUserTodos(query);
+}
 
 export async function createTodo(
   _prevState: CreateTodoState,
@@ -59,6 +70,8 @@ export async function createTodo(
     return { errors: { general: ["Failed to create todo"] } };
   }
 
-  revalidatePath("/");
-  redirect("/");
+  const boardHref = "/";
+
+  revalidatePath(boardHref);
+  redirect(boardHref);
 }

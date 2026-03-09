@@ -1,3 +1,6 @@
+const serverOnlyStub =
+  require.resolve("next/dist/compiled/server-only/empty.js");
+
 const config = {
   displayName: "nextjs",
   preset: "../../jest.preset.js",
@@ -32,8 +35,7 @@ const config = {
   transformIgnorePatterns: ["node_modules/(?!(jose)/)"],
   moduleNameMapper: {
     "^~/(.*)$": "<rootDir>/src/$1",
-    "^server-only$":
-      "<rootDir>/../../node_modules/next/dist/compiled/server-only/empty.js",
+    "^server-only$": serverOnlyStub,
   },
 };
 

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { TodoView } from "./_components/todo-view";
 import { TodoViewSkeleton } from "./_components/todo-view-skeleton";
 
-export default function TodoPage({
+export default async function TodoPage({
   params,
 }: {
   params: Promise<{ id: string }>;
