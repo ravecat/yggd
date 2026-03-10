@@ -39,4 +39,4 @@ const config = {
   },
 };
 
-export default config;
+module.exports = config;

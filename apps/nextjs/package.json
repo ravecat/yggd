@@ -33,7 +33,7 @@
     "y-excalidraw": "^2.0.12"
   },
   "devDependencies": {
-    "@nx/next": "22.1.0",
+    "@nx/next": "22.5.4",
     "@tailwindcss/postcss": "^4.1.16",
     "@types/jest": "^30.0.0",
     "@types/node": "20.19.9",
