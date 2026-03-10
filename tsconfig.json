@@ -4,9 +4,6 @@
   "references": [
     {
       "path": "./apps/nextjs"
-    },
-    {
-      "path": "./packages/shared"
     }
   ]
 }
