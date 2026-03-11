@@ -136,7 +136,9 @@ export function TimeSeriesChart({ ref, options }: TimeSeriesChartProps) {
     const buf = bufferRef.current;
     if (!UPlot || !size || buf.length === 0 || !containerRef.current) return;
 
-    const { title: _, xWindowSize: __, ...uplotOpts } = optsRef.current;
+    const uplotOpts = { ...optsRef.current };
+    delete uplotOpts.title;
+    delete uplotOpts.xWindowSize;
     uplotRef.current = new UPlot(
       { ...uplotOpts, width: size.width, height: size.height },
       buf as unknown as uPlot.AlignedData,
