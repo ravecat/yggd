@@ -1,12 +1,32 @@
-"use client";
+import { Suspense } from "react";
+import { connection } from "next/server";
+import { LiveSocketProvider } from "./_components/live-socket-provider";
 
-import { Socket } from "@rvct/shared/react";
-import { env } from "~/shared/lib/env";
+export async function LiveLayoutContent({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  await connection();
+
+  const publicChannelUrl = (process.env.PUBLIC_CHANNEL_URL ?? "").replace(
+    /\/$/,
+    "",
+  );
+
+  return (
+    <LiveSocketProvider url={publicChannelUrl}>{children}</LiveSocketProvider>
+  );
+}
 
 export default function LiveLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <Socket url={env.PUBLIC_CHANNEL_URL}>{children}</Socket>;
+  return (
+    <Suspense fallback={null}>
+      <LiveLayoutContent>{children}</LiveLayoutContent>
+    </Suspense>
+  );
 }

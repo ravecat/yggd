@@ -1,6 +1,6 @@
 import "../shared/global.css";
-import { Footer } from "~/components/footer";
-import { getRuntimeEnvScript } from "~/shared/lib/env";
+import { Suspense } from "react";
+import { Footer, FooterFallback } from "~/components/footer";
 import { Navbar } from "./_components/navbar";
 
 export const metadata = {
@@ -17,15 +17,12 @@ export default function Layout({
   return (
     <html lang="en">
       <body>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: getRuntimeEnvScript(),
-          }}
-        />
         <div className="flex h-full flex-col">
           <Navbar />
           <main className="flex min-h-0 flex-1 flex-col">{children}</main>
-          <Footer />
+          <Suspense fallback={<FooterFallback />}>
+            <Footer />
+          </Suspense>
         </div>
         {modal}
       </body>

@@ -1,8 +1,24 @@
-"use client";
+import { connection } from "next/server";
 
-import { env } from "~/shared/lib/env";
+export function FooterFallback() {
+  return (
+    <footer aria-hidden="true">
+      <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-3">
+        <div className="flex items-center gap-3 text-sm">
+          <div className="h-4 w-28 animate-pulse rounded bg-muted" />
+          <div className="h-4 w-28 animate-pulse rounded bg-muted" />
+        </div>
+        <div className="h-4 w-16 animate-pulse rounded bg-muted" />
+      </div>
+    </footer>
+  );
+}
 
-export function Footer() {
+export async function Footer() {
+  await connection();
+
+  const publicApiUrl = (process.env.PUBLIC_API_URL ?? "").replace(/\/$/, "");
+
   return (
     <footer>
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-3">
@@ -10,7 +26,7 @@ export function Footer() {
           <span>
             <a
               className="underline underline-offset-2"
-              href={`${env.PUBLIC_API_URL}/openapi/ui`}
+              href={`${publicApiUrl}/openapi/ui`}
               rel="noreferrer"
               target="_blank"
             >
@@ -19,7 +35,7 @@ export function Footer() {
             (
             <a
               className="underline underline-offset-2"
-              href={`${env.PUBLIC_API_URL}/openapi`}
+              href={`${publicApiUrl}/openapi`}
               rel="noreferrer"
               target="_blank"
             >
@@ -30,7 +46,7 @@ export function Footer() {
           <span>
             <a
               className="underline underline-offset-2"
-              href={`${env.PUBLIC_API_URL}/asyncapi/ui`}
+              href={`${publicApiUrl}/asyncapi/ui`}
               rel="noreferrer"
               target="_blank"
             >
@@ -39,7 +55,7 @@ export function Footer() {
             (
             <a
               className="underline underline-offset-2"
-              href={`${env.PUBLIC_API_URL}/asyncapi`}
+              href={`${publicApiUrl}/asyncapi`}
               rel="noreferrer"
               target="_blank"
             >
