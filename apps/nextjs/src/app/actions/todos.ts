@@ -3,17 +3,17 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import {
+  getTodos,
+  getTodosQueryParamsSchema,
   postTodos,
   ValidationError,
   type AttributesPriorityEnum2Key,
   type AttributesStatusEnum2Key,
+  type MetaStatusesEnumKey,
+  type Todo,
 } from "@rvct/shared";
 import type { GetTodosQueryParams } from "@rvct/shared";
 import { assigns } from "~/shared/lib/session";
-import {
-  fetchCurrentUserTodos,
-  type FetchTodosResult,
-} from "~/shared/lib/todos";
 
 export type CreateTodoState = {
   errors?: {
@@ -26,10 +26,34 @@ export type CreateTodoState = {
   message?: string;
 };
 
+export type FetchTodosResult = {
+  statuses: MetaStatusesEnumKey[];
+  todos: Todo[];
+};
+
 export async function fetchTodosAction(
   query: GetTodosQueryParams = {},
 ): Promise<FetchTodosResult> {
-  return fetchCurrentUserTodos(query);
+  const { userId } = await assigns();
+
+  if (!userId) {
+    throw new Error("Authentication required to view todos");
+  }
+
+  const validatedQuery = getTodosQueryParamsSchema.parse({
+    ...query,
+    filter: {
+      ...query.filter,
+      user_id: { eq: userId },
+    },
+  });
+
+  const response = await getTodos(validatedQuery);
+
+  return {
+    statuses: response.meta?.statuses ?? [],
+    todos: response.data ?? [],
+  };
 }
 
 export async function createTodo(
@@ -70,8 +94,6 @@ export async function createTodo(
     return { errors: { general: ["Failed to create todo"] } };
   }
 
-  const boardHref = "/";
-
-  revalidatePath(boardHref);
-  redirect(boardHref);
+  revalidatePath("/");
+  redirect("/");
 }

@@ -1,12 +1,14 @@
 import { describe, test, expect } from "@jest/globals";
 import { getTodosQueryParamsSchema } from "../api/zod/getTodosSchema.js";
+import { z } from "zod/v4";
 import {
   mergeQueryHref,
   parseQuery,
-  parseQueryParams,
   stringifyQuery,
   toQueryHref,
 } from "./query.js";
+
+const queryStructureSchema = z.record(z.string(), z.any());
 
 function deserializeQueryParams(
   params: Record<string, string | string[] | undefined>,
@@ -22,7 +24,7 @@ function deserializeQueryParams(
     searchParams.append(key, value);
   }
 
-  return parseQuery(searchParams.toString());
+  return parseQuery(searchParams.toString(), queryStructureSchema);
 }
 
 function serializeQueryParams<TQueryParams extends Record<string, unknown>>(
@@ -336,9 +338,10 @@ describe("Query utilities", () => {
 });
 
 describe("string query helpers", () => {
-  test("parseQuery deserializes nested structures from query string", () => {
+  test("parseQuery deserializes and validates nested structures from query string", () => {
     const result = parseQuery(
       "?sort=-priority,-updated_at&include=user,comments&fields[todo]=title,content&filter[title][contains]=report&page[limit]=10&tags[0]=a&tags[1]=b",
+      queryStructureSchema,
     );
 
     expect(result).toEqual({
@@ -366,12 +369,11 @@ describe("string query helpers", () => {
     );
   });
 
-  test("parseQueryParams converts parsed query state to generated transport params", () => {
-    const parsed = parseQuery(
+  test("parseQuery converts raw query string to generated transport params", () => {
+    const result = parseQuery(
       "?sort=-priority,-updated_at&include=user&fields[todo]=title,content&filter[title][contains]=report&page[limit]=10&page[offset]=20",
+      getTodosQueryParamsSchema,
     );
-
-    const result = parseQueryParams(getTodosQueryParamsSchema, parsed);
 
     expect(result).toEqual({
       sort: "-priority,-updated_at",

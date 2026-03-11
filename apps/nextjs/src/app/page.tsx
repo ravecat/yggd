@@ -1,11 +1,10 @@
 import { Suspense } from "react";
-import { ControlPanel } from "./_components/control-panel";
-import { ControlPanelSkeleton } from "./_components/control-panel-skeleton";
-import { TodosList } from "./_components/todos-list";
-import { TodosSkeleton } from "./_components/todos-skeleton";
-import { TodosProvider } from "~/contexts/todos";
+import {
+  ControlPanel,
+  ControlPanelSkeleton,
+} from "./_components/control-panel";
+import { TodosList, TodosSkeleton } from "./_components/todos-list";
 import { assigns } from "~/shared/lib/session";
-import { fetchCurrentUserTodos } from "~/shared/lib/todos";
 
 const boardDescription =
   "Dynamic board grouped by status for daily task tracking (JSON:API)";
@@ -22,7 +21,13 @@ function IndexPageFallback() {
   );
 }
 
-async function IndexPageContent() {
+type IndexPageProps = PageProps<"/">;
+
+async function IndexPageContent({
+  searchParams,
+}: {
+  searchParams: IndexPageProps["searchParams"];
+}) {
   const { userId } = await assigns();
 
   if (!userId) {
@@ -42,25 +47,23 @@ async function IndexPageContent() {
     );
   }
 
-  const { statuses, todos } = await fetchCurrentUserTodos();
-
   return (
     <div className="h-full overflow-hidden">
       <div className="mx-auto flex h-full min-h-0 w-full max-w-6xl flex-col gap-2 px-4">
         <p className="py-2 text-sm text-muted-foreground">{boardDescription}</p>
-        <TodosProvider statuses={statuses} todos={todos}>
-          <ControlPanel canCreate />
-          <TodosList />
-        </TodosProvider>
+        <ControlPanel />
+        <Suspense fallback={<TodosSkeleton />}>
+          <TodosList searchParams={searchParams} />
+        </Suspense>
       </div>
     </div>
   );
 }
 
-export default function Index() {
+export default function Index({ searchParams }: IndexPageProps) {
   return (
     <Suspense fallback={<IndexPageFallback />}>
-      <IndexPageContent />
+      <IndexPageContent searchParams={searchParams} />
     </Suspense>
   );
 }

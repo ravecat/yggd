@@ -53,7 +53,7 @@ function splitQueryHref(href: string) {
   };
 }
 
-export function parseQuery(query: string): Record<string, unknown> {
+function deserializeQuery(query: string): Record<string, unknown> {
   return qs.parse(query, {
     ignoreQueryPrefix: true,
     depth: 20,
@@ -64,11 +64,11 @@ export function parseQuery(query: string): Record<string, unknown> {
   }) as Record<string, unknown>;
 }
 
-export function parseQueryParams<TQueryParams extends QueryParamsInput>(
+export function parseQuery<TQueryParams extends QueryParamsInput>(
+  query: string,
   schema: QueryParamsSchema<TQueryParams>,
-  params: Record<string, unknown>,
 ): TQueryParams {
-  return schema.parse(params);
+  return schema.parse(deserializeQuery(query));
 }
 
 export function stringifyQuery<TQueryParams = QueryParamsInput>(
@@ -97,7 +97,7 @@ export function mergeQueryHref<TQueryParams = QueryParamsInput>(
 ): string {
   const { pathname, query, hash } = splitQueryHref(href);
   const mergedParams = mergeQueryParams(
-    parseQuery(query) as QueryParamsInput,
+    deserializeQuery(query) as QueryParamsInput,
     params as QueryParamsInput,
   );
   const serializedQuery = stringifyQuery(mergedParams);

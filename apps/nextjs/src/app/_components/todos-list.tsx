@@ -1,48 +1,33 @@
-"use client";
-
-import type { Todo } from "@rvct/shared";
+import { getTodosQueryParamsSchema, parseQuery, type Todo } from "@rvct/shared";
 import Link from "next/link";
 import { ChevronDownIcon } from "lucide-react";
-import { useTodosContext } from "~/contexts/todos";
+import { fetchTodosAction } from "../actions/todos";
+import {
+  toSearchParamsString,
+  type RouteSearchParams,
+} from "~/shared/lib/search-params";
 import { ScrollArea } from "~/shared/ui/scroll-area";
 
-export function TodosList() {
-  const { hasLoadingError, isLoading, searchValue, statuses, todos } =
-    useTodosContext();
+type TodosListProps = {
+  searchParams: Promise<RouteSearchParams>;
+};
 
-  if (hasLoadingError) {
-    return (
-      <div className="flex min-h-80 flex-1 items-center justify-center rounded-lg border border-dashed border-destructive/40 bg-destructive/5 px-6 text-center">
-        <div className="space-y-2">
-          <p className="text-lg font-medium text-foreground">
-            Failed to load tasks
-          </p>
-          <p className="text-sm text-muted-foreground">
-            Please retry by changing search or sort.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
+export async function TodosList({ searchParams }: TodosListProps) {
+  const todosQuery = parseQuery(
+    toSearchParamsString(await searchParams),
+    getTodosQueryParamsSchema,
+  );
+  const { statuses, todos } = await fetchTodosAction(todosQuery);
   const hasTasks = todos.length > 0;
 
   if (!hasTasks) {
-    const searchActive = searchValue.trim().length > 0;
-    const emptyTitle = isLoading
-      ? "Loading tasks"
-      : searchActive
-        ? "No matching tasks"
-        : "No tasks yet";
-    const emptyMessage = searchActive
-      ? "Adjust search or sorting to see results."
-      : "Create task to add your first item.";
-
     return (
       <div className="flex min-h-80 flex-1 items-center justify-center rounded-lg border border-dashed border-border bg-muted/20 px-6 text-center">
         <div className="space-y-2">
-          <p className="text-lg font-medium text-foreground">{emptyTitle}</p>
-          <p className="text-sm text-muted-foreground">{emptyMessage}</p>
+          <p className="text-lg font-medium text-foreground">No tasks yet</p>
+          <p className="text-sm text-muted-foreground">
+            Create task to add your first item.
+          </p>
         </div>
       </div>
     );
@@ -198,6 +183,37 @@ export function TodosList() {
             ))}
           </div>
         </ScrollArea>
+      </div>
+    </div>
+  );
+}
+
+export function TodosSkeleton() {
+  return (
+    <div className="p-4">
+      <div className="grid min-h-[26rem] gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {Array.from({ length: 4 }).map((_, columnIndex) => (
+          <section key={columnIndex} className="flex min-h-[26rem] flex-col">
+            <header className="flex items-center justify-between border-b border-border py-2.5">
+              <div className="h-4 w-32 animate-pulse rounded bg-muted" />
+              <div className="h-4 w-14 animate-pulse rounded bg-muted" />
+            </header>
+
+            <div className="flex flex-1 flex-col gap-2.5 py-3">
+              {Array.from({ length: 3 }).map((_, cardIndex) => (
+                <article
+                  key={cardIndex}
+                  className="rounded-lg border border-border bg-card p-3 shadow-sm"
+                >
+                  <div className="mb-2 h-4 w-10/12 animate-pulse rounded bg-muted" />
+                  <div className="mb-1.5 h-3 w-full animate-pulse rounded bg-muted/80" />
+                  <div className="mb-3 h-3 w-8/12 animate-pulse rounded bg-muted/80" />
+                  <div className="h-5 w-16 animate-pulse rounded bg-muted" />
+                </article>
+              ))}
+            </div>
+          </section>
+        ))}
       </div>
     </div>
   );
