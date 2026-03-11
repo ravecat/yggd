@@ -15,7 +15,7 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "pnpm run dev -- --host 0.0.0.0",
+        "command": "pnpm run dev",
         "cwd": "apps/sveltekit"
       },
       "continuous": true
@@ -23,15 +23,15 @@
     "start": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "pnpm run start",
+        "command": "pnpm run dev",
         "cwd": "apps/sveltekit"
       },
-      "dependsOn": ["build"]
+      "continuous": true
     },
     "preview": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "pnpm run preview -- --host 0.0.0.0",
+        "command": "pnpm run preview",
         "cwd": "apps/sveltekit"
       },
       "continuous": true
