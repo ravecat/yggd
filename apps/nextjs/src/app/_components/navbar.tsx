@@ -1,11 +1,7 @@
 import { Suspense } from "react";
-import { NavLinks } from "./nav-links";
+import { NavLinks, NavLinksFallback } from "./nav-links";
 import { PageSwitcher } from "./page-switcher";
-import { SignIn } from "~/components/sign-in";
-
-function SignInFallback() {
-  return <div className="h-9 w-40 animate-pulse rounded-md bg-gray-200" />;
-}
+import { SignIn, SignInFallback } from "~/components/sign-in";
 
 export function Navbar() {
   return (
@@ -15,7 +11,9 @@ export function Navbar() {
           <PageSwitcher />
         </div>
         <div className="order-last flex w-full items-center justify-center sm:order-0 sm:w-auto">
-          <NavLinks />
+          <Suspense fallback={<NavLinksFallback />}>
+            <NavLinks />
+          </Suspense>
         </div>
         <div className="flex items-center justify-end">
           <Suspense fallback={<SignInFallback />}>

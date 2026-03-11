@@ -27,6 +27,10 @@ const links = [
   { href: "/chart", label: "Chart", value: "chart" },
 ] as const;
 
+export function NavLinksFallback() {
+  return <div className="h-9 w-full rounded-md sm:w-80" />;
+}
+
 export function NavLinks() {
   const pathname = usePathname();
   const activeValue = getActiveValue(pathname);
