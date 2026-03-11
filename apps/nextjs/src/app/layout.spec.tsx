@@ -5,6 +5,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 
 jest.mock("../components/footer", () => ({
   Footer: () => <footer>Footer</footer>,
+  FooterFallback: () => <footer>Footer fallback</footer>,
 }));
 
 jest.mock("~/app/_components/navbar", () => ({
@@ -14,12 +15,9 @@ jest.mock("~/app/_components/navbar", () => ({
 describe("Layout", () => {
   beforeEach(() => {
     jest.resetModules();
-    process.env.PUBLIC_API_URL = "https://api.example.com";
-    process.env.APP_URL = "https://app.example.com";
-    process.env.PUBLIC_CHANNEL_URL = "wss://channel.example.com/socket";
   });
 
-  test("injects runtime env before the page content", async () => {
+  test("renders page content without runtime env script injection", async () => {
     const { default: Layout } = await import("./layout");
     const element = await Layout({
       children: <div>Content</div>,
@@ -27,11 +25,8 @@ describe("Layout", () => {
     });
     const html = renderToStaticMarkup(element);
 
-    expect(html).toContain(
-      '<script>window.__ENV__={"PUBLIC_API_URL":"https://api.example.com","APP_URL":"https://app.example.com","PUBLIC_CHANNEL_URL":"wss://channel.example.com/socket"};</script>',
-    );
-    expect(html.indexOf("<script>window.__ENV__=")).toBeLessThan(
-      html.indexOf("Content"),
-    );
+    expect(html).not.toContain("window.__ENV__=");
+    expect(html).not.toContain("dangerouslySetInnerHTML");
+    expect(html).toContain("Content");
   });
 });
