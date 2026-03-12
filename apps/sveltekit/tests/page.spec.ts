@@ -3,11 +3,9 @@ import { describe, expect, it } from "vitest";
 import Page from "../src/routes/+page.svelte";
 
 describe("+page", () => {
-  it("renders the default heading", () => {
+  it("renders without page copy", () => {
     render(Page);
 
-    expect(
-      screen.getByRole("heading", { name: "Welcome to SvelteKit" }),
-    ).toBeTruthy();
+    expect(screen.queryByRole("heading")).toBeNull();
   });
 });

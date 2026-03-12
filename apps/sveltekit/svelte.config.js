@@ -6,6 +6,9 @@ const config = {
     adapter: adapter({
       precompress: true,
     }),
+    alias: {
+      $shared: "./src/shared",
+    },
   },
 };
 
