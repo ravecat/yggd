@@ -19,13 +19,17 @@ jest.mock("next/link", () => ({
   ),
 }));
 
+jest.mock("./filter-tasks", () => ({
+  FilterTasks: () => <div data-testid="filter-tasks">Filter tasks</div>,
+}));
+
 describe("ControlPanel", () => {
-  test("renders the create button and static filter input", async () => {
+  test("renders the create button and filter tasks control", async () => {
     const { ControlPanel } = await import("./control-panel");
     const element = ControlPanel();
     const html = renderToStaticMarkup(element);
 
-    expect(html).toContain('type="search"');
+    expect(html).toContain("filter-tasks");
     expect(html).toContain("Filter tasks");
     expect(html).toContain("Create task");
   });

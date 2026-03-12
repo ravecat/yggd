@@ -8,7 +8,7 @@ import {
 } from "@rvct/shared";
 import { useRouter } from "next/navigation";
 import { useActionState, useState } from "react";
-import { createTodo } from "~/app/actions/todos";
+import { createTodo } from "~/features/todos/mutations";
 import {
   Dialog,
   DialogContent,

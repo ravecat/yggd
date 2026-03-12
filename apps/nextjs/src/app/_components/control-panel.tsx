@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { PlusIcon } from "lucide-react";
-import { Input } from "~/shared/ui/input";
 import { Button } from "~/shared/ui/button";
+import { FilterTasks } from "./filter-tasks";
 
 export function ControlPanel() {
   return (
@@ -13,13 +13,7 @@ export function ControlPanel() {
         </Button>
       </Link>
 
-      <div className="min-w-0 flex-1">
-        <Input
-          type="search"
-          placeholder="Filter tasks"
-          aria-label="Filter tasks"
-        />
-      </div>
+      <FilterTasks />
     </div>
   );
 }

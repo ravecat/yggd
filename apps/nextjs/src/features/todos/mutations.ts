@@ -3,16 +3,11 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import {
-  getTodos,
-  getTodosQueryParamsSchema,
   postTodos,
   ValidationError,
   type AttributesPriorityEnum2Key,
   type AttributesStatusEnum2Key,
-  type MetaStatusesEnumKey,
-  type Todo,
 } from "@rvct/shared";
-import type { GetTodosQueryParams } from "@rvct/shared";
 import { assigns } from "~/shared/lib/session";
 
 export type CreateTodoState = {
@@ -25,36 +20,6 @@ export type CreateTodoState = {
   };
   message?: string;
 };
-
-export type FetchTodosResult = {
-  statuses: MetaStatusesEnumKey[];
-  todos: Todo[];
-};
-
-export async function fetchTodosAction(
-  query: GetTodosQueryParams = {},
-): Promise<FetchTodosResult> {
-  const { userId } = await assigns();
-
-  if (!userId) {
-    throw new Error("Authentication required to view todos");
-  }
-
-  const validatedQuery = getTodosQueryParamsSchema.parse({
-    ...query,
-    filter: {
-      ...query.filter,
-      user_id: { eq: userId },
-    },
-  });
-
-  const response = await getTodos(validatedQuery);
-
-  return {
-    statuses: response.meta?.statuses ?? [],
-    todos: response.data ?? [],
-  };
-}
 
 export async function createTodo(
   _prevState: CreateTodoState,

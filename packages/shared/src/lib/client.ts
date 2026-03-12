@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios";
 import type { AxiosRequestConfig, AxiosResponse } from "axios";
-import { stringifyQuery } from "./query";
+import { toQueryString } from "./query";
 
 export type RequestConfig<TData = unknown> = {
   url?: string;
@@ -139,7 +139,7 @@ export const axiosInstance = axios.create({
     "Content-Type": "application/vnd.api+json",
   },
   paramsSerializer: (params) =>
-    stringifyQuery(params as Record<string, unknown>),
+    toQueryString(params as Record<string, unknown>),
 });
 
 axiosInstance.interceptors.response.use(
