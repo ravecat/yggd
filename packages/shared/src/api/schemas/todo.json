@@ -6,6 +6,13 @@
       "additionalProperties": false,
       "description": "An attributes object for a todo",
       "properties": {
+        "board_id": {
+          "description": "Field included by default.",
+          "format": "uuid",
+          "type": "string",
+          "x-struct": null,
+          "x-validate": null
+        },
         "content": {
           "description": "Field included by default.",
           "type": "string",
@@ -48,13 +55,6 @@
           "description": "Field included by default.",
           "x-struct": null,
           "x-validate": null
-        },
-        "user_id": {
-          "description": "Field included by default.",
-          "format": "uuid",
-          "type": "string",
-          "x-struct": null,
-          "x-validate": null
         }
       },
       "required": [
@@ -64,7 +64,7 @@
         "priority",
         "created_at",
         "updated_at",
-        "user_id"
+        "board_id"
       ],
       "type": "object",
       "x-struct": null,
@@ -75,11 +75,11 @@
       "additionalProperties": false,
       "description": "A relationships object for a todo",
       "properties": {
-        "user": {
+        "board": {
           "properties": {
             "data": {
               "additionalProperties": false,
-              "description": "An identifier for user",
+              "description": "An identifier for board",
               "nullable": true,
               "properties": {
                 "id": {

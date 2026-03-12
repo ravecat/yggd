@@ -3,15 +3,25 @@ import { PlusIcon } from "lucide-react";
 import { Button } from "~/shared/ui/button";
 import { FilterTasks } from "./filter-tasks";
 
-export function ControlPanel() {
+type ControlPanelProps = {
+  boardId: string;
+  canCreate?: boolean;
+};
+
+export function ControlPanel({ boardId, canCreate = true }: ControlPanelProps) {
   return (
     <div className="flex flex-wrap gap-2">
-      <Link href="/todo/create" className="w-full shrink-0 sm:w-auto">
-        <Button size="sm" className="w-full min-w-31 sm:w-auto">
-          <PlusIcon className="h-4 w-4" />
-          Create task
-        </Button>
-      </Link>
+      {canCreate ? (
+        <Link
+          href={`/todo/create?boardId=${encodeURIComponent(boardId)}`}
+          className="w-full shrink-0 sm:w-auto"
+        >
+          <Button size="sm" className="w-full min-w-31 sm:w-auto">
+            <PlusIcon className="h-4 w-4" />
+            Create task
+          </Button>
+        </Link>
+      ) : null}
 
       <FilterTasks />
     </div>

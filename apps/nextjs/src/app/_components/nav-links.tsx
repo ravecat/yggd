@@ -7,6 +7,9 @@ import { Tabs, TabsList, TabsTrigger } from "~/shared/ui/tabs";
 type NavLinkValue = "todo" | "canvas" | "telemetry" | "chart";
 
 function getActiveValue(pathname: string): NavLinkValue {
+  if (pathname === "/todos" || pathname.startsWith("/todos/")) {
+    return "todo";
+  }
   if (pathname === "/canvas" || pathname.startsWith("/canvas/")) {
     return "canvas";
   }

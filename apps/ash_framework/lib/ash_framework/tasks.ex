@@ -21,6 +21,7 @@ defmodule AshFramework.Tasks do
   end
 
   resources do
+    resource AshFramework.Tasks.Board
     resource AshFramework.Tasks.Todo
   end
 end

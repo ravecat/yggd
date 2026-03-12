@@ -6,7 +6,7 @@ import {
   attributesStatusEnum2,
   type AttributesStatusEnum2Key,
 } from "@rvct/shared";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useActionState, useState } from "react";
 import { createTodo } from "~/features/todos/mutations";
 import {
@@ -36,6 +36,8 @@ const STATUS_OPTIONS = Object.values(
 
 export default function CreateTodoModal() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const boardId = searchParams.get("boardId");
   const [state, submit, pending] = useActionState(createTodo, {
     errors: {},
     message: "",
@@ -55,6 +57,7 @@ export default function CreateTodoModal() {
         </DialogHeader>
 
         <form action={submit} className="space-y-4">
+          <input type="hidden" name="boardId" value={boardId ?? ""} />
           <input type="hidden" name="priority" value={priority} />
           <input type="hidden" name="status" value={status} />
 

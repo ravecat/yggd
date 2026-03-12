@@ -3,10 +3,10 @@
  * Do not edit manually.
  */
 
+import type { Board } from "./Board";
 import type { Errors } from "./Errors";
 import type { Todo } from "./Todo";
 import type { TodoFilter } from "./TodoFilter";
-import type { User } from "./User";
 
 export type GetTodosQueryParams = {
   /**
@@ -16,7 +16,7 @@ export type GetTodosQueryParams = {
   filter?: TodoFilter;
   /**
    * @description Sort order to apply to the results
-   * @pattern ^(id|-id|\+\+id|--id|title|-title|\+\+title|--title|content|-content|\+\+content|--content|status|-status|\+\+status|--status|priority|-priority|\+\+priority|--priority|created_at|-created_at|\+\+created_at|--created_at|updated_at|-updated_at|\+\+updated_at|--updated_at|user_id|-user_id|\+\+user_id|--user_id)(,(id|-id|\+\+id|--id|title|-title|\+\+title|--title|content|-content|\+\+content|--content|status|-status|\+\+status|--status|priority|-priority|\+\+priority|--priority|created_at|-created_at|\+\+created_at|--created_at|updated_at|-updated_at|\+\+updated_at|--updated_at|user_id|-user_id|\+\+user_id|--user_id))*$
+   * @pattern ^(id|-id|\+\+id|--id|title|-title|\+\+title|--title|content|-content|\+\+content|--content|status|-status|\+\+status|--status|priority|-priority|\+\+priority|--priority|created_at|-created_at|\+\+created_at|--created_at|updated_at|-updated_at|\+\+updated_at|--updated_at|board_id|-board_id|\+\+board_id|--board_id)(,(id|-id|\+\+id|--id|title|-title|\+\+title|--title|content|-content|\+\+content|--content|status|-status|\+\+status|--status|priority|-priority|\+\+priority|--priority|created_at|-created_at|\+\+created_at|--created_at|updated_at|-updated_at|\+\+updated_at|--updated_at|board_id|-board_id|\+\+board_id|--board_id))*$
    * @type string | undefined
    */
   sort?: string;
@@ -51,7 +51,7 @@ export type GetTodosQueryParams = {
   };
   /**
    * @description Relationship paths to include in the response
-   * @pattern ^(user)(,(user))*$
+   * @pattern ^(board)(,(board))*$
    * @type string | undefined
    */
   include?: string;
@@ -93,7 +93,7 @@ export type GetTodos200 = {
   /**
    * @type array | undefined
    */
-  included?: User[];
+  included?: Board[];
   /**
    * @type object | undefined
    */

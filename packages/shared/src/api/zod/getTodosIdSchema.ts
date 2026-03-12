@@ -10,9 +10,9 @@ import type {
   GetTodosIdQueryParams,
   GetTodosIdQueryResponse,
 } from "../models/GetTodosId";
+import { boardSchema } from "./boardSchema";
 import { errorsSchema } from "./errorsSchema";
 import { todoSchema } from "./todoSchema";
-import { userSchema } from "./userSchema";
 import { z } from "zod/v4";
 
 export const getTodosIdPathParamsSchema = z.object({
@@ -24,7 +24,7 @@ export const getTodosIdQueryParamsSchema = z
     include: z.optional(
       z
         .string()
-        .regex(/^(user)(,(user))*$/)
+        .regex(/^(board)(,(board))*$/)
         .describe("Relationship paths to include in the response"),
     ),
     fields: z.optional(
@@ -53,7 +53,7 @@ export const getTodosId200Schema = z.object({
   },
   get included() {
     return z
-      .array(userSchema)
+      .array(boardSchema)
       .refine((items) => new Set(items).size === items.length, {
         message: "Array entries must be unique",
       })

@@ -27,24 +27,16 @@ export const userSchema = z
     relationships: z.optional(
       z
         .object({
-          todos: z.optional(
+          board: z.optional(
             z.object({
-              data: z.optional(
-                z
-                  .array(
-                    z
-                      .object({
-                        id: z.string(),
-                        meta: z.optional(z.object({}).catchall(z.any())),
-                        type: z.string(),
-                      })
-                      .describe("Resource identifiers for todos"),
-                  )
-                  .refine((items) => new Set(items).size === items.length, {
-                    message: "Array entries must be unique",
-                  })
-                  .describe("Relationship data for todos"),
-              ),
+              data: z
+                .object({
+                  id: z.string(),
+                  meta: z.optional(z.object({}).catchall(z.any())),
+                  type: z.string(),
+                })
+                .describe("An identifier for board")
+                .nullish(),
             }),
           ),
         })

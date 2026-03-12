@@ -14,6 +14,7 @@ export const todoSchema = z
     attributes: z.optional(
       z
         .object({
+          board_id: z.uuid().describe("Field included by default."),
           content: z.string().describe("Field included by default."),
           created_at: z.any().describe("Field included by default."),
           priority: z
@@ -31,7 +32,6 @@ export const todoSchema = z
             .describe("Field included by default."),
           title: z.string().describe("Field included by default."),
           updated_at: z.any().describe("Field included by default."),
-          user_id: z.uuid().describe("Field included by default."),
         })
         .describe("An attributes object for a todo"),
     ),
@@ -39,7 +39,7 @@ export const todoSchema = z
     relationships: z.optional(
       z
         .object({
-          user: z.optional(
+          board: z.optional(
             z.object({
               data: z
                 .object({
@@ -47,7 +47,7 @@ export const todoSchema = z
                   meta: z.optional(z.object({}).catchall(z.any())),
                   type: z.string(),
                 })
-                .describe("An identifier for user")
+                .describe("An identifier for board")
                 .nullish(),
             }),
           ),

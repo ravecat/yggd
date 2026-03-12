@@ -13,15 +13,16 @@ import {
 import { ScrollArea } from "~/shared/ui/scroll-area";
 
 type TodosListProps = {
+  boardId: string;
   searchParams: Promise<RouteSearchParams>;
 };
 
-export async function TodosList({ searchParams }: TodosListProps) {
+export async function TodosList({ boardId, searchParams }: TodosListProps) {
   const todosQuery = parseQueryString(
     toSearchParamsString(await searchParams),
     getTodosQueryParamsSchema,
   );
-  const { statuses, todos } = await fetchTodos(todosQuery);
+  const { statuses, todos } = await fetchTodos(boardId, todosQuery);
   const hasTasks = todos.length > 0;
 
   if (!hasTasks) {
@@ -30,7 +31,7 @@ export async function TodosList({ searchParams }: TodosListProps) {
         <div className="space-y-2">
           <p className="text-lg font-medium text-foreground">No tasks yet</p>
           <p className="text-sm text-muted-foreground">
-            Create task to add your first item.
+            This board does not have any tasks yet.
           </p>
         </div>
       </div>

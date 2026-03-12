@@ -89,6 +89,7 @@ defmodule AshFramework.Accounts.User do
 
       # Uses the information from the token to create or sign in the user
       change AshAuthentication.Strategy.MagicLink.SignInChange
+      change after_action(&ensure_board/3)
 
       metadata :token, :string do
         allow_nil? false
@@ -123,6 +124,7 @@ defmodule AshFramework.Accounts.User do
 
       change AshAuthentication.GenerateTokenChange
       change AshAuthentication.Strategy.OAuth2.IdentityChange
+      change after_action(&ensure_board/3)
 
       metadata :token, :string do
         allow_nil? false
@@ -154,8 +156,8 @@ defmodule AshFramework.Accounts.User do
   end
 
   relationships do
-    has_many :todos, AshFramework.Tasks.Todo do
-      destination_attribute :user_id
+    has_one :board, AshFramework.Tasks.Board do
+      destination_attribute :owner_id
       public? true
     end
 
@@ -167,5 +169,15 @@ defmodule AshFramework.Accounts.User do
 
   identities do
     identity :unique_email, [:email]
+  end
+
+  defp ensure_board(_changeset, user, _context) do
+    AshFramework.Tasks.Board
+    |> Ash.Changeset.for_create(:provision, %{owner_id: user.id})
+    |> Ash.create(authorize?: false)
+    |> case do
+      {:ok, _board} -> {:ok, user}
+      {:error, error} -> {:error, error}
+    end
   end
 end

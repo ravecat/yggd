@@ -1,9 +1,14 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
+import { clearSession } from "~/shared/lib/session";
+
+export async function GET(request: Request) {
+  await clearSession();
+
+  return NextResponse.redirect(new URL("/", request.url));
+}
 
 export async function POST() {
-  const cookieStore = await cookies();
-  cookieStore.delete("auth_token");
+  await clearSession();
 
   return NextResponse.json({ success: true });
 }

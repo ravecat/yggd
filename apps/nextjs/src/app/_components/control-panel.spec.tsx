@@ -26,11 +26,21 @@ jest.mock("./filter-tasks", () => ({
 describe("ControlPanel", () => {
   test("renders the create button and filter tasks control", async () => {
     const { ControlPanel } = await import("./control-panel");
-    const element = ControlPanel();
+    const element = ControlPanel({ boardId: "board-1" });
     const html = renderToStaticMarkup(element);
 
     expect(html).toContain("filter-tasks");
     expect(html).toContain("Filter tasks");
     expect(html).toContain("Create task");
+    expect(html).toContain("/todo/create?boardId=board-1");
+  });
+
+  test("omits the create button when the board is read-only", async () => {
+    const { ControlPanel } = await import("./control-panel");
+    const element = ControlPanel({ boardId: "board-1", canCreate: false });
+    const html = renderToStaticMarkup(element);
+
+    expect(html).toContain("filter-tasks");
+    expect(html).not.toContain("Create task");
   });
 });

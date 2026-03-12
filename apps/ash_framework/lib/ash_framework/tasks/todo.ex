@@ -1,6 +1,10 @@
 defmodule AshFramework.Tasks.Todo do
+  import Ash.Expr, only: [expr: 1]
+  require Ash.Query
+
   use Ash.Resource,
     otp_app: :ash_framework,
+    primary_read_warning?: false,
     domain: AshFramework.Tasks,
     data_layer: AshPostgres.DataLayer,
     authorizers: [Ash.Policy.Authorizer],
@@ -8,7 +12,7 @@ defmodule AshFramework.Tasks.Todo do
 
   json_api do
     type "todo"
-    includes [:user]
+    includes [:board]
     derive_filter? true
 
     routes do
@@ -55,7 +59,12 @@ defmodule AshFramework.Tasks.Todo do
     end
 
     create :create do
-      accept [:title, :content, :status, :priority, :user_id]
+      accept [:title, :content, :status, :priority, :board_id]
+      change &__MODULE__.ensure_actor_owns_board/2
+    end
+
+    create :create_internal do
+      accept [:title, :content, :status, :priority, :board_id]
     end
 
     update :update do
@@ -65,18 +74,23 @@ defmodule AshFramework.Tasks.Todo do
 
   policies do
     policy action_type(:read) do
-      authorize_if always()
-    end
-
-    policy action_type(:create) do
-      authorize_if always()
+      authorize_if expr(board.visibility == :public)
+      authorize_if relates_to_actor_via([:board, :owner])
     end
 
     policy action_type(:update) do
-      authorize_if always()
+      authorize_if relates_to_actor_via([:board, :owner])
     end
 
     policy action_type(:destroy) do
+      authorize_if relates_to_actor_via([:board, :owner])
+    end
+
+    policy action(:create) do
+      authorize_if actor_present()
+    end
+
+    policy action(:create_internal) do
       authorize_if always()
     end
   end
@@ -116,9 +130,39 @@ defmodule AshFramework.Tasks.Todo do
   end
 
   relationships do
-    belongs_to :user, AshFramework.Accounts.User do
+    belongs_to :board, AshFramework.Tasks.Board do
       allow_nil? false
       public? true
     end
+  end
+
+  def ensure_actor_owns_board(changeset, %{actor: actor}) when not is_nil(actor) do
+    board_id = Ash.Changeset.get_attribute(changeset, :board_id)
+
+    if is_nil(board_id) or board_owned_by_actor?(board_id, actor.id) do
+      changeset
+    else
+      Ash.Changeset.add_error(
+        changeset,
+        field: :board_id,
+        message: "must belong to the authenticated user"
+      )
+    end
+  end
+
+  def ensure_actor_owns_board(changeset, _context) do
+    Ash.Changeset.add_error(
+      changeset,
+      field: :board_id,
+      message: "must belong to the authenticated user"
+    )
+  end
+
+  defp board_owned_by_actor?(board_id, actor_id) do
+    AshFramework.Tasks.Board
+    |> Ash.Query.filter(expr(id == ^board_id and owner_id == ^actor_id))
+    |> Ash.read_one!(authorize?: false)
+    |> Kernel.is_nil()
+    |> Kernel.not()
   end
 end

@@ -1,5 +1,36 @@
+import { Suspense } from "react";
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
+import { fetchCurrentBoard } from "~/features/boards/query";
 
-export default function CreateTodoPage() {
-  redirect("/");
+type CreateTodoPageProps = {
+  searchParams: Promise<{ boardId?: string }>;
+};
+
+async function CreateTodoPageContent({ searchParams }: CreateTodoPageProps) {
+  await connection();
+
+  const { boardId } = await searchParams;
+
+  if (typeof boardId === "string" && boardId.length > 0) {
+    redirect(`/todos/${boardId}`);
+  }
+
+  const board = await fetchCurrentBoard();
+
+  if (!board) {
+    redirect("/");
+  }
+
+  redirect(`/todos/${board.id}`);
+
+  return null;
+}
+
+export default function CreateTodoPage(props: CreateTodoPageProps) {
+  return (
+    <Suspense fallback={null}>
+      <CreateTodoPageContent {...props} />
+    </Suspense>
+  );
 }

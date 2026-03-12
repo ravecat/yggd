@@ -1,9 +1,10 @@
 import "../shared/global.css";
 import { Suspense } from "react";
+import type { Metadata } from "next";
 import { Footer, FooterFallback } from "~/components/footer";
 import { Navbar } from "./_components/navbar";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Welcome to nextjs",
 };
 
