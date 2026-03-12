@@ -8,6 +8,429 @@ components:
             $ref: '#/components/schemas/errors'
       description: General Error
   schemas:
+    board:
+      additionalProperties: false
+      description: A "Resource object" representing a board
+      properties:
+        attributes:
+          additionalProperties: false
+          description: An attributes object for a board
+          properties:
+            created_at:
+              description: Field included by default.
+              x-struct:
+              x-validate:
+            owner_id:
+              description: Field included by default.
+              format: uuid
+              type: string
+              x-struct:
+              x-validate:
+            updated_at:
+              description: Field included by default.
+              x-struct:
+              x-validate:
+            visibility:
+              description: Field included by default.
+              enum:
+                - private
+                - public
+              type: string
+              x-struct:
+              x-validate:
+          required:
+            - visibility
+            - created_at
+            - updated_at
+            - owner_id
+          type: object
+          x-struct:
+          x-validate:
+        id:
+          type: string
+        relationships:
+          additionalProperties: false
+          description: A relationships object for a board
+          properties:
+            owner:
+              properties:
+                data:
+                  additionalProperties: false
+                  description: An identifier for owner
+                  nullable: true
+                  properties:
+                    id:
+                      type: string
+                      x-struct:
+                      x-validate:
+                    meta:
+                      additionalProperties: true
+                      type: object
+                      x-struct:
+                      x-validate:
+                    type:
+                      type: string
+                      x-struct:
+                      x-validate:
+                  required:
+                    - type
+                    - id
+                  type: object
+                  x-struct:
+                  x-validate:
+              x-struct:
+              x-validate:
+            todos:
+              properties:
+                data:
+                  description: Relationship data for todos
+                  items:
+                    additionalProperties: false
+                    description: Resource identifiers for todos
+                    properties:
+                      id:
+                        type: string
+                        x-struct:
+                        x-validate:
+                      meta:
+                        additionalProperties: true
+                        type: object
+                        x-struct:
+                        x-validate:
+                      type:
+                        type: string
+                        x-struct:
+                        x-validate:
+                    required:
+                      - type
+                      - id
+                    type: object
+                  type: array
+                  uniqueItems: true
+                  x-struct:
+                  x-validate:
+              x-struct:
+              x-validate:
+          type: object
+          x-struct:
+          x-validate:
+        type:
+          type: string
+          x-struct:
+          x-validate:
+      required:
+        - type
+        - id
+      type: object
+      x-struct:
+      x-validate:
+    board-filter:
+      additionalProperties: false
+      description: Filters the query to results matching the given filter object
+      example: ''
+      properties:
+        and:
+          items:
+            $ref: '#/components/schemas/board-filter'
+          type: array
+          uniqueItems: true
+          x-struct:
+          x-validate:
+        created_at:
+          $ref: '#/components/schemas/board-filter-created_at'
+        id:
+          $ref: '#/components/schemas/board-filter-id'
+        not:
+          $ref: '#/components/schemas/board-filter'
+        or:
+          items:
+            $ref: '#/components/schemas/board-filter'
+          type: array
+          uniqueItems: true
+          x-struct:
+          x-validate:
+        owner_id:
+          $ref: '#/components/schemas/board-filter-owner_id'
+        todos:
+          $ref: '#/components/schemas/todo-filter'
+        updated_at:
+          $ref: '#/components/schemas/board-filter-updated_at'
+        visibility:
+          $ref: '#/components/schemas/board-filter-visibility'
+      type: deepObject
+      x-struct:
+      x-validate:
+    board-filter-created_at:
+      additionalProperties: false
+      properties:
+        eq:
+          x-struct:
+          x-validate:
+        greater_than:
+          x-struct:
+          x-validate:
+        greater_than_or_equal:
+          x-struct:
+          x-validate:
+        in:
+          items:
+            x-struct:
+            x-validate:
+          type: array
+          x-struct:
+          x-validate:
+        is_distinct_from:
+          type: string
+          x-struct:
+          x-validate:
+        is_nil:
+          type: boolean
+          x-struct:
+          x-validate:
+        is_not_distinct_from:
+          type: string
+          x-struct:
+          x-validate:
+        less_than:
+          x-struct:
+          x-validate:
+        less_than_or_equal:
+          x-struct:
+          x-validate:
+        not_eq:
+          x-struct:
+          x-validate:
+      type: object
+      x-struct:
+      x-validate:
+    board-filter-id:
+      additionalProperties: false
+      properties:
+        eq:
+          format: uuid
+          type: string
+          x-struct:
+          x-validate:
+        greater_than:
+          format: uuid
+          type: string
+          x-struct:
+          x-validate:
+        greater_than_or_equal:
+          format: uuid
+          type: string
+          x-struct:
+          x-validate:
+        in:
+          items:
+            format: uuid
+            type: string
+            x-struct:
+            x-validate:
+          type: array
+          x-struct:
+          x-validate:
+        is_distinct_from:
+          type: string
+          x-struct:
+          x-validate:
+        is_nil:
+          type: boolean
+          x-struct:
+          x-validate:
+        is_not_distinct_from:
+          type: string
+          x-struct:
+          x-validate:
+        less_than:
+          format: uuid
+          type: string
+          x-struct:
+          x-validate:
+        less_than_or_equal:
+          format: uuid
+          type: string
+          x-struct:
+          x-validate:
+        not_eq:
+          format: uuid
+          type: string
+          x-struct:
+          x-validate:
+      type: object
+      x-struct:
+      x-validate:
+    board-filter-owner_id:
+      additionalProperties: false
+      properties:
+        eq:
+          format: uuid
+          type: string
+          x-struct:
+          x-validate:
+        greater_than:
+          format: uuid
+          type: string
+          x-struct:
+          x-validate:
+        greater_than_or_equal:
+          format: uuid
+          type: string
+          x-struct:
+          x-validate:
+        in:
+          items:
+            format: uuid
+            type: string
+            x-struct:
+            x-validate:
+          type: array
+          x-struct:
+          x-validate:
+        is_distinct_from:
+          type: string
+          x-struct:
+          x-validate:
+        is_nil:
+          type: boolean
+          x-struct:
+          x-validate:
+        is_not_distinct_from:
+          type: string
+          x-struct:
+          x-validate:
+        less_than:
+          format: uuid
+          type: string
+          x-struct:
+          x-validate:
+        less_than_or_equal:
+          format: uuid
+          type: string
+          x-struct:
+          x-validate:
+        not_eq:
+          format: uuid
+          type: string
+          x-struct:
+          x-validate:
+      type: object
+      x-struct:
+      x-validate:
+    board-filter-updated_at:
+      additionalProperties: false
+      properties:
+        eq:
+          x-struct:
+          x-validate:
+        greater_than:
+          x-struct:
+          x-validate:
+        greater_than_or_equal:
+          x-struct:
+          x-validate:
+        in:
+          items:
+            x-struct:
+            x-validate:
+          type: array
+          x-struct:
+          x-validate:
+        is_distinct_from:
+          type: string
+          x-struct:
+          x-validate:
+        is_nil:
+          type: boolean
+          x-struct:
+          x-validate:
+        is_not_distinct_from:
+          type: string
+          x-struct:
+          x-validate:
+        less_than:
+          x-struct:
+          x-validate:
+        less_than_or_equal:
+          x-struct:
+          x-validate:
+        not_eq:
+          x-struct:
+          x-validate:
+      type: object
+      x-struct:
+      x-validate:
+    board-filter-visibility:
+      additionalProperties: false
+      properties:
+        eq:
+          enum:
+            - private
+            - public
+          type: string
+          x-struct:
+          x-validate:
+        greater_than:
+          enum:
+            - private
+            - public
+          type: string
+          x-struct:
+          x-validate:
+        greater_than_or_equal:
+          enum:
+            - private
+            - public
+          type: string
+          x-struct:
+          x-validate:
+        in:
+          items:
+            enum:
+              - private
+              - public
+            type: string
+            x-struct:
+            x-validate:
+          type: array
+          x-struct:
+          x-validate:
+        is_distinct_from:
+          type: string
+          x-struct:
+          x-validate:
+        is_nil:
+          type: boolean
+          x-struct:
+          x-validate:
+        is_not_distinct_from:
+          type: string
+          x-struct:
+          x-validate:
+        less_than:
+          enum:
+            - private
+            - public
+          type: string
+          x-struct:
+          x-validate:
+        less_than_or_equal:
+          enum:
+            - private
+            - public
+          type: string
+          x-struct:
+          x-validate:
+        not_eq:
+          enum:
+            - private
+            - public
+          type: string
+          x-struct:
+          x-validate:
+      type: object
+      x-struct:
+      x-validate:
     error:
       additionalProperties: false
       properties:
@@ -82,6 +505,12 @@ components:
           additionalProperties: false
           description: An attributes object for a todo
           properties:
+            board_id:
+              description: Field included by default.
+              format: uuid
+              type: string
+              x-struct:
+              x-validate:
             content:
               description: Field included by default.
               type: string
@@ -122,12 +551,6 @@ components:
               description: Field included by default.
               x-struct:
               x-validate:
-            user_id:
-              description: Field included by default.
-              format: uuid
-              type: string
-              x-struct:
-              x-validate:
           required:
             - title
             - content
@@ -135,7 +558,7 @@ components:
             - priority
             - created_at
             - updated_at
-            - user_id
+            - board_id
           type: object
           x-struct:
           x-validate:
@@ -145,11 +568,11 @@ components:
           additionalProperties: false
           description: A relationships object for a todo
           properties:
-            user:
+            board:
               properties:
                 data:
                   additionalProperties: false
-                  description: An identifier for user
+                  description: An identifier for board
                   nullable: true
                   properties:
                     id:
@@ -198,6 +621,10 @@ components:
           uniqueItems: true
           x-struct:
           x-validate:
+        board:
+          $ref: '#/components/schemas/board-filter'
+        board_id:
+          $ref: '#/components/schemas/todo-filter-board_id'
         content:
           $ref: '#/components/schemas/todo-filter-content'
         created_at:
@@ -221,9 +648,64 @@ components:
           $ref: '#/components/schemas/todo-filter-title'
         updated_at:
           $ref: '#/components/schemas/todo-filter-updated_at'
-        user_id:
-          $ref: '#/components/schemas/todo-filter-user_id'
       type: deepObject
+      x-struct:
+      x-validate:
+    todo-filter-board_id:
+      additionalProperties: false
+      properties:
+        eq:
+          format: uuid
+          type: string
+          x-struct:
+          x-validate:
+        greater_than:
+          format: uuid
+          type: string
+          x-struct:
+          x-validate:
+        greater_than_or_equal:
+          format: uuid
+          type: string
+          x-struct:
+          x-validate:
+        in:
+          items:
+            format: uuid
+            type: string
+            x-struct:
+            x-validate:
+          type: array
+          x-struct:
+          x-validate:
+        is_distinct_from:
+          type: string
+          x-struct:
+          x-validate:
+        is_nil:
+          type: boolean
+          x-struct:
+          x-validate:
+        is_not_distinct_from:
+          type: string
+          x-struct:
+          x-validate:
+        less_than:
+          format: uuid
+          type: string
+          x-struct:
+          x-validate:
+        less_than_or_equal:
+          format: uuid
+          type: string
+          x-struct:
+          x-validate:
+        not_eq:
+          format: uuid
+          type: string
+          x-struct:
+          x-validate:
+      type: object
       x-struct:
       x-validate:
     todo-filter-content:
@@ -677,63 +1159,6 @@ components:
       type: object
       x-struct:
       x-validate:
-    todo-filter-user_id:
-      additionalProperties: false
-      properties:
-        eq:
-          format: uuid
-          type: string
-          x-struct:
-          x-validate:
-        greater_than:
-          format: uuid
-          type: string
-          x-struct:
-          x-validate:
-        greater_than_or_equal:
-          format: uuid
-          type: string
-          x-struct:
-          x-validate:
-        in:
-          items:
-            format: uuid
-            type: string
-            x-struct:
-            x-validate:
-          type: array
-          x-struct:
-          x-validate:
-        is_distinct_from:
-          type: string
-          x-struct:
-          x-validate:
-        is_nil:
-          type: boolean
-          x-struct:
-          x-validate:
-        is_not_distinct_from:
-          type: string
-          x-struct:
-          x-validate:
-        less_than:
-          format: uuid
-          type: string
-          x-struct:
-          x-validate:
-        less_than_or_equal:
-          format: uuid
-          type: string
-          x-struct:
-          x-validate:
-        not_eq:
-          format: uuid
-          type: string
-          x-struct:
-          x-validate:
-      type: object
-      x-struct:
-      x-validate:
     user:
       additionalProperties: false
       description: A "Resource object" representing a user
@@ -766,33 +1191,30 @@ components:
           additionalProperties: false
           description: A relationships object for a user
           properties:
-            todos:
+            board:
               properties:
                 data:
-                  description: Relationship data for todos
-                  items:
-                    additionalProperties: false
-                    description: Resource identifiers for todos
-                    properties:
-                      id:
-                        type: string
-                        x-struct:
-                        x-validate:
-                      meta:
-                        additionalProperties: true
-                        type: object
-                        x-struct:
-                        x-validate:
-                      type:
-                        type: string
-                        x-struct:
-                        x-validate:
-                    required:
-                      - type
-                      - id
-                    type: object
-                  type: array
-                  uniqueItems: true
+                  additionalProperties: false
+                  description: An identifier for board
+                  nullable: true
+                  properties:
+                    id:
+                      type: string
+                      x-struct:
+                      x-validate:
+                    meta:
+                      additionalProperties: true
+                      type: object
+                      x-struct:
+                      x-validate:
+                    type:
+                      type: string
+                      x-struct:
+                      x-validate:
+                  required:
+                    - type
+                    - id
+                  type: object
                   x-struct:
                   x-validate:
               x-struct:
@@ -821,18 +1243,18 @@ info:
   version: '1.1'
 openapi: 3.0.0
 paths:
-  /todos:
+  /boards:
     get:
       callbacks: {}
       deprecated: false
-      description: /todos operation on todo resource
+      description: /boards operation on board resource
       parameters:
         - description: Filters the query to results with attributes matching the given filter object
           in: query
           name: filter
           required: false
           schema:
-            $ref: '#/components/schemas/todo-filter'
+            $ref: '#/components/schemas/board-filter'
           style: deepObject
         - description: Sort order to apply to the results
           explode: false
@@ -840,7 +1262,7 @@ paths:
           name: sort
           required: false
           schema:
-            pattern: ^(id|-id|\+\+id|--id|title|-title|\+\+title|--title|content|-content|\+\+content|--content|status|-status|\+\+status|--status|priority|-priority|\+\+priority|--priority|created_at|-created_at|\+\+created_at|--created_at|updated_at|-updated_at|\+\+updated_at|--updated_at|user_id|-user_id|\+\+user_id|--user_id)(,(id|-id|\+\+id|--id|title|-title|\+\+title|--title|content|-content|\+\+content|--content|status|-status|\+\+status|--status|priority|-priority|\+\+priority|--priority|created_at|-created_at|\+\+created_at|--created_at|updated_at|-updated_at|\+\+updated_at|--updated_at|user_id|-user_id|\+\+user_id|--user_id))*$
+            pattern: ^(id|-id|\+\+id|--id|visibility|-visibility|\+\+visibility|--visibility|created_at|-created_at|\+\+created_at|--created_at|updated_at|-updated_at|\+\+updated_at|--updated_at|owner_id|-owner_id|\+\+owner_id|--owner_id)(,(id|-id|\+\+id|--id|visibility|-visibility|\+\+visibility|--visibility|created_at|-created_at|\+\+created_at|--created_at|updated_at|-updated_at|\+\+updated_at|--updated_at|owner_id|-owner_id|\+\+owner_id|--owner_id))*$
             type: string
             x-struct:
             x-validate:
@@ -886,7 +1308,7 @@ paths:
           name: include
           required: false
           schema:
-            pattern: ^(user)(,(user))*$
+            pattern: ^(owner)(,(owner))*$
             type: string
             x-struct:
             x-validate:
@@ -898,11 +1320,338 @@ paths:
           schema:
             additionalProperties: true
             example:
-              todo: id,title,content,status,priority,created_at,updated_at,user_id
+              board: id,visibility,created_at,updated_at,owner_id
+            properties:
+              board:
+                description: Comma separated field names for board
+                example: id,visibility,created_at,updated_at,owner_id
+                type: string
+                x-struct:
+                x-validate:
+            type: object
+            x-struct:
+            x-validate:
+          style: deepObject
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                additionalProperties: false
+                properties:
+                  data:
+                    description: An array of resource objects representing a board
+                    items:
+                      $ref: '#/components/schemas/board'
+                    type: array
+                    uniqueItems: true
+                    x-struct:
+                    x-validate:
+                  included:
+                    items:
+                      oneOf:
+                        - $ref: '#/components/schemas/user'
+                      x-struct:
+                      x-validate:
+                    type: array
+                    uniqueItems: true
+                    x-struct:
+                    x-validate:
+                  meta:
+                    additionalProperties: true
+                    type: object
+                    x-struct:
+                    x-validate:
+                type: object
+                x-struct:
+                x-validate:
+          description: Success
+        default:
+          $ref: '#/components/responses/errors'
+      tags:
+        - board
+  /boards/{id}:
+    get:
+      callbacks: {}
+      deprecated: false
+      description: /boards/:id operation on board resource
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            x-struct:
+            x-validate:
+          style: form
+        - description: Relationship paths to include in the response
+          explode: false
+          in: query
+          name: include
+          required: false
+          schema:
+            pattern: ^(owner)(,(owner))*$
+            type: string
+            x-struct:
+            x-validate:
+          style: form
+        - description: Limits the response fields to only those listed for each type
+          in: query
+          name: fields
+          required: false
+          schema:
+            additionalProperties: true
+            example:
+              board: id,visibility,created_at,updated_at,owner_id
+            properties:
+              board:
+                description: Comma separated field names for board
+                example: id,visibility,created_at,updated_at,owner_id
+                type: string
+                x-struct:
+                x-validate:
+            type: object
+            x-struct:
+            x-validate:
+          style: deepObject
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                additionalProperties: false
+                properties:
+                  data:
+                    $ref: '#/components/schemas/board'
+                  included:
+                    items:
+                      oneOf:
+                        - $ref: '#/components/schemas/user'
+                      x-struct:
+                      x-validate:
+                    type: array
+                    uniqueItems: true
+                    x-struct:
+                    x-validate:
+                  meta:
+                    additionalProperties: true
+                    type: object
+                    x-struct:
+                    x-validate:
+                x-struct:
+                x-validate:
+          description: Success
+        default:
+          $ref: '#/components/responses/errors'
+      tags:
+        - board
+    patch:
+      callbacks: {}
+      deprecated: false
+      description: /boards/:id operation on board resource
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            x-struct:
+            x-validate:
+          style: form
+        - description: Relationship paths to include in the response
+          explode: false
+          in: query
+          name: include
+          required: false
+          schema:
+            pattern: ^(owner)(,(owner))*$
+            type: string
+            x-struct:
+            x-validate:
+          style: form
+        - description: Limits the response fields to only those listed for each type
+          in: query
+          name: fields
+          required: false
+          schema:
+            additionalProperties: true
+            example:
+              board: id,visibility,created_at,updated_at,owner_id
+            properties:
+              board:
+                description: Comma separated field names for board
+                example: id,visibility,created_at,updated_at,owner_id
+                type: string
+                x-struct:
+                x-validate:
+            type: object
+            x-struct:
+            x-validate:
+          style: deepObject
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              additionalProperties: false
+              properties:
+                data:
+                  additionalProperties: false
+                  properties:
+                    attributes:
+                      additionalProperties: false
+                      properties:
+                        visibility:
+                          anyOf:
+                            - enum:
+                                - private
+                                - public
+                              type: string
+                              x-struct:
+                              x-validate:
+                            - type: 'null'
+                      type: object
+                      x-struct:
+                      x-validate:
+                    id:
+                      type: string
+                      x-struct:
+                      x-validate:
+                    relationships:
+                      additionalProperties: false
+                      properties: {}
+                      type: object
+                      x-struct:
+                      x-validate:
+                    type:
+                      enum:
+                        - board
+                      x-struct:
+                      x-validate:
+                  required:
+                    - id
+                  type: object
+                  x-struct:
+                  x-validate:
+              required:
+                - data
+              type: object
+              x-struct:
+              x-validate:
+        description: Request body for the /boards/:id operation on board resource
+        required: false
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                additionalProperties: false
+                properties:
+                  data:
+                    $ref: '#/components/schemas/board'
+                  included:
+                    items:
+                      oneOf:
+                        - $ref: '#/components/schemas/user'
+                      x-struct:
+                      x-validate:
+                    type: array
+                    uniqueItems: true
+                    x-struct:
+                    x-validate:
+                  meta:
+                    additionalProperties: true
+                    type: object
+                    x-struct:
+                    x-validate:
+                x-struct:
+                x-validate:
+          description: Success
+        default:
+          $ref: '#/components/responses/errors'
+      tags:
+        - board
+  /todos:
+    get:
+      callbacks: {}
+      deprecated: false
+      description: /todos operation on todo resource
+      parameters:
+        - description: Filters the query to results with attributes matching the given filter object
+          in: query
+          name: filter
+          required: false
+          schema:
+            $ref: '#/components/schemas/todo-filter'
+          style: deepObject
+        - description: Sort order to apply to the results
+          explode: false
+          in: query
+          name: sort
+          required: false
+          schema:
+            pattern: ^(id|-id|\+\+id|--id|title|-title|\+\+title|--title|content|-content|\+\+content|--content|status|-status|\+\+status|--status|priority|-priority|\+\+priority|--priority|created_at|-created_at|\+\+created_at|--created_at|updated_at|-updated_at|\+\+updated_at|--updated_at|board_id|-board_id|\+\+board_id|--board_id)(,(id|-id|\+\+id|--id|title|-title|\+\+title|--title|content|-content|\+\+content|--content|status|-status|\+\+status|--status|priority|-priority|\+\+priority|--priority|created_at|-created_at|\+\+created_at|--created_at|updated_at|-updated_at|\+\+updated_at|--updated_at|board_id|-board_id|\+\+board_id|--board_id))*$
+            type: string
+            x-struct:
+            x-validate:
+          style: form
+        - description: Paginates the response with the limit and offset or keyset pagination.
+          in: query
+          name: page
+          required: false
+          schema:
+            example:
+              limit: 10
+            properties:
+              after:
+                type: string
+                x-struct:
+                x-validate:
+              before:
+                type: string
+                x-struct:
+                x-validate:
+              count:
+                default: false
+                type: boolean
+                x-struct:
+                x-validate:
+              limit:
+                minimum: 1
+                type: integer
+                x-struct:
+                x-validate:
+              offset:
+                minimum: 0
+                type: integer
+                x-struct:
+                x-validate:
+            type: object
+            x-struct:
+            x-validate:
+          style: deepObject
+        - description: Relationship paths to include in the response
+          explode: false
+          in: query
+          name: include
+          required: false
+          schema:
+            pattern: ^(board)(,(board))*$
+            type: string
+            x-struct:
+            x-validate:
+          style: form
+        - description: Limits the response fields to only those listed for each type
+          in: query
+          name: fields
+          required: false
+          schema:
+            additionalProperties: true
+            example:
+              todo: id,title,content,status,priority,created_at,updated_at,board_id
             properties:
               todo:
                 description: Comma separated field names for todo
-                example: id,title,content,status,priority,created_at,updated_at,user_id
+                example: id,title,content,status,priority,created_at,updated_at,board_id
                 type: string
                 x-struct:
                 x-validate:
@@ -928,7 +1677,7 @@ paths:
                   included:
                     items:
                       oneOf:
-                        - $ref: '#/components/schemas/user'
+                        - $ref: '#/components/schemas/board'
                       x-struct:
                       x-validate:
                     type: array
@@ -975,7 +1724,7 @@ paths:
           name: include
           required: false
           schema:
-            pattern: ^(user)(,(user))*$
+            pattern: ^(board)(,(board))*$
             type: string
             x-struct:
             x-validate:
@@ -987,11 +1736,11 @@ paths:
           schema:
             additionalProperties: true
             example:
-              todo: id,title,content,status,priority,created_at,updated_at,user_id
+              todo: id,title,content,status,priority,created_at,updated_at,board_id
             properties:
               todo:
                 description: Comma separated field names for todo
-                example: id,title,content,status,priority,created_at,updated_at,user_id
+                example: id,title,content,status,priority,created_at,updated_at,board_id
                 type: string
                 x-struct:
                 x-validate:
@@ -1011,6 +1760,11 @@ paths:
                     attributes:
                       additionalProperties: false
                       properties:
+                        board_id:
+                          format: uuid
+                          type: string
+                          x-struct:
+                          x-validate:
                         content:
                           type: string
                           x-struct:
@@ -1043,15 +1797,10 @@ paths:
                           type: string
                           x-struct:
                           x-validate:
-                        user_id:
-                          format: uuid
-                          type: string
-                          x-struct:
-                          x-validate:
                       required:
                         - title
                         - content
-                        - user_id
+                        - board_id
                       type: object
                       x-struct:
                       x-validate:
@@ -1088,7 +1837,7 @@ paths:
                   included:
                     items:
                       oneOf:
-                        - $ref: '#/components/schemas/user'
+                        - $ref: '#/components/schemas/board'
                       x-struct:
                       x-validate:
                     type: array
@@ -1127,7 +1876,7 @@ paths:
           name: include
           required: false
           schema:
-            pattern: ^(user)(,(user))*$
+            pattern: ^(board)(,(board))*$
             type: string
             x-struct:
             x-validate:
@@ -1139,11 +1888,11 @@ paths:
           schema:
             additionalProperties: true
             example:
-              todo: id,title,content,status,priority,created_at,updated_at,user_id
+              todo: id,title,content,status,priority,created_at,updated_at,board_id
             properties:
               todo:
                 description: Comma separated field names for todo
-                example: id,title,content,status,priority,created_at,updated_at,user_id
+                example: id,title,content,status,priority,created_at,updated_at,board_id
                 type: string
                 x-struct:
                 x-validate:
@@ -1177,7 +1926,7 @@ paths:
           name: include
           required: false
           schema:
-            pattern: ^(user)(,(user))*$
+            pattern: ^(board)(,(board))*$
             type: string
             x-struct:
             x-validate:
@@ -1189,11 +1938,11 @@ paths:
           schema:
             additionalProperties: true
             example:
-              todo: id,title,content,status,priority,created_at,updated_at,user_id
+              todo: id,title,content,status,priority,created_at,updated_at,board_id
             properties:
               todo:
                 description: Comma separated field names for todo
-                example: id,title,content,status,priority,created_at,updated_at,user_id
+                example: id,title,content,status,priority,created_at,updated_at,board_id
                 type: string
                 x-struct:
                 x-validate:
@@ -1213,7 +1962,7 @@ paths:
                   included:
                     items:
                       oneOf:
-                        - $ref: '#/components/schemas/user'
+                        - $ref: '#/components/schemas/board'
                       x-struct:
                       x-validate:
                     type: array
@@ -1251,7 +2000,7 @@ paths:
           name: include
           required: false
           schema:
-            pattern: ^(user)(,(user))*$
+            pattern: ^(board)(,(board))*$
             type: string
             x-struct:
             x-validate:
@@ -1263,11 +2012,11 @@ paths:
           schema:
             additionalProperties: true
             example:
-              todo: id,title,content,status,priority,created_at,updated_at,user_id
+              todo: id,title,content,status,priority,created_at,updated_at,board_id
             properties:
               todo:
                 description: Comma separated field names for todo
-                example: id,title,content,status,priority,created_at,updated_at,user_id
+                example: id,title,content,status,priority,created_at,updated_at,board_id
                 type: string
                 x-struct:
                 x-validate:
@@ -1365,7 +2114,7 @@ paths:
                   included:
                     items:
                       oneOf:
-                        - $ref: '#/components/schemas/user'
+                        - $ref: '#/components/schemas/board'
                       x-struct:
                       x-validate:
                     type: array

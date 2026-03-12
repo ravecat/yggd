@@ -3,6 +3,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { generateCodeVerifier, generateCodeChallenge } from "~/shared/lib/pkce";
+import { clearSession, setSession } from "~/shared/lib/session";
 
 export async function signup() {
   const verifier = generateCodeVerifier();
@@ -28,8 +29,7 @@ export async function signup() {
 }
 
 export async function signout() {
-  const cookieStore = await cookies();
-  cookieStore.delete("auth_token");
+  await clearSession();
   redirect("/");
 }
 
@@ -57,13 +57,7 @@ export async function exchangeCodeForToken(code: string): Promise<string> {
 
   const { token } = await response.json();
 
-  cookieStore.set("auth_token", token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: 60 * 60 * 24 * 7,
-  });
+  await setSession(token);
 
   cookieStore.delete("pkce_verifier");
 

@@ -3,14 +3,14 @@
  * Do not edit manually.
  */
 
+import type { Board } from "./Board";
 import type { Errors } from "./Errors";
 import type { Todo } from "./Todo";
-import type { User } from "./User";
 
 export type PostTodosQueryParams = {
   /**
    * @description Relationship paths to include in the response
-   * @pattern ^(user)(,(user))*$
+   * @pattern ^(board)(,(board))*$
    * @type string | undefined
    */
   include?: string;
@@ -40,7 +40,7 @@ export type PostTodos201 = {
   /**
    * @type array | undefined
    */
-  included?: User[];
+  included?: Board[];
   /**
    * @type object | undefined
    */
@@ -76,11 +76,12 @@ export const attributesStatusEnum2 = {
 export type AttributesStatusEnum2Key =
   (typeof attributesStatusEnum2)[keyof typeof attributesStatusEnum2];
 
-export const dataTypeEnum = {
+export const dataTypeEnum2 = {
   todo: "todo",
 } as const;
 
-export type DataTypeEnumKey = (typeof dataTypeEnum)[keyof typeof dataTypeEnum];
+export type DataTypeEnum2Key =
+  (typeof dataTypeEnum2)[keyof typeof dataTypeEnum2];
 
 /**
  * @description Request body for the /todos operation on todo resource
@@ -95,6 +96,10 @@ export type PostTodosMutationRequest = {
      */
     attributes?: {
       /**
+       * @type string, uuid
+       */
+      board_id: string;
+      /**
        * @type string
        */
       content: string;
@@ -104,16 +109,12 @@ export type PostTodosMutationRequest = {
        * @type string
        */
       title: string;
-      /**
-       * @type string, uuid
-       */
-      user_id: string;
     };
     /**
      * @type object | undefined
      */
     relationships?: object;
-    type?: DataTypeEnumKey;
+    type?: DataTypeEnum2Key;
   };
 };
 

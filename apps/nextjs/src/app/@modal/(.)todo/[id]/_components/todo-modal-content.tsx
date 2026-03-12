@@ -1,5 +1,6 @@
 import { getTodosId, ValidationError } from "@rvct/shared";
 import { notFound } from "next/navigation";
+import { config } from "~/shared/lib/api";
 import { Modal } from "~/shared/ui/modal";
 
 function shouldRenderNotFound(error: unknown): boolean {
@@ -13,7 +14,7 @@ function shouldRenderNotFound(error: unknown): boolean {
 
   const responseStatus = (error as { response?: { status?: number } }).response
     ?.status;
-  return responseStatus === 404;
+  return responseStatus === 403 || responseStatus === 404;
 }
 
 export function TodoModalFallback() {
@@ -40,7 +41,7 @@ export async function TodoModalContent({
   let response: Awaited<ReturnType<typeof getTodosId>>;
 
   try {
-    response = await getTodosId(id);
+    response = await getTodosId(id, undefined, await config());
   } catch (error) {
     if (shouldRenderNotFound(error)) {
       notFound();

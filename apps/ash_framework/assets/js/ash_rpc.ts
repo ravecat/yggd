@@ -15,7 +15,6 @@ export type UserResourceSchema = {
   id: UUID;
   email: string;
   name: string | null;
-  todos: { __type: "Relationship"; __array: true; __resource: TodoResourceSchema; };
 };
 
 
@@ -32,7 +31,7 @@ export type UserAttributesOnlySchema = {
 // Todo Schema
 export type TodoResourceSchema = {
   __type: "Resource";
-  __primitiveFields: "id" | "title" | "content" | "status" | "priority" | "createdAt" | "updatedAt" | "userId";
+  __primitiveFields: "id" | "title" | "content" | "status" | "priority" | "createdAt" | "updatedAt" | "boardId";
   id: UUID;
   title: string;
   content: string;
@@ -40,15 +39,14 @@ export type TodoResourceSchema = {
   priority: "low" | "medium" | "high" | "urgent";
   createdAt: UtcDateTimeUsec;
   updatedAt: UtcDateTimeUsec;
-  userId: UUID;
-  user: { __type: "Relationship"; __resource: UserResourceSchema; };
+  boardId: UUID;
 };
 
 
 
 export type TodoAttributesOnlySchema = {
   __type: "Resource";
-  __primitiveFields: "id" | "title" | "content" | "status" | "priority" | "createdAt" | "updatedAt" | "userId";
+  __primitiveFields: "id" | "title" | "content" | "status" | "priority" | "createdAt" | "updatedAt" | "boardId";
   id: UUID;
   title: string;
   content: string;
@@ -56,7 +54,7 @@ export type TodoAttributesOnlySchema = {
   priority: "low" | "medium" | "high" | "urgent";
   createdAt: UtcDateTimeUsec;
   updatedAt: UtcDateTimeUsec;
-  userId: UUID;
+  boardId: UUID;
 };
 
 
@@ -86,7 +84,6 @@ export type UserFilterInput = {
   };
 
 
-  todos?: TodoFilterInput;
 
 };
 export type TodoFilterInput = {
@@ -144,14 +141,13 @@ export type TodoFilterInput = {
     in?: Array<UtcDateTimeUsec>;
   };
 
-  userId?: {
+  boardId?: {
     eq?: UUID;
     notEq?: UUID;
     in?: Array<UUID>;
   };
 
 
-  user?: UserFilterInput;
 
 };
 
@@ -1051,7 +1047,7 @@ export type CreateTodoInput = {
   content: string;
   status?: "blocked" | "backlog" | "in_progress" | "review" | "done" | "rejected";
   priority?: "low" | "medium" | "high" | "urgent";
-  userId: UUID;
+  boardId: UUID;
 };
 
 export type CreateTodoFields = UnifiedFieldSelection<TodoResourceSchema>[];

@@ -15,7 +15,7 @@ export type DeleteTodosIdPathParams = {
 export type DeleteTodosIdQueryParams = {
   /**
    * @description Relationship paths to include in the response
-   * @pattern ^(user)(,(user))*$
+   * @pattern ^(board)(,(board))*$
    * @type string | undefined
    */
   include?: string;

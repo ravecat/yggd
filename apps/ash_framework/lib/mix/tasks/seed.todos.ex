@@ -17,6 +17,7 @@ defmodule Mix.Tasks.Seed.Todos do
   require Logger
 
   alias AshFramework.Accounts.User
+  alias AshFramework.Tasks.Board
   alias AshFramework.Tasks.Todo
   alias AshFramework.Tasks.TodoStatus
 
@@ -58,6 +59,11 @@ defmodule Mix.Tasks.Seed.Todos do
       }
 
       AshFramework.Repo.insert!(user)
+
+      Board
+      |> Ash.Changeset.for_create(:provision, %{owner_id: user.id})
+      |> Ash.create!(authorize?: false)
+
       Logger.info("Created user: #{email}")
       user
     end)
@@ -70,11 +76,17 @@ defmodule Mix.Tasks.Seed.Todos do
       Enum.map(1..@todos_count, fn i ->
         user = Enum.random(users)
 
+        board =
+          User
+          |> Ash.get!(user.id, authorize?: false)
+          |> Ash.load!(:board, authorize?: false)
+          |> Map.fetch!(:board)
+
         %{
           title: Faker.Lorem.sentence(3..8),
           content: generate_content(),
           status: Enum.random(TodoStatus.values()),
-          user_id: user.id
+          board_id: board.id
         }
         |> tap(fn _ ->
           if rem(i, 10) == 0 do
@@ -87,8 +99,8 @@ defmodule Mix.Tasks.Seed.Todos do
 
     Enum.each(todos_data, fn todo_data ->
       Todo
-      |> Ash.Changeset.for_create(:create, todo_data)
-      |> Ash.create!()
+      |> Ash.Changeset.for_create(:create_internal, todo_data)
+      |> Ash.create!(authorize?: false)
     end)
 
     Logger.info("Successfully created #{@todos_count} todos")

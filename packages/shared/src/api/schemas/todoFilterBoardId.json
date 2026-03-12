@@ -63,5 +63,5 @@
   "type": "object",
   "x-struct": null,
   "x-validate": null,
-  "x-readme-ref-name": "todo-filter-user_id"
+  "x-readme-ref-name": "todo-filter-board_id"
 }

@@ -3,9 +3,9 @@
  * Do not edit manually.
  */
 
+import type { Board } from "./Board";
 import type { Errors } from "./Errors";
 import type { Todo } from "./Todo";
-import type { User } from "./User";
 
 export type GetTodosIdPathParams = {
   /**
@@ -17,7 +17,7 @@ export type GetTodosIdPathParams = {
 export type GetTodosIdQueryParams = {
   /**
    * @description Relationship paths to include in the response
-   * @pattern ^(user)(,(user))*$
+   * @pattern ^(board)(,(board))*$
    * @type string | undefined
    */
   include?: string;
@@ -47,7 +47,7 @@ export type GetTodosId200 = {
   /**
    * @type array | undefined
    */
-  included?: User[];
+  included?: Board[];
   /**
    * @type object | undefined
    */

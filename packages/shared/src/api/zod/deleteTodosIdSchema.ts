@@ -22,7 +22,7 @@ export const deleteTodosIdQueryParamsSchema = z
     include: z.optional(
       z
         .string()
-        .regex(/^(user)(,(user))*$/)
+        .regex(/^(board)(,(board))*$/)
         .describe("Relationship paths to include in the response"),
     ),
     fields: z.optional(

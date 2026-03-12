@@ -10,9 +10,9 @@ import type {
   PostTodosMutationResponse,
   PostTodosQueryParams,
 } from "../models/PostTodos";
+import { boardSchema } from "./boardSchema";
 import { errorsSchema } from "./errorsSchema";
 import { todoSchema } from "./todoSchema";
-import { userSchema } from "./userSchema";
 import { z } from "zod/v4";
 
 export const postTodosQueryParamsSchema = z
@@ -20,7 +20,7 @@ export const postTodosQueryParamsSchema = z
     include: z.optional(
       z
         .string()
-        .regex(/^(user)(,(user))*$/)
+        .regex(/^(board)(,(board))*$/)
         .describe("Relationship paths to include in the response"),
     ),
     fields: z.optional(
@@ -49,7 +49,7 @@ export const postTodos201Schema = z.object({
   },
   get included() {
     return z
-      .array(userSchema)
+      .array(boardSchema)
       .refine((items) => new Set(items).size === items.length, {
         message: "Array entries must be unique",
       })
@@ -72,6 +72,7 @@ export const postTodosMutationRequestSchema = z.object({
   data: z.object({
     attributes: z.optional(
       z.object({
+        board_id: z.uuid(),
         content: z.string(),
         priority: z.optional(
           z.union([z.enum(["low", "medium", "high", "urgent"]), z.null()]),
@@ -90,7 +91,6 @@ export const postTodosMutationRequestSchema = z.object({
           ]),
         ),
         title: z.string(),
-        user_id: z.uuid(),
       }),
     ),
     relationships: z.optional(z.object({})),

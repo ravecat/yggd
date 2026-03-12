@@ -3,7 +3,7 @@
  * Do not edit manually.
  */
 
-export type TodoFilterUserId = {
+export type TodoFilterBoardId = {
   /**
    * @type string | undefined, uuid
    */

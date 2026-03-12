@@ -1,5 +1,7 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTodosId, ValidationError } from "@rvct/shared";
+import { config } from "~/shared/lib/api";
 
 function shouldRenderNotFound(error: unknown): boolean {
   if (error instanceof ValidationError) {
@@ -12,7 +14,7 @@ function shouldRenderNotFound(error: unknown): boolean {
 
   const responseStatus = (error as { response?: { status?: number } }).response
     ?.status;
-  return responseStatus === 404;
+  return responseStatus === 403 || responseStatus === 404;
 }
 
 export async function TodoView({
@@ -24,7 +26,7 @@ export async function TodoView({
   let response: Awaited<ReturnType<typeof getTodosId>>;
 
   try {
-    response = await getTodosId(id);
+    response = await getTodosId(id, undefined, await config());
   } catch (error) {
     if (shouldRenderNotFound(error)) {
       notFound();
@@ -41,6 +43,15 @@ export async function TodoView({
 
   return (
     <>
+      {todo.attributes?.board_id ? (
+        <Link
+          href={`/todos/${todo.attributes.board_id}`}
+          className="mb-8 inline-flex items-center text-sm text-gray-600 hover:text-gray-900"
+        >
+          ← Back to board
+        </Link>
+      ) : null}
+
       <h1 className="mb-6 text-4xl font-bold">
         {todo.attributes?.title || "Untitled"}
       </h1>

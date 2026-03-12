@@ -3,6 +3,8 @@
  * Do not edit manually.
  */
 
+import type { BoardFilter } from "./BoardFilter";
+import type { TodoFilterBoardId } from "./TodoFilterBoardId";
 import type { TodoFilterContent } from "./TodoFilterContent";
 import type { TodoFilterCreatedAt } from "./TodoFilterCreatedAt";
 import type { TodoFilterId } from "./TodoFilterId";
@@ -10,7 +12,6 @@ import type { TodoFilterPriority } from "./TodoFilterPriority";
 import type { TodoFilterStatus } from "./TodoFilterStatus";
 import type { TodoFilterTitle } from "./TodoFilterTitle";
 import type { TodoFilterUpdatedAt } from "./TodoFilterUpdatedAt";
-import type { TodoFilterUserId } from "./TodoFilterUserId";
 
 /**
  * @description Filters the query to results matching the given filter object
@@ -20,6 +21,15 @@ export type TodoFilter = {
    * @type array | undefined
    */
   and?: TodoFilter[];
+  /**
+   * @description Filters the query to results matching the given filter object
+   * @type deepObject | undefined
+   */
+  board?: BoardFilter;
+  /**
+   * @type object | undefined
+   */
+  board_id?: TodoFilterBoardId;
   /**
    * @type object | undefined
    */
@@ -57,8 +67,4 @@ export type TodoFilter = {
    * @type object | undefined
    */
   updated_at?: TodoFilterUpdatedAt;
-  /**
-   * @type object | undefined
-   */
-  user_id?: TodoFilterUserId;
 };

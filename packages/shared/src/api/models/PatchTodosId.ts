@@ -3,9 +3,9 @@
  * Do not edit manually.
  */
 
+import type { Board } from "./Board";
 import type { Errors } from "./Errors";
 import type { Todo } from "./Todo";
-import type { User } from "./User";
 
 export type PatchTodosIdPathParams = {
   /**
@@ -17,7 +17,7 @@ export type PatchTodosIdPathParams = {
 export type PatchTodosIdQueryParams = {
   /**
    * @description Relationship paths to include in the response
-   * @pattern ^(user)(,(user))*$
+   * @pattern ^(board)(,(board))*$
    * @type string | undefined
    */
   include?: string;
@@ -47,7 +47,7 @@ export type PatchTodosId200 = {
   /**
    * @type array | undefined
    */
-  included?: User[];
+  included?: Board[];
   /**
    * @type object | undefined
    */
@@ -83,12 +83,12 @@ export const attributesStatusEnum3 = {
 export type AttributesStatusEnum3Key =
   (typeof attributesStatusEnum3)[keyof typeof attributesStatusEnum3];
 
-export const dataTypeEnum2 = {
+export const dataTypeEnum3 = {
   todo: "todo",
 } as const;
 
-export type DataTypeEnum2Key =
-  (typeof dataTypeEnum2)[keyof typeof dataTypeEnum2];
+export type DataTypeEnum3Key =
+  (typeof dataTypeEnum3)[keyof typeof dataTypeEnum3];
 
 /**
  * @description Request body for the /todos/:id operation on todo resource
@@ -115,7 +115,7 @@ export type PatchTodosIdMutationRequest = {
      * @type object | undefined
      */
     relationships?: object;
-    type?: DataTypeEnum2Key;
+    type?: DataTypeEnum3Key;
   };
 };
 

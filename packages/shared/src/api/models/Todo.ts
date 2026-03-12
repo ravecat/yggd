@@ -36,6 +36,11 @@ export type Todo = {
   attributes?: {
     /**
      * @description Field included by default.
+     * @type string, uuid
+     */
+    board_id: string;
+    /**
+     * @description Field included by default.
      * @type string
      */
     content: string;
@@ -62,11 +67,6 @@ export type Todo = {
      * @description Field included by default.
      */
     updated_at: any;
-    /**
-     * @description Field included by default.
-     * @type string, uuid
-     */
-    user_id: string;
   };
   /**
    * @type string
@@ -77,9 +77,9 @@ export type Todo = {
    * @type object | undefined
    */
   relationships?: {
-    user?: {
+    board?: {
       /**
-       * @description An identifier for user
+       * @description An identifier for board
        * @type object
        */
       data?: {

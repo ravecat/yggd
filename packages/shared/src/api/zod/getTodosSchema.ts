@@ -9,10 +9,10 @@ import type {
   GetTodosQueryParams,
   GetTodosQueryResponse,
 } from "../models/GetTodos";
+import { boardSchema } from "./boardSchema";
 import { errorsSchema } from "./errorsSchema";
 import { todoFilterSchema } from "./todoFilterSchema";
 import { todoSchema } from "./todoSchema";
-import { userSchema } from "./userSchema";
 import { z } from "zod/v4";
 
 export const getTodosQueryParamsSchema = z
@@ -28,7 +28,7 @@ export const getTodosQueryParamsSchema = z
       z
         .string()
         .regex(
-          /^(id|-id|\+\+id|--id|title|-title|\+\+title|--title|content|-content|\+\+content|--content|status|-status|\+\+status|--status|priority|-priority|\+\+priority|--priority|created_at|-created_at|\+\+created_at|--created_at|updated_at|-updated_at|\+\+updated_at|--updated_at|user_id|-user_id|\+\+user_id|--user_id)(,(id|-id|\+\+id|--id|title|-title|\+\+title|--title|content|-content|\+\+content|--content|status|-status|\+\+status|--status|priority|-priority|\+\+priority|--priority|created_at|-created_at|\+\+created_at|--created_at|updated_at|-updated_at|\+\+updated_at|--updated_at|user_id|-user_id|\+\+user_id|--user_id))*$/,
+          /^(id|-id|\+\+id|--id|title|-title|\+\+title|--title|content|-content|\+\+content|--content|status|-status|\+\+status|--status|priority|-priority|\+\+priority|--priority|created_at|-created_at|\+\+created_at|--created_at|updated_at|-updated_at|\+\+updated_at|--updated_at|board_id|-board_id|\+\+board_id|--board_id)(,(id|-id|\+\+id|--id|title|-title|\+\+title|--title|content|-content|\+\+content|--content|status|-status|\+\+status|--status|priority|-priority|\+\+priority|--priority|created_at|-created_at|\+\+created_at|--created_at|updated_at|-updated_at|\+\+updated_at|--updated_at|board_id|-board_id|\+\+board_id|--board_id))*$/,
         )
         .describe("Sort order to apply to the results"),
     ),
@@ -48,7 +48,7 @@ export const getTodosQueryParamsSchema = z
     include: z.optional(
       z
         .string()
-        .regex(/^(user)(,(user))*$/)
+        .regex(/^(board)(,(board))*$/)
         .describe("Relationship paths to include in the response"),
     ),
     fields: z.optional(
@@ -81,7 +81,7 @@ export const getTodos200Schema = z.object({
   },
   get included() {
     return z
-      .array(userSchema)
+      .array(boardSchema)
       .refine((items) => new Set(items).size === items.length, {
         message: "Array entries must be unique",
       })

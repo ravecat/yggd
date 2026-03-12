@@ -35,36 +35,32 @@
       "additionalProperties": false,
       "description": "A relationships object for a user",
       "properties": {
-        "todos": {
+        "board": {
           "properties": {
             "data": {
-              "description": "Relationship data for todos",
-              "items": {
-                "additionalProperties": false,
-                "description": "Resource identifiers for todos",
-                "properties": {
-                  "id": {
-                    "type": "string",
-                    "x-struct": null,
-                    "x-validate": null
-                  },
-                  "meta": {
-                    "additionalProperties": true,
-                    "type": "object",
-                    "x-struct": null,
-                    "x-validate": null
-                  },
-                  "type": {
-                    "type": "string",
-                    "x-struct": null,
-                    "x-validate": null
-                  }
+              "additionalProperties": false,
+              "description": "An identifier for board",
+              "nullable": true,
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "x-struct": null,
+                  "x-validate": null
                 },
-                "required": ["type", "id"],
-                "type": "object"
+                "meta": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "x-struct": null,
+                  "x-validate": null
+                },
+                "type": {
+                  "type": "string",
+                  "x-struct": null,
+                  "x-validate": null
+                }
               },
-              "type": "array",
-              "uniqueItems": true,
+              "required": ["type", "id"],
+              "type": "object",
               "x-struct": null,
               "x-validate": null
             }

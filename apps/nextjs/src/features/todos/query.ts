@@ -7,7 +7,7 @@ import {
   type Todo,
 } from "@rvct/shared";
 import type { GetTodosQueryParams } from "@rvct/shared";
-import { assigns } from "~/shared/lib/session";
+import { config } from "~/shared/lib/api";
 
 export type FetchTodosResult = {
   statuses: MetaStatusesEnumKey[];
@@ -15,23 +15,18 @@ export type FetchTodosResult = {
 };
 
 export async function fetchTodos(
+  boardId: string,
   query: GetTodosQueryParams = {},
 ): Promise<FetchTodosResult> {
-  const { userId } = await assigns();
-
-  if (!userId) {
-    throw new Error("Authentication required to view todos");
-  }
-
   const validatedQuery = getTodosQueryParamsSchema.parse({
     ...query,
     filter: {
       ...query.filter,
-      user_id: { eq: userId },
+      board_id: { eq: boardId },
     },
   });
 
-  const response = await getTodos(validatedQuery);
+  const response = await getTodos(validatedQuery, await config());
 
   return {
     statuses: response.meta?.statuses ?? [],

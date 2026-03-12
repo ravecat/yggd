@@ -1,3 +1,19 @@
+export type { AttributesVisibilityEnumKey, Board } from "./Board";
+export type { BoardFilter } from "./BoardFilter";
+export type { BoardFilterCreatedAt } from "./BoardFilterCreatedAt";
+export type { BoardFilterId } from "./BoardFilterId";
+export type { BoardFilterOwnerId } from "./BoardFilterOwnerId";
+export type { BoardFilterUpdatedAt } from "./BoardFilterUpdatedAt";
+export type {
+  BoardFilterVisibility,
+  BoardFilterVisibilityEqEnumKey,
+  BoardFilterVisibilityGreaterThanEnumKey,
+  BoardFilterVisibilityGreaterThanOrEqualEnumKey,
+  BoardFilterVisibilityInEnumKey,
+  BoardFilterVisibilityLessThanEnumKey,
+  BoardFilterVisibilityLessThanOrEqualEnumKey,
+  BoardFilterVisibilityNotEqEnumKey,
+} from "./BoardFilterVisibility";
 export type {
   DeleteTodosId200,
   DeleteTodosIdError,
@@ -8,6 +24,21 @@ export type {
 } from "./DeleteTodosId";
 export type { Error } from "./Error";
 export type { Errors } from "./Errors";
+export type {
+  GetBoards200,
+  GetBoardsError,
+  GetBoardsQuery,
+  GetBoardsQueryParams,
+  GetBoardsQueryResponse,
+} from "./GetBoards";
+export type {
+  GetBoardsId200,
+  GetBoardsIdError,
+  GetBoardsIdPathParams,
+  GetBoardsIdQuery,
+  GetBoardsIdQueryParams,
+  GetBoardsIdQueryResponse,
+} from "./GetBoardsId";
 export type {
   GetTodos200,
   GetTodosError,
@@ -27,9 +58,20 @@ export type {
 export type { Link } from "./Link";
 export type { Links } from "./Links";
 export type {
+  AttributesVisibilityEnum2Key,
+  DataTypeEnumKey,
+  PatchBoardsId200,
+  PatchBoardsIdError,
+  PatchBoardsIdMutation,
+  PatchBoardsIdMutationRequest,
+  PatchBoardsIdMutationResponse,
+  PatchBoardsIdPathParams,
+  PatchBoardsIdQueryParams,
+} from "./PatchBoardsId";
+export type {
   AttributesPriorityEnum3Key,
   AttributesStatusEnum3Key,
-  DataTypeEnum2Key,
+  DataTypeEnum3Key,
   PatchTodosId200,
   PatchTodosIdError,
   PatchTodosIdMutation,
@@ -41,7 +83,7 @@ export type {
 export type {
   AttributesPriorityEnum2Key,
   AttributesStatusEnum2Key,
-  DataTypeEnumKey,
+  DataTypeEnum2Key,
   PostTodos201,
   PostTodosError,
   PostTodosMutation,
@@ -55,6 +97,7 @@ export type {
   Todo,
 } from "./Todo";
 export type { TodoFilter } from "./TodoFilter";
+export type { TodoFilterBoardId } from "./TodoFilterBoardId";
 export type { TodoFilterContent } from "./TodoFilterContent";
 export type { TodoFilterCreatedAt } from "./TodoFilterCreatedAt";
 export type { TodoFilterId } from "./TodoFilterId";
@@ -80,15 +123,24 @@ export type {
 } from "./TodoFilterStatus";
 export type { TodoFilterTitle } from "./TodoFilterTitle";
 export type { TodoFilterUpdatedAt } from "./TodoFilterUpdatedAt";
-export type { TodoFilterUserId } from "./TodoFilterUserId";
 export type { User } from "./User";
+export { attributesVisibilityEnum } from "./Board";
+export { boardFilterVisibilityEqEnum } from "./BoardFilterVisibility";
+export { boardFilterVisibilityGreaterThanEnum } from "./BoardFilterVisibility";
+export { boardFilterVisibilityGreaterThanOrEqualEnum } from "./BoardFilterVisibility";
+export { boardFilterVisibilityInEnum } from "./BoardFilterVisibility";
+export { boardFilterVisibilityLessThanEnum } from "./BoardFilterVisibility";
+export { boardFilterVisibilityLessThanOrEqualEnum } from "./BoardFilterVisibility";
+export { boardFilterVisibilityNotEqEnum } from "./BoardFilterVisibility";
 export { metaStatusesEnum } from "./GetTodos";
+export { attributesVisibilityEnum2 } from "./PatchBoardsId";
+export { dataTypeEnum } from "./PatchBoardsId";
 export { attributesPriorityEnum3 } from "./PatchTodosId";
 export { attributesStatusEnum3 } from "./PatchTodosId";
-export { dataTypeEnum2 } from "./PatchTodosId";
+export { dataTypeEnum3 } from "./PatchTodosId";
 export { attributesPriorityEnum2 } from "./PostTodos";
 export { attributesStatusEnum2 } from "./PostTodos";
-export { dataTypeEnum } from "./PostTodos";
+export { dataTypeEnum2 } from "./PostTodos";
 export { attributesPriorityEnum } from "./Todo";
 export { attributesStatusEnum } from "./Todo";
 export { todoFilterPriorityEqEnum } from "./TodoFilterPriority";

@@ -3,10 +3,10 @@
  * Do not edit manually.
  */
 
-import type { TodoFilterUserId } from "../models/TodoFilterUserId";
+import type { BoardFilterId } from "../models/BoardFilterId";
 import { z } from "zod/v4";
 
-export const todoFilterUserIdSchema = z.object({
+export const boardFilterIdSchema = z.object({
   eq: z.optional(z.uuid()),
   greater_than: z.optional(z.uuid()),
   greater_than_or_equal: z.optional(z.uuid()),
@@ -17,4 +17,4 @@ export const todoFilterUserIdSchema = z.object({
   less_than: z.optional(z.uuid()),
   less_than_or_equal: z.optional(z.uuid()),
   not_eq: z.optional(z.uuid()),
-}) as unknown as z.ZodType<TodoFilterUserId>;
+}) as unknown as z.ZodType<BoardFilterId>;

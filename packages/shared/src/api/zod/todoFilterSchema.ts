@@ -4,6 +4,8 @@
  */
 
 import type { TodoFilter } from "../models/TodoFilter";
+import { boardFilterSchema } from "./boardFilterSchema";
+import { todoFilterBoardIdSchema } from "./todoFilterBoardIdSchema";
 import { todoFilterContentSchema } from "./todoFilterContentSchema";
 import { todoFilterCreatedAtSchema } from "./todoFilterCreatedAtSchema";
 import { todoFilterIdSchema } from "./todoFilterIdSchema";
@@ -11,7 +13,6 @@ import { todoFilterPrioritySchema } from "./todoFilterPrioritySchema";
 import { todoFilterStatusSchema } from "./todoFilterStatusSchema";
 import { todoFilterTitleSchema } from "./todoFilterTitleSchema";
 import { todoFilterUpdatedAtSchema } from "./todoFilterUpdatedAtSchema";
-import { todoFilterUserIdSchema } from "./todoFilterUserIdSchema";
 import { z } from "zod/v4";
 
 /**
@@ -30,6 +31,16 @@ export const todoFilterSchema = z
           message: "Array entries must be unique",
         })
         .optional();
+    },
+    get board() {
+      return boardFilterSchema
+        .describe(
+          "Filters the query to results matching the given filter object",
+        )
+        .optional();
+    },
+    get board_id() {
+      return todoFilterBoardIdSchema.optional();
     },
     get content() {
       return todoFilterContentSchema.optional();
@@ -70,9 +81,6 @@ export const todoFilterSchema = z
     },
     get updated_at() {
       return todoFilterUpdatedAtSchema.optional();
-    },
-    get user_id() {
-      return todoFilterUserIdSchema.optional();
     },
   })
   .describe(

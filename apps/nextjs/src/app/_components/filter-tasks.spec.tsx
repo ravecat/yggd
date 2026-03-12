@@ -24,7 +24,7 @@ jest.mock("next/navigation", () => ({
 
 describe("FilterTasks", () => {
   beforeEach(() => {
-    pathnameMock = "/";
+    pathnameMock = "/todos/board-1";
     searchParamsStringMock = "";
     replaceMock.mockReset();
     jest.useFakeTimers();
@@ -76,7 +76,7 @@ describe("FilterTasks", () => {
     const [href] = replaceMock.mock.calls[0] as [string, { scroll: boolean }];
     const url = new URL(href, "https://example.com");
 
-    expect(url.pathname).toBe("/");
+    expect(url.pathname).toBe("/todos/board-1");
     expect(url.searchParams.get("sort")).toBe("-updated_at");
     expect(url.searchParams.get("filter[status][eq]")).toBe("backlog");
     expect(url.searchParams.get("filter[title][contains]")).toBe("bug");

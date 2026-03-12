@@ -31,10 +31,10 @@ export type User = {
    * @type object | undefined
    */
   relationships?: {
-    todos?: {
+    board?: {
       /**
-       * @description Relationship data for todos
-       * @type array | undefined
+       * @description An identifier for board
+       * @type object
        */
       data?: {
         /**
@@ -51,7 +51,7 @@ export type User = {
          * @type string
          */
         type: string;
-      }[];
+      } | null;
     };
   };
   /**
