@@ -30,4 +30,10 @@ export default tseslint.config(
       },
     },
   },
+  {
+    files: ["src/shared/ui/button/button.svelte"],
+    rules: {
+      "svelte/no-navigation-without-resolve": "off",
+    },
+  },
 );
