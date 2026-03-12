@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
+
 const getTodosMock = jest.fn();
 const parseQueryMock = jest.fn();
 const assignsMock = jest.fn();
@@ -24,7 +25,7 @@ jest.mock("@rvct/shared", () => ({
   ValidationError: class ValidationError extends Error {},
 }));
 
-describe("fetchTodosAction", () => {
+describe("fetchTodos", () => {
   beforeEach(() => {
     getTodosMock.mockReset();
     parseQueryMock.mockReset();
@@ -48,8 +49,8 @@ describe("fetchTodosAction", () => {
       meta: { statuses: ["backlog"] },
     });
 
-    const { fetchTodosAction } = await import("./todos");
-    const result = await fetchTodosAction({
+    const { fetchTodos } = await import("./query");
+    const result = await fetchTodos({
       filter: {
         title: { contains: "  roadmap  " },
       },
@@ -73,9 +74,9 @@ describe("fetchTodosAction", () => {
   test("rejects unauthenticated access for current user todos", async () => {
     assignsMock.mockResolvedValue({ userId: null });
 
-    const { fetchTodosAction } = await import("./todos");
+    const { fetchTodos } = await import("./query");
 
-    await expect(fetchTodosAction()).rejects.toThrow(
+    await expect(fetchTodos()).rejects.toThrow(
       "Authentication required to view todos",
     );
     expect(parseQueryMock).not.toHaveBeenCalled();
@@ -96,8 +97,8 @@ describe("fetchTodosAction", () => {
       meta: {},
     });
 
-    const { fetchTodosAction } = await import("./todos");
-    await fetchTodosAction();
+    const { fetchTodos } = await import("./query");
+    await fetchTodos();
 
     expect(parseQueryMock).toHaveBeenCalledWith(validatedQuery);
     expect(getTodosMock).toHaveBeenCalledWith(validatedQuery);

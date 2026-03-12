@@ -1,7 +1,7 @@
 import { LogIn, LogOut } from "lucide-react";
 import { Button } from "~/shared/ui/button";
 import { assigns } from "~/shared/lib/session";
-import { signup, signout } from "~/app/actions/auth";
+import { signup, signout } from "~/features/auth";
 
 export function SignInFallback() {
   return <div className="h-9 w-40 animate-pulse rounded-md bg-gray-200" />;

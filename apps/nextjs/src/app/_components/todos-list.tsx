@@ -1,7 +1,11 @@
-import { getTodosQueryParamsSchema, parseQuery, type Todo } from "@rvct/shared";
+import {
+  getTodosQueryParamsSchema,
+  parseQueryString,
+  type Todo,
+} from "@rvct/shared";
 import Link from "next/link";
 import { ChevronDownIcon } from "lucide-react";
-import { fetchTodosAction } from "../actions/todos";
+import { fetchTodos } from "~/features/todos/query";
 import {
   toSearchParamsString,
   type RouteSearchParams,
@@ -13,11 +17,11 @@ type TodosListProps = {
 };
 
 export async function TodosList({ searchParams }: TodosListProps) {
-  const todosQuery = parseQuery(
+  const todosQuery = parseQueryString(
     toSearchParamsString(await searchParams),
     getTodosQueryParamsSchema,
   );
-  const { statuses, todos } = await fetchTodosAction(todosQuery);
+  const { statuses, todos } = await fetchTodos(todosQuery);
   const hasTasks = todos.length > 0;
 
   if (!hasTasks) {

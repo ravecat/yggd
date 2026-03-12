@@ -3,8 +3,8 @@ import { getTodosQueryParamsSchema } from "../api/zod/getTodosSchema.js";
 import { z } from "zod/v4";
 import {
   mergeQueryHref,
-  parseQuery,
-  stringifyQuery,
+  parseQueryString,
+  toQueryString,
   toQueryHref,
 } from "./query.js";
 
@@ -24,13 +24,13 @@ function deserializeQueryParams(
     searchParams.append(key, value);
   }
 
-  return parseQuery(searchParams.toString(), queryStructureSchema);
+  return parseQueryString(searchParams.toString(), queryStructureSchema);
 }
 
 function serializeQueryParams<TQueryParams extends Record<string, unknown>>(
   params: Partial<TQueryParams>,
 ): [string, string][] {
-  return Array.from(new URLSearchParams(stringifyQuery(params)).entries());
+  return Array.from(new URLSearchParams(toQueryString(params)).entries());
 }
 
 describe("Query utilities", () => {
@@ -338,8 +338,8 @@ describe("Query utilities", () => {
 });
 
 describe("string query helpers", () => {
-  test("parseQuery deserializes and validates nested structures from query string", () => {
-    const result = parseQuery(
+  test("parseQueryString deserializes and validates nested structures from query string", () => {
+    const result = parseQueryString(
       "?sort=-priority,-updated_at&include=user,comments&fields[todo]=title,content&filter[title][contains]=report&page[limit]=10&tags[0]=a&tags[1]=b",
       queryStructureSchema,
     );
@@ -354,8 +354,8 @@ describe("string query helpers", () => {
     });
   });
 
-  test("stringifyQuery serializes nested structures to query string", () => {
-    const result = stringifyQuery({
+  test("toQueryString serializes nested structures to query string", () => {
+    const result = toQueryString({
       sort: "-priority,-updated_at",
       include: "user,comments",
       fields: { todo: "title,content" },
@@ -369,8 +369,8 @@ describe("string query helpers", () => {
     );
   });
 
-  test("parseQuery converts raw query string to generated transport params", () => {
-    const result = parseQuery(
+  test("parseQueryString converts raw query string to generated transport params", () => {
+    const result = parseQueryString(
       "?sort=-priority,-updated_at&include=user&fields[todo]=title,content&filter[title][contains]=report&page[limit]=10&page[offset]=20",
       getTodosQueryParamsSchema,
     );
