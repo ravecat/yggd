@@ -3,18 +3,13 @@ import "server-only";
 import type { RequestConfig } from "@rvct/shared";
 import { assigns } from "~/shared/lib/session";
 
-type Config = Pick<RequestConfig, "headers">;
-
-export async function config(): Promise<Config> {
+export async function config(): Promise<RequestConfig<never>> {
   const { token } = await assigns();
 
-  if (!token) {
-    return {};
-  }
-
   return {
+    baseURL: process.env.PUBLIC_API_URL,
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token ?? ""}`,
     },
   };
 }

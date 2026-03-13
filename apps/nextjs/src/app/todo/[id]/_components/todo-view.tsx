@@ -1,21 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getTodosId, ValidationError } from "@rvct/shared";
-import { config } from "~/shared/lib/api";
-
-function shouldRenderNotFound(error: unknown): boolean {
-  if (error instanceof ValidationError) {
-    return true;
-  }
-
-  if (typeof error !== "object" || error === null) {
-    return false;
-  }
-
-  const responseStatus = (error as { response?: { status?: number } }).response
-    ?.status;
-  return responseStatus === 403 || responseStatus === 404;
-}
+import { fetchTodo } from "~/features/todos/query";
 
 export async function TodoView({
   params,
@@ -23,19 +8,7 @@ export async function TodoView({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  let response: Awaited<ReturnType<typeof getTodosId>>;
-
-  try {
-    response = await getTodosId(id, undefined, await config());
-  } catch (error) {
-    if (shouldRenderNotFound(error)) {
-      notFound();
-    }
-
-    throw error;
-  }
-
-  const todo = response.data;
+  const todo = await fetchTodo(id);
 
   if (!todo) {
     notFound();

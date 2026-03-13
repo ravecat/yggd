@@ -1,5 +1,4 @@
 import { Suspense } from "react";
-import { ValidationError } from "@rvct/shared";
 import { notFound } from "next/navigation";
 import {
   ControlPanel,
@@ -8,21 +7,6 @@ import {
 import { TodosList, TodosSkeleton } from "../../_components/todos-list";
 import { fetchBoard } from "~/features/boards/query";
 import { assigns } from "~/shared/lib/session";
-
-function shouldRenderNotFound(error: unknown): boolean {
-  if (error instanceof ValidationError) {
-    return true;
-  }
-
-  if (typeof error !== "object" || error === null) {
-    return false;
-  }
-
-  const responseStatus = (error as { response?: { status?: number } }).response
-    ?.status;
-
-  return responseStatus === 403 || responseStatus === 404;
-}
 
 type BoardPageProps = PageProps<"/todos/[boardId]">;
 
@@ -45,17 +29,7 @@ async function BoardPageContent({
   searchParams: BoardPageProps["searchParams"];
 }) {
   const [{ boardId }, { userId }] = await Promise.all([params, assigns()]);
-  let board;
-
-  try {
-    board = await fetchBoard(boardId);
-  } catch (error) {
-    if (shouldRenderNotFound(error)) {
-      notFound();
-    }
-
-    throw error;
-  }
+  const board = await fetchBoard(boardId);
 
   if (!board) {
     notFound();

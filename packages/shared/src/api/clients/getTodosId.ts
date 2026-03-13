@@ -33,7 +33,7 @@ export async function getTodosId(
 
   const res = await request<
     GetTodosIdQueryResponse,
-    ResponseErrorConfig<Error>,
+    ResponseErrorConfig,
     unknown
   >({
     method: "GET",

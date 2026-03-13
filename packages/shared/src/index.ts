@@ -1,5 +1,10 @@
 export * from "./api/index.js";
-export * from "./lib/client.js";
+export {
+  type Client,
+  type RequestConfig,
+  type ResponseConfig,
+} from "./lib/client.js";
+export * from "./lib/jsonapi.js";
 export * from "./asyncapi/index.js";
 export * from "./lib/query.js";
 export * from "./lib/excalidraw-document.js";

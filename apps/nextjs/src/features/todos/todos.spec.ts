@@ -1,18 +1,83 @@
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 
 const getTodosMock = jest.fn();
+const getTodosIdMock = jest.fn();
 const postTodosMock = jest.fn();
 const parseQueryMock = jest.fn();
 const assignsMock = jest.fn();
 const configMock = jest.fn();
 const revalidatePathMock = jest.fn();
 const redirectMock = jest.fn();
+const mockGetErrorMessage = (
+  errors: Array<{ detail?: string; title?: string }>,
+  fallback = "Request failed",
+) => errors[0]?.detail || errors[0]?.title || fallback;
+const mockGetErrorStatus = (errors: Array<{ status?: string }>) => {
+  const status = Number(errors[0]?.status);
+  return Number.isInteger(status) ? status : null;
+};
+const mockToFieldErrors = (
+  errors: Array<{ detail?: string; source?: { pointer?: string } }>,
+  fields: readonly string[],
+) => {
+  const result: Record<string, string[]> = {};
 
-class ValidationErrorMock extends Error {
-  name = "ValidationError";
+  fields.forEach((field) => {
+    result[field] = [];
+  });
+  result.general = [];
 
-  traverseErrors = jest.fn();
-}
+  errors.forEach((error) => {
+    const fieldName = error.source?.pointer?.split("/").at(-1);
+    const message = error.detail || "Validation error";
+
+    if (fieldName && fieldName in result) {
+      result[fieldName].push(message);
+      return;
+    }
+
+    result.general.push(message);
+  });
+
+  return result;
+};
+const mockApiError = class ApiError extends Error {
+  readonly status: number | null;
+  readonly errors: Array<{
+    detail?: string;
+    title?: string;
+    status?: string;
+    source?: { pointer?: string };
+  }>;
+
+  constructor({
+    errors,
+    status,
+    message,
+  }: {
+    errors: Array<{
+      detail?: string;
+      title?: string;
+      status?: string;
+      source?: { pointer?: string };
+    }>;
+    status?: number | null;
+    message?: string;
+  }) {
+    super(message ?? mockGetErrorMessage(errors));
+    this.name = "ApiError";
+    this.status = status ?? mockGetErrorStatus(errors);
+    this.errors = errors;
+  }
+
+  hasStatus(...statuses: number[]) {
+    return this.status !== null && statuses.includes(this.status);
+  }
+
+  toFieldErrors(fields: readonly string[]) {
+    return mockToFieldErrors(this.errors, fields);
+  }
+};
 
 jest.mock("next/cache", () => ({
   revalidatePath: revalidatePathMock,
@@ -36,11 +101,12 @@ jest.mock("~/shared/lib/session", () => ({
 
 jest.mock("@rvct/shared", () => ({
   getTodos: getTodosMock,
+  getTodosId: getTodosIdMock,
   getTodosQueryParamsSchema: {
     parse: parseQueryMock,
   },
+  isApiError: (error: unknown) => error instanceof mockApiError,
   postTodos: postTodosMock,
-  ValidationError: ValidationErrorMock,
 }));
 
 describe("fetchTodos", () => {
@@ -52,6 +118,7 @@ describe("fetchTodos", () => {
     configMock.mockReset();
     revalidatePathMock.mockReset();
     redirectMock.mockReset();
+    getTodosIdMock.mockReset();
   });
 
   test("injects the current board filter and validates the query", async () => {
@@ -116,6 +183,60 @@ describe("fetchTodos", () => {
 
     expect(parseQueryMock).toHaveBeenCalledWith(validatedQuery);
     expect(getTodosMock).toHaveBeenCalledWith(validatedQuery, {});
+  });
+
+  test("fetchTodo loads a single todo with auth config", async () => {
+    configMock.mockResolvedValue({
+      headers: { Authorization: "Bearer token" },
+    });
+    getTodosIdMock.mockResolvedValue({
+      data: { id: "todo-1" },
+    });
+
+    const { fetchTodo } = await import("./query");
+    const todo = await fetchTodo("todo-1");
+
+    expect(getTodosIdMock).toHaveBeenCalledWith("todo-1", undefined, {
+      headers: { Authorization: "Bearer token" },
+    });
+    expect(todo).toEqual({ id: "todo-1" });
+  });
+
+  test("fetchTodo returns null when the todo is missing", async () => {
+    configMock.mockResolvedValue({});
+    getTodosIdMock.mockResolvedValue({
+      data: null,
+    });
+
+    const { fetchTodo } = await import("./query");
+    const todo = await fetchTodo("todo-1");
+
+    expect(todo).toBeNull();
+  });
+
+  test("fetchTodo returns null for validation failures on detail lookup", async () => {
+    configMock.mockResolvedValue({});
+    getTodosIdMock.mockRejectedValue(
+      new mockApiError({
+        errors: [{ detail: "Todo id is invalid", status: "422" }],
+      }),
+    );
+
+    const { fetchTodo } = await import("./query");
+    const todo = await fetchTodo("todo-1");
+
+    expect(todo).toBeNull();
+  });
+
+  test("fetchTodo rethrows unexpected transport failures", async () => {
+    const error = new Error("socket hang up");
+
+    configMock.mockResolvedValue({});
+    getTodosIdMock.mockRejectedValue(error);
+
+    const { fetchTodo } = await import("./query");
+
+    await expect(fetchTodo("todo-1")).rejects.toThrow(error);
   });
 });
 
@@ -189,16 +310,17 @@ describe("createTodo", () => {
     assignsMock.mockResolvedValue({ userId: "user-1" });
     configMock.mockResolvedValue({});
 
-    const validationError = new ValidationErrorMock();
-    validationError.traverseErrors.mockReturnValue({
-      title: ["is required"],
-      content: [],
-      priority: [],
-      status: [],
-      board_id: [],
-      general: [],
-    });
-    postTodosMock.mockRejectedValue(validationError);
+    postTodosMock.mockRejectedValue(
+      new mockApiError({
+        errors: [
+          {
+            detail: "is required",
+            status: "422",
+            source: { pointer: "/data/attributes/title" },
+          },
+        ],
+      }),
+    );
 
     const formData = new FormData();
     formData.set("boardId", "board-1");
@@ -220,5 +342,24 @@ describe("createTodo", () => {
         general: [],
       },
     });
+  });
+
+  test("fetchTodos throws when the API returns an error document", async () => {
+    configMock.mockResolvedValue({});
+    parseQueryMock.mockReturnValue({
+      filter: {
+        board_id: { eq: "board-1" },
+      },
+    });
+    getTodosMock.mockRejectedValue(
+      new mockApiError({
+        errors: [{ detail: "Failed to load todos", status: "500" }],
+      }),
+    );
+
+    const { fetchTodos } = await import("./query");
+
+    await expect(fetchTodos("board-1")).rejects.toBeInstanceOf(mockApiError);
+    await expect(fetchTodos("board-1")).rejects.toThrow("Failed to load todos");
   });
 });
