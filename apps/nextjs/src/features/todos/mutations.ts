@@ -3,8 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import {
+  isApiError,
   postTodos,
-  ValidationError,
   type AttributesPriorityEnum2Key,
   type AttributesStatusEnum2Key,
 } from "@rvct/shared";
@@ -23,6 +23,14 @@ export type CreateTodoState = {
   message?: string;
 };
 
+const createTodoFields = [
+  "title",
+  "content",
+  "priority",
+  "status",
+  "board_id",
+] as const;
+
 export async function createTodo(
   _prevState: CreateTodoState,
   formData: FormData,
@@ -33,13 +41,13 @@ export async function createTodo(
     return { errors: { general: ["Not authenticated"] } };
   }
 
+  const boardId = formData.get("boardId");
+
+  if (typeof boardId !== "string" || boardId.length === 0) {
+    return { errors: { general: ["Board is required"] } };
+  }
+
   try {
-    const boardId = formData.get("boardId");
-
-    if (typeof boardId !== "string" || boardId.length === 0) {
-      return { errors: { general: ["Board is required"] } };
-    }
-
     await postTodos(
       {
         data: {
@@ -57,22 +65,15 @@ export async function createTodo(
       await config(),
     );
   } catch (error) {
-    if (error instanceof ValidationError) {
+    if (isApiError(error) && error.hasStatus(400, 422)) {
       return {
-        errors: error.traverseErrors([
-          "title",
-          "content",
-          "priority",
-          "status",
-          "board_id",
-        ]),
+        errors: error.toFieldErrors(createTodoFields),
       };
     }
 
     return { errors: { general: ["Failed to create todo"] } };
   }
 
-  const boardId = formData.get("boardId") as string;
   const boardHref = `/todos/${boardId}`;
 
   revalidatePath(boardHref);

@@ -39,7 +39,7 @@ export async function patchTodosId(
 
   const res = await request<
     PatchTodosIdMutationResponse,
-    ResponseErrorConfig<Error>,
+    ResponseErrorConfig,
     PatchTodosIdMutationRequest
   >({
     method: "PATCH",
