@@ -1,5 +1,5 @@
 import { describe, expect, test } from "@jest/globals";
-import { ApiError, isErrorResponse } from "./jsonapi.js";
+import { ApiError, isErrorResponse } from "~/lib/jsonapi";
 
 describe("jsonapi utilities", () => {
   test("detects json:api error documents", () => {

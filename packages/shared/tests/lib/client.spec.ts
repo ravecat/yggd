@@ -1,6 +1,6 @@
 import axios from "axios";
 import { afterEach, describe, expect, jest, test } from "@jest/globals";
-import { isApiError } from "./jsonapi.js";
+import { isApiError } from "~/lib/jsonapi";
 
 describe("client transport", () => {
   afterEach(() => {
@@ -9,7 +9,7 @@ describe("client transport", () => {
   });
 
   test("converts json:api error documents into ApiError", async () => {
-    const request = jest.fn().mockRejectedValue({
+    const request = jest.fn<() => Promise<never>>().mockRejectedValue({
       isAxiosError: true,
       response: {
         status: 422,
@@ -26,7 +26,7 @@ describe("client transport", () => {
     });
     jest.spyOn(axios, "create").mockReturnValue({ request } as never);
 
-    const { default: client } = await import("./client.js");
+    const { default: client } = await import("~/lib/client");
 
     try {
       await client({
