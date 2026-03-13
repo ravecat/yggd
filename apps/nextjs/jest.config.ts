@@ -31,6 +31,10 @@ const config = {
   moduleFileExtensions: ["ts", "tsx", "js", "jsx"],
   coverageDirectory: "../../coverage/apps/nextjs",
   testEnvironment: "jsdom",
+  testMatch: [
+    "<rootDir>/tests/**/*.spec.[jt]s?(x)",
+    "<rootDir>/tests/**/*.test.[jt]s?(x)",
+  ],
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
   transformIgnorePatterns: ["node_modules/(?!(jose)/)"],
   moduleNameMapper: {

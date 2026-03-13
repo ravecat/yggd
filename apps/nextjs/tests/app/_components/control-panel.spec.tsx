@@ -19,13 +19,13 @@ jest.mock("next/link", () => ({
   ),
 }));
 
-jest.mock("./filter-tasks", () => ({
+jest.mock("~/app/_components/filter-tasks", () => ({
   FilterTasks: () => <div data-testid="filter-tasks">Filter tasks</div>,
 }));
 
 describe("ControlPanel", () => {
   test("renders the create button and filter tasks control", async () => {
-    const { ControlPanel } = await import("./control-panel");
+    const { ControlPanel } = await import("~/app/_components/control-panel");
     const element = ControlPanel({ boardId: "board-1" });
     const html = renderToStaticMarkup(element);
 
@@ -36,7 +36,7 @@ describe("ControlPanel", () => {
   });
 
   test("omits the create button when the board is read-only", async () => {
-    const { ControlPanel } = await import("./control-panel");
+    const { ControlPanel } = await import("~/app/_components/control-panel");
     const element = ControlPanel({ boardId: "board-1", canCreate: false });
     const html = renderToStaticMarkup(element);
 

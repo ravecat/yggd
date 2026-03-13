@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import { redirect } from "next/navigation";
-import { connection } from "next/server";
 import { fetchCurrentBoard } from "~/features/boards/query";
 
 type CreateTodoPageProps = {
@@ -8,8 +7,6 @@ type CreateTodoPageProps = {
 };
 
 async function CreateTodoPageContent({ searchParams }: CreateTodoPageProps) {
-  await connection();
-
   const { boardId } = await searchParams;
 
   if (typeof boardId === "string" && boardId.length > 0) {

@@ -3,7 +3,7 @@
 import { beforeEach, describe, expect, test } from "@jest/globals";
 import { renderToStaticMarkup } from "react-dom/server";
 
-jest.mock("../components/footer", () => ({
+jest.mock("~/components/footer", () => ({
   Footer: () => <footer>Footer</footer>,
   FooterFallback: () => <footer>Footer fallback</footer>,
 }));
@@ -18,7 +18,7 @@ describe("Layout", () => {
   });
 
   test("renders page content without runtime env script injection", async () => {
-    const { default: Layout } = await import("./layout");
+    const { default: Layout } = await import("~/app/layout");
     const element = await Layout({
       children: <div>Content</div>,
       modal: <div>Modal</div>,

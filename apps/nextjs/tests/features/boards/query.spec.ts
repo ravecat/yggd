@@ -77,7 +77,7 @@ describe("board queries", () => {
       data: [{ id: "board-1" }],
     });
 
-    const { fetchCurrentBoard } = await import("./query");
+    const { fetchCurrentBoard } = await import("~/features/boards/query");
     const board = await fetchCurrentBoard();
 
     expect(mockParseQuery).toHaveBeenCalledWith({
@@ -101,7 +101,7 @@ describe("board queries", () => {
   test("fetchCurrentBoard returns null when the user is not authenticated", async () => {
     mockAssigns.mockResolvedValue({ userId: null });
 
-    const { fetchCurrentBoard } = await import("./query");
+    const { fetchCurrentBoard } = await import("~/features/boards/query");
     const board = await fetchCurrentBoard();
 
     expect(board).toBeNull();
@@ -117,7 +117,7 @@ describe("board queries", () => {
       data: { id: "board-1" },
     });
 
-    const { fetchBoard } = await import("./query");
+    const { fetchBoard } = await import("~/features/boards/query");
     const board = await fetchBoard("board-1");
 
     expect(mockGetBoardsId).toHaveBeenCalledWith("board-1", undefined, {
@@ -132,7 +132,7 @@ describe("board queries", () => {
       data: null,
     });
 
-    const { fetchBoard } = await import("./query");
+    const { fetchBoard } = await import("~/features/boards/query");
     const board = await fetchBoard("board-1");
 
     expect(board).toBeNull();
@@ -146,7 +146,7 @@ describe("board queries", () => {
       }),
     );
 
-    const { fetchBoard } = await import("./query");
+    const { fetchBoard } = await import("~/features/boards/query");
     const board = await fetchBoard("board-1");
 
     expect(board).toBeNull();
@@ -158,7 +158,7 @@ describe("board queries", () => {
     mockConfig.mockResolvedValue({});
     mockGetBoardsId.mockRejectedValue(error);
 
-    const { fetchBoard } = await import("./query");
+    const { fetchBoard } = await import("~/features/boards/query");
 
     await expect(fetchBoard("board-1")).rejects.toThrow(error);
   });
@@ -177,7 +177,7 @@ describe("board queries", () => {
       }),
     );
 
-    const { fetchCurrentBoard } = await import("./query");
+    const { fetchCurrentBoard } = await import("~/features/boards/query");
 
     await expect(fetchCurrentBoard()).rejects.toBeInstanceOf(mockApiError);
     await expect(fetchCurrentBoard()).rejects.toThrow("Failed to load boards");

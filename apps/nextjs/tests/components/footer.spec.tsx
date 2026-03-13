@@ -17,7 +17,7 @@ describe("Footer", () => {
   });
 
   test("renders API links from runtime env", async () => {
-    const { Footer } = await import("./footer");
+    const { Footer } = await import("~/components/footer");
     const html = renderToStaticMarkup(await Footer());
 
     expect(connectionMock).toHaveBeenCalledTimes(1);

@@ -27,13 +27,6 @@ import {
 } from "~/shared/ui/select";
 import { Textarea } from "~/shared/ui/textarea";
 
-const PRIORITY_OPTIONS = Object.values(
-  attributesPriorityEnum2,
-) as AttributesPriorityEnum2Key[];
-const STATUS_OPTIONS = Object.values(
-  attributesStatusEnum2,
-) as AttributesStatusEnum2Key[];
-
 export default function CreateTodoModal() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -60,12 +53,6 @@ export default function CreateTodoModal() {
           <input type="hidden" name="boardId" value={boardId ?? ""} />
           <input type="hidden" name="priority" value={priority} />
           <input type="hidden" name="status" value={status} />
-
-          {state.errors?.general && state.errors.general.length > 0 && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded text-sm">
-              {state.errors.general.join(", ")}
-            </div>
-          )}
 
           <div>
             <Label htmlFor="title" className="mb-2">
@@ -127,9 +114,13 @@ export default function CreateTodoModal() {
                   <SelectValue placeholder="Select priority" />
                 </SelectTrigger>
                 <SelectContent>
-                  {PRIORITY_OPTIONS.map((value) => (
+                  {(
+                    Object.values(
+                      attributesPriorityEnum2,
+                    ) as AttributesPriorityEnum2Key[]
+                  ).map((value) => (
                     <SelectItem key={value} value={value}>
-                      {value.charAt(0).toUpperCase() + value.slice(1)}
+                      {value}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -161,7 +152,11 @@ export default function CreateTodoModal() {
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>
                 <SelectContent>
-                  {STATUS_OPTIONS.map((value) => (
+                  {(
+                    Object.values(
+                      attributesStatusEnum2,
+                    ) as AttributesStatusEnum2Key[]
+                  ).map((value) => (
                     <SelectItem key={value} value={value}>
                       {value}
                     </SelectItem>
