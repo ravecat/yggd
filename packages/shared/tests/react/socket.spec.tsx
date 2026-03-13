@@ -2,7 +2,7 @@ import { render, renderHook, screen, waitFor } from "@testing-library/react";
 import { act } from "@testing-library/react";
 import { createRoot } from "react-dom/client";
 import type { Socket as PhoenixSocket } from "phoenix";
-import { Socket, useSocket } from "./socket";
+import { Socket, useSocket } from "~/react/socket";
 
 interface MockSocketInstance extends Partial<PhoenixSocket> {
   url: string;
@@ -22,7 +22,7 @@ jest.mock("phoenix", () => {
 
     constructor(
       public url: string,
-      public options: { params: Record<string, unknown> }
+      public options: { params: Record<string, unknown> },
     ) {
       mockSocketInstances.push(this);
     }
@@ -43,7 +43,7 @@ describe("Socket Context", () => {
     const { unmount } = render(
       <Socket url={process.env.PUBLIC_PHOENIX_URL as string}>
         <div>Test Child</div>
-      </Socket>
+      </Socket>,
     );
 
     expect(mockSocketInstances).toHaveLength(1);
@@ -57,7 +57,7 @@ describe("Socket Context", () => {
     const { unmount } = render(
       <Socket url={process.env.PUBLIC_PHOENIX_URL as string}>
         <div>Test Child</div>
-      </Socket>
+      </Socket>,
     );
 
     await waitFor(() => {
@@ -71,7 +71,7 @@ describe("Socket Context", () => {
     const { unmount } = render(
       <Socket url={process.env.PUBLIC_PHOENIX_URL as string}>
         <div>Test Child</div>
-      </Socket>
+      </Socket>,
     );
 
     await waitFor(() => {
@@ -87,16 +87,16 @@ describe("Socket Context", () => {
     const { unmount } = render(
       <Socket url={process.env.PUBLIC_PHOENIX_URL as string}>
         <div>Test Child</div>
-      </Socket>
+      </Socket>,
     );
 
     expect(mockSocketInstances[mockSocketInstances.length - 1].url).toBe(
-      process.env.PUBLIC_PHOENIX_URL
+      process.env.PUBLIC_PHOENIX_URL,
     );
     expect(mockSocketInstances[mockSocketInstances.length - 1].options).toEqual(
       {
         params: {},
-      }
+      },
     );
 
     unmount();
@@ -107,11 +107,11 @@ describe("Socket Context", () => {
     const { unmount } = render(
       <Socket url={customUrl}>
         <div>Test Child</div>
-      </Socket>
+      </Socket>,
     );
 
     expect(mockSocketInstances[mockSocketInstances.length - 1].url).toBe(
-      customUrl
+      customUrl,
     );
 
     unmount();
@@ -122,11 +122,11 @@ describe("Socket Context", () => {
     const { unmount } = render(
       <Socket url={process.env.PUBLIC_PHOENIX_URL as string} opts={customOpts}>
         <div>Test Child</div>
-      </Socket>
+      </Socket>,
     );
 
     expect(mockSocketInstances[mockSocketInstances.length - 1].options).toEqual(
-      customOpts
+      customOpts,
     );
 
     unmount();
@@ -138,14 +138,14 @@ describe("Socket Context", () => {
     const { unmount } = render(
       <Socket url={customUrl} opts={customOpts}>
         <div>Test Child</div>
-      </Socket>
+      </Socket>,
     );
 
     expect(mockSocketInstances[mockSocketInstances.length - 1].url).toBe(
-      customUrl
+      customUrl,
     );
     expect(mockSocketInstances[mockSocketInstances.length - 1].options).toEqual(
-      customOpts
+      customOpts,
     );
 
     unmount();
@@ -160,7 +160,7 @@ describe("Socket Context", () => {
     render(
       <Socket url={process.env.PUBLIC_PHOENIX_URL as string}>
         <TestComponent />
-      </Socket>
+      </Socket>,
     );
 
     expect(screen.getByTestId("socket-type").textContent).toBe("object");
@@ -170,7 +170,7 @@ describe("Socket Context", () => {
     render(
       <Socket url={process.env.PUBLIC_PHOENIX_URL as string}>
         <div data-testid="child">Test Child Content</div>
-      </Socket>
+      </Socket>,
     );
 
     expect(screen.getByTestId("child").textContent).toBe("Test Child Content");
@@ -182,7 +182,7 @@ describe("Socket Context", () => {
         <div data-testid="child-1">First Child</div>
         <div data-testid="child-2">Second Child</div>
         <div data-testid="child-3">Third Child</div>
-      </Socket>
+      </Socket>,
     );
 
     expect(screen.getByTestId("child-1")).toBeTruthy();
@@ -224,7 +224,7 @@ describe("Socket Context", () => {
       ProviderRoot.render(
         <Socket url={process.env.PUBLIC_PHOENIX_URL as string}>
           <div data-testid="provider-mounted" />
-        </Socket>
+        </Socket>,
       );
     });
 
@@ -234,7 +234,7 @@ describe("Socket Context", () => {
     };
 
     expect(() => render(<TestConsumer />, { container: rootB })).toThrow(
-      "useSocket must be used within Socket component"
+      "useSocket must be used within Socket component",
     );
     act(() => {
       ProviderRoot.unmount();
@@ -259,7 +259,7 @@ describe("Socket Context", () => {
       <Socket url={process.env.PUBLIC_PHOENIX_URL as string}>
         <TestComponent1 />
         <TestComponent2 />
-      </Socket>
+      </Socket>,
     );
 
     expect(socket1).not.toBeNull();
@@ -280,7 +280,7 @@ describe("Socket Context", () => {
     const { rerender } = render(
       <Socket url={process.env.PUBLIC_PHOENIX_URL as string}>
         <TestComponent />
-      </Socket>
+      </Socket>,
     );
 
     const firstUrl = screen.getByTestId("socket-id").textContent;
@@ -288,7 +288,7 @@ describe("Socket Context", () => {
     rerender(
       <Socket url={process.env.PUBLIC_PHOENIX_URL as string}>
         <TestComponent />
-      </Socket>
+      </Socket>,
     );
 
     const secondUrl = screen.getByTestId("socket-id").textContent;
@@ -305,7 +305,7 @@ describe("Socket Context", () => {
     const { rerender } = render(
       <Socket url={process.env.PUBLIC_PHOENIX_URL as string}>
         <TestComponent count={1} />
-      </Socket>
+      </Socket>,
     );
 
     await waitFor(() => {
@@ -315,13 +315,13 @@ describe("Socket Context", () => {
     rerender(
       <Socket url={process.env.PUBLIC_PHOENIX_URL as string}>
         <TestComponent count={2} />
-      </Socket>
+      </Socket>,
     );
 
     rerender(
       <Socket url={process.env.PUBLIC_PHOENIX_URL as string}>
         <TestComponent count={3} />
-      </Socket>
+      </Socket>,
     );
 
     expect(mockConnect).toHaveBeenCalledTimes(1);
@@ -343,19 +343,19 @@ describe("Socket Context", () => {
     const { rerender } = render(
       <Socket url={process.env.PUBLIC_PHOENIX_URL as string}>
         <TestComponent count={1} />
-      </Socket>
+      </Socket>,
     );
 
     rerender(
       <Socket url={process.env.PUBLIC_PHOENIX_URL as string}>
         <TestComponent count={2} />
-      </Socket>
+      </Socket>,
     );
 
     rerender(
       <Socket url={process.env.PUBLIC_PHOENIX_URL as string}>
         <TestComponent count={3} />
-      </Socket>
+      </Socket>,
     );
 
     expect(capturedSocket1).not.toBeNull();
@@ -369,7 +369,7 @@ describe("Socket Context", () => {
     const { unmount: unmount1 } = render(
       <Socket url={process.env.PUBLIC_PHOENIX_URL as string}>
         <div>Test 1</div>
-      </Socket>
+      </Socket>,
     );
 
     unmount1();
@@ -377,7 +377,7 @@ describe("Socket Context", () => {
     const { unmount: unmount2 } = render(
       <Socket url={process.env.PUBLIC_PHOENIX_URL as string}>
         <div>Test 2</div>
-      </Socket>
+      </Socket>,
     );
 
     unmount2();
@@ -385,7 +385,7 @@ describe("Socket Context", () => {
     const { unmount: unmount3 } = render(
       <Socket url={process.env.PUBLIC_PHOENIX_URL as string}>
         <div>Test 3</div>
-      </Socket>
+      </Socket>,
     );
 
     await waitFor(() => {
@@ -410,7 +410,7 @@ describe("Socket Context", () => {
         <Socket url={process.env.PUBLIC_PHOENIX_URL as string}>
           <TestComponent />
         </Socket>
-      </Socket>
+      </Socket>,
     );
 
     expect(screen.getByTestId("socket-present").textContent).toBe("present");
@@ -438,7 +438,7 @@ describe("Socket Context", () => {
     render(
       <Socket url={process.env.PUBLIC_PHOENIX_URL as string}>
         <TestComponent />
-      </Socket>
+      </Socket>,
     );
 
     expect(screen.getByTestId("socket-url")).toBeTruthy();
@@ -470,7 +470,7 @@ describe("Socket Context", () => {
     render(
       <Socket url={process.env.PUBLIC_PHOENIX_URL as string}>
         <ParentChild />
-      </Socket>
+      </Socket>,
     );
 
     expect(screen.getByTestId("deep-socket").textContent).toBe("valid");
@@ -481,7 +481,7 @@ describe("Socket Context", () => {
       const { unmount } = render(
         <Socket url={process.env.PUBLIC_PHOENIX_URL as string}>
           <div>Test {i}</div>
-        </Socket>
+        </Socket>,
       );
 
       await waitFor(() => {
@@ -507,7 +507,7 @@ describe("Socket Context", () => {
     const { rerender } = render(
       <Socket url={process.env.PUBLIC_PHOENIX_URL as string}>
         <TestComponent />
-      </Socket>
+      </Socket>,
     );
 
     const initialRenderCount = renderCount;
@@ -515,7 +515,7 @@ describe("Socket Context", () => {
     rerender(
       <Socket url={process.env.PUBLIC_PHOENIX_URL as string}>
         <TestComponent />
-      </Socket>
+      </Socket>,
     );
 
     expect(renderCount).toBeGreaterThan(initialRenderCount);

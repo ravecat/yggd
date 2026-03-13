@@ -1,12 +1,12 @@
 import { describe, test, expect } from "@jest/globals";
-import { getTodosQueryParamsSchema } from "../api/zod/getTodosSchema.js";
+import { getTodosQueryParamsSchema } from "~/api/zod/getTodosSchema";
 import { z } from "zod/v4";
 import {
   mergeQueryHref,
   parseQueryString,
   toQueryString,
   toQueryHref,
-} from "./query.js";
+} from "~/lib/query";
 
 const queryStructureSchema = z.record(z.string(), z.any());
 
@@ -371,13 +371,13 @@ describe("string query helpers", () => {
 
   test("parseQueryString converts raw query string to generated transport params", () => {
     const result = parseQueryString(
-      "?sort=-priority,-updated_at&include=user&fields[todo]=title,content&filter[title][contains]=report&page[limit]=10&page[offset]=20",
+      "?sort=-priority,-updated_at&include=board&fields[todo]=title,content&filter[title][contains]=report&page[limit]=10&page[offset]=20",
       getTodosQueryParamsSchema,
     );
 
     expect(result).toEqual({
       sort: "-priority,-updated_at",
-      include: "user",
+      include: "board",
       fields: { todo: "title,content" },
       filter: { title: { contains: "report" } },
       page: { count: false, limit: 10, offset: 20 },

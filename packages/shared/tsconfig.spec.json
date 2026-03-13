@@ -2,9 +2,10 @@
   "compilerOptions": {
     "importHelpers": true,
     "isolatedModules": true,
-    "lib": ["es2022"],
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
+    "jsx": "react-jsx",
+    "lib": ["es2022", "dom", "dom.iterable"],
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
@@ -15,14 +16,21 @@
     "target": "es2022",
     "customConditions": ["development"],
     "noEmit": true,
-    "types": ["jest", "node"],
+    "baseUrl": ".",
+    "rootDir": ".",
+    "paths": {
+      "~/*": ["./src/*"]
+    },
+    "types": ["jest", "node", "react"],
     "forceConsistentCasingInFileNames": true
   },
   "include": [
-    "jest.config.ts",
-    "src/**/*.test.ts",
-    "src/**/*.spec.ts",
-    "src/**/*.d.ts"
+    "src/**/*.d.ts",
+    "tests/**/*.test.ts",
+    "tests/**/*.spec.ts",
+    "tests/**/*.test.tsx",
+    "tests/**/*.spec.tsx",
+    "tests/**/*.d.ts"
   ],
   "references": [
     {
