@@ -10,7 +10,7 @@ jest.mock("next/server", () => ({
   connection: connectionMock,
 }));
 
-jest.mock("./_components/live-socket-provider", () => ({
+jest.mock("~/app/(live)/_components/live-socket-provider", () => ({
   LiveSocketProvider: ({
     children,
     url,
@@ -28,7 +28,7 @@ describe("LiveLayout", () => {
   });
 
   test("wraps the runtime env reader in Suspense", async () => {
-    const { default: LiveLayout } = await import("./layout");
+    const { default: LiveLayout } = await import("~/app/(live)/layout");
     const element = LiveLayout({
       children: <div>Content</div>,
     });
@@ -37,7 +37,7 @@ describe("LiveLayout", () => {
   });
 
   test("reads runtime channel URL and passes it to the socket provider", async () => {
-    const { LiveLayoutContent } = await import("./layout");
+    const { LiveLayoutContent } = await import("~/app/(live)/layout");
     const element = await LiveLayoutContent({
       children: <div>Content</div>,
     });

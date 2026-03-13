@@ -38,30 +38,60 @@ describe("jsonapi utilities", () => {
     ).toBe("Board not found");
   });
 
-  test("groups field errors without a custom error class", () => {
+  test("ApiError traverses json:api errors into a field map", () => {
     const error = new ApiError({
       errors: [
         {
-          detail: "is required",
-          source: { pointer: "/data/attributes/title" },
+          detail: "First name must contain at least two characters.",
+          source: { pointer: "/data/attributes/firstName" },
         },
         {
-          detail: "is invalid",
-          source: { pointer: "/data/attributes/status" },
+          detail: "Missing punctuation character.",
+          source: { pointer: "/data/attributes/password" },
         },
         {
-          detail: "Something went wrong",
+          title: "Password confirmation does not match.",
+          source: { pointer: "/data/attributes/password" },
+        },
+        {
+          detail: "Board query parameter is invalid.",
+          source: { parameter: "boardId" },
+        },
+        {
+          code: "unknown_error",
         },
       ],
     });
 
-    expect(
-      error.toFieldErrors(["title", "status", "content"] as const),
-    ).toEqual({
-      title: ["is required"],
-      status: ["is invalid"],
-      content: [],
-      general: ["Something went wrong"],
+    expect(error.raw).toEqual([
+      {
+        detail: "First name must contain at least two characters.",
+        source: { pointer: "/data/attributes/firstName" },
+      },
+      {
+        detail: "Missing punctuation character.",
+        source: { pointer: "/data/attributes/password" },
+      },
+      {
+        title: "Password confirmation does not match.",
+        source: { pointer: "/data/attributes/password" },
+      },
+      {
+        detail: "Board query parameter is invalid.",
+        source: { parameter: "boardId" },
+      },
+      {
+        code: "unknown_error",
+      },
+    ]);
+    expect(error.errors).toEqual({
+      firstName: ["First name must contain at least two characters."],
+      password: [
+        "Missing punctuation character.",
+        "Password confirmation does not match.",
+      ],
+      boardId: ["Board query parameter is invalid."],
+      general: ["unknown_error"],
     });
   });
 });

@@ -15,7 +15,7 @@ describe("auth signout route", () => {
   });
 
   test("POST clears the auth cookie and returns a success payload", async () => {
-    const { POST } = await import("./route");
+    const { POST } = await import("~/app/auth/signout/route");
     const response = await POST();
 
     expect(clearSessionMock).toHaveBeenCalled();
@@ -24,7 +24,7 @@ describe("auth signout route", () => {
   });
 
   test("GET clears the auth cookie and redirects home", async () => {
-    const { GET } = await import("./route");
+    const { GET } = await import("~/app/auth/signout/route");
     const response = await GET(new Request("http://localhost/auth/signout"));
 
     expect(clearSessionMock).toHaveBeenCalled();

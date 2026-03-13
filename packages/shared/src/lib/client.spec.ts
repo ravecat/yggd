@@ -47,13 +47,16 @@ describe("client transport", () => {
 
       expect(error.status).toBe(422);
       expect(error.message).toBe("is required");
-      expect(error.errors).toEqual([
+      expect(error.raw).toEqual([
         {
           status: "422",
           source: { pointer: "/data/attributes/title" },
           detail: "is required",
         },
       ]);
+      expect(error.errors).toEqual({
+        title: ["is required"],
+      });
 
       return;
     }

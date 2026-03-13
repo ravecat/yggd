@@ -1,24 +1,29 @@
 {
+  "extends": "./tsconfig.json",
   "compilerOptions": {
     "noEmit": true,
     "jsx": "preserve",
+    "rootDir": ".",
+    "tsBuildInfoFile": "dist/tsconfig.spec.tsbuildinfo",
     "types": ["jest", "node"]
   },
   "include": [
     "jest.config.ts",
-    "src/**/*.test.ts",
-    "src/**/*.spec.ts",
-    "src/**/*.test.tsx",
-    "src/**/*.spec.tsx",
-    "src/**/*.test.js",
-    "src/**/*.spec.js",
-    "src/**/*.test.jsx",
-    "src/**/*.spec.jsx",
-    "src/**/*.d.ts"
-  ],
-  "references": [
-    {
-      "path": "./tsconfig.json"
-    }
+    "next-env.d.ts",
+    "src/**/*.js",
+    "src/**/*.jsx",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.d.ts",
+    "tests/**/*.test.ts",
+    "tests/**/*.spec.ts",
+    "tests/**/*.test.tsx",
+    "tests/**/*.spec.tsx",
+    "tests/**/*.test.js",
+    "tests/**/*.spec.js",
+    "tests/**/*.test.jsx",
+    "tests/**/*.spec.jsx",
+    "tests/**/*.d.ts",
+    ".next/types/**/*.ts"
   ]
 }

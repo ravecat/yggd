@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import {
+  type ErrorMap,
   isApiError,
   postTodos,
   type AttributesPriorityEnum2Key,
@@ -12,40 +13,21 @@ import { config } from "~/shared/lib/api";
 import { assigns } from "~/shared/lib/session";
 
 export type CreateTodoState = {
-  errors?: {
-    board_id?: string[];
-    title?: string[];
-    content?: string[];
-    priority?: string[];
-    status?: string[];
-    general?: string[];
-  };
+  errors?: ErrorMap;
   message?: string;
 };
-
-const createTodoFields = [
-  "title",
-  "content",
-  "priority",
-  "status",
-  "board_id",
-] as const;
 
 export async function createTodo(
   _prevState: CreateTodoState,
   formData: FormData,
 ): Promise<CreateTodoState> {
-  const session = await assigns();
+  const [session, requestConfig] = await Promise.all([assigns(), config()]);
 
   if (!session.userId) {
     return { errors: { general: ["Not authenticated"] } };
   }
 
-  const boardId = formData.get("boardId");
-
-  if (typeof boardId !== "string" || boardId.length === 0) {
-    return { errors: { general: ["Board is required"] } };
-  }
+  const boardId = formData.get("boardId") as string;
 
   try {
     await postTodos(
@@ -62,12 +44,12 @@ export async function createTodo(
         },
       },
       undefined,
-      await config(),
+      requestConfig,
     );
   } catch (error) {
-    if (isApiError(error) && error.hasStatus(400, 422)) {
+    if (isApiError(error)) {
       return {
-        errors: error.toFieldErrors(createTodoFields),
+        errors: error.errors,
       };
     }
 

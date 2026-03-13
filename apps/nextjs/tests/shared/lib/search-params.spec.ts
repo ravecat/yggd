@@ -1,5 +1,8 @@
 import { describe, expect, test } from "@jest/globals";
-import { toSearchParamsString, type RouteSearchParams } from "./search-params";
+import {
+  toSearchParamsString,
+  type RouteSearchParams,
+} from "~/shared/lib/search-params";
 
 function toEntries(params: RouteSearchParams): [string, string][] {
   return Array.from(
