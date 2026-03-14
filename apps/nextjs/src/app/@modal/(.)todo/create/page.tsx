@@ -7,7 +7,7 @@ import {
   type AttributesStatusEnum2Key,
 } from "@rvct/shared";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useActionState, useState } from "react";
+import { Suspense, useActionState, useState } from "react";
 import { createTodo } from "~/features/todos/mutations";
 import {
   Dialog,
@@ -27,7 +27,48 @@ import {
 } from "~/shared/ui/select";
 import { Textarea } from "~/shared/ui/textarea";
 
-export default function CreateTodoModal() {
+function CreateTodoModalFallback() {
+  return (
+    <Dialog open>
+      <DialogContent className="max-w-2xl">
+        <DialogHeader>
+          <DialogTitle>Create New Todo</DialogTitle>
+        </DialogHeader>
+
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <div className="h-4 w-16 rounded bg-muted" />
+            <div className="h-10 rounded-md bg-muted" />
+          </div>
+
+          <div className="space-y-2">
+            <div className="h-4 w-20 rounded bg-muted" />
+            <div className="min-h-[200px] rounded-md bg-muted" />
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-2">
+              <div className="h-4 w-16 rounded bg-muted" />
+              <div className="h-10 rounded-md bg-muted" />
+            </div>
+
+            <div className="space-y-2">
+              <div className="h-4 w-14 rounded bg-muted" />
+              <div className="h-10 rounded-md bg-muted" />
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-2 pt-4">
+            <div className="h-10 w-20 rounded-md bg-muted" />
+            <div className="h-10 w-24 rounded-md bg-muted" />
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function CreateTodoModalContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const boardId = searchParams.get("boardId");
@@ -187,5 +228,13 @@ export default function CreateTodoModal() {
         </form>
       </DialogContent>
     </Dialog>
+  );
+}
+
+export default function CreateTodoModal() {
+  return (
+    <Suspense fallback={<CreateTodoModalFallback />}>
+      <CreateTodoModalContent />
+    </Suspense>
   );
 }
