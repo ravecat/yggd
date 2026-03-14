@@ -1,10 +1,11 @@
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
+import { attributesVisibilityEnum } from "@rvct/shared";
 import {
   ControlPanel,
   ControlPanelSkeleton,
-} from "../../_components/control-panel";
-import { TodosList, TodosSkeleton } from "../../_components/todos-list";
+} from "./_components/control-panel";
+import { TodosList, TodosSkeleton } from "./_components/todos-list";
 import { fetchBoard } from "~/features/boards/query";
 import { assigns } from "~/shared/lib/session";
 
@@ -36,6 +37,8 @@ async function BoardPageContent({
   }
 
   const canCreate = board.attributes?.owner_id === userId;
+  const boardVisibility =
+    board.attributes?.visibility ?? attributesVisibilityEnum.private;
 
   return (
     <div className="h-full overflow-hidden">
@@ -43,7 +46,11 @@ async function BoardPageContent({
         <p className="py-2 text-sm text-muted-foreground">
           Dynamic board grouped by status for daily task tracking (JSON:API)
         </p>
-        <ControlPanel boardId={board.id} canCreate={canCreate} />
+        <ControlPanel
+          boardId={board.id}
+          boardVisibility={boardVisibility}
+          canCreate={canCreate}
+        />
         <Suspense fallback={<TodosSkeleton />}>
           <TodosList boardId={board.id} searchParams={searchParams} />
         </Suspense>

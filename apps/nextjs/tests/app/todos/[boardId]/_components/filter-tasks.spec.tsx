@@ -39,7 +39,8 @@ describe("FilterTasks", () => {
     searchParamsStringMock =
       "sort=-updated_at&filter[status][eq]=backlog&filter[title][contains]=roadmap";
 
-    const { FilterTasks } = await import("~/app/_components/filter-tasks");
+    const { FilterTasks } =
+      await import("~/app/todos/[boardId]/_components/filter-tasks");
 
     render(<FilterTasks />);
 
@@ -86,7 +87,8 @@ describe("FilterTasks", () => {
     searchParamsStringMock =
       "filter[title][contains]=roadmap&page[offset]=20&page[limit]=10";
 
-    const { FilterTasks } = await import("~/app/_components/filter-tasks");
+    const { FilterTasks } =
+      await import("~/app/todos/[boardId]/_components/filter-tasks");
 
     render(<FilterTasks />);
 
@@ -101,7 +103,8 @@ describe("FilterTasks", () => {
     searchParamsStringMock =
       "filter[title][contains]=roadmap&page[offset]=20&page[limit]=10";
 
-    const { FilterTasks } = await import("~/app/_components/filter-tasks");
+    const { FilterTasks } =
+      await import("~/app/todos/[boardId]/_components/filter-tasks");
 
     render(<FilterTasks />);
 
