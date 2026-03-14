@@ -4,13 +4,20 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Tabs, TabsList, TabsTrigger } from "~/shared/ui/tabs";
 
-type NavLinkValue = "todo" | "canvas" | "telemetry" | "chart";
-
-function getActiveValue(pathname: string): NavLinkValue {
-  if (pathname === "/todos" || pathname.startsWith("/todos/")) {
+function getActiveValue(pathname: string) {
+  if (
+    pathname === "/todos" ||
+    pathname.startsWith("/todos/") ||
+    pathname === "/todo" ||
+    pathname.startsWith("/todo/")
+  ) {
     return "todo";
   }
-  if (pathname === "/canvas" || pathname.startsWith("/canvas/")) {
+  if (
+    pathname === "/" ||
+    pathname === "/canvas" ||
+    pathname.startsWith("/canvas/")
+  ) {
     return "canvas";
   }
   if (pathname === "/telemetry" || pathname.startsWith("/telemetry/")) {
@@ -24,7 +31,7 @@ function getActiveValue(pathname: string): NavLinkValue {
 }
 
 const links = [
-  { href: "/", label: "Todo", value: "todo" },
+  { href: "/todos", label: "Todo", value: "todo" },
   { href: "/canvas", label: "Canvas", value: "canvas" },
   { href: "/telemetry", label: "Telemetry", value: "telemetry" },
   { href: "/chart", label: "Chart", value: "chart" },
