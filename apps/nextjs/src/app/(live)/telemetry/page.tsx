@@ -8,6 +8,7 @@ import {
   TimeSeriesChart,
   type ChartRef,
 } from "~/components/ui/time-series-chart";
+import { ScrollArea } from "~/shared/ui/scroll-area";
 
 interface MetricMeta {
   labels: string[];
@@ -69,16 +70,17 @@ export default function TelemetryPage() {
   }, [socket]);
 
   return (
-    <div className="h-full overflow-auto">
-      <div className="mx-auto flex h-full w-full max-w-6xl flex-col gap-4 px-4 py-4">
+    <div className="h-full overflow-hidden">
+      <div className="mx-auto flex h-full w-full max-w-6xl flex-col gap-2 px-4">
         <p className="py-2 text-sm text-muted-foreground">
           Live runtime metrics dashboard for BEAM and host signals
           (OpenTelemetry OTLP, Erlang :telemetry, :os_mon, Phoenix Channels)
         </p>
-        <div className="grid flex-1 auto-rows-fr grid-cols-1 gap-4 min-h-0 sm:grid-cols-2">
-          {Object.entries(metrics).map(([name, meta]) => (
-            <div key={name} className="h-full">
+        <ScrollArea className="h-0 flex-1">
+          <div className="grid min-h-full auto-rows-[20rem] gap-2 pb-4 sm:grid-cols-2 lg:auto-rows-[22rem]">
+            {Object.entries(metrics).map(([name, meta]) => (
               <TimeSeriesChart
+                key={name}
                 ref={(chart) => {
                   if (chart) charts.current.set(name, chart);
                   else charts.current.delete(name);
@@ -90,9 +92,9 @@ export default function TelemetryPage() {
                   ...(meta.labels.length > 1 && { legend: { show: true } }),
                 }}
               />
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </ScrollArea>
       </div>
     </div>
   );
