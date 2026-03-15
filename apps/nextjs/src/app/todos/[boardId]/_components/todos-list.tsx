@@ -2,8 +2,7 @@ import { type Todo } from "@rvct/shared";
 import Link from "next/link";
 import { ChevronDownIcon } from "lucide-react";
 import type { BoardPageProps } from "../page";
-import { todosQueryCodec } from "~/features/todos/query-codec";
-import { fetchTodos } from "~/features/todos/query";
+import { fetchTodos, todosQueryCodec } from "~/features/todos/query";
 import { toSearchParamsString } from "~/shared/lib/search-params";
 import { ScrollArea } from "~/shared/ui/scroll-area";
 
