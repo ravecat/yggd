@@ -1,5 +1,10 @@
 {
+  "scripts": {
+    "format": "prettier --ignore-path ../.prettierignore --write .",
+    "format.check": "prettier --ignore-path ../.prettierignore --check ."
+  },
   "devDependencies": {
+    "prettier": "^3.6.2",
     "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9"
   },

@@ -42,14 +42,14 @@
     "format": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "prettier --write .",
+        "command": "pnpm run format",
         "cwd": "apps/nextjs"
       }
     },
-    "format-check": {
+    "format.check": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "prettier --check .",
+        "command": "pnpm run format.check",
         "cwd": "apps/nextjs"
       },
       "cache": true,
