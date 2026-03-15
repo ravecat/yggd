@@ -3,8 +3,12 @@ import type { z } from "zod/v4";
 
 type QueryParamsInput = Record<string, unknown>;
 
-export type QueryParamsSchema<TQueryParams extends QueryParamsInput> =
+type QueryParamsSchema<TQueryParams extends QueryParamsInput> =
   z.ZodType<TQueryParams>;
+
+function toQueryParamsInput(value: unknown): QueryParamsInput {
+  return isQueryParamsInput(value) ? value : {};
+}
 
 function parseRawQueryString(queryString: string): QueryParamsInput {
   return qs.parse(queryString, {
@@ -53,28 +57,31 @@ function mergeQueryParams(
   return merged;
 }
 
-function splitQueryHref(href: string) {
-  const [hrefWithoutHash, hashPart] = href.split("#", 2);
-  const [pathname, query] = hrefWithoutHash.split("?", 2);
+function splitHrefParts(href: string) {
+  const hashIndex = href.indexOf("#");
+  const hrefWithoutHash = hashIndex === -1 ? href : href.slice(0, hashIndex);
+  const hash = hashIndex === -1 ? "" : href.slice(hashIndex);
+  const queryIndex = hrefWithoutHash.indexOf("?");
+  const base =
+    queryIndex === -1 ? hrefWithoutHash : hrefWithoutHash.slice(0, queryIndex);
+  const query = queryIndex === -1 ? "" : hrefWithoutHash.slice(queryIndex + 1);
 
   return {
-    pathname,
-    query: query ?? "",
-    hash: hashPart ? `#${hashPart}` : "",
+    base,
+    query,
+    hash,
   };
 }
 
-export function parseQueryString<TQueryParams extends QueryParamsInput>(
+function parseQueryString<TQueryParams extends QueryParamsInput>(
   queryString: string,
   queryParamsSchema: QueryParamsSchema<TQueryParams>,
 ): TQueryParams {
   return queryParamsSchema.parse(parseRawQueryString(queryString));
 }
 
-export function toQueryString<TQueryParams = QueryParamsInput>(
-  queryParams: Partial<TQueryParams>,
-): string {
-  return qs.stringify(queryParams as Record<string, unknown>, {
+function stringifyQueryParamsInput(queryParams: QueryParamsInput): string {
+  return qs.stringify(queryParams, {
     arrayFormat: "indices",
     encodeValuesOnly: true,
     allowDots: false,
@@ -82,27 +89,41 @@ export function toQueryString<TQueryParams = QueryParamsInput>(
   });
 }
 
-export function toQueryHref<TQueryParams = QueryParamsInput>(
-  pathname: string,
-  params: Partial<TQueryParams>,
-): string {
-  const query = toQueryString(params);
-
-  return query.length > 0 ? `${pathname}?${query}` : pathname;
+function toQueryString<
+  TQueryParams extends QueryParamsInput = QueryParamsInput,
+>(queryParams: Partial<TQueryParams>): string {
+  return stringifyQueryParamsInput(toQueryParamsInput(queryParams));
 }
 
-export function mergeQueryHref<TQueryParams = QueryParamsInput>(
+function toHref<TQueryParams extends QueryParamsInput = QueryParamsInput>(
   href: string,
   params: Partial<TQueryParams>,
 ): string {
-  const { pathname, query, hash } = splitQueryHref(href);
+  const { base, query, hash } = splitHrefParts(href);
   const mergedParams = mergeQueryParams(
     parseRawQueryString(query),
-    params as QueryParamsInput,
+    toQueryParamsInput(params),
   );
-  const serializedQuery = toQueryString(mergedParams);
+
+  const serializedQuery = stringifyQueryParamsInput(mergedParams);
   const nextHref =
-    serializedQuery.length > 0 ? `${pathname}?${serializedQuery}` : pathname;
+    serializedQuery.length > 0 ? `${base}?${serializedQuery}` : base;
 
   return `${nextHref}${hash}`;
+}
+
+export function createQueryCodec<TQueryParams extends QueryParamsInput>(
+  queryParamsSchema: QueryParamsSchema<TQueryParams>,
+) {
+  return {
+    parse(queryString: string): TQueryParams {
+      return parseQueryString(queryString, queryParamsSchema);
+    },
+    stringify(queryParams: Partial<TQueryParams>): string {
+      return toQueryString(queryParams);
+    },
+    toHref(href: string, params: Partial<TQueryParams>): string {
+      return toHref(href, params);
+    },
+  };
 }
