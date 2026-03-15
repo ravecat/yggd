@@ -30,6 +30,22 @@
       },
       "continuous": true
     },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prettier --ignore-path ../../.prettierignore --write .",
+        "cwd": "packages/shared"
+      }
+    },
+    "format-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prettier --ignore-path ../../.prettierignore --check .",
+        "cwd": "packages/shared"
+      },
+      "cache": true,
+      "inputs": ["production", "^production"]
+    },
     "build": {
       "cache": true,
       "inputs": ["production", "^production"],

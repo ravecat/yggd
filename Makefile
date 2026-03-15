@@ -15,7 +15,7 @@ serve:
 	$(MAKE) start
 
 format:
-	npx prettier --write "**/*.md"
+	npx nx run-many -t format --all --outputStyle=stream
 
 format.check:
-	npx prettier --check "**/*.md"
+	npx nx run-many -t format-check --all --outputStyle=stream

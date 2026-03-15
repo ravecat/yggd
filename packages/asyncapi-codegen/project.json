@@ -4,6 +4,21 @@
   "sourceRoot": "packages/asyncapi-codegen/src",
   "projectType": "library",
   "targets": {
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prettier --ignore-path ../../.prettierignore --write .",
+        "cwd": "packages/asyncapi-codegen"
+      }
+    },
+    "format-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prettier --ignore-path ../../.prettierignore --check .",
+        "cwd": "packages/asyncapi-codegen"
+      },
+      "cache": true
+    },
     "build": {
       "executor": "nx:run-commands",
       "options": {
