@@ -20,20 +20,19 @@ export function FilterTasks() {
     searchParamsString,
     getTodosQueryParamsSchema,
   );
-  const currentTitleContains = todosQuery?.filter?.title?.contains;
-  const currentTitleFilter = currentTitleContains ?? "";
-  const [titleFilter, setTitleFilter] = useState(currentTitleFilter);
+  const currentFilterValue = todosQuery?.filter?.title?.contains ?? "";
+  const [filterValue, setFilterValue] = useState(currentFilterValue);
 
   useEffect(() => {
-    setTitleFilter(currentTitleFilter);
-  }, [currentTitleFilter]);
+    setFilterValue(currentFilterValue);
+  }, [currentFilterValue]);
 
   useEffect(() => {
     const timeoutId = window.setTimeout(() => {
-      const nextTitleContains =
-        titleFilter.trim().length > 0 ? titleFilter : undefined;
+      const nextFilterValue =
+        filterValue.trim().length > 0 ? filterValue : undefined;
 
-      if (nextTitleContains === currentTitleContains) {
+      if (nextFilterValue === currentFilterValue) {
         return;
       }
 
@@ -44,7 +43,7 @@ export function FilterTasks() {
       const nextHref = mergeQueryHref(currentHref, {
         filter: {
           title: {
-            contains: nextTitleContains,
+            contains: nextFilterValue,
           },
         },
         page: undefined,
@@ -54,14 +53,14 @@ export function FilterTasks() {
     }, DEBOUNCE_MS);
 
     return () => window.clearTimeout(timeoutId);
-  }, [currentTitleContains, pathname, router, searchParamsString, titleFilter]);
+  }, [currentFilterValue, filterValue, pathname, router, searchParamsString]);
 
   return (
     <div className="min-w-0 flex-1">
       <Input
         type="search"
-        value={titleFilter}
-        onChange={(event) => setTitleFilter(event.target.value)}
+        value={filterValue}
+        onChange={(event) => setFilterValue(event.target.value)}
         placeholder="Filter tasks"
         aria-label="Filter tasks"
       />

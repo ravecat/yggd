@@ -1,8 +1,8 @@
-export type SearchParamValue = string | string[] | undefined;
+type SearchParamValue = string | string[] | undefined;
 
-export type RouteSearchParams = Readonly<Record<string, SearchParamValue>>;
-
-export function toSearchParamsString(params: RouteSearchParams): string {
+export function toSearchParamsString(
+  params: Readonly<Record<string, SearchParamValue>>,
+): string {
   const searchParams = new URLSearchParams();
 
   for (const [key, value] of Object.entries(params)) {

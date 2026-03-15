@@ -1,24 +1,33 @@
 import { attributesVisibilityEnum } from "@rvct/shared";
 import Link from "next/link";
 import { PlusIcon } from "lucide-react";
+import { fetchBoard } from "~/features/boards/query";
+import { assigns } from "~/shared/lib/session";
 import { Button } from "~/shared/ui/button";
 import { BoardVisibilityToggle } from "./board-visibility-toggle";
 import { FilterTasks } from "./filter-tasks";
 
 type ControlPanelProps = {
   boardId: string;
-  boardVisibility?: "private" | "public";
-  canCreate?: boolean;
 };
 
-export function ControlPanel({
-  boardId,
-  boardVisibility = attributesVisibilityEnum.private,
-  canCreate = true,
-}: ControlPanelProps) {
+export async function ControlPanel({ boardId }: ControlPanelProps) {
+  const [board, { userId }] = await Promise.all([
+    fetchBoard(boardId),
+    assigns(),
+  ]);
+
+  if (!board) {
+    return null;
+  }
+
+  const isOwner = board.attributes?.owner_id === userId;
+  const visibility =
+    board.attributes?.visibility ?? attributesVisibilityEnum.private;
+
   return (
     <div className="flex flex-wrap gap-2">
-      {canCreate ? (
+      {isOwner ? (
         <Link
           href={`/todo/create?boardId=${encodeURIComponent(boardId)}`}
           className="w-full shrink-0 sm:w-auto"
@@ -32,8 +41,8 @@ export function ControlPanel({
 
       <FilterTasks />
 
-      {canCreate ? (
-        <BoardVisibilityToggle id={boardId} visibility={boardVisibility} />
+      {isOwner && visibility ? (
+        <BoardVisibilityToggle id={boardId} visibility={visibility} />
       ) : null}
     </div>
   );

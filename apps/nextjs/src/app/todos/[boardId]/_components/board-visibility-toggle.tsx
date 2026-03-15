@@ -1,6 +1,9 @@
 "use client";
 
-import { attributesVisibilityEnum2 } from "@rvct/shared";
+import {
+  type AttributesVisibilityEnum2Key,
+  attributesVisibilityEnum2,
+} from "@rvct/shared";
 import { useRouter } from "next/navigation";
 import { useId, useState, useTransition } from "react";
 import { updateBoardVisibility } from "~/features/boards/mutations";
@@ -8,7 +11,7 @@ import { Label } from "~/shared/ui/label";
 
 type Props = {
   id: string;
-  visibility?: "private" | "public";
+  visibility?: AttributesVisibilityEnum2Key;
 };
 
 export function BoardVisibilityToggle({
