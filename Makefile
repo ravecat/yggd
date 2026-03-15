@@ -1,4 +1,4 @@
-.PHONY: all setup start serve format format.check
+.PHONY: all setup start serve test format format.check
 
 all:
 	$(MAKE) serve
@@ -13,6 +13,9 @@ start:
 serve:
 	$(MAKE) setup
 	$(MAKE) start
+
+test:
+	npx nx run-many -t test --all --outputStyle=stream
 
 format:
 	npx nx run-many -t format --all --outputStyle=stream
