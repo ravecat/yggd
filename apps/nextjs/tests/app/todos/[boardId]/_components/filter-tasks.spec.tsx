@@ -22,6 +22,47 @@ jest.mock("next/navigation", () => ({
   useSearchParams: () => new URLSearchParams(searchParamsStringMock),
 }));
 
+jest.mock("@rvct/shared", () => ({
+  createQueryCodec: () => ({
+    parse: (queryString: string) => {
+      const searchParams = new URLSearchParams(queryString);
+      const titleContains = searchParams.get("filter[title][contains]");
+
+      return titleContains
+        ? {
+            filter: {
+              title: {
+                contains: titleContains,
+              },
+            },
+          }
+        : {};
+    },
+    toHref: (
+      href: string,
+      params: {
+        filter?: {
+          title?: {
+            contains?: string;
+          };
+        };
+      },
+    ) => {
+      const url = new URL(href, "https://example.com");
+      const titleContains = params.filter?.title?.contains;
+
+      if (titleContains) {
+        url.searchParams.set("filter[title][contains]", titleContains);
+      } else {
+        url.searchParams.delete("filter[title][contains]");
+      }
+
+      return `${url.pathname}${url.search}`;
+    },
+  }),
+  getTodosQueryParamsSchema: {},
+}));
+
 describe("FilterTasks", () => {
   beforeEach(() => {
     pathnameMock = "/todos/board-1";
@@ -99,7 +140,7 @@ describe("FilterTasks", () => {
     expect(replaceMock).not.toHaveBeenCalled();
   });
 
-  test("removes the title filter and resets pagination when the input is cleared", async () => {
+  test("removes the title filter and preserves existing query params when the input is cleared", async () => {
     searchParamsStringMock =
       "filter[title][contains]=roadmap&page[offset]=20&page[limit]=10";
 
@@ -124,7 +165,7 @@ describe("FilterTasks", () => {
     const url = new URL(href, "https://example.com");
 
     expect(url.searchParams.get("filter[title][contains]")).toBeNull();
-    expect(url.searchParams.get("page[offset]")).toBeNull();
-    expect(url.searchParams.get("page[limit]")).toBeNull();
+    expect(url.searchParams.get("page[offset]")).toBe("20");
+    expect(url.searchParams.get("page[limit]")).toBe("10");
   });
 });

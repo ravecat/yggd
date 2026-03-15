@@ -1,15 +1,18 @@
-"use server";
+import "server-only";
 
 import {
+  createQueryCodec,
   getTodos,
   getTodosId,
   getTodosQueryParamsSchema,
   isApiError,
+  type GetTodosQueryParams,
   type MetaStatusesEnumKey,
   type Todo,
 } from "@rvct/shared";
-import type { GetTodosQueryParams } from "@rvct/shared";
 import { config } from "~/shared/lib/api";
+
+export const todosQueryCodec = createQueryCodec(getTodosQueryParamsSchema);
 
 export type FetchTodosResult = {
   statuses: MetaStatusesEnumKey[];

@@ -1,11 +1,12 @@
 "use client";
 
+import { createQueryCodec, getTodosQueryParamsSchema } from "@rvct/shared";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { todosQueryCodec } from "~/features/todos/query-codec";
 import { Input } from "~/shared/ui/input";
 
 const DEBOUNCE_MS = 300;
+const todosQueryCodec = createQueryCodec(getTodosQueryParamsSchema);
 
 export function FilterTasks() {
   const pathname = usePathname();
@@ -24,29 +25,25 @@ export function FilterTasks() {
     const timeoutId = window.setTimeout(() => {
       const nextFilterValue =
         filterValue.trim().length > 0 ? filterValue : undefined;
+      const currentHref = `${pathname}${searchParamsString ? `?${searchParamsString}` : ""}`;
 
-      if (nextFilterValue === currentFilterValue) {
-        return;
-      }
-
-      const currentHref =
-        searchParamsString.length > 0
-          ? `${pathname}?${searchParamsString}`
-          : pathname;
       const nextHref = todosQueryCodec.toHref(currentHref, {
         filter: {
           title: {
             contains: nextFilterValue,
           },
         },
-        page: undefined,
       });
+
+      if (nextHref === currentHref) {
+        return;
+      }
 
       router.replace(nextHref, { scroll: false });
     }, DEBOUNCE_MS);
 
     return () => window.clearTimeout(timeoutId);
-  }, [currentFilterValue, filterValue, pathname, router, searchParamsString]);
+  }, [filterValue, pathname, router, searchParamsString]);
 
   return (
     <div className="min-w-0 flex-1">
