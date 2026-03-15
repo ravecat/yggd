@@ -1,11 +1,8 @@
-import {
-  getTodosQueryParamsSchema,
-  parseQueryString,
-  type Todo,
-} from "@rvct/shared";
+import { type Todo } from "@rvct/shared";
 import Link from "next/link";
 import { ChevronDownIcon } from "lucide-react";
 import type { BoardPageProps } from "../page";
+import { todosQueryCodec } from "~/features/todos/query-codec";
 import { fetchTodos } from "~/features/todos/query";
 import { toSearchParamsString } from "~/shared/lib/search-params";
 import { ScrollArea } from "~/shared/ui/scroll-area";
@@ -16,9 +13,8 @@ type TodosListProps = {
 };
 
 export async function TodosList({ boardId, searchParams }: TodosListProps) {
-  const todosQuery = parseQueryString(
+  const todosQuery = todosQueryCodec.parse(
     toSearchParamsString(await searchParams),
-    getTodosQueryParamsSchema,
   );
   const { statuses, todos } = await fetchTodos(boardId, todosQuery);
   const hasTasks = todos.length > 0;

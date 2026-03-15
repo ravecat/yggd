@@ -1,12 +1,8 @@
 "use client";
 
-import {
-  getTodosQueryParamsSchema,
-  mergeQueryHref,
-  parseQueryString,
-} from "@rvct/shared";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { todosQueryCodec } from "~/features/todos/query-codec";
 import { Input } from "~/shared/ui/input";
 
 const DEBOUNCE_MS = 300;
@@ -16,10 +12,7 @@ export function FilterTasks() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const searchParamsString = searchParams.toString();
-  const todosQuery = parseQueryString(
-    searchParamsString,
-    getTodosQueryParamsSchema,
-  );
+  const todosQuery = todosQueryCodec.parse(searchParamsString);
   const currentFilterValue = todosQuery?.filter?.title?.contains ?? "";
   const [filterValue, setFilterValue] = useState(currentFilterValue);
 
@@ -40,7 +33,7 @@ export function FilterTasks() {
         searchParamsString.length > 0
           ? `${pathname}?${searchParamsString}`
           : pathname;
-      const nextHref = mergeQueryHref(currentHref, {
+      const nextHref = todosQueryCodec.toHref(currentHref, {
         filter: {
           title: {
             contains: nextFilterValue,

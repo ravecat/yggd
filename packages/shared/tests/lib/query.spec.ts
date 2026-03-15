@@ -1,14 +1,11 @@
 import { describe, test, expect } from "@jest/globals";
 import { getTodosQueryParamsSchema } from "~/api/zod/getTodosSchema";
 import { z } from "zod/v4";
-import {
-  mergeQueryHref,
-  parseQueryString,
-  toQueryString,
-  toQueryHref,
-} from "~/lib/query";
+import { createQueryCodec } from "~/lib/query";
 
 const queryStructureSchema = z.record(z.string(), z.any());
+const queryStructureCodec = createQueryCodec(queryStructureSchema);
+const todosQueryCodec = createQueryCodec(getTodosQueryParamsSchema);
 
 function deserializeQueryParams(
   params: Record<string, string | string[] | undefined>,
@@ -24,13 +21,15 @@ function deserializeQueryParams(
     searchParams.append(key, value);
   }
 
-  return parseQueryString(searchParams.toString(), queryStructureSchema);
+  return queryStructureCodec.parse(searchParams.toString());
 }
 
 function serializeQueryParams<TQueryParams extends Record<string, unknown>>(
   params: Partial<TQueryParams>,
 ): [string, string][] {
-  return Array.from(new URLSearchParams(toQueryString(params)).entries());
+  return Array.from(
+    new URLSearchParams(queryStructureCodec.stringify(params)).entries(),
+  );
 }
 
 describe("Query utilities", () => {
@@ -337,11 +336,10 @@ describe("Query utilities", () => {
   });
 });
 
-describe("string query helpers", () => {
-  test("parseQueryString deserializes and validates nested structures from query string", () => {
-    const result = parseQueryString(
+describe("query codec", () => {
+  test("parse deserializes and validates nested structures from query string", () => {
+    const result = queryStructureCodec.parse(
       "?sort=-priority,-updated_at&include=user,comments&fields[todo]=title,content&filter[title][contains]=report&page[limit]=10&tags[0]=a&tags[1]=b",
-      queryStructureSchema,
     );
 
     expect(result).toEqual({
@@ -354,8 +352,8 @@ describe("string query helpers", () => {
     });
   });
 
-  test("toQueryString serializes nested structures to query string", () => {
-    const result = toQueryString({
+  test("stringify serializes nested structures to query string", () => {
+    const result = queryStructureCodec.stringify({
       sort: "-priority,-updated_at",
       include: "user,comments",
       fields: { todo: "title,content" },
@@ -369,10 +367,25 @@ describe("string query helpers", () => {
     );
   });
 
-  test("parseQueryString converts raw query string to generated transport params", () => {
-    const result = parseQueryString(
+  test("stringify does not serialize schema defaults", () => {
+    const result = todosQueryCodec.stringify({
+      page: { limit: 10 },
+    });
+
+    expect(result).toBe("page[limit]=10");
+  });
+
+  test("stringify does not validate params against schema", () => {
+    expect(
+      todosQueryCodec.stringify({
+        page: { limit: 0 },
+      }),
+    ).toBe("page[limit]=0");
+  });
+
+  test("parse converts raw query string to generated transport params", () => {
+    const result = todosQueryCodec.parse(
       "?sort=-priority,-updated_at&include=board&fields[todo]=title,content&filter[title][contains]=report&page[limit]=10&page[offset]=20",
-      getTodosQueryParamsSchema,
     );
 
     expect(result).toEqual({
@@ -384,60 +397,97 @@ describe("string query helpers", () => {
     });
   });
 
-  test("toQueryHref appends the serialized query string to a pathname", () => {
+  test("toHref appends params when href has no query string", () => {
     expect(
-      toQueryHref("/todos", {
+      queryStructureCodec.toHref("/todos", {
         sort: "-priority,-updated_at",
         page: { limit: 10 },
       }),
     ).toBe("/todos?sort=-priority%2C-updated_at&page[limit]=10");
   });
 
-  test("toQueryHref returns the pathname unchanged when query params are empty", () => {
+  test("toHref returns the pathname unchanged when query params are empty", () => {
     expect(
-      toQueryHref("/todos", {
+      queryStructureCodec.toHref("/todos", {
         sort: undefined,
       }),
     ).toBe("/todos");
   });
 
-  test("mergeQueryHref merges query params into an existing relative href", () => {
+  test("toHref merges query params into an existing relative href", () => {
     expect(
-      mergeQueryHref("/todos?page[limit]=10&page[offset]=20", {
+      queryStructureCodec.toHref("/todos?page[limit]=10&page[offset]=20", {
         sort: "-priority",
       }),
     ).toBe("/todos?page[limit]=10&page[offset]=20&sort=-priority");
   });
 
-  test("mergeQueryHref deep-merges nested query params", () => {
+  test("toHref deep-merges nested query params", () => {
     expect(
-      mergeQueryHref("/todos?page[limit]=10&page[offset]=20", {
+      queryStructureCodec.toHref("/todos?page[limit]=10&page[offset]=20", {
         page: { limit: 30 },
       }),
     ).toBe("/todos?page[limit]=30&page[offset]=20");
   });
 
-  test("mergeQueryHref removes keys assigned to undefined", () => {
+  test("toHref removes keys assigned to undefined", () => {
     expect(
-      mergeQueryHref("/todos?page[limit]=10&sort=-priority", {
+      queryStructureCodec.toHref("/todos?page[limit]=10&sort=-priority", {
         sort: undefined,
       }),
     ).toBe("/todos?page[limit]=10");
   });
 
-  test("mergeQueryHref preserves hash fragments", () => {
+  test("toHref preserves hash fragments", () => {
     expect(
-      mergeQueryHref("/todos?page[limit]=10#list", {
+      queryStructureCodec.toHref("/todos?page[limit]=10#list", {
         sort: "-priority",
       }),
     ).toBe("/todos?page[limit]=10&sort=-priority#list");
   });
 
-  test("mergeQueryHref supports absolute urls", () => {
+  test("toHref preserves the full hash fragment", () => {
     expect(
-      mergeQueryHref("https://example.com/todos?page[limit]=10", {
+      queryStructureCodec.toHref(
+        "/todos?page[limit]=10#list?tab=done#section-2",
+        {
+          sort: "-priority",
+        },
+      ),
+    ).toBe("/todos?page[limit]=10&sort=-priority#list?tab=done#section-2");
+  });
+
+  test("toHref supports absolute urls", () => {
+    expect(
+      queryStructureCodec.toHref("https://example.com/todos?page[limit]=10", {
         sort: "-priority",
       }),
     ).toBe("https://example.com/todos?page[limit]=10&sort=-priority");
+  });
+
+  test("toHref appends schema-typed params without serializing defaults", () => {
+    expect(
+      todosQueryCodec.toHref("/todos?page[limit]=10", {
+        sort: "-priority",
+      }),
+    ).toBe("/todos?page[limit]=10&sort=-priority");
+  });
+
+  test("toHref does not validate merged params against schema", () => {
+    expect(
+      todosQueryCodec.toHref("/todos?page[limit]=0", {
+        sort: "-priority",
+      }),
+    ).toBe("/todos?page[limit]=0&sort=-priority");
+  });
+
+  test("createQueryCodec binds schema-aware helpers", () => {
+    const codec = createQueryCodec(getTodosQueryParamsSchema);
+
+    expect(
+      codec.toHref("/todos?page[limit]=10", {
+        filter: { title: { contains: "report" } },
+      }),
+    ).toBe("/todos?page[limit]=10&filter[title][contains]=report");
   });
 });
