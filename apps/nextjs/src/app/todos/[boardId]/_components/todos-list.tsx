@@ -5,16 +5,14 @@ import {
 } from "@rvct/shared";
 import Link from "next/link";
 import { ChevronDownIcon } from "lucide-react";
+import type { BoardPageProps } from "../page";
 import { fetchTodos } from "~/features/todos/query";
-import {
-  toSearchParamsString,
-  type RouteSearchParams,
-} from "~/shared/lib/search-params";
+import { toSearchParamsString } from "~/shared/lib/search-params";
 import { ScrollArea } from "~/shared/ui/scroll-area";
 
 type TodosListProps = {
   boardId: string;
-  searchParams: Promise<RouteSearchParams>;
+  searchParams: BoardPageProps["searchParams"];
 };
 
 export async function TodosList({ boardId, searchParams }: TodosListProps) {
@@ -60,7 +58,7 @@ export async function TodosList({ boardId, searchParams }: TodosListProps) {
     columns.set(status, [todo]);
   }
 
-  const table = Array.from(columns, ([key, items]) => ({
+  const tasks = Array.from(columns, ([key, items]) => ({
     key,
     todos: items,
   }));
@@ -69,7 +67,7 @@ export async function TodosList({ boardId, searchParams }: TodosListProps) {
     <div className="flex min-h-0 flex-1 flex-col">
       <ScrollArea className="h-0 flex-1 md:hidden">
         <div className="flex min-h-full flex-col gap-3">
-          {table.map((column) => (
+          {tasks.map((column) => (
             <details key={column.key} className="group md:hidden">
               <summary className="flex list-none items-center justify-between gap-3 border-b border-border py-2 marker:hidden [&::-webkit-details-marker]:hidden">
                 <span className="text-sm font-semibold leading-5 text-foreground">
@@ -126,7 +124,7 @@ export async function TodosList({ boardId, searchParams }: TodosListProps) {
 
       <div className="hidden min-h-0 flex-1 flex-col gap-3 md:flex">
         <div className="grid auto-cols-fr grid-flow-col gap-4">
-          {table.map((column) => (
+          {tasks.map((column) => (
             <header
               key={column.key}
               className="flex items-center justify-between border-b border-border py-2"
@@ -144,7 +142,7 @@ export async function TodosList({ boardId, searchParams }: TodosListProps) {
 
         <ScrollArea className="h-0 flex-1">
           <div className="grid min-h-full auto-cols-fr grid-flow-col gap-4">
-            {table.map((column) => (
+            {tasks.map((column) => (
               <section
                 key={column.key}
                 className="flex h-full min-h-full flex-col"

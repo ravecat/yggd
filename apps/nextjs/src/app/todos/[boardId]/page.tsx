@@ -1,15 +1,13 @@
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
-import { attributesVisibilityEnum } from "@rvct/shared";
 import {
   ControlPanel,
   ControlPanelSkeleton,
 } from "./_components/control-panel";
 import { TodosList, TodosSkeleton } from "./_components/todos-list";
 import { fetchBoard } from "~/features/boards/query";
-import { assigns } from "~/shared/lib/session";
 
-type BoardPageProps = PageProps<"/todos/[boardId]">;
+export type BoardPageProps = PageProps<"/todos/[boardId]">;
 
 function BoardPageFallback() {
   return (
@@ -29,16 +27,12 @@ async function BoardPageContent({
   params: BoardPageProps["params"];
   searchParams: BoardPageProps["searchParams"];
 }) {
-  const [{ boardId }, { userId }] = await Promise.all([params, assigns()]);
+  const { boardId } = await params;
   const board = await fetchBoard(boardId);
 
   if (!board) {
     notFound();
   }
-
-  const canCreate = board.attributes?.owner_id === userId;
-  const boardVisibility =
-    board.attributes?.visibility ?? attributesVisibilityEnum.private;
 
   return (
     <div className="h-full overflow-hidden">
@@ -46,11 +40,7 @@ async function BoardPageContent({
         <p className="py-2 text-sm text-muted-foreground">
           Dynamic board grouped by status for daily task tracking (JSON:API)
         </p>
-        <ControlPanel
-          boardId={board.id}
-          boardVisibility={boardVisibility}
-          canCreate={canCreate}
-        />
+        <ControlPanel boardId={board.id} />
         <Suspense fallback={<TodosSkeleton />}>
           <TodosList boardId={board.id} searchParams={searchParams} />
         </Suspense>
