@@ -1,7 +1,4 @@
-.PHONY: all setup start serve test format format.check
-
-all:
-	$(MAKE) serve
+.PHONY: setup start serve test lint format format.check
 
 setup:
 	pnpm install --recursive
@@ -17,8 +14,11 @@ serve:
 test:
 	npx nx run-many -t test --all --outputStyle=stream
 
+lint:
+	npx nx run-many -t lint --all --outputStyle=stream
+
 format:
 	npx nx run-many -t format --all --outputStyle=stream
 
 format.check:
-	npx nx run-many -t format-check --all --outputStyle=stream
+	npx nx run-many -t format.check --all --outputStyle=stream

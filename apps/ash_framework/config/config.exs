@@ -131,7 +131,7 @@ config :tailwind,
 config :bun,
   version: "1.2.16",
   assets: [
-    args: ["install"],
+    args: [],
     cd: Path.expand("../assets", __DIR__)
   ],
   ash_codegen: [

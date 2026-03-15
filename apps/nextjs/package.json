@@ -2,6 +2,11 @@
   "name": "nextjs",
   "version": "0.0.1",
   "private": true,
+  "scripts": {
+    "lint": "pnpm exec eslint .",
+    "format": "pnpm exec eslint --fix . && pnpm exec prettier --write .",
+    "format.check": "pnpm exec eslint . && pnpm exec prettier --check ."
+  },
   "overrides": {
     "@rvct/shared": {
       "react": "19.2.0",

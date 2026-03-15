@@ -61,10 +61,10 @@
         "cwd": "apps/sveltekit"
       }
     },
-    "format-check": {
+    "format.check": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "pnpm run format:check",
+        "command": "pnpm run format.check",
         "cwd": "apps/sveltekit"
       },
       "cache": true,

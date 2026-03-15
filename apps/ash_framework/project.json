@@ -68,17 +68,15 @@
     "format": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["mix format", "prettier --write assets"],
-        "cwd": "apps/ash_framework",
-        "parallel": false
+        "command": "mix format",
+        "cwd": "apps/ash_framework"
       }
     },
-    "format-check": {
+    "format.check": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["mix format --check-formatted", "prettier --check assets"],
-        "cwd": "apps/ash_framework",
-        "parallel": false
+        "command": "mix format.check",
+        "cwd": "apps/ash_framework"
       },
       "cache": true
     },

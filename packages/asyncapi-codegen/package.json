@@ -2,6 +2,11 @@
   "name": "@rvct/asyncapi-codegen",
   "version": "0.2.0",
   "type": "module",
+  "scripts": {
+    "lint": "pnpm exec eslint .",
+    "format": "pnpm exec eslint --fix . && pnpm exec prettier --write .",
+    "format.check": "pnpm exec eslint . && pnpm exec prettier --check ."
+  },
   "description": "AsyncAPI to TypeScript and Zod v4 code generator",
   "main": "./src/index.mjs",
   "module": "./src/index.mjs",

@@ -1,6 +1,13 @@
+# Dependencies
+node_modules
+assets/node_modules
+
 # Elixir build outputs
 _build
 deps
+cover
+doc
+tmp
 
 # Phoenix/Ash outputs
 priv/static
@@ -10,5 +17,5 @@ priv/repo/migrations
 # Generated TypeScript RPC client
 assets/js/ash_rpc.ts
 
-# Elixir lock file
+# Lock files
 mix.lock

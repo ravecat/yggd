@@ -7,14 +7,14 @@
     "format": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "prettier --ignore-path ../../.prettierignore --write .",
+        "command": "pnpm run format",
         "cwd": "packages/asyncapi-codegen"
       }
     },
-    "format-check": {
+    "format.check": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "prettier --ignore-path ../../.prettierignore --check .",
+        "command": "pnpm run format.check",
         "cwd": "packages/asyncapi-codegen"
       },
       "cache": true

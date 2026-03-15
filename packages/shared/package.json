@@ -2,6 +2,11 @@
   "name": "@rvct/shared",
   "version": "0.2.0",
   "type": "module",
+  "scripts": {
+    "lint": "pnpm exec eslint .",
+    "format": "pnpm exec eslint --fix . && pnpm exec prettier --write .",
+    "format.check": "pnpm exec eslint . && pnpm exec prettier --check ."
+  },
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
