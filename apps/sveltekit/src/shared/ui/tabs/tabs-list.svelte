@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Tabs as TabsPrimitive } from "bits-ui";
-  import { cn } from "$shared/utils.js";
+  import { cn } from "$shared/utils";
 
   let {
     ref = $bindable(null),

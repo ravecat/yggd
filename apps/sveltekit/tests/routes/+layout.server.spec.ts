@@ -8,7 +8,7 @@ const env: Record<string, string | undefined> = {
 
 vi.mock("$env/dynamic/private", () => ({ env }));
 
-describe("+layout.server", () => {
+describe("src/routes/+layout.server.ts", () => {
   beforeEach(() => {
     env.NEXTJS_APP_URL = undefined;
     env.SVELTEKIT_APP_URL = "https://sveltekit.example.com";
@@ -18,7 +18,7 @@ describe("+layout.server", () => {
   it("builds framework links from implementation-specific env vars", async () => {
     env.NEXTJS_APP_URL = "https://nextjs.example.com";
 
-    const { load } = await import("../src/routes/+layout.server");
+    const { load } = await import("../../src/routes/+layout.server");
 
     expect(load({} as Parameters<typeof load>[0])).toEqual({
       frameworks: [

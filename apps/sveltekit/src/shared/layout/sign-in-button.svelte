@@ -1,6 +1,6 @@
 <script lang="ts">
   import LogInIcon from "@lucide/svelte/icons/log-in";
-  import { Button } from "$shared/ui/button/index.js";
+  import { Button } from "$shared/ui/button";
 </script>
 
 <Button type="button" size="sm" class="min-w-[7.75rem]">

@@ -1,6 +1,6 @@
 import { env } from "$env/dynamic/private";
 import type { LayoutServerLoad } from "./$types";
-import type { Framework } from "$shared/navigation.js";
+import type { Framework } from "$shared/navigation";
 
 export const load: LayoutServerLoad = () => ({
   frameworks: [

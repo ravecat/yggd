@@ -1,26 +1,30 @@
 <script lang="ts">
-  import type { Framework } from "$shared/navigation.js";
-  import NavLinks from "./nav-links.svelte";
-  import PageSwitcher from "./page-switcher.svelte";
-  import SignInButton from "./sign-in-button.svelte";
+  import { goto } from "$app/navigation";
+  import { resolve } from "$app/paths";
+  import { page } from "$app/state";
+  import * as Tabs from "$shared/ui/tabs";
 
-  let { frameworks }: { frameworks: Framework[] } = $props();
+  const links = [
+    { href: "/todos", label: "Todo" },
+    { href: "/canvas", label: "Canvas" },
+    { href: "/telemetry", label: "Telemetry" },
+    { href: "/chart", label: "Chart" },
+  ] as const;
 </script>
 
-<header class="border-border bg-background">
-  <div
-    class="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-2 sm:grid sm:h-14 sm:grid-cols-3 sm:py-0"
-  >
-    <div class="flex items-center">
-      <PageSwitcher data={frameworks} />
-    </div>
-    <div
-      class="order-last flex w-full items-center justify-center sm:order-0 sm:w-auto"
-    >
-      <NavLinks />
-    </div>
-    <div class="flex items-center justify-end">
-      <SignInButton />
-    </div>
-  </div>
-</header>
+<nav aria-label="Primary" class="w-full min-w-0 sm:w-auto">
+  <Tabs.Root value={page.route.id ?? undefined} class="w-full sm:w-auto">
+    <Tabs.List class="h-9 w-full overflow-hidden p-0.5 sm:w-auto">
+      {#each links as link (link.href)}
+        <Tabs.Trigger
+          value={link.href}
+          class="h-full min-w-0 flex-1 px-[1.5625rem]"
+          aria-current={page.route.id === link.href ? "page" : undefined}
+          onclick={() => goto(resolve(link.href))}
+        >
+          {link.label}
+        </Tabs.Trigger>
+      {/each}
+    </Tabs.List>
+  </Tabs.Root>
+</nav>

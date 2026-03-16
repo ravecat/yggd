@@ -2,31 +2,13 @@
   import { browser } from "$app/environment";
   import CheckIcon from "@lucide/svelte/icons/check";
   import ChevronsUpDownIcon from "@lucide/svelte/icons/chevrons-up-down";
-  import { Button } from "$shared/ui/button/index.js";
-  import * as DropdownMenu from "$shared/ui/dropdown-menu/index.js";
-  import type { Framework } from "$shared/navigation.js";
+  import type { Framework } from "$shared/navigation";
+  import { Button } from "$shared/ui/button";
+  import * as DropdownMenu from "$shared/ui/dropdown-menu";
 
-  let { data }: { data: Framework[] } = $props();
+  let { frameworks }: { frameworks: Framework[] } = $props();
 
-  const currentFramework = $derived.by(() => {
-    const host = browser ? window.location.host : null;
-
-    return (
-      data.find((framework) => {
-        if (!host) {
-          return framework.id === "sveltekit";
-        }
-
-        try {
-          return new URL(framework.href).host === host;
-        } catch {
-          return false;
-        }
-      }) ??
-      data.find((framework) => framework.id === "sveltekit") ??
-      data[0]
-    );
-  });
+  const currentFrameworkId = "sveltekit";
 
   function visitFramework(href: string) {
     if (!browser) {
@@ -46,20 +28,20 @@
         size="sm"
         class="min-w-[7.75rem] justify-between"
       >
-        {currentFramework.label}
+        SvelteKit
         <ChevronsUpDownIcon class="size-3.5 opacity-50" />
       </Button>
     {/snippet}
   </DropdownMenu.Trigger>
   <DropdownMenu.Content align="start" class="min-w-40">
     <DropdownMenu.Label>Frameworks</DropdownMenu.Label>
-    {#each data as framework (framework.id)}
+    {#each frameworks as framework (framework.id)}
       <DropdownMenu.Item
         class="flex items-center justify-between"
         onclick={() => visitFramework(framework.href)}
       >
         <span>{framework.label}</span>
-        {#if framework.id === currentFramework.id}
+        {#if framework.id === currentFrameworkId}
           <CheckIcon class="size-4 opacity-50" />
         {/if}
       </DropdownMenu.Item>
