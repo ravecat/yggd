@@ -4,15 +4,29 @@
   import ChevronsUpDownIcon from "@lucide/svelte/icons/chevrons-up-down";
   import { Button } from "$shared/ui/button/index.js";
   import * as DropdownMenu from "$shared/ui/dropdown-menu/index.js";
-  import {
-    defaultFramework,
-    frameworks,
-    getFrameworkByHostname,
-  } from "$shared/navigation.js";
+  import type { Framework } from "$shared/navigation.js";
 
-  const currentFramework = browser
-    ? (getFrameworkByHostname(window.location.hostname) ?? defaultFramework)
-    : defaultFramework;
+  let { data }: { data: Framework[] } = $props();
+
+  const currentFramework = $derived.by(() => {
+    const host = browser ? window.location.host : null;
+
+    return (
+      data.find((framework) => {
+        if (!host) {
+          return framework.id === "sveltekit";
+        }
+
+        try {
+          return new URL(framework.href).host === host;
+        } catch {
+          return false;
+        }
+      }) ??
+      data.find((framework) => framework.id === "sveltekit") ??
+      data[0]
+    );
+  });
 
   function visitFramework(href: string) {
     if (!browser) {
@@ -39,7 +53,7 @@
   </DropdownMenu.Trigger>
   <DropdownMenu.Content align="start" class="min-w-40">
     <DropdownMenu.Label>Frameworks</DropdownMenu.Label>
-    {#each frameworks as framework (framework.id)}
+    {#each data as framework (framework.id)}
       <DropdownMenu.Item
         class="flex items-center justify-between"
         onclick={() => visitFramework(framework.href)}

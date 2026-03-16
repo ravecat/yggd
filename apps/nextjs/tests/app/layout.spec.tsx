@@ -8,8 +8,8 @@ jest.mock("~/components/footer", () => ({
   FooterFallback: () => <footer>Footer fallback</footer>,
 }));
 
-jest.mock("~/app/_components/navbar", () => ({
-  Navbar: () => <nav>Navbar</nav>,
+jest.mock("~/app/_components/header", () => ({
+  Header: () => <header>Header</header>,
 }));
 
 describe("Layout", () => {

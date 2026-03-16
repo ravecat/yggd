@@ -1,12 +1,27 @@
 <script lang="ts">
+  import { page } from "$app/state";
   import { goto } from "$app/navigation";
   import { resolve } from "$app/paths";
   import * as Tabs from "$shared/ui/tabs/index.js";
-  import { getActiveNavValue, navLinks } from "$shared/navigation.js";
+  import { navLinks } from "$shared/navigation.js";
 
-  let { pathname }: { pathname: string } = $props();
+  const activeValue = $derived.by(() => {
+    const pathname = page.url.pathname;
 
-  const activeValue = $derived(getActiveNavValue(pathname));
+    if (pathname === "/canvas" || pathname.startsWith("/canvas/")) {
+      return "canvas";
+    }
+
+    if (pathname === "/telemetry" || pathname.startsWith("/telemetry/")) {
+      return "telemetry";
+    }
+
+    if (pathname === "/chart" || pathname.startsWith("/chart/")) {
+      return "chart";
+    }
+
+    return "todo";
+  });
 </script>
 
 <nav aria-label="Primary" class="w-full min-w-0 sm:w-auto">

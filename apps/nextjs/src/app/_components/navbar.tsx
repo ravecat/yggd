@@ -1,26 +1,67 @@
-import { Suspense } from "react";
-import { NavLinks, NavLinksFallback } from "./nav-links";
-import { PageSwitcher } from "./page-switcher";
-import { SignIn, SignInFallback } from "~/components/sign-in";
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Tabs, TabsList, TabsTrigger } from "~/shared/ui/tabs";
+
+function getActiveValue(pathname: string) {
+  if (
+    pathname === "/todos" ||
+    pathname.startsWith("/todos/") ||
+    pathname === "/todo" ||
+    pathname.startsWith("/todo/")
+  ) {
+    return "tasks";
+  }
+  if (
+    pathname === "/" ||
+    pathname === "/canvas" ||
+    pathname.startsWith("/canvas/")
+  ) {
+    return "canvas";
+  }
+  if (pathname === "/telemetry" || pathname.startsWith("/telemetry/")) {
+    return "telemetry";
+  }
+  if (pathname === "/chart" || pathname.startsWith("/chart/")) {
+    return "chart";
+  }
+
+  return "tasks";
+}
+
+const links = [
+  { href: "/todos", label: "Tasks", value: "tasks" },
+  { href: "/canvas", label: "Canvas", value: "canvas" },
+  { href: "/telemetry", label: "Telemetry", value: "telemetry" },
+  { href: "/chart", label: "Chart", value: "chart" },
+] as const;
+
+export function NavbarFallback() {
+  return <div className="h-9 w-full rounded-md sm:w-80" />;
+}
 
 export function Navbar() {
+  const pathname = usePathname();
+  const activeValue = getActiveValue(pathname);
+
   return (
-    <header className="border-border bg-background">
-      <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-2 sm:grid sm:h-14 sm:grid-cols-3 sm:py-0">
-        <div className="flex items-center">
-          <PageSwitcher />
-        </div>
-        <div className="order-last flex w-full items-center justify-center sm:order-0 sm:w-auto">
-          <Suspense fallback={<NavLinksFallback />}>
-            <NavLinks />
-          </Suspense>
-        </div>
-        <div className="flex items-center justify-end">
-          <Suspense fallback={<SignInFallback />}>
-            <SignIn />
-          </Suspense>
-        </div>
-      </div>
-    </header>
+    <nav aria-label="Primary" className="w-full min-w-0 sm:w-auto">
+      <Tabs value={activeValue} className="w-full sm:w-auto">
+        <TabsList className="h-9 w-full overflow-hidden p-0.5 sm:w-auto">
+          {links.map((link) => (
+            <TabsTrigger
+              key={link.href}
+              value={link.value}
+              asChild
+              className="h-full min-w-0 flex-1 px-6.25"
+              aria-current={activeValue === link.value ? "page" : undefined}
+            >
+              <Link href={link.href}>{link.label}</Link>
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
+    </nav>
   );
 }

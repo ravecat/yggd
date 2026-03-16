@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
   const code = searchParams.get("code");
   const error = searchParams.get("error");
 
-  const appUrl = process.env.APP_URL;
+  const appUrl = process.env.NEXTJS_APP_URL;
 
   if (error) {
     console.error("OAuth error:", error);
