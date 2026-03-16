@@ -9,6 +9,7 @@ export async function signup() {
   const verifier = generateCodeVerifier();
   const challenge = generateCodeChallenge(verifier);
   const cookieStore = await cookies();
+  const appUrl = process.env.NEXTJS_APP_URL;
 
   cookieStore.set("pkce_verifier", verifier, {
     httpOnly: true,
@@ -18,7 +19,7 @@ export async function signup() {
     maxAge: 60 * 10,
   });
 
-  const callbackUri = `${process.env.APP_URL}/auth/callback`;
+  const callbackUri = `${appUrl}/auth/callback`;
   const oauthUrl = new URL("/auth/user/google", process.env.PUBLIC_API_URL);
 
   oauthUrl.searchParams.set("redirect_uri", callbackUri);

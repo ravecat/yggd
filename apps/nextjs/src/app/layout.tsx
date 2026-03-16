@@ -2,7 +2,7 @@ import "../shared/global.css";
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import { Footer, FooterFallback } from "~/components/footer";
-import { Navbar } from "./_components/navbar";
+import { Header } from "./_components/header";
 
 export const metadata: Metadata = {
   title: "Welcome to nextjs",
@@ -19,7 +19,7 @@ export default function Layout({
     <html lang="en">
       <body>
         <div className="flex h-full flex-col">
-          <Navbar />
+          <Header />
           <main className="flex min-h-0 flex-1 flex-col">{children}</main>
           <Suspense fallback={<FooterFallback />}>
             <Footer />
