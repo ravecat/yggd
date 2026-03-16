@@ -1,13 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useSocket } from "@rvct/shared/react";
 import type { PriceTick } from "@rvct/shared";
+import { useSocket } from "@rvct/shared/react";
 import type { Channel } from "phoenix";
-import {
-  TimeSeriesChart,
-  type ChartRef,
-} from "~/components/ui/time-series-chart";
+import { TimeSeriesChart, type ChartRef } from "~/components/time-series-chart";
 
 type ConnectionStatus = "connecting" | "connected" | "disconnected";
 

@@ -11,7 +11,7 @@
   },
   "iconLibrary": "lucide",
   "aliases": {
-    "components": "~/shared/ui",
+    "components": "~/components",
     "utils": "~/shared/lib/component",
     "ui": "~/shared/ui",
     "lib": "~/shared/lib"
