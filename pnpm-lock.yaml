@@ -35,6 +35,9 @@ importers:
       '@kubb/plugin-oas':
         specifier: ^4.32.4
         version: 4.32.4(@kubb/react-fabric@0.13.3)(encoding@0.1.13)
+      '@kubb/plugin-swr':
+        specifier: ^4.32.4
+        version: 4.36.1(@kubb/fabric-core@0.13.3)(@kubb/react-fabric@0.13.3)(axios@1.13.2)(encoding@0.1.13)
       '@kubb/plugin-ts':
         specifier: ^4.32.4
         version: 4.32.4(@kubb/react-fabric@0.13.3)(encoding@0.1.13)(typescript@5.9.3)
@@ -394,12 +397,12 @@ importers:
       phoenix:
         specifier: ^1.8.1
         version: 1.8.2
-      qs:
-        specifier: ^6.15.0
-        version: 6.15.0
       react:
         specifier: ^18.0.0 || ^19.0.0
         version: 19.2.0
+      swr:
+        specifier: ^2.4.1
+        version: 2.4.1(react@19.2.0)
       y-indexeddb:
         specifier: ^9.0.12
         version: 9.0.12(yjs@13.6.27)
@@ -412,10 +415,6 @@ importers:
       zod:
         specifier: ^4.3.6
         version: 4.3.6
-    devDependencies:
-      '@types/qs':
-        specifier: ^6.15.0
-        version: 6.15.0
 
 packages:
 
@@ -1804,6 +1803,10 @@ packages:
     peerDependencies:
       tslib: '2'
 
+  '@kubb/ast@4.36.1':
+    resolution: {integrity: sha512-LJvBcwl0ZJ/FL71MefJP6KMwLXQA/R3+MEyBZV+E6LKUDEwwSTsW1FA7pZbYKc//fLflyntPZPsMvornQR+dqg==}
+    engines: {node: '>=20'}
+
   '@kubb/cli@4.32.4':
     resolution: {integrity: sha512-n/qX6O7YSKKxXWuDGl+6ry5RQXKyCYGMlPRlaPiCQ/9+kI2GAijOY2XSWN9xCIk4aP4eo6OOlGi5b0vTvPLAGQ==}
     engines: {node: '>=20'}
@@ -1815,6 +1818,13 @@ packages:
     peerDependencies:
       '@kubb/react-fabric': 0.13.3
 
+  '@kubb/core@4.36.1':
+    resolution: {integrity: sha512-FoORF4/BIRmeTRnjl+rgXMvO59EomdlXu4LP0UG7wIl81zFl6VkvtL0yDsTQqS6xUPIMc2XIH9VdANc/jCn0Rw==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      '@kubb/fabric-core': 0.13.3
+      '@kubb/react-fabric': 0.13.3
+
   '@kubb/fabric-core@0.13.3':
     resolution: {integrity: sha512-vWjvXnA1kSIMMxCNhYipL+eXRWFUJ+hN5Jt95ktAwbv+kgllOOSIyOnMRo77rz0lzrU5Smhi2VCILiaPnPLkfQ==}
     engines: {node: '>=20'}
@@ -1823,10 +1833,27 @@ packages:
     resolution: {integrity: sha512-0OXja2M4Tyzh3sfhNbdmgo3MiUV3du8qOtD4yH4RtSMJkmqYXUnciDydZtBkfratjftumCKfu+LVzeZeXra5Yg==}
     engines: {node: '>=20'}
 
+  '@kubb/oas@4.36.1':
+    resolution: {integrity: sha512-QMrsBJ/LUldPaLPXGgvU5MyZ1tx5dvtr4bHGhUuwFf/IvHUvB303MqY+x1PH+qKaTyI1WugbK7OsUerDxwXXpQ==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      '@kubb/fabric-core': 0.13.3
+
   '@kubb/plugin-client@4.32.4':
     resolution: {integrity: sha512-kslwTn4Xp8bbREd0r/BCdnr758BXy5mGeR9228mxjWfdxg75ANKtT75W4hJSCj5KF+hyrWBfgagxrbDEn+Jxlw==}
     engines: {node: '>=20'}
     peerDependencies:
+      '@kubb/react-fabric': 0.13.3
+      axios: ^1.7.2
+    peerDependenciesMeta:
+      axios:
+        optional: true
+
+  '@kubb/plugin-client@4.36.1':
+    resolution: {integrity: sha512-s8aMMP2ymrzjcU0vg+g/9AwRhYS+l3nvTeM8jqK2kh9SChds7ipKblMCSt2CNMHcpPpvgKNaUnkql6kgln6TDg==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      '@kubb/fabric-core': 0.13.3
       '@kubb/react-fabric': 0.13.3
       axios: ^1.7.2
     peerDependenciesMeta:
@@ -1839,6 +1866,20 @@ packages:
     peerDependencies:
       '@kubb/react-fabric': 0.13.3
 
+  '@kubb/plugin-oas@4.36.1':
+    resolution: {integrity: sha512-mQmP/QMy74e+YggUyB8LAWSfFteT6RevXg1juB2yJe+p/5jcsihhqW060J9dnOMMAKMo7LzPTta6bpI7WQOVmA==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      '@kubb/fabric-core': 0.13.3
+      '@kubb/react-fabric': 0.13.3
+
+  '@kubb/plugin-swr@4.36.1':
+    resolution: {integrity: sha512-BF1bh5G7ZjYhk27c7whkTMP/HiBoENJAaH01m0OLaAdd2oHACZtQbQ2r9jr0tEfgbNvZd3A60G+kIDbTarAetg==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      '@kubb/fabric-core': 0.13.3
+      '@kubb/react-fabric': 0.13.3
+
   '@kubb/plugin-ts@4.32.4':
     resolution: {integrity: sha512-dvAR2k2/GexD3MBpDEXct98mMafPue6L8fAA8P1annYNXOjXJJdk0CPVCHP+QXbXzcHEpTLs2ElYv/oS+cflAQ==}
     engines: {node: '>=20'}
@@ -1846,8 +1887,18 @@ packages:
       '@kubb/react-fabric': 0.13.3
       typescript: '>=5.9.0'
 
+  '@kubb/plugin-ts@4.36.1':
+    resolution: {integrity: sha512-5iQKf2U8lBSW5fZ1nV99hVak10LCt2X5oqz7J17E9qrnSGepbsC6P4GDGvkh3FTAE+fkgumNjqXDXlBehr/2fQ==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      '@kubb/react-fabric': 0.13.3
+
   '@kubb/plugin-zod@4.32.4':
     resolution: {integrity: sha512-+aJ72GznqkTMe6b4IfwDNGeyDAEbBf6Wgbg8ET7sQYj6cReKpu2EvnBfcXRxztZCJcoC4I4tYh94fWBtylCjyA==}
+    engines: {node: '>=20'}
+
+  '@kubb/plugin-zod@4.36.1':
+    resolution: {integrity: sha512-g9cmNSAV1XCSkx5mZKO4m/WRV+s9jblSIZmeoMqRYniuMQAqLMfZr/IZTGmrKdFvBkDDI9iCmoHJfpeS1kDFsg==}
     engines: {node: '>=20'}
 
   '@kubb/react-fabric@0.13.3':
@@ -3124,6 +3175,12 @@ packages:
     peerDependencies:
       openapi-types: '>=7'
 
+  '@readme/openapi-parser@6.0.0':
+    resolution: {integrity: sha512-PaTnrKlKgEJZzjJ77AAhGe28NiyLBdiKMx95rJ9xlLZ8QLqYitMpPBQAKhsuEGOWQQbsIMfBZEPavbXghACQHA==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      openapi-types: '>=7'
+
   '@readme/openapi-schemas@3.1.0':
     resolution: {integrity: sha512-9FC/6ho8uFa8fV50+FPy/ngWN53jaUu4GRXlAjcxIRrzhltJnpKkBG2Tp0IDraFJeWrOpk84RJ9EMEEYzaI1Bw==}
     engines: {node: '>=18'}
@@ -3131,6 +3188,16 @@ packages:
   '@readme/postman-to-openapi@4.1.0':
     resolution: {integrity: sha512-VvV2Hzjskz01m8doSn7Ypt6cSZzgjnypVqXy1ipThbyYD6SGiM74VSePXykOODj/43Y2m6zeYedPk/ZLts/HvQ==}
     engines: {node: '>=14'}
+
+  '@redocly/ajv@8.18.0':
+    resolution: {integrity: sha512-F+LMD2IDIXuHxgpLJh3nkLj9+tSaEzoUWd+7fONGq5pe2169FUDjpEkOfEpoGLz1sbZni/69p07OsecNfAOpqA==}
+
+  '@redocly/config@0.44.1':
+    resolution: {integrity: sha512-l6/ZE+/RBfNDdhzltau6cbW8+k5PgJbJBMqaBrlQlZQlmGBHMxqGyDaon4dPLj0jdi37gsMQ3yf95JBY/vaDSg==}
+
+  '@redocly/openapi-core@2.24.0':
+    resolution: {integrity: sha512-4j8+OKA+bFBOj9Uhr6LJuNnFQpKAE9uK5Smw4yd2WJS2bcsJhCqbUWOG9N1cYBUFlwRQpLBT1ZOSmDFYv81NOg==}
+    engines: {node: '>=22.12.0 || >=20.19.0 <21.0.0', npm: '>=10'}
 
   '@rollup/plugin-babel@6.1.0':
     resolution: {integrity: sha512-dFZNuFD2YRcoomP4oYf+DvQNSUA9ih+A3vUqopQx5EdtPGo3WBnQcI/S8pwpz91UsGfL0HsMSOlaMld8HrbubA==}
@@ -4531,6 +4598,14 @@ packages:
       ajv:
         optional: true
 
+  ajv-formats@3.0.1:
+    resolution: {integrity: sha512-8iUql50EUR+uUcdRQ3HDqa6EVyo3docL8g5WJ3FNcWmu62IbkGUue/pEyLBW8VGKKucTPgqeks4fIU1DA4yowQ==}
+    peerDependencies:
+      ajv: ^8.0.0
+    peerDependenciesMeta:
+      ajv:
+        optional: true
+
   ajv-keywords@3.5.2:
     resolution: {integrity: sha512-5p6WTN0DdTGVQk6VjcEju19IgaHudalcfabD7yhDGeA6bcQnmL+CpveLJq/3hvfwd1aof6L386Ougkx6RfyMIQ==}
     peerDependencies:
@@ -5043,6 +5118,9 @@ packages:
 
   colord@2.9.3:
     resolution: {integrity: sha512-jeC1axXpnb0/2nn/Y1LPuLdgXBLH7aDcHu4KEKfqw3CUhX7ZpfBSlPKyqXE6btIgEzfWtrX3/tyBCaCvXvMkOw==}
+
+  colorette@1.4.0:
+    resolution: {integrity: sha512-Y2oEozpomLn7Q3HFP7dpww7AtMJplbM9lGZP6RDfHqmbeRjiwRg4n6VM6j4KLmRke85uWEI7JqF17f3pqdRA0g==}
 
   colorette@2.0.20:
     resolution: {integrity: sha512-IfEDxwoWIjkeXL1eXcDiow4UbKjhLdq6/EuSVR9GMN7KVH3r9gQ83e73hsz1Nd1T3ijd5xv1wcWRYO+D6kCI2w==}
@@ -7122,6 +7200,10 @@ packages:
       react:
         optional: true
 
+  js-levenshtein@1.1.6:
+    resolution: {integrity: sha512-X2BB11YZtrRqY4EnQcLX5Rh373zbK4alC1FW7D7MBhL2gtcC17cTnr6DmfHZeS0s2rTHjUTMMHfG7gO8SSdw+g==}
+    engines: {node: '>=0.10.0'}
+
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
 
@@ -7163,6 +7245,10 @@ packages:
   json-schema-merge-allof@0.8.1:
     resolution: {integrity: sha512-CTUKmIlPJbsWfzRRnOXz+0MjIqvnleIXwFTzz+t9T86HnYX/Rozria6ZVGLktAU9e+NygNljveP+yxqtQp/Q4w==}
     engines: {node: '>=12.0.0'}
+
+  json-schema-to-ts@2.7.2:
+    resolution: {integrity: sha512-R1JfqKqbBR4qE8UyBR56Ms30LL62/nlhoz+1UkfI/VE7p54Awu919FZ6ZUPG8zIa3XB65usPJgr1ONVncUGSaQ==}
+    engines: {node: '>=16'}
 
   json-schema-to-typescript@15.0.4:
     resolution: {integrity: sha512-Su9oK8DR4xCmDsLlyvadkXzX6+GGXJpbhwoLtOGArAG61dvbW4YQmSEno2y66ahpIdmLMg6YUf/QHLgiwvkrHQ==}
@@ -7972,6 +8058,10 @@ packages:
     resolution: {integrity: sha512-U2LuDL9/gtqGtF2qUyZBYx+xBadbZ5x1aqIla7NyCoWp6Ts+lL0K0sunybgnTOXMvfFpz9xfYq9pa3jCyHiCiQ==}
     engines: {node: '>=20'}
 
+  oas-normalize@16.0.2:
+    resolution: {integrity: sha512-ew+2VNZDI/JsMkUfV9wD+6eBjE93yTF82IePBjITAyEojQ92+sGpGt8H+fRa9yVLsCQhzHf7P8LKmmjBTCut5g==}
+    engines: {node: '>=20'}
+
   oas-resolver@2.5.6:
     resolution: {integrity: sha512-Yx5PWQNZomfEhPPOphFbZKi9W93CocQj18NlD2Pa4GWZzdZpSJvYwoiuurRI7m3SpcChrnO08hkuQDL3FGsVFQ==}
     hasBin: true
@@ -7984,6 +8074,10 @@ packages:
 
   oas@28.9.0:
     resolution: {integrity: sha512-FuLpp4NB6oyqLaComkmrPViiHYJw8HzntthpUAt0ZPkPzKCRhgupyjzafln773/Y71hGsoQUYfc9mIz4C9I99w==}
+    engines: {node: '>=20'}
+
+  oas@31.1.2:
+    resolution: {integrity: sha512-FjLZUpaShE6WUvQZgpO4ASWJn/xkVjevEtI84373hELjq5uR6WPj+RBdkms9BS+U0ePSjayGid7Kj4gD1URkbA==}
     engines: {node: '>=20'}
 
   object-assign@4.1.1:
@@ -8232,6 +8326,10 @@ packages:
   pkg-dir@7.0.0:
     resolution: {integrity: sha512-Ie9z/WINcxxLp27BKOCHGde4ITq9UklYKDzVo1nhk5sqGEXU3FpkwP5GM2voTGJkGd9B3Otl+Q4uwSOeSUtOBA==}
     engines: {node: '>=14.16'}
+
+  pluralize@8.0.0:
+    resolution: {integrity: sha512-Nc3IT5yHzflTfbjgqWcCPpo7DaKy4FnpB0l/zCAW0Tc7jxAiuqSxHasntB3D7887LSrA93kDJ9IXovxJYxyLCA==}
+    engines: {node: '>=4'}
 
   png-chunk-text@1.0.0:
     resolution: {integrity: sha512-DEROKU3SkkLGWNMzru3xPVgxyd48UGuMSZvioErCure6yhOc/pRH2ZV+SEn7nmaf7WNf3NdIpH+UTrRdKyq9Lw==}
@@ -9538,6 +9636,10 @@ packages:
     resolution: {integrity: sha512-W/KYk+NFhkmsYpuHq5JykngiOCnxeVL8v8dFnqxSD8qEEdRfXk1SDM6JzNqcERbcGYj9tMrDQBYV9cjgnunFIg==}
     engines: {node: '>=18'}
 
+  tinyexec@1.0.4:
+    resolution: {integrity: sha512-u9r3uZC0bdpGOXtlxUIdwf9pkmvhqJdrVCH9fapQtgy/OeTTMZ1nqH7agtvEfmGui6e1XxjcdrlxvxJvc3sMqw==}
+    engines: {node: '>=18'}
+
   tinyglobby@0.2.15:
     resolution: {integrity: sha512-j2Zq4NyQYG5XMST4cbs02Ak8iJUdxRM0XI5QyxXuZOzKOINmWurp3smXu3y5wDcJrptwpSjgXHzIQxR0omXljQ==}
     engines: {node: '>=12.0.0'}
@@ -9596,6 +9698,9 @@ packages:
   tree-kill@1.2.2:
     resolution: {integrity: sha512-L0Orpi8qGpRG//Nd+H90vFB+3iHnue1zSSGmNOOCh1GLJ7rUKVwV2HvijphGQS2UmhUZewS9VgvxYIdgr+fG1A==}
     hasBin: true
+
+  ts-algebra@1.2.2:
+    resolution: {integrity: sha512-kloPhf1hq3JbCPOTYoOWDKxebWjNb2o/LKnNfkWhxVVisFFmMJPPdJeGoGmM+iRLyoXAR61e08Pb+vUXINg8aA==}
 
   ts-api-utils@2.1.0:
     resolution: {integrity: sha512-CUgTZL1irw8u29bzrOD/nH85jqyc74D6SshFgujOIA7osm2Rz7dYH77agkx7H4FBNxDq7Cjf+IjaX/8zwFW+ZQ==}
@@ -10232,6 +10337,9 @@ packages:
 
   yallist@3.1.1:
     resolution: {integrity: sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==}
+
+  yaml-ast-parser@0.0.43:
+    resolution: {integrity: sha512-2PTINUwsRqSd+s8XxKaJWQlUuEMHJQyEuh2edBbW8KNJz0SJPwUSD2zRWqezFEdN7IzAgeuYHFUCF7o8zRdZ0A==}
 
   yaml@1.10.2:
     resolution: {integrity: sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==}
@@ -12048,6 +12156,8 @@ snapshots:
       '@jsonjoy.com/codegen': 1.0.0(tslib@2.8.1)
       tslib: 2.8.1
 
+  '@kubb/ast@4.36.1': {}
+
   '@kubb/cli@4.32.4(@kubb/react-fabric@0.13.3)(typescript@5.9.3)':
     dependencies:
       '@clack/prompts': 1.1.0
@@ -12070,6 +12180,17 @@ snapshots:
       semver: 7.7.4
       tinyexec: 1.0.2
 
+  '@kubb/core@4.36.1(@kubb/fabric-core@0.13.3)(@kubb/react-fabric@0.13.3)':
+    dependencies:
+      '@kubb/ast': 4.36.1
+      '@kubb/fabric-core': 0.13.3
+      '@kubb/react-fabric': 0.13.3
+      empathic: 2.0.0
+      fflate: 0.8.2
+      remeda: 2.33.6
+      semver: 7.7.4
+      tinyexec: 1.0.4
+
   '@kubb/fabric-core@0.13.3':
     dependencies:
       '@clack/prompts': 1.1.0
@@ -12084,6 +12205,23 @@ snapshots:
       jsonpointer: 5.0.1
       oas: 28.9.0
       oas-normalize: 15.7.1(encoding@0.1.13)
+      openapi-types: 12.1.3
+      remeda: 2.33.6
+      swagger2openapi: 7.0.8(encoding@0.1.13)
+    transitivePeerDependencies:
+      - '@kubb/react-fabric'
+      - encoding
+
+  '@kubb/oas@4.36.1(@kubb/fabric-core@0.13.3)(@kubb/react-fabric@0.13.3)(encoding@0.1.13)':
+    dependencies:
+      '@kubb/ast': 4.36.1
+      '@kubb/core': 4.36.1(@kubb/fabric-core@0.13.3)(@kubb/react-fabric@0.13.3)
+      '@kubb/fabric-core': 0.13.3
+      '@redocly/openapi-core': 2.24.0
+      '@stoplight/yaml': 4.3.0
+      jsonpointer: 5.0.1
+      oas: 31.1.2
+      oas-normalize: 16.0.2(encoding@0.1.13)
       openapi-types: 12.1.3
       remeda: 2.33.6
       swagger2openapi: 7.0.8(encoding@0.1.13)
@@ -12107,6 +12245,22 @@ snapshots:
       - typescript
       - utf-8-validate
 
+  '@kubb/plugin-client@4.36.1(@kubb/fabric-core@0.13.3)(@kubb/react-fabric@0.13.3)(axios@1.13.2)(encoding@0.1.13)':
+    dependencies:
+      '@kubb/core': 4.36.1(@kubb/fabric-core@0.13.3)(@kubb/react-fabric@0.13.3)
+      '@kubb/fabric-core': 0.13.3
+      '@kubb/oas': 4.36.1(@kubb/fabric-core@0.13.3)(@kubb/react-fabric@0.13.3)(encoding@0.1.13)
+      '@kubb/plugin-oas': 4.36.1(@kubb/fabric-core@0.13.3)(@kubb/react-fabric@0.13.3)(encoding@0.1.13)
+      '@kubb/plugin-ts': 4.36.1(@kubb/react-fabric@0.13.3)(encoding@0.1.13)
+      '@kubb/plugin-zod': 4.36.1(@kubb/fabric-core@0.13.3)(encoding@0.1.13)
+      '@kubb/react-fabric': 0.13.3
+    optionalDependencies:
+      axios: 1.13.2
+    transitivePeerDependencies:
+      - bufferutil
+      - encoding
+      - utf-8-validate
+
   '@kubb/plugin-oas@4.32.4(@kubb/react-fabric@0.13.3)(encoding@0.1.13)':
     dependencies:
       '@kubb/core': 4.32.4(@kubb/react-fabric@0.13.3)
@@ -12116,12 +12270,52 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
+  '@kubb/plugin-oas@4.36.1(@kubb/fabric-core@0.13.3)(@kubb/react-fabric@0.13.3)(encoding@0.1.13)':
+    dependencies:
+      '@kubb/core': 4.36.1(@kubb/fabric-core@0.13.3)(@kubb/react-fabric@0.13.3)
+      '@kubb/fabric-core': 0.13.3
+      '@kubb/oas': 4.36.1(@kubb/fabric-core@0.13.3)(@kubb/react-fabric@0.13.3)(encoding@0.1.13)
+      '@kubb/react-fabric': 0.13.3
+      remeda: 2.33.6
+    transitivePeerDependencies:
+      - encoding
+
+  '@kubb/plugin-swr@4.36.1(@kubb/fabric-core@0.13.3)(@kubb/react-fabric@0.13.3)(axios@1.13.2)(encoding@0.1.13)':
+    dependencies:
+      '@kubb/core': 4.36.1(@kubb/fabric-core@0.13.3)(@kubb/react-fabric@0.13.3)
+      '@kubb/fabric-core': 0.13.3
+      '@kubb/oas': 4.36.1(@kubb/fabric-core@0.13.3)(@kubb/react-fabric@0.13.3)(encoding@0.1.13)
+      '@kubb/plugin-client': 4.36.1(@kubb/fabric-core@0.13.3)(@kubb/react-fabric@0.13.3)(axios@1.13.2)(encoding@0.1.13)
+      '@kubb/plugin-oas': 4.36.1(@kubb/fabric-core@0.13.3)(@kubb/react-fabric@0.13.3)(encoding@0.1.13)
+      '@kubb/plugin-ts': 4.36.1(@kubb/react-fabric@0.13.3)(encoding@0.1.13)
+      '@kubb/plugin-zod': 4.36.1(@kubb/fabric-core@0.13.3)(encoding@0.1.13)
+      '@kubb/react-fabric': 0.13.3
+      remeda: 2.33.6
+    transitivePeerDependencies:
+      - axios
+      - bufferutil
+      - encoding
+      - utf-8-validate
+
   '@kubb/plugin-ts@4.32.4(@kubb/react-fabric@0.13.3)(encoding@0.1.13)(typescript@5.9.3)':
     dependencies:
       '@kubb/core': 4.32.4(@kubb/react-fabric@0.13.3)
       '@kubb/fabric-core': 0.13.3
       '@kubb/oas': 4.32.4(@kubb/react-fabric@0.13.3)(encoding@0.1.13)
       '@kubb/plugin-oas': 4.32.4(@kubb/react-fabric@0.13.3)(encoding@0.1.13)
+      '@kubb/react-fabric': 0.13.3
+      remeda: 2.33.6
+      typescript: 5.9.3
+    transitivePeerDependencies:
+      - encoding
+
+  '@kubb/plugin-ts@4.36.1(@kubb/react-fabric@0.13.3)(encoding@0.1.13)':
+    dependencies:
+      '@kubb/ast': 4.36.1
+      '@kubb/core': 4.36.1(@kubb/fabric-core@0.13.3)(@kubb/react-fabric@0.13.3)
+      '@kubb/fabric-core': 0.13.3
+      '@kubb/oas': 4.36.1(@kubb/fabric-core@0.13.3)(@kubb/react-fabric@0.13.3)(encoding@0.1.13)
+      '@kubb/plugin-oas': 4.36.1(@kubb/fabric-core@0.13.3)(@kubb/react-fabric@0.13.3)(encoding@0.1.13)
       '@kubb/react-fabric': 0.13.3
       remeda: 2.33.6
       typescript: 5.9.3
@@ -12140,6 +12334,20 @@ snapshots:
       - bufferutil
       - encoding
       - typescript
+      - utf-8-validate
+
+  '@kubb/plugin-zod@4.36.1(@kubb/fabric-core@0.13.3)(encoding@0.1.13)':
+    dependencies:
+      '@kubb/core': 4.36.1(@kubb/fabric-core@0.13.3)(@kubb/react-fabric@0.13.3)
+      '@kubb/oas': 4.36.1(@kubb/fabric-core@0.13.3)(@kubb/react-fabric@0.13.3)(encoding@0.1.13)
+      '@kubb/plugin-oas': 4.36.1(@kubb/fabric-core@0.13.3)(@kubb/react-fabric@0.13.3)(encoding@0.1.13)
+      '@kubb/plugin-ts': 4.36.1(@kubb/react-fabric@0.13.3)(encoding@0.1.13)
+      '@kubb/react-fabric': 0.13.3
+      remeda: 2.33.6
+    transitivePeerDependencies:
+      - '@kubb/fabric-core'
+      - bufferutil
+      - encoding
       - utf-8-validate
 
   '@kubb/react-fabric@0.13.3':
@@ -13735,6 +13943,16 @@ snapshots:
       ajv-draft-04: 1.0.0(ajv@8.18.0)
       openapi-types: 12.1.3
 
+  '@readme/openapi-parser@6.0.0(openapi-types@12.1.3)':
+    dependencies:
+      '@apidevtools/json-schema-ref-parser': 14.2.1(@types/json-schema@7.0.15)
+      '@readme/better-ajv-errors': 2.4.0(ajv@8.18.0)
+      '@readme/openapi-schemas': 3.1.0
+      '@types/json-schema': 7.0.15
+      ajv: 8.18.0
+      ajv-draft-04: 1.0.0(ajv@8.18.0)
+      openapi-types: 12.1.3
+
   '@readme/openapi-schemas@3.1.0': {}
 
   '@readme/postman-to-openapi@4.1.0':
@@ -13745,6 +13963,30 @@ snapshots:
       lodash.camelcase: 4.3.0
       marked: 4.3.0
       mustache: 4.2.0
+
+  '@redocly/ajv@8.18.0':
+    dependencies:
+      fast-deep-equal: 3.1.3
+      fast-uri: 3.1.0
+      json-schema-traverse: 1.0.0
+      require-from-string: 2.0.2
+
+  '@redocly/config@0.44.1':
+    dependencies:
+      json-schema-to-ts: 2.7.2
+
+  '@redocly/openapi-core@2.24.0':
+    dependencies:
+      '@redocly/ajv': 8.18.0
+      '@redocly/config': 0.44.1
+      ajv: '@redocly/ajv@8.18.0'
+      ajv-formats: 3.0.1(@redocly/ajv@8.18.0)
+      colorette: 1.4.0
+      js-levenshtein: 1.1.6
+      js-yaml: 4.1.1
+      picomatch: 4.0.3
+      pluralize: 8.0.0
+      yaml-ast-parser: 0.0.43
 
   '@rollup/plugin-babel@6.1.0(@babel/core@7.29.0)(@types/babel__core@7.20.5)(rollup@4.59.0)':
     dependencies:
@@ -15229,6 +15471,10 @@ snapshots:
     optionalDependencies:
       ajv: 8.18.0
 
+  ajv-formats@3.0.1(@redocly/ajv@8.18.0):
+    optionalDependencies:
+      ajv: '@redocly/ajv@8.18.0'
+
   ajv-keywords@3.5.2(ajv@6.12.6):
     dependencies:
       ajv: 6.12.6
@@ -15842,6 +16088,8 @@ snapshots:
   color-name@1.1.4: {}
 
   colord@2.9.3: {}
+
+  colorette@1.4.0: {}
 
   colorette@2.0.20: {}
 
@@ -18463,6 +18711,8 @@ snapshots:
       '@types/react': 19.2.0
       react: 19.2.0
 
+  js-levenshtein@1.1.6: {}
+
   js-tokens@4.0.0: {}
 
   js-yaml@3.14.2:
@@ -18518,6 +18768,12 @@ snapshots:
       compute-lcm: 1.1.2
       json-schema-compare: 0.2.2
       lodash: 4.17.23
+
+  json-schema-to-ts@2.7.2:
+    dependencies:
+      '@babel/runtime': 7.28.6
+      '@types/json-schema': 7.0.15
+      ts-algebra: 1.2.2
 
   json-schema-to-typescript@15.0.4:
     dependencies:
@@ -19397,6 +19653,16 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
+  oas-normalize@16.0.2(encoding@0.1.13):
+    dependencies:
+      '@readme/openapi-parser': 6.0.0(openapi-types@12.1.3)
+      '@readme/postman-to-openapi': 4.1.0
+      js-yaml: 4.1.1
+      openapi-types: 12.1.3
+      swagger2openapi: 7.0.8(encoding@0.1.13)
+    transitivePeerDependencies:
+      - encoding
+
   oas-resolver@2.5.6:
     dependencies:
       node-fetch-h2: 2.3.0
@@ -19421,6 +19687,19 @@ snapshots:
   oas@28.9.0:
     dependencies:
       '@readme/openapi-parser': 5.5.0(openapi-types@12.1.3)
+      '@types/json-schema': 7.0.15
+      json-schema-merge-allof: 0.8.1
+      jsonpath-plus: 10.4.0
+      jsonpointer: 5.0.1
+      memoizee: 0.4.17
+      openapi-types: 12.1.3
+      path-to-regexp: 8.3.0
+      remove-undefined-objects: 7.0.0
+
+  oas@31.1.2:
+    dependencies:
+      '@apidevtools/json-schema-ref-parser': 14.2.1(@types/json-schema@7.0.15)
+      '@readme/openapi-parser': 6.0.0(openapi-types@12.1.3)
       '@types/json-schema': 7.0.15
       json-schema-merge-allof: 0.8.1
       jsonpath-plus: 10.4.0
@@ -19688,6 +19967,8 @@ snapshots:
   pkg-dir@7.0.0:
     dependencies:
       find-up: 6.3.0
+
+  pluralize@8.0.0: {}
 
   png-chunk-text@1.0.0: {}
 
@@ -21142,6 +21423,8 @@ snapshots:
 
   tinyexec@1.0.2: {}
 
+  tinyexec@1.0.4: {}
+
   tinyglobby@0.2.15:
     dependencies:
       fdir: 6.5.0(picomatch@4.0.3)
@@ -21188,6 +21471,8 @@ snapshots:
       tslib: 2.8.1
 
   tree-kill@1.2.2: {}
+
+  ts-algebra@1.2.2: {}
 
   ts-api-utils@2.1.0(typescript@5.9.3):
     dependencies:
@@ -21847,6 +22132,8 @@ snapshots:
   y18n@5.0.8: {}
 
   yallist@3.1.1: {}
+
+  yaml-ast-parser@0.0.43: {}
 
   yaml@1.10.2: {}
 

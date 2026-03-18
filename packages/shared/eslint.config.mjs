@@ -8,6 +8,8 @@ export default [
       "@nx/dependency-checks": [
         "error",
         {
+          // Nx does not recognize the generated Kubb SWR hooks as a package usage.
+          ignoredDependencies: ["swr"],
           ignoredFiles: ["{projectRoot}/eslint.config.{js,cjs,mjs,ts,cts,mts}"],
         },
       ],

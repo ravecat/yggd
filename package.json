@@ -17,6 +17,7 @@
     "@kubb/core": "^4.32.4",
     "@kubb/plugin-client": "^4.32.4",
     "@kubb/plugin-oas": "^4.32.4",
+    "@kubb/plugin-swr": "^4.32.4",
     "@kubb/plugin-ts": "^4.32.4",
     "@kubb/plugin-zod": "^4.32.4",
     "@next/eslint-plugin-next": "^16.1.6",
