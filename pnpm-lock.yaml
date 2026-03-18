@@ -407,7 +407,7 @@ importers:
         specifier: ^13.6.27
         version: 13.6.27
       zod:
-        specifier: ^4.0.17
+        specifier: ^4.3.6
         version: 4.3.6
     devDependencies:
       '@types/qs':
