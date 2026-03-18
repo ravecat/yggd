@@ -1,7 +1,6 @@
 import "server-only";
 
 import {
-  createQueryCodec,
   getTodos,
   getTodosId,
   getTodosQueryParamsSchema,
@@ -12,9 +11,7 @@ import {
 } from "@rvct/shared";
 import { config } from "~/shared/lib/api";
 
-export const todosQueryCodec = createQueryCodec(getTodosQueryParamsSchema);
-
-export type FetchTodosResult = {
+export type Todos = {
   statuses: MetaStatusesEnumKey[];
   todos: Todo[];
 };
@@ -22,7 +19,7 @@ export type FetchTodosResult = {
 export async function fetchTodos(
   boardId: string,
   query: GetTodosQueryParams = {},
-): Promise<FetchTodosResult> {
+): Promise<Todos> {
   const validatedQuery = getTodosQueryParamsSchema.parse({
     ...query,
     filter: {

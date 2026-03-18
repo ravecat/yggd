@@ -1,22 +1,39 @@
+"use client";
+
 import { type Todo } from "@rvct/shared";
 import Link from "next/link";
 import { ChevronDownIcon } from "lucide-react";
-import type { BoardPageProps } from "../page";
-import { fetchTodos, todosQueryCodec } from "~/features/todos/query";
-import { toSearchParamsString } from "~/shared/lib/search-params";
+import type { ReactNode } from "react";
+import { useEffect, useState } from "react";
+import useSWR from "swr";
+import type { Todos } from "~/features/todos/query";
+import { Input } from "~/shared/ui/input";
 import { ScrollArea } from "~/shared/ui/scroll-area";
 
 type TodosListProps = {
   boardId: string;
-  searchParams: BoardPageProps["searchParams"];
+  initialData: Todos;
+  children?: ReactNode;
 };
 
-export async function TodosList({ boardId, searchParams }: TodosListProps) {
-  const todosQuery = todosQueryCodec.parse(
-    toSearchParamsString(await searchParams),
-  );
-  const { statuses, todos } = await fetchTodos(boardId, todosQuery);
+function TodosGrid({ data, error }: { data: Todos; error?: Error }) {
+  const { statuses, todos } = data;
   const hasTasks = todos.length > 0;
+
+  if (error) {
+    return (
+      <div className="flex min-h-80 flex-1 items-center justify-center rounded-lg border border-dashed border-destructive/40 bg-destructive/5 px-6 text-center">
+        <div className="space-y-2">
+          <p className="text-lg font-medium text-foreground">
+            Failed to load tasks
+          </p>
+          <p className="text-sm text-muted-foreground">
+            Please retry in a moment.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   if (!hasTasks) {
     return (
@@ -86,7 +103,7 @@ export async function TodosList({ boardId, searchParams }: TodosListProps) {
                   >
                     <div className="mb-2 flex items-start justify-between gap-2">
                       <h3 className="line-clamp-2 text-sm font-semibold text-foreground">
-                        {todo.attributes?.title || "-"}
+                        {todo.attributes?.title || "Untitled"}
                       </h3>
                       <span className="shrink-0 rounded-md border border-border bg-muted px-1.5 py-0.5 text-[10px] font-semibold tracking-wide text-muted-foreground">
                         {todo.attributes?.priority}
@@ -186,33 +203,96 @@ export async function TodosList({ boardId, searchParams }: TodosListProps) {
   );
 }
 
-export function TodosSkeleton() {
-  return (
-    <div className="p-4">
-      <div className="grid min-h-[26rem] gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {Array.from({ length: 4 }).map((_, columnIndex) => (
-          <section key={columnIndex} className="flex min-h-[26rem] flex-col">
-            <header className="flex items-center justify-between border-b border-border py-2.5">
-              <div className="h-4 w-32 animate-pulse rounded bg-muted" />
-              <div className="h-4 w-14 animate-pulse rounded bg-muted" />
-            </header>
+export function TodosList({ boardId, initialData, children }: TodosListProps) {
+  const [filterInput, setFilterInput] = useState("");
+  const [filter, setFilter] = useState("");
 
-            <div className="flex flex-1 flex-col gap-2.5 py-3">
-              {Array.from({ length: 3 }).map((_, cardIndex) => (
-                <article
-                  key={cardIndex}
-                  className="rounded-lg border border-border bg-card p-3 shadow-sm"
-                >
-                  <div className="mb-2 h-4 w-10/12 animate-pulse rounded bg-muted" />
-                  <div className="mb-1.5 h-3 w-full animate-pulse rounded bg-muted/80" />
-                  <div className="mb-3 h-3 w-8/12 animate-pulse rounded bg-muted/80" />
-                  <div className="h-5 w-16 animate-pulse rounded bg-muted" />
-                </article>
-              ))}
-            </div>
-          </section>
-        ))}
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      setFilter(filterInput);
+    }, 300);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [filterInput]);
+
+  const { data, error } = useSWR<Todos>(
+    [boardId, filter] as const,
+    async ([boardId, filter]: readonly [string, string]) => {
+      const searchParams = new URLSearchParams({ boardId });
+
+      if (filter) {
+        searchParams.set("filter", filter);
+      }
+
+      const response = await fetch(`/api/todos?${searchParams.toString()}`);
+
+      if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+
+      return (await response.json()) as Todos;
+    },
+    {
+      fallbackData: initialData,
+      keepPreviousData: true,
+      revalidateOnFocus: false,
+      revalidateOnMount: false,
+    },
+  );
+
+  return (
+    <div className="flex min-h-0 flex-1 flex-col gap-2">
+      <div className="flex flex-wrap gap-2">
+        {children}
+        <div className="min-w-0 flex-1">
+          <Input
+            type="search"
+            value={filterInput}
+            onChange={(event) => setFilterInput(event.target.value)}
+            placeholder="Filter tasks"
+            aria-label="Filter tasks"
+          />
+        </div>
       </div>
+      <TodosGrid data={data ?? initialData} error={error} />
     </div>
+  );
+}
+
+export function TodosListSkeleton() {
+  return (
+    <>
+      <div className="flex gap-2">
+        <div className="h-9 w-28 shrink-0 rounded bg-gray-200 animate-pulse" />
+        <div className="h-9 min-w-0 flex-1 rounded-md border border-input bg-background animate-pulse" />
+      </div>
+
+      <div className="p-4">
+        <div className="grid min-h-[26rem] gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          {Array.from({ length: 4 }).map((_, columnIndex) => (
+            <section key={columnIndex} className="flex min-h-[26rem] flex-col">
+              <header className="flex items-center justify-between border-b border-border py-2.5">
+                <div className="h-4 w-32 animate-pulse rounded bg-muted" />
+                <div className="h-4 w-14 animate-pulse rounded bg-muted" />
+              </header>
+
+              <div className="flex flex-1 flex-col gap-2.5 py-3">
+                {Array.from({ length: 3 }).map((_, cardIndex) => (
+                  <article
+                    key={cardIndex}
+                    className="rounded-lg border border-border bg-card p-3 shadow-sm"
+                  >
+                    <div className="mb-2 h-4 w-10/12 animate-pulse rounded bg-muted" />
+                    <div className="mb-1.5 h-3 w-full animate-pulse rounded bg-muted/80" />
+                    <div className="mb-3 h-3 w-8/12 animate-pulse rounded bg-muted/80" />
+                    <div className="h-5 w-16 animate-pulse rounded bg-muted" />
+                  </article>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      </div>
+    </>
   );
 }

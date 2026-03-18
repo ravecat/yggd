@@ -1,11 +1,13 @@
 import { Suspense } from "react";
+import Link from "next/link";
 import { notFound } from "next/navigation";
-import {
-  ControlPanel,
-  ControlPanelSkeleton,
-} from "./_components/control-panel";
-import { TodosList, TodosSkeleton } from "./_components/todos-list";
+import { PlusIcon } from "lucide-react";
+import { BoardVisibilityToggle } from "./_components/board-visibility-toggle";
+import { TodosList, TodosListSkeleton } from "./_components/todos-list";
 import { fetchBoard } from "~/features/boards/query";
+import { fetchTodos } from "~/features/todos/query";
+import { assigns } from "~/shared/lib/session";
+import { Button } from "~/shared/ui/button";
 
 export type BoardPageProps = PageProps<"/todos/[boardId]">;
 
@@ -13,8 +15,7 @@ function BoardPageFallback() {
   return (
     <div className="h-full overflow-hidden">
       <div className="mx-auto flex h-full min-h-0 w-full max-w-6xl flex-col gap-2 px-4">
-        <ControlPanelSkeleton />
-        <TodosSkeleton />
+        <TodosListSkeleton />
       </div>
     </div>
   );
@@ -22,10 +23,8 @@ function BoardPageFallback() {
 
 async function BoardPageContent({
   params,
-  searchParams,
 }: {
   params: BoardPageProps["params"];
-  searchParams: BoardPageProps["searchParams"];
 }) {
   const { boardId } = await params;
   const board = await fetchBoard(boardId);
@@ -34,16 +33,39 @@ async function BoardPageContent({
     notFound();
   }
 
+  const [{ userId }, initialData] = await Promise.all([
+    assigns(),
+    fetchTodos(board.id),
+  ]);
+
+  const isOwner = board.attributes?.owner_id === userId;
+
   return (
     <div className="h-full overflow-hidden">
       <div className="mx-auto flex h-full min-h-0 w-full max-w-6xl flex-col gap-2 px-4">
         <p className="py-2 text-sm text-muted-foreground">
           Dynamic board grouped by status for daily task tracking (JSON:API)
         </p>
-        <ControlPanel boardId={board.id} />
-        <Suspense fallback={<TodosSkeleton />}>
-          <TodosList boardId={board.id} searchParams={searchParams} />
-        </Suspense>
+        <TodosList boardId={board.id} initialData={initialData}>
+          {isOwner ? (
+            <Link
+              href={`/todo/create?boardId=${encodeURIComponent(board.id)}`}
+              className="w-full shrink-0 sm:w-auto"
+            >
+              <Button size="sm" className="w-full min-w-31 sm:w-auto">
+                <PlusIcon className="h-4 w-4" />
+                Create task
+              </Button>
+            </Link>
+          ) : null}
+
+          {isOwner && board.attributes?.visibility ? (
+            <BoardVisibilityToggle
+              id={board.id}
+              visibility={board.attributes.visibility}
+            />
+          ) : null}
+        </TodosList>
       </div>
     </div>
   );
