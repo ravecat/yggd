@@ -115,11 +115,6 @@ jest.mock("~/shared/lib/session", () => ({
 }));
 
 jest.mock("@rvct/shared", () => ({
-  createQueryCodec: () => ({
-    parse: jest.fn(),
-    stringify: jest.fn(),
-    toHref: jest.fn(),
-  }),
   getTodos: getTodosMock,
   getTodosId: getTodosIdMock,
   getTodosQueryParamsSchema: {

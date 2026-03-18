@@ -6,7 +6,9 @@ export const responseErrorSchema = z.object({
   errors: errorsSchema,
 });
 
-export type ResponseErrorConfig = z.infer<typeof responseErrorSchema>;
+export type ResponseErrorConfig<TError = unknown> = TError extends unknown
+  ? z.infer<typeof responseErrorSchema>
+  : never;
 export type ErrorMap = Partial<Record<string, string[]>>;
 
 export function isErrorResponse(data: unknown): data is ResponseErrorConfig {
