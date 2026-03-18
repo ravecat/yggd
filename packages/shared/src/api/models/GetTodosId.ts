@@ -14,24 +14,78 @@ export type GetTodosIdPathParams = {
   id: string;
 };
 
+export const getTodosIdQueryParamsIncludeEnum = {
+  board: "board",
+} as const;
+
+export type GetTodosIdQueryParamsIncludeEnumKey =
+  (typeof getTodosIdQueryParamsIncludeEnum)[keyof typeof getTodosIdQueryParamsIncludeEnum];
+
+export const fieldsBoardEnum7 = {
+  id: "id",
+  visibility: "visibility",
+  created_at: "created_at",
+  updated_at: "updated_at",
+  owner_id: "owner_id",
+  owner: "owner",
+  todos: "todos",
+} as const;
+
+export type FieldsBoardEnum7Key =
+  (typeof fieldsBoardEnum7)[keyof typeof fieldsBoardEnum7];
+
+export const fieldsTodoEnum7 = {
+  id: "id",
+  title: "title",
+  content: "content",
+  status: "status",
+  priority: "priority",
+  created_at: "created_at",
+  updated_at: "updated_at",
+  board_id: "board_id",
+  board: "board",
+} as const;
+
+export type FieldsTodoEnum7Key =
+  (typeof fieldsTodoEnum7)[keyof typeof fieldsTodoEnum7];
+
+export const fieldsUserEnum7 = {
+  id: "id",
+  email: "email",
+  name: "name",
+  board: "board",
+  identities: "identities",
+} as const;
+
+export type FieldsUserEnum7Key =
+  (typeof fieldsUserEnum7)[keyof typeof fieldsUserEnum7];
+
 export type GetTodosIdQueryParams = {
   /**
    * @description Relationship paths to include in the response
-   * @pattern ^(board)(,(board))*$
-   * @type string | undefined
+   * @type array | undefined
    */
-  include?: string;
+  include?: GetTodosIdQueryParamsIncludeEnumKey[];
   /**
    * @description Limits the response fields to only those listed for each type
    * @type object | undefined
    */
   fields?: {
     /**
-     * @description Comma separated field names for todo
-     * @type string | undefined
+     * @description Field names for board
+     * @type array | undefined
      */
-    todo?: string;
-    [key: string]: unknown;
+    board?: FieldsBoardEnum7Key[];
+    /**
+     * @description Field names for todo
+     * @type array | undefined
+     */
+    todo?: FieldsTodoEnum7Key[];
+    /**
+     * @description Field names for user
+     * @type array | undefined
+     */
+    user?: FieldsUserEnum7Key[];
   };
 };
 

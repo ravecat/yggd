@@ -14,24 +14,78 @@ export type PatchTodosIdPathParams = {
   id: string;
 };
 
+export const patchTodosIdQueryParamsIncludeEnum = {
+  board: "board",
+} as const;
+
+export type PatchTodosIdQueryParamsIncludeEnumKey =
+  (typeof patchTodosIdQueryParamsIncludeEnum)[keyof typeof patchTodosIdQueryParamsIncludeEnum];
+
+export const fieldsBoardEnum8 = {
+  id: "id",
+  visibility: "visibility",
+  created_at: "created_at",
+  updated_at: "updated_at",
+  owner_id: "owner_id",
+  owner: "owner",
+  todos: "todos",
+} as const;
+
+export type FieldsBoardEnum8Key =
+  (typeof fieldsBoardEnum8)[keyof typeof fieldsBoardEnum8];
+
+export const fieldsTodoEnum8 = {
+  id: "id",
+  title: "title",
+  content: "content",
+  status: "status",
+  priority: "priority",
+  created_at: "created_at",
+  updated_at: "updated_at",
+  board_id: "board_id",
+  board: "board",
+} as const;
+
+export type FieldsTodoEnum8Key =
+  (typeof fieldsTodoEnum8)[keyof typeof fieldsTodoEnum8];
+
+export const fieldsUserEnum8 = {
+  id: "id",
+  email: "email",
+  name: "name",
+  board: "board",
+  identities: "identities",
+} as const;
+
+export type FieldsUserEnum8Key =
+  (typeof fieldsUserEnum8)[keyof typeof fieldsUserEnum8];
+
 export type PatchTodosIdQueryParams = {
   /**
    * @description Relationship paths to include in the response
-   * @pattern ^(board)(,(board))*$
-   * @type string | undefined
+   * @type array | undefined
    */
-  include?: string;
+  include?: PatchTodosIdQueryParamsIncludeEnumKey[];
   /**
    * @description Limits the response fields to only those listed for each type
    * @type object | undefined
    */
   fields?: {
     /**
-     * @description Comma separated field names for todo
-     * @type string | undefined
+     * @description Field names for board
+     * @type array | undefined
      */
-    todo?: string;
-    [key: string]: unknown;
+    board?: FieldsBoardEnum8Key[];
+    /**
+     * @description Field names for todo
+     * @type array | undefined
+     */
+    todo?: FieldsTodoEnum8Key[];
+    /**
+     * @description Field names for user
+     * @type array | undefined
+     */
+    user?: FieldsUserEnum8Key[];
   };
 };
 

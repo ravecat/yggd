@@ -1,43 +1,20 @@
 {
   "additionalProperties": false,
   "properties": {
-    "contains": { "type": "string", "x-struct": null, "x-validate": null },
-    "eq": { "type": "string", "x-struct": null, "x-validate": null },
-    "greater_than": { "type": "string", "x-struct": null, "x-validate": null },
-    "greater_than_or_equal": {
-      "type": "string",
-      "x-struct": null,
-      "x-validate": null
-    },
-    "ilike": { "type": "string", "x-struct": null, "x-validate": null },
-    "in": {
-      "items": { "type": "string", "x-struct": null, "x-validate": null },
-      "type": "array",
-      "x-struct": null,
-      "x-validate": null
-    },
-    "is_distinct_from": {
-      "type": "string",
-      "x-struct": null,
-      "x-validate": null
-    },
-    "is_nil": { "type": "boolean", "x-struct": null, "x-validate": null },
-    "is_not_distinct_from": {
-      "type": "string",
-      "x-struct": null,
-      "x-validate": null
-    },
-    "less_than": { "type": "string", "x-struct": null, "x-validate": null },
-    "less_than_or_equal": {
-      "type": "string",
-      "x-struct": null,
-      "x-validate": null
-    },
-    "like": { "type": "string", "x-struct": null, "x-validate": null },
-    "not_eq": { "type": "string", "x-struct": null, "x-validate": null }
+    "contains": { "type": "string" },
+    "eq": { "type": "string" },
+    "greater_than": { "type": "string" },
+    "greater_than_or_equal": { "type": "string" },
+    "ilike": { "type": "string" },
+    "in": { "items": { "type": "string" }, "type": "array" },
+    "is_distinct_from": { "type": "string" },
+    "is_nil": { "type": "boolean" },
+    "is_not_distinct_from": { "type": "string" },
+    "less_than": { "type": "string" },
+    "less_than_or_equal": { "type": "string" },
+    "like": { "type": "string" },
+    "not_eq": { "type": "string" }
   },
   "type": "object",
-  "x-struct": null,
-  "x-validate": null,
   "x-readme-ref-name": "todo-filter-content"
 }

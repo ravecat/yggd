@@ -33,7 +33,7 @@ export async function getBoardsId(
 
   const res = await request<
     GetBoardsIdQueryResponse,
-    ResponseErrorConfig,
+    ResponseErrorConfig<Error>,
     unknown
   >({
     method: "GET",

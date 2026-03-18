@@ -25,7 +25,8 @@ defmodule Mix.Tasks.Openapi.Export do
     spec =
       [
         domains: Application.fetch_env!(:ash_framework, :ash_domains),
-        phoenix_endpoint: AshFrameworkWeb.Endpoint
+        phoenix_endpoint: AshFrameworkWeb.Endpoint,
+        modify_open_api: {AshFrameworkWeb.OpenApiSpec, :modify, []}
       ]
       |> AshJsonApi.OpenApi.spec()
       |> Jason.encode!(pretty: true)

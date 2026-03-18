@@ -1,67 +1,35 @@
 {
   "additionalProperties": false,
   "properties": {
-    "eq": {
-      "enum": ["low", "medium", "high", "urgent"],
-      "type": "string",
-      "x-struct": null,
-      "x-validate": null
-    },
+    "eq": { "enum": ["low", "medium", "high", "urgent"], "type": "string" },
     "greater_than": {
       "enum": ["low", "medium", "high", "urgent"],
-      "type": "string",
-      "x-struct": null,
-      "x-validate": null
+      "type": "string"
     },
     "greater_than_or_equal": {
       "enum": ["low", "medium", "high", "urgent"],
-      "type": "string",
-      "x-struct": null,
-      "x-validate": null
+      "type": "string"
     },
     "in": {
       "items": {
         "enum": ["low", "medium", "high", "urgent"],
-        "type": "string",
-        "x-struct": null,
-        "x-validate": null
+        "type": "string"
       },
-      "type": "array",
-      "x-struct": null,
-      "x-validate": null
+      "type": "array"
     },
-    "is_distinct_from": {
-      "type": "string",
-      "x-struct": null,
-      "x-validate": null
-    },
-    "is_nil": { "type": "boolean", "x-struct": null, "x-validate": null },
-    "is_not_distinct_from": {
-      "type": "string",
-      "x-struct": null,
-      "x-validate": null
-    },
+    "is_distinct_from": { "type": "string" },
+    "is_nil": { "type": "boolean" },
+    "is_not_distinct_from": { "type": "string" },
     "less_than": {
       "enum": ["low", "medium", "high", "urgent"],
-      "type": "string",
-      "x-struct": null,
-      "x-validate": null
+      "type": "string"
     },
     "less_than_or_equal": {
       "enum": ["low", "medium", "high", "urgent"],
-      "type": "string",
-      "x-struct": null,
-      "x-validate": null
+      "type": "string"
     },
-    "not_eq": {
-      "enum": ["low", "medium", "high", "urgent"],
-      "type": "string",
-      "x-struct": null,
-      "x-validate": null
-    }
+    "not_eq": { "enum": ["low", "medium", "high", "urgent"], "type": "string" }
   },
   "type": "object",
-  "x-struct": null,
-  "x-validate": null,
   "x-readme-ref-name": "todo-filter-priority"
 }

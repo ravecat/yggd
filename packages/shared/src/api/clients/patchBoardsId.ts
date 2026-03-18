@@ -39,7 +39,7 @@ export async function patchBoardsId(
 
   const res = await request<
     PatchBoardsIdMutationResponse,
-    ResponseErrorConfig,
+    ResponseErrorConfig<Error>,
     PatchBoardsIdMutationRequest
   >({
     method: "PATCH",

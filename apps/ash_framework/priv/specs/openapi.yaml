@@ -1,11 +1,10 @@
----
 components:
   responses:
     errors:
       content:
         application/vnd.api+json:
           schema:
-            $ref: '#/components/schemas/errors'
+            $ref: "#/components/schemas/errors"
       description: General Error
   schemas:
     board:
@@ -18,34 +17,24 @@ components:
           properties:
             created_at:
               description: Field included by default.
-              x-struct:
-              x-validate:
             owner_id:
               description: Field included by default.
               format: uuid
               type: string
-              x-struct:
-              x-validate:
             updated_at:
               description: Field included by default.
-              x-struct:
-              x-validate:
             visibility:
               description: Field included by default.
               enum:
                 - private
                 - public
               type: string
-              x-struct:
-              x-validate:
           required:
             - visibility
             - created_at
             - updated_at
             - owner_id
           type: object
-          x-struct:
-          x-validate:
         id:
           type: string
         relationships:
@@ -61,25 +50,15 @@ components:
                   properties:
                     id:
                       type: string
-                      x-struct:
-                      x-validate:
                     meta:
                       additionalProperties: true
                       type: object
-                      x-struct:
-                      x-validate:
                     type:
                       type: string
-                      x-struct:
-                      x-validate:
                   required:
                     - type
                     - id
                   type: object
-                  x-struct:
-                  x-validate:
-              x-struct:
-              x-validate:
             todos:
               properties:
                 data:
@@ -90,276 +69,158 @@ components:
                     properties:
                       id:
                         type: string
-                        x-struct:
-                        x-validate:
                       meta:
                         additionalProperties: true
                         type: object
-                        x-struct:
-                        x-validate:
                       type:
                         type: string
-                        x-struct:
-                        x-validate:
                     required:
                       - type
                       - id
                     type: object
                   type: array
                   uniqueItems: true
-                  x-struct:
-                  x-validate:
-              x-struct:
-              x-validate:
           type: object
-          x-struct:
-          x-validate:
         type:
           type: string
-          x-struct:
-          x-validate:
       required:
         - type
         - id
       type: object
-      x-struct:
-      x-validate:
     board-filter:
       additionalProperties: false
       description: Filters the query to results matching the given filter object
-      example: ''
+      example: ""
       properties:
         and:
           items:
-            $ref: '#/components/schemas/board-filter'
+            $ref: "#/components/schemas/board-filter"
           type: array
           uniqueItems: true
-          x-struct:
-          x-validate:
         created_at:
-          $ref: '#/components/schemas/board-filter-created_at'
+          $ref: "#/components/schemas/board-filter-created_at"
         id:
-          $ref: '#/components/schemas/board-filter-id'
+          $ref: "#/components/schemas/board-filter-id"
         not:
-          $ref: '#/components/schemas/board-filter'
+          $ref: "#/components/schemas/board-filter"
         or:
           items:
-            $ref: '#/components/schemas/board-filter'
+            $ref: "#/components/schemas/board-filter"
           type: array
           uniqueItems: true
-          x-struct:
-          x-validate:
         owner_id:
-          $ref: '#/components/schemas/board-filter-owner_id'
+          $ref: "#/components/schemas/board-filter-owner_id"
         todos:
-          $ref: '#/components/schemas/todo-filter'
+          $ref: "#/components/schemas/todo-filter"
         updated_at:
-          $ref: '#/components/schemas/board-filter-updated_at'
+          $ref: "#/components/schemas/board-filter-updated_at"
         visibility:
-          $ref: '#/components/schemas/board-filter-visibility'
+          $ref: "#/components/schemas/board-filter-visibility"
       type: deepObject
-      x-struct:
-      x-validate:
     board-filter-created_at:
       additionalProperties: false
       properties:
-        eq:
-          x-struct:
-          x-validate:
-        greater_than:
-          x-struct:
-          x-validate:
-        greater_than_or_equal:
-          x-struct:
-          x-validate:
+        eq: {}
+        greater_than: {}
+        greater_than_or_equal: {}
         in:
-          items:
-            x-struct:
-            x-validate:
+          items: {}
           type: array
-          x-struct:
-          x-validate:
         is_distinct_from:
           type: string
-          x-struct:
-          x-validate:
         is_nil:
           type: boolean
-          x-struct:
-          x-validate:
         is_not_distinct_from:
           type: string
-          x-struct:
-          x-validate:
-        less_than:
-          x-struct:
-          x-validate:
-        less_than_or_equal:
-          x-struct:
-          x-validate:
-        not_eq:
-          x-struct:
-          x-validate:
+        less_than: {}
+        less_than_or_equal: {}
+        not_eq: {}
       type: object
-      x-struct:
-      x-validate:
     board-filter-id:
       additionalProperties: false
       properties:
         eq:
           format: uuid
           type: string
-          x-struct:
-          x-validate:
         greater_than:
           format: uuid
           type: string
-          x-struct:
-          x-validate:
         greater_than_or_equal:
           format: uuid
           type: string
-          x-struct:
-          x-validate:
         in:
           items:
             format: uuid
             type: string
-            x-struct:
-            x-validate:
           type: array
-          x-struct:
-          x-validate:
         is_distinct_from:
           type: string
-          x-struct:
-          x-validate:
         is_nil:
           type: boolean
-          x-struct:
-          x-validate:
         is_not_distinct_from:
           type: string
-          x-struct:
-          x-validate:
         less_than:
           format: uuid
           type: string
-          x-struct:
-          x-validate:
         less_than_or_equal:
           format: uuid
           type: string
-          x-struct:
-          x-validate:
         not_eq:
           format: uuid
           type: string
-          x-struct:
-          x-validate:
       type: object
-      x-struct:
-      x-validate:
     board-filter-owner_id:
       additionalProperties: false
       properties:
         eq:
           format: uuid
           type: string
-          x-struct:
-          x-validate:
         greater_than:
           format: uuid
           type: string
-          x-struct:
-          x-validate:
         greater_than_or_equal:
           format: uuid
           type: string
-          x-struct:
-          x-validate:
         in:
           items:
             format: uuid
             type: string
-            x-struct:
-            x-validate:
           type: array
-          x-struct:
-          x-validate:
         is_distinct_from:
           type: string
-          x-struct:
-          x-validate:
         is_nil:
           type: boolean
-          x-struct:
-          x-validate:
         is_not_distinct_from:
           type: string
-          x-struct:
-          x-validate:
         less_than:
           format: uuid
           type: string
-          x-struct:
-          x-validate:
         less_than_or_equal:
           format: uuid
           type: string
-          x-struct:
-          x-validate:
         not_eq:
           format: uuid
           type: string
-          x-struct:
-          x-validate:
       type: object
-      x-struct:
-      x-validate:
     board-filter-updated_at:
       additionalProperties: false
       properties:
-        eq:
-          x-struct:
-          x-validate:
-        greater_than:
-          x-struct:
-          x-validate:
-        greater_than_or_equal:
-          x-struct:
-          x-validate:
+        eq: {}
+        greater_than: {}
+        greater_than_or_equal: {}
         in:
-          items:
-            x-struct:
-            x-validate:
+          items: {}
           type: array
-          x-struct:
-          x-validate:
         is_distinct_from:
           type: string
-          x-struct:
-          x-validate:
         is_nil:
           type: boolean
-          x-struct:
-          x-validate:
         is_not_distinct_from:
           type: string
-          x-struct:
-          x-validate:
-        less_than:
-          x-struct:
-          x-validate:
-        less_than_or_equal:
-          x-struct:
-          x-validate:
-        not_eq:
-          x-struct:
-          x-validate:
+        less_than: {}
+        less_than_or_equal: {}
+        not_eq: {}
       type: object
-      x-struct:
-      x-validate:
     board-filter-visibility:
       additionalProperties: false
       properties:
@@ -368,135 +229,102 @@ components:
             - private
             - public
           type: string
-          x-struct:
-          x-validate:
         greater_than:
           enum:
             - private
             - public
           type: string
-          x-struct:
-          x-validate:
         greater_than_or_equal:
           enum:
             - private
             - public
           type: string
-          x-struct:
-          x-validate:
         in:
           items:
             enum:
               - private
               - public
             type: string
-            x-struct:
-            x-validate:
           type: array
-          x-struct:
-          x-validate:
         is_distinct_from:
           type: string
-          x-struct:
-          x-validate:
         is_nil:
           type: boolean
-          x-struct:
-          x-validate:
         is_not_distinct_from:
           type: string
-          x-struct:
-          x-validate:
         less_than:
           enum:
             - private
             - public
           type: string
-          x-struct:
-          x-validate:
         less_than_or_equal:
           enum:
             - private
             - public
           type: string
-          x-struct:
-          x-validate:
         not_eq:
           enum:
             - private
             - public
           type: string
-          x-struct:
-          x-validate:
       type: object
-      x-struct:
-      x-validate:
     error:
       additionalProperties: false
       properties:
         code:
-          description: An application-specific error code, expressed as a string value.
+          description:
+            An application-specific error code, expressed as a string value.
           type: string
-          x-struct:
-          x-validate:
         detail:
-          description: A human-readable explanation specific to this occurrence of the problem.
+          description:
+            A human-readable explanation specific to this occurrence of the
+            problem.
           type: string
-          x-struct:
-          x-validate:
         id:
-          description: A unique identifier for this particular occurrence of the problem.
+          description:
+            A unique identifier for this particular occurrence of the problem.
           type: string
-          x-struct:
-          x-validate:
         links:
-          $ref: '#/components/schemas/links'
+          $ref: "#/components/schemas/links"
         source:
           properties:
             parameter:
-              description: A string indicating which query parameter caused the error.
+              description:
+                A string indicating which query parameter caused the error.
               type: string
-              x-struct:
-              x-validate:
             pointer:
-              description: A JSON Pointer [RFC6901] to the associated entity in the request document [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific attribute].
+              description:
+                A JSON Pointer [RFC6901] to the associated entity in the request
+                document [e.g. "/data" for a primary data object, or
+                "/data/attributes/title" for a specific attribute].
               type: string
-              x-struct:
-              x-validate:
           type: object
-          x-struct:
-          x-validate:
         status:
-          description: The HTTP status code applicable to this problem, expressed as a string value.
+          description:
+            The HTTP status code applicable to this problem, expressed as a
+            string value.
           type: string
-          x-struct:
-          x-validate:
         title:
-          description: A short, human-readable summary of the problem. It SHOULD NOT change from occurrence to occurrence of the problem, except for purposes of localization.
+          description:
+            A short, human-readable summary of the problem. It SHOULD NOT change
+            from occurrence to occurrence of the problem, except for purposes of
+            localization.
           type: string
-          x-struct:
-          x-validate:
       type: object
-      x-struct:
-      x-validate:
     errors:
       items:
-        $ref: '#/components/schemas/error'
+        $ref: "#/components/schemas/error"
       type: array
       uniqueItems: true
-      x-struct:
-      x-validate:
     link:
-      description: "A link MUST be represented as either: a string containing the link's URL or a link object."
+      description:
+        "A link MUST be represented as either: a string containing the link's
+        URL or a link object."
       type: string
-      x-struct:
-      x-validate:
     links:
       additionalProperties:
-        $ref: '#/components/schemas/link'
+        $ref: "#/components/schemas/link"
       type: object
-      x-struct:
-      x-validate:
     todo:
       additionalProperties: false
       description: A "Resource object" representing a todo
@@ -509,17 +337,11 @@ components:
               description: Field included by default.
               format: uuid
               type: string
-              x-struct:
-              x-validate:
             content:
               description: Field included by default.
               type: string
-              x-struct:
-              x-validate:
             created_at:
               description: Field included by default.
-              x-struct:
-              x-validate:
             priority:
               description: Field included by default.
               enum:
@@ -528,8 +350,6 @@ components:
                 - high
                 - urgent
               type: string
-              x-struct:
-              x-validate:
             status:
               description: Field included by default.
               enum:
@@ -540,17 +360,11 @@ components:
                 - done
                 - rejected
               type: string
-              x-struct:
-              x-validate:
             title:
               description: Field included by default.
               type: string
-              x-struct:
-              x-validate:
             updated_at:
               description: Field included by default.
-              x-struct:
-              x-validate:
           required:
             - title
             - content
@@ -560,8 +374,6 @@ components:
             - updated_at
             - board_id
           type: object
-          x-struct:
-          x-validate:
         id:
           type: string
         relationships:
@@ -577,299 +389,175 @@ components:
                   properties:
                     id:
                       type: string
-                      x-struct:
-                      x-validate:
                     meta:
                       additionalProperties: true
                       type: object
-                      x-struct:
-                      x-validate:
                     type:
                       type: string
-                      x-struct:
-                      x-validate:
                   required:
                     - type
                     - id
                   type: object
-                  x-struct:
-                  x-validate:
-              x-struct:
-              x-validate:
           type: object
-          x-struct:
-          x-validate:
         type:
           type: string
-          x-struct:
-          x-validate:
       required:
         - type
         - id
       type: object
-      x-struct:
-      x-validate:
     todo-filter:
       additionalProperties: false
       description: Filters the query to results matching the given filter object
-      example: ''
+      example: ""
       properties:
         and:
           items:
-            $ref: '#/components/schemas/todo-filter'
+            $ref: "#/components/schemas/todo-filter"
           type: array
           uniqueItems: true
-          x-struct:
-          x-validate:
         board:
-          $ref: '#/components/schemas/board-filter'
+          $ref: "#/components/schemas/board-filter"
         board_id:
-          $ref: '#/components/schemas/todo-filter-board_id'
+          $ref: "#/components/schemas/todo-filter-board_id"
         content:
-          $ref: '#/components/schemas/todo-filter-content'
+          $ref: "#/components/schemas/todo-filter-content"
         created_at:
-          $ref: '#/components/schemas/todo-filter-created_at'
+          $ref: "#/components/schemas/todo-filter-created_at"
         id:
-          $ref: '#/components/schemas/todo-filter-id'
+          $ref: "#/components/schemas/todo-filter-id"
         not:
-          $ref: '#/components/schemas/todo-filter'
+          $ref: "#/components/schemas/todo-filter"
         or:
           items:
-            $ref: '#/components/schemas/todo-filter'
+            $ref: "#/components/schemas/todo-filter"
           type: array
           uniqueItems: true
-          x-struct:
-          x-validate:
         priority:
-          $ref: '#/components/schemas/todo-filter-priority'
+          $ref: "#/components/schemas/todo-filter-priority"
         status:
-          $ref: '#/components/schemas/todo-filter-status'
+          $ref: "#/components/schemas/todo-filter-status"
         title:
-          $ref: '#/components/schemas/todo-filter-title'
+          $ref: "#/components/schemas/todo-filter-title"
         updated_at:
-          $ref: '#/components/schemas/todo-filter-updated_at'
+          $ref: "#/components/schemas/todo-filter-updated_at"
       type: deepObject
-      x-struct:
-      x-validate:
     todo-filter-board_id:
       additionalProperties: false
       properties:
         eq:
           format: uuid
           type: string
-          x-struct:
-          x-validate:
         greater_than:
           format: uuid
           type: string
-          x-struct:
-          x-validate:
         greater_than_or_equal:
           format: uuid
           type: string
-          x-struct:
-          x-validate:
         in:
           items:
             format: uuid
             type: string
-            x-struct:
-            x-validate:
           type: array
-          x-struct:
-          x-validate:
         is_distinct_from:
           type: string
-          x-struct:
-          x-validate:
         is_nil:
           type: boolean
-          x-struct:
-          x-validate:
         is_not_distinct_from:
           type: string
-          x-struct:
-          x-validate:
         less_than:
           format: uuid
           type: string
-          x-struct:
-          x-validate:
         less_than_or_equal:
           format: uuid
           type: string
-          x-struct:
-          x-validate:
         not_eq:
           format: uuid
           type: string
-          x-struct:
-          x-validate:
       type: object
-      x-struct:
-      x-validate:
     todo-filter-content:
       additionalProperties: false
       properties:
         contains:
           type: string
-          x-struct:
-          x-validate:
         eq:
           type: string
-          x-struct:
-          x-validate:
         greater_than:
           type: string
-          x-struct:
-          x-validate:
         greater_than_or_equal:
           type: string
-          x-struct:
-          x-validate:
         ilike:
           type: string
-          x-struct:
-          x-validate:
         in:
           items:
             type: string
-            x-struct:
-            x-validate:
           type: array
-          x-struct:
-          x-validate:
         is_distinct_from:
           type: string
-          x-struct:
-          x-validate:
         is_nil:
           type: boolean
-          x-struct:
-          x-validate:
         is_not_distinct_from:
           type: string
-          x-struct:
-          x-validate:
         less_than:
           type: string
-          x-struct:
-          x-validate:
         less_than_or_equal:
           type: string
-          x-struct:
-          x-validate:
         like:
           type: string
-          x-struct:
-          x-validate:
         not_eq:
           type: string
-          x-struct:
-          x-validate:
       type: object
-      x-struct:
-      x-validate:
     todo-filter-created_at:
       additionalProperties: false
       properties:
-        eq:
-          x-struct:
-          x-validate:
-        greater_than:
-          x-struct:
-          x-validate:
-        greater_than_or_equal:
-          x-struct:
-          x-validate:
+        eq: {}
+        greater_than: {}
+        greater_than_or_equal: {}
         in:
-          items:
-            x-struct:
-            x-validate:
+          items: {}
           type: array
-          x-struct:
-          x-validate:
         is_distinct_from:
           type: string
-          x-struct:
-          x-validate:
         is_nil:
           type: boolean
-          x-struct:
-          x-validate:
         is_not_distinct_from:
           type: string
-          x-struct:
-          x-validate:
-        less_than:
-          x-struct:
-          x-validate:
-        less_than_or_equal:
-          x-struct:
-          x-validate:
-        not_eq:
-          x-struct:
-          x-validate:
+        less_than: {}
+        less_than_or_equal: {}
+        not_eq: {}
       type: object
-      x-struct:
-      x-validate:
     todo-filter-id:
       additionalProperties: false
       properties:
         eq:
           format: uuid
           type: string
-          x-struct:
-          x-validate:
         greater_than:
           format: uuid
           type: string
-          x-struct:
-          x-validate:
         greater_than_or_equal:
           format: uuid
           type: string
-          x-struct:
-          x-validate:
         in:
           items:
             format: uuid
             type: string
-            x-struct:
-            x-validate:
           type: array
-          x-struct:
-          x-validate:
         is_distinct_from:
           type: string
-          x-struct:
-          x-validate:
         is_nil:
           type: boolean
-          x-struct:
-          x-validate:
         is_not_distinct_from:
           type: string
-          x-struct:
-          x-validate:
         less_than:
           format: uuid
           type: string
-          x-struct:
-          x-validate:
         less_than_or_equal:
           format: uuid
           type: string
-          x-struct:
-          x-validate:
         not_eq:
           format: uuid
           type: string
-          x-struct:
-          x-validate:
       type: object
-      x-struct:
-      x-validate:
     todo-filter-priority:
       additionalProperties: false
       properties:
@@ -880,8 +568,6 @@ components:
             - high
             - urgent
           type: string
-          x-struct:
-          x-validate:
         greater_than:
           enum:
             - low
@@ -889,8 +575,6 @@ components:
             - high
             - urgent
           type: string
-          x-struct:
-          x-validate:
         greater_than_or_equal:
           enum:
             - low
@@ -898,8 +582,6 @@ components:
             - high
             - urgent
           type: string
-          x-struct:
-          x-validate:
         in:
           items:
             enum:
@@ -908,23 +590,13 @@ components:
               - high
               - urgent
             type: string
-            x-struct:
-            x-validate:
           type: array
-          x-struct:
-          x-validate:
         is_distinct_from:
           type: string
-          x-struct:
-          x-validate:
         is_nil:
           type: boolean
-          x-struct:
-          x-validate:
         is_not_distinct_from:
           type: string
-          x-struct:
-          x-validate:
         less_than:
           enum:
             - low
@@ -932,8 +604,6 @@ components:
             - high
             - urgent
           type: string
-          x-struct:
-          x-validate:
         less_than_or_equal:
           enum:
             - low
@@ -941,8 +611,6 @@ components:
             - high
             - urgent
           type: string
-          x-struct:
-          x-validate:
         not_eq:
           enum:
             - low
@@ -950,11 +618,7 @@ components:
             - high
             - urgent
           type: string
-          x-struct:
-          x-validate:
       type: object
-      x-struct:
-      x-validate:
     todo-filter-status:
       additionalProperties: false
       properties:
@@ -967,8 +631,6 @@ components:
             - done
             - rejected
           type: string
-          x-struct:
-          x-validate:
         greater_than:
           enum:
             - blocked
@@ -978,8 +640,6 @@ components:
             - done
             - rejected
           type: string
-          x-struct:
-          x-validate:
         greater_than_or_equal:
           enum:
             - blocked
@@ -989,8 +649,6 @@ components:
             - done
             - rejected
           type: string
-          x-struct:
-          x-validate:
         in:
           items:
             enum:
@@ -1001,23 +659,13 @@ components:
               - done
               - rejected
             type: string
-            x-struct:
-            x-validate:
           type: array
-          x-struct:
-          x-validate:
         is_distinct_from:
           type: string
-          x-struct:
-          x-validate:
         is_nil:
           type: boolean
-          x-struct:
-          x-validate:
         is_not_distinct_from:
           type: string
-          x-struct:
-          x-validate:
         less_than:
           enum:
             - blocked
@@ -1027,8 +675,6 @@ components:
             - done
             - rejected
           type: string
-          x-struct:
-          x-validate:
         less_than_or_equal:
           enum:
             - blocked
@@ -1038,8 +684,6 @@ components:
             - done
             - rejected
           type: string
-          x-struct:
-          x-validate:
         not_eq:
           enum:
             - blocked
@@ -1049,116 +693,58 @@ components:
             - done
             - rejected
           type: string
-          x-struct:
-          x-validate:
       type: object
-      x-struct:
-      x-validate:
     todo-filter-title:
       additionalProperties: false
       properties:
         contains:
           type: string
-          x-struct:
-          x-validate:
         eq:
           type: string
-          x-struct:
-          x-validate:
         greater_than:
           type: string
-          x-struct:
-          x-validate:
         greater_than_or_equal:
           type: string
-          x-struct:
-          x-validate:
         ilike:
           type: string
-          x-struct:
-          x-validate:
         in:
           items:
             type: string
-            x-struct:
-            x-validate:
           type: array
-          x-struct:
-          x-validate:
         is_distinct_from:
           type: string
-          x-struct:
-          x-validate:
         is_nil:
           type: boolean
-          x-struct:
-          x-validate:
         is_not_distinct_from:
           type: string
-          x-struct:
-          x-validate:
         less_than:
           type: string
-          x-struct:
-          x-validate:
         less_than_or_equal:
           type: string
-          x-struct:
-          x-validate:
         like:
           type: string
-          x-struct:
-          x-validate:
         not_eq:
           type: string
-          x-struct:
-          x-validate:
       type: object
-      x-struct:
-      x-validate:
     todo-filter-updated_at:
       additionalProperties: false
       properties:
-        eq:
-          x-struct:
-          x-validate:
-        greater_than:
-          x-struct:
-          x-validate:
-        greater_than_or_equal:
-          x-struct:
-          x-validate:
+        eq: {}
+        greater_than: {}
+        greater_than_or_equal: {}
         in:
-          items:
-            x-struct:
-            x-validate:
+          items: {}
           type: array
-          x-struct:
-          x-validate:
         is_distinct_from:
           type: string
-          x-struct:
-          x-validate:
         is_nil:
           type: boolean
-          x-struct:
-          x-validate:
         is_not_distinct_from:
           type: string
-          x-struct:
-          x-validate:
-        less_than:
-          x-struct:
-          x-validate:
-        less_than_or_equal:
-          x-struct:
-          x-validate:
-        not_eq:
-          x-struct:
-          x-validate:
+        less_than: {}
+        less_than_or_equal: {}
+        not_eq: {}
       type: object
-      x-struct:
-      x-validate:
     user:
       additionalProperties: false
       description: A "Resource object" representing a user
@@ -1170,21 +756,15 @@ components:
             email:
               description: Field included by default.
               type: string
-              x-struct:
-              x-validate:
             name:
               anyOf:
                 - nullable: true
                   type: string
-                  x-struct:
-                  x-validate:
-                - type: 'null'
+                - type: "null"
               description: Field included by default.
           required:
             - email
           type: object
-          x-struct:
-          x-validate:
         id:
           type: string
         relationships:
@@ -1200,38 +780,22 @@ components:
                   properties:
                     id:
                       type: string
-                      x-struct:
-                      x-validate:
                     meta:
                       additionalProperties: true
                       type: object
-                      x-struct:
-                      x-validate:
                     type:
                       type: string
-                      x-struct:
-                      x-validate:
                   required:
                     - type
                     - id
                   type: object
-                  x-struct:
-                  x-validate:
-              x-struct:
-              x-validate:
           type: object
-          x-struct:
-          x-validate:
         type:
           type: string
-          x-struct:
-          x-validate:
       required:
         - type
         - id
       type: object
-      x-struct:
-      x-validate:
   securitySchemes:
     bearerAuth:
       bearerFormat: JWT
@@ -1240,7 +804,7 @@ components:
       type: http
 info:
   title: Open API Specification
-  version: '1.1'
+  version: "1.1"
 openapi: 3.0.0
 paths:
   /boards:
@@ -1249,12 +813,14 @@ paths:
       deprecated: false
       description: /boards operation on board resource
       parameters:
-        - description: Filters the query to results with attributes matching the given filter object
+        - description:
+            Filters the query to results with attributes matching the given
+            filter object
           in: query
           name: filter
           required: false
           schema:
-            $ref: '#/components/schemas/board-filter'
+            $ref: "#/components/schemas/board-filter"
           style: deepObject
         - description: Sort order to apply to the results
           explode: false
@@ -1262,12 +828,24 @@ paths:
           name: sort
           required: false
           schema:
-            pattern: ^(id|-id|\+\+id|--id|visibility|-visibility|\+\+visibility|--visibility|created_at|-created_at|\+\+created_at|--created_at|updated_at|-updated_at|\+\+updated_at|--updated_at|owner_id|-owner_id|\+\+owner_id|--owner_id)(,(id|-id|\+\+id|--id|visibility|-visibility|\+\+visibility|--visibility|created_at|-created_at|\+\+created_at|--created_at|updated_at|-updated_at|\+\+updated_at|--updated_at|owner_id|-owner_id|\+\+owner_id|--owner_id))*$
-            type: string
-            x-struct:
-            x-validate:
+            items:
+              enum:
+                - id
+                - -id
+                - visibility
+                - -visibility
+                - created_at
+                - -created_at
+                - updated_at
+                - -updated_at
+                - owner_id
+                - -owner_id
+              type: string
+            type: array
           style: form
-        - description: Paginates the response with the limit and offset or keyset pagination.
+        - description:
+            Paginates the response with the limit and offset or keyset
+            pagination.
           in: query
           name: page
           required: false
@@ -1277,30 +855,18 @@ paths:
             properties:
               after:
                 type: string
-                x-struct:
-                x-validate:
               before:
                 type: string
-                x-struct:
-                x-validate:
               count:
                 default: false
                 type: boolean
-                x-struct:
-                x-validate:
               limit:
                 minimum: 1
                 type: integer
-                x-struct:
-                x-validate:
               offset:
                 minimum: 0
                 type: integer
-                x-struct:
-                x-validate:
             type: object
-            x-struct:
-            x-validate:
           style: deepObject
         - description: Relationship paths to include in the response
           explode: false
@@ -1308,66 +874,114 @@ paths:
           name: include
           required: false
           schema:
-            pattern: ^(owner)(,(owner))*$
-            type: string
-            x-struct:
-            x-validate:
+            items:
+              enum:
+                - owner
+              type: string
+            type: array
           style: form
-        - description: Limits the response fields to only those listed for each type
+        - description:
+            Limits the response fields to only those listed for each type
           in: query
           name: fields
           required: false
           schema:
-            additionalProperties: true
+            additionalProperties: false
             example:
-              board: id,visibility,created_at,updated_at,owner_id
+              board:
+                - id
+                - visibility
+                - created_at
+                - updated_at
+                - owner_id
             properties:
               board:
-                description: Comma separated field names for board
-                example: id,visibility,created_at,updated_at,owner_id
-                type: string
-                x-struct:
-                x-validate:
+                description: Field names for board
+                example:
+                  - id
+                  - visibility
+                  - created_at
+                  - updated_at
+                  - owner_id
+                items:
+                  enum:
+                    - id
+                    - visibility
+                    - created_at
+                    - updated_at
+                    - owner_id
+                    - owner
+                    - todos
+                  type: string
+                type: array
+              todo:
+                description: Field names for todo
+                example:
+                  - id
+                  - title
+                  - content
+                  - status
+                  - priority
+                  - created_at
+                  - updated_at
+                  - board_id
+                items:
+                  enum:
+                    - id
+                    - title
+                    - content
+                    - status
+                    - priority
+                    - created_at
+                    - updated_at
+                    - board_id
+                    - board
+                  type: string
+                type: array
+              user:
+                description: Field names for user
+                example:
+                  - id
+                  - email
+                  - name
+                items:
+                  enum:
+                    - id
+                    - email
+                    - name
+                    - board
+                    - identities
+                  type: string
+                type: array
             type: object
-            x-struct:
-            x-validate:
           style: deepObject
       responses:
-        '200':
+        "200":
           content:
             application/vnd.api+json:
               schema:
                 additionalProperties: false
                 properties:
                   data:
-                    description: An array of resource objects representing a board
+                    description:
+                      An array of resource objects representing a board
                     items:
-                      $ref: '#/components/schemas/board'
+                      $ref: "#/components/schemas/board"
                     type: array
                     uniqueItems: true
-                    x-struct:
-                    x-validate:
                   included:
                     items:
                       oneOf:
-                        - $ref: '#/components/schemas/user'
-                      x-struct:
-                      x-validate:
+                        - $ref: "#/components/schemas/user"
                     type: array
                     uniqueItems: true
-                    x-struct:
-                    x-validate:
                   meta:
                     additionalProperties: true
                     type: object
-                    x-struct:
-                    x-validate:
                 type: object
-                x-struct:
-                x-validate:
           description: Success
         default:
-          $ref: '#/components/responses/errors'
+          $ref: "#/components/responses/errors"
       tags:
         - board
   /boards/{id}:
@@ -1381,8 +995,6 @@ paths:
           required: true
           schema:
             type: string
-            x-struct:
-            x-validate:
           style: form
         - description: Relationship paths to include in the response
           explode: false
@@ -1390,59 +1002,108 @@ paths:
           name: include
           required: false
           schema:
-            pattern: ^(owner)(,(owner))*$
-            type: string
-            x-struct:
-            x-validate:
+            items:
+              enum:
+                - owner
+              type: string
+            type: array
           style: form
-        - description: Limits the response fields to only those listed for each type
+        - description:
+            Limits the response fields to only those listed for each type
           in: query
           name: fields
           required: false
           schema:
-            additionalProperties: true
+            additionalProperties: false
             example:
-              board: id,visibility,created_at,updated_at,owner_id
+              board:
+                - id
+                - visibility
+                - created_at
+                - updated_at
+                - owner_id
             properties:
               board:
-                description: Comma separated field names for board
-                example: id,visibility,created_at,updated_at,owner_id
-                type: string
-                x-struct:
-                x-validate:
+                description: Field names for board
+                example:
+                  - id
+                  - visibility
+                  - created_at
+                  - updated_at
+                  - owner_id
+                items:
+                  enum:
+                    - id
+                    - visibility
+                    - created_at
+                    - updated_at
+                    - owner_id
+                    - owner
+                    - todos
+                  type: string
+                type: array
+              todo:
+                description: Field names for todo
+                example:
+                  - id
+                  - title
+                  - content
+                  - status
+                  - priority
+                  - created_at
+                  - updated_at
+                  - board_id
+                items:
+                  enum:
+                    - id
+                    - title
+                    - content
+                    - status
+                    - priority
+                    - created_at
+                    - updated_at
+                    - board_id
+                    - board
+                  type: string
+                type: array
+              user:
+                description: Field names for user
+                example:
+                  - id
+                  - email
+                  - name
+                items:
+                  enum:
+                    - id
+                    - email
+                    - name
+                    - board
+                    - identities
+                  type: string
+                type: array
             type: object
-            x-struct:
-            x-validate:
           style: deepObject
       responses:
-        '200':
+        "200":
           content:
             application/vnd.api+json:
               schema:
                 additionalProperties: false
                 properties:
                   data:
-                    $ref: '#/components/schemas/board'
+                    $ref: "#/components/schemas/board"
                   included:
                     items:
                       oneOf:
-                        - $ref: '#/components/schemas/user'
-                      x-struct:
-                      x-validate:
+                        - $ref: "#/components/schemas/user"
                     type: array
                     uniqueItems: true
-                    x-struct:
-                    x-validate:
                   meta:
                     additionalProperties: true
                     type: object
-                    x-struct:
-                    x-validate:
-                x-struct:
-                x-validate:
           description: Success
         default:
-          $ref: '#/components/responses/errors'
+          $ref: "#/components/responses/errors"
       tags:
         - board
     patch:
@@ -1455,8 +1116,6 @@ paths:
           required: true
           schema:
             type: string
-            x-struct:
-            x-validate:
           style: form
         - description: Relationship paths to include in the response
           explode: false
@@ -1464,29 +1123,86 @@ paths:
           name: include
           required: false
           schema:
-            pattern: ^(owner)(,(owner))*$
-            type: string
-            x-struct:
-            x-validate:
+            items:
+              enum:
+                - owner
+              type: string
+            type: array
           style: form
-        - description: Limits the response fields to only those listed for each type
+        - description:
+            Limits the response fields to only those listed for each type
           in: query
           name: fields
           required: false
           schema:
-            additionalProperties: true
+            additionalProperties: false
             example:
-              board: id,visibility,created_at,updated_at,owner_id
+              board:
+                - id
+                - visibility
+                - created_at
+                - updated_at
+                - owner_id
             properties:
               board:
-                description: Comma separated field names for board
-                example: id,visibility,created_at,updated_at,owner_id
-                type: string
-                x-struct:
-                x-validate:
+                description: Field names for board
+                example:
+                  - id
+                  - visibility
+                  - created_at
+                  - updated_at
+                  - owner_id
+                items:
+                  enum:
+                    - id
+                    - visibility
+                    - created_at
+                    - updated_at
+                    - owner_id
+                    - owner
+                    - todos
+                  type: string
+                type: array
+              todo:
+                description: Field names for todo
+                example:
+                  - id
+                  - title
+                  - content
+                  - status
+                  - priority
+                  - created_at
+                  - updated_at
+                  - board_id
+                items:
+                  enum:
+                    - id
+                    - title
+                    - content
+                    - status
+                    - priority
+                    - created_at
+                    - updated_at
+                    - board_id
+                    - board
+                  type: string
+                type: array
+              user:
+                description: Field names for user
+                example:
+                  - id
+                  - email
+                  - name
+                items:
+                  enum:
+                    - id
+                    - email
+                    - name
+                    - board
+                    - identities
+                  type: string
+                type: array
             type: object
-            x-struct:
-            x-validate:
           style: deepObject
       requestBody:
         content:
@@ -1506,68 +1222,47 @@ paths:
                                 - private
                                 - public
                               type: string
-                              x-struct:
-                              x-validate:
-                            - type: 'null'
+                            - type: "null"
                       type: object
-                      x-struct:
-                      x-validate:
                     id:
                       type: string
-                      x-struct:
-                      x-validate:
                     relationships:
                       additionalProperties: false
                       properties: {}
                       type: object
-                      x-struct:
-                      x-validate:
                     type:
                       enum:
                         - board
-                      x-struct:
-                      x-validate:
                   required:
                     - id
                   type: object
-                  x-struct:
-                  x-validate:
               required:
                 - data
               type: object
-              x-struct:
-              x-validate:
-        description: Request body for the /boards/:id operation on board resource
+        description:
+          Request body for the /boards/:id operation on board resource
         required: false
       responses:
-        '200':
+        "200":
           content:
             application/vnd.api+json:
               schema:
                 additionalProperties: false
                 properties:
                   data:
-                    $ref: '#/components/schemas/board'
+                    $ref: "#/components/schemas/board"
                   included:
                     items:
                       oneOf:
-                        - $ref: '#/components/schemas/user'
-                      x-struct:
-                      x-validate:
+                        - $ref: "#/components/schemas/user"
                     type: array
                     uniqueItems: true
-                    x-struct:
-                    x-validate:
                   meta:
                     additionalProperties: true
                     type: object
-                    x-struct:
-                    x-validate:
-                x-struct:
-                x-validate:
           description: Success
         default:
-          $ref: '#/components/responses/errors'
+          $ref: "#/components/responses/errors"
       tags:
         - board
   /todos:
@@ -1576,12 +1271,14 @@ paths:
       deprecated: false
       description: /todos operation on todo resource
       parameters:
-        - description: Filters the query to results with attributes matching the given filter object
+        - description:
+            Filters the query to results with attributes matching the given
+            filter object
           in: query
           name: filter
           required: false
           schema:
-            $ref: '#/components/schemas/todo-filter'
+            $ref: "#/components/schemas/todo-filter"
           style: deepObject
         - description: Sort order to apply to the results
           explode: false
@@ -1589,12 +1286,30 @@ paths:
           name: sort
           required: false
           schema:
-            pattern: ^(id|-id|\+\+id|--id|title|-title|\+\+title|--title|content|-content|\+\+content|--content|status|-status|\+\+status|--status|priority|-priority|\+\+priority|--priority|created_at|-created_at|\+\+created_at|--created_at|updated_at|-updated_at|\+\+updated_at|--updated_at|board_id|-board_id|\+\+board_id|--board_id)(,(id|-id|\+\+id|--id|title|-title|\+\+title|--title|content|-content|\+\+content|--content|status|-status|\+\+status|--status|priority|-priority|\+\+priority|--priority|created_at|-created_at|\+\+created_at|--created_at|updated_at|-updated_at|\+\+updated_at|--updated_at|board_id|-board_id|\+\+board_id|--board_id))*$
-            type: string
-            x-struct:
-            x-validate:
+            items:
+              enum:
+                - id
+                - -id
+                - title
+                - -title
+                - content
+                - -content
+                - status
+                - -status
+                - priority
+                - -priority
+                - created_at
+                - -created_at
+                - updated_at
+                - -updated_at
+                - board_id
+                - -board_id
+              type: string
+            type: array
           style: form
-        - description: Paginates the response with the limit and offset or keyset pagination.
+        - description:
+            Paginates the response with the limit and offset or keyset
+            pagination.
           in: query
           name: page
           required: false
@@ -1604,30 +1319,18 @@ paths:
             properties:
               after:
                 type: string
-                x-struct:
-                x-validate:
               before:
                 type: string
-                x-struct:
-                x-validate:
               count:
                 default: false
                 type: boolean
-                x-struct:
-                x-validate:
               limit:
                 minimum: 1
                 type: integer
-                x-struct:
-                x-validate:
               offset:
                 minimum: 0
                 type: integer
-                x-struct:
-                x-validate:
             type: object
-            x-struct:
-            x-validate:
           style: deepObject
         - description: Relationship paths to include in the response
           explode: false
@@ -1635,55 +1338,110 @@ paths:
           name: include
           required: false
           schema:
-            pattern: ^(board)(,(board))*$
-            type: string
-            x-struct:
-            x-validate:
+            items:
+              enum:
+                - board
+              type: string
+            type: array
           style: form
-        - description: Limits the response fields to only those listed for each type
+        - description:
+            Limits the response fields to only those listed for each type
           in: query
           name: fields
           required: false
           schema:
-            additionalProperties: true
+            additionalProperties: false
             example:
-              todo: id,title,content,status,priority,created_at,updated_at,board_id
-            properties:
               todo:
-                description: Comma separated field names for todo
-                example: id,title,content,status,priority,created_at,updated_at,board_id
-                type: string
-                x-struct:
-                x-validate:
+                - id
+                - title
+                - content
+                - status
+                - priority
+                - created_at
+                - updated_at
+                - board_id
+            properties:
+              board:
+                description: Field names for board
+                example:
+                  - id
+                  - visibility
+                  - created_at
+                  - updated_at
+                  - owner_id
+                items:
+                  enum:
+                    - id
+                    - visibility
+                    - created_at
+                    - updated_at
+                    - owner_id
+                    - owner
+                    - todos
+                  type: string
+                type: array
+              todo:
+                description: Field names for todo
+                example:
+                  - id
+                  - title
+                  - content
+                  - status
+                  - priority
+                  - created_at
+                  - updated_at
+                  - board_id
+                items:
+                  enum:
+                    - id
+                    - title
+                    - content
+                    - status
+                    - priority
+                    - created_at
+                    - updated_at
+                    - board_id
+                    - board
+                  type: string
+                type: array
+              user:
+                description: Field names for user
+                example:
+                  - id
+                  - email
+                  - name
+                items:
+                  enum:
+                    - id
+                    - email
+                    - name
+                    - board
+                    - identities
+                  type: string
+                type: array
             type: object
-            x-struct:
-            x-validate:
           style: deepObject
       responses:
-        '200':
+        "200":
           content:
             application/vnd.api+json:
               schema:
                 additionalProperties: false
                 properties:
                   data:
-                    description: An array of resource objects representing a todo
+                    description:
+                      An array of resource objects representing a todo
                     items:
-                      $ref: '#/components/schemas/todo'
+                      $ref: "#/components/schemas/todo"
                     type: array
                     uniqueItems: true
-                    x-struct:
-                    x-validate:
                   included:
                     items:
                       oneOf:
-                        - $ref: '#/components/schemas/board'
-                      x-struct:
-                      x-validate:
+                        - $ref: "#/components/schemas/board"
                     type: array
                     uniqueItems: true
-                    x-struct:
-                    x-validate:
                   meta:
                     additionalProperties: true
                     properties:
@@ -1697,20 +1455,12 @@ paths:
                             - done
                             - rejected
                           type: string
-                          x-struct:
-                          x-validate:
                         type: array
-                        x-struct:
-                        x-validate:
                     type: object
-                    x-struct:
-                    x-validate:
                 type: object
-                x-struct:
-                x-validate:
           description: Success
         default:
-          $ref: '#/components/responses/errors'
+          $ref: "#/components/responses/errors"
       tags:
         - todo
     post:
@@ -1724,29 +1474,89 @@ paths:
           name: include
           required: false
           schema:
-            pattern: ^(board)(,(board))*$
-            type: string
-            x-struct:
-            x-validate:
+            items:
+              enum:
+                - board
+              type: string
+            type: array
           style: form
-        - description: Limits the response fields to only those listed for each type
+        - description:
+            Limits the response fields to only those listed for each type
           in: query
           name: fields
           required: false
           schema:
-            additionalProperties: true
+            additionalProperties: false
             example:
-              todo: id,title,content,status,priority,created_at,updated_at,board_id
-            properties:
               todo:
-                description: Comma separated field names for todo
-                example: id,title,content,status,priority,created_at,updated_at,board_id
-                type: string
-                x-struct:
-                x-validate:
+                - id
+                - title
+                - content
+                - status
+                - priority
+                - created_at
+                - updated_at
+                - board_id
+            properties:
+              board:
+                description: Field names for board
+                example:
+                  - id
+                  - visibility
+                  - created_at
+                  - updated_at
+                  - owner_id
+                items:
+                  enum:
+                    - id
+                    - visibility
+                    - created_at
+                    - updated_at
+                    - owner_id
+                    - owner
+                    - todos
+                  type: string
+                type: array
+              todo:
+                description: Field names for todo
+                example:
+                  - id
+                  - title
+                  - content
+                  - status
+                  - priority
+                  - created_at
+                  - updated_at
+                  - board_id
+                items:
+                  enum:
+                    - id
+                    - title
+                    - content
+                    - status
+                    - priority
+                    - created_at
+                    - updated_at
+                    - board_id
+                    - board
+                  type: string
+                type: array
+              user:
+                description: Field names for user
+                example:
+                  - id
+                  - email
+                  - name
+                items:
+                  enum:
+                    - id
+                    - email
+                    - name
+                    - board
+                    - identities
+                  type: string
+                type: array
             type: object
-            x-struct:
-            x-validate:
           style: deepObject
       requestBody:
         content:
@@ -1763,12 +1573,8 @@ paths:
                         board_id:
                           format: uuid
                           type: string
-                          x-struct:
-                          x-validate:
                         content:
                           type: string
-                          x-struct:
-                          x-validate:
                         priority:
                           anyOf:
                             - enum:
@@ -1777,9 +1583,7 @@ paths:
                                 - high
                                 - urgent
                               type: string
-                              x-struct:
-                              x-validate:
-                            - type: 'null'
+                            - type: "null"
                         status:
                           anyOf:
                             - enum:
@@ -1790,70 +1594,48 @@ paths:
                                 - done
                                 - rejected
                               type: string
-                              x-struct:
-                              x-validate:
-                            - type: 'null'
+                            - type: "null"
                         title:
                           type: string
-                          x-struct:
-                          x-validate:
                       required:
                         - title
                         - content
                         - board_id
                       type: object
-                      x-struct:
-                      x-validate:
                     relationships:
                       additionalProperties: false
                       properties: {}
                       type: object
-                      x-struct:
-                      x-validate:
                     type:
                       enum:
                         - todo
-                      x-struct:
-                      x-validate:
                   type: object
-                  x-struct:
-                  x-validate:
               required:
                 - data
               type: object
-              x-struct:
-              x-validate:
         description: Request body for the /todos operation on todo resource
         required: true
       responses:
-        '201':
+        "201":
           content:
             application/vnd.api+json:
               schema:
                 additionalProperties: false
                 properties:
                   data:
-                    $ref: '#/components/schemas/todo'
+                    $ref: "#/components/schemas/todo"
                   included:
                     items:
                       oneOf:
-                        - $ref: '#/components/schemas/board'
-                      x-struct:
-                      x-validate:
+                        - $ref: "#/components/schemas/board"
                     type: array
                     uniqueItems: true
-                    x-struct:
-                    x-validate:
                   meta:
                     additionalProperties: true
                     type: object
-                    x-struct:
-                    x-validate:
-                x-struct:
-                x-validate:
           description: Success
         default:
-          $ref: '#/components/responses/errors'
+          $ref: "#/components/responses/errors"
       tags:
         - todo
   /todos/{id}:
@@ -1867,8 +1649,6 @@ paths:
           required: true
           schema:
             type: string
-            x-struct:
-            x-validate:
           style: form
         - description: Relationship paths to include in the response
           explode: false
@@ -1876,35 +1656,95 @@ paths:
           name: include
           required: false
           schema:
-            pattern: ^(board)(,(board))*$
-            type: string
-            x-struct:
-            x-validate:
+            items:
+              enum:
+                - board
+              type: string
+            type: array
           style: form
-        - description: Limits the response fields to only those listed for each type
+        - description:
+            Limits the response fields to only those listed for each type
           in: query
           name: fields
           required: false
           schema:
-            additionalProperties: true
+            additionalProperties: false
             example:
-              todo: id,title,content,status,priority,created_at,updated_at,board_id
-            properties:
               todo:
-                description: Comma separated field names for todo
-                example: id,title,content,status,priority,created_at,updated_at,board_id
-                type: string
-                x-struct:
-                x-validate:
+                - id
+                - title
+                - content
+                - status
+                - priority
+                - created_at
+                - updated_at
+                - board_id
+            properties:
+              board:
+                description: Field names for board
+                example:
+                  - id
+                  - visibility
+                  - created_at
+                  - updated_at
+                  - owner_id
+                items:
+                  enum:
+                    - id
+                    - visibility
+                    - created_at
+                    - updated_at
+                    - owner_id
+                    - owner
+                    - todos
+                  type: string
+                type: array
+              todo:
+                description: Field names for todo
+                example:
+                  - id
+                  - title
+                  - content
+                  - status
+                  - priority
+                  - created_at
+                  - updated_at
+                  - board_id
+                items:
+                  enum:
+                    - id
+                    - title
+                    - content
+                    - status
+                    - priority
+                    - created_at
+                    - updated_at
+                    - board_id
+                    - board
+                  type: string
+                type: array
+              user:
+                description: Field names for user
+                example:
+                  - id
+                  - email
+                  - name
+                items:
+                  enum:
+                    - id
+                    - email
+                    - name
+                    - board
+                    - identities
+                  type: string
+                type: array
             type: object
-            x-struct:
-            x-validate:
           style: deepObject
       responses:
-        '200':
+        "200":
           description: Deleted successfully
         default:
-          $ref: '#/components/responses/errors'
+          $ref: "#/components/responses/errors"
       tags:
         - todo
     get:
@@ -1917,8 +1757,6 @@ paths:
           required: true
           schema:
             type: string
-            x-struct:
-            x-validate:
           style: form
         - description: Relationship paths to include in the response
           explode: false
@@ -1926,59 +1764,111 @@ paths:
           name: include
           required: false
           schema:
-            pattern: ^(board)(,(board))*$
-            type: string
-            x-struct:
-            x-validate:
+            items:
+              enum:
+                - board
+              type: string
+            type: array
           style: form
-        - description: Limits the response fields to only those listed for each type
+        - description:
+            Limits the response fields to only those listed for each type
           in: query
           name: fields
           required: false
           schema:
-            additionalProperties: true
+            additionalProperties: false
             example:
-              todo: id,title,content,status,priority,created_at,updated_at,board_id
-            properties:
               todo:
-                description: Comma separated field names for todo
-                example: id,title,content,status,priority,created_at,updated_at,board_id
-                type: string
-                x-struct:
-                x-validate:
+                - id
+                - title
+                - content
+                - status
+                - priority
+                - created_at
+                - updated_at
+                - board_id
+            properties:
+              board:
+                description: Field names for board
+                example:
+                  - id
+                  - visibility
+                  - created_at
+                  - updated_at
+                  - owner_id
+                items:
+                  enum:
+                    - id
+                    - visibility
+                    - created_at
+                    - updated_at
+                    - owner_id
+                    - owner
+                    - todos
+                  type: string
+                type: array
+              todo:
+                description: Field names for todo
+                example:
+                  - id
+                  - title
+                  - content
+                  - status
+                  - priority
+                  - created_at
+                  - updated_at
+                  - board_id
+                items:
+                  enum:
+                    - id
+                    - title
+                    - content
+                    - status
+                    - priority
+                    - created_at
+                    - updated_at
+                    - board_id
+                    - board
+                  type: string
+                type: array
+              user:
+                description: Field names for user
+                example:
+                  - id
+                  - email
+                  - name
+                items:
+                  enum:
+                    - id
+                    - email
+                    - name
+                    - board
+                    - identities
+                  type: string
+                type: array
             type: object
-            x-struct:
-            x-validate:
           style: deepObject
       responses:
-        '200':
+        "200":
           content:
             application/vnd.api+json:
               schema:
                 additionalProperties: false
                 properties:
                   data:
-                    $ref: '#/components/schemas/todo'
+                    $ref: "#/components/schemas/todo"
                   included:
                     items:
                       oneOf:
-                        - $ref: '#/components/schemas/board'
-                      x-struct:
-                      x-validate:
+                        - $ref: "#/components/schemas/board"
                     type: array
                     uniqueItems: true
-                    x-struct:
-                    x-validate:
                   meta:
                     additionalProperties: true
                     type: object
-                    x-struct:
-                    x-validate:
-                x-struct:
-                x-validate:
           description: Success
         default:
-          $ref: '#/components/responses/errors'
+          $ref: "#/components/responses/errors"
       tags:
         - todo
     patch:
@@ -1991,8 +1881,6 @@ paths:
           required: true
           schema:
             type: string
-            x-struct:
-            x-validate:
           style: form
         - description: Relationship paths to include in the response
           explode: false
@@ -2000,29 +1888,89 @@ paths:
           name: include
           required: false
           schema:
-            pattern: ^(board)(,(board))*$
-            type: string
-            x-struct:
-            x-validate:
+            items:
+              enum:
+                - board
+              type: string
+            type: array
           style: form
-        - description: Limits the response fields to only those listed for each type
+        - description:
+            Limits the response fields to only those listed for each type
           in: query
           name: fields
           required: false
           schema:
-            additionalProperties: true
+            additionalProperties: false
             example:
-              todo: id,title,content,status,priority,created_at,updated_at,board_id
-            properties:
               todo:
-                description: Comma separated field names for todo
-                example: id,title,content,status,priority,created_at,updated_at,board_id
-                type: string
-                x-struct:
-                x-validate:
+                - id
+                - title
+                - content
+                - status
+                - priority
+                - created_at
+                - updated_at
+                - board_id
+            properties:
+              board:
+                description: Field names for board
+                example:
+                  - id
+                  - visibility
+                  - created_at
+                  - updated_at
+                  - owner_id
+                items:
+                  enum:
+                    - id
+                    - visibility
+                    - created_at
+                    - updated_at
+                    - owner_id
+                    - owner
+                    - todos
+                  type: string
+                type: array
+              todo:
+                description: Field names for todo
+                example:
+                  - id
+                  - title
+                  - content
+                  - status
+                  - priority
+                  - created_at
+                  - updated_at
+                  - board_id
+                items:
+                  enum:
+                    - id
+                    - title
+                    - content
+                    - status
+                    - priority
+                    - created_at
+                    - updated_at
+                    - board_id
+                    - board
+                  type: string
+                type: array
+              user:
+                description: Field names for user
+                example:
+                  - id
+                  - email
+                  - name
+                items:
+                  enum:
+                    - id
+                    - email
+                    - name
+                    - board
+                    - identities
+                  type: string
+                type: array
             type: object
-            x-struct:
-            x-validate:
           style: deepObject
       requestBody:
         content:
@@ -2039,9 +1987,7 @@ paths:
                         content:
                           anyOf:
                             - type: string
-                              x-struct:
-                              x-validate:
-                            - type: 'null'
+                            - type: "null"
                         priority:
                           anyOf:
                             - enum:
@@ -2050,9 +1996,7 @@ paths:
                                 - high
                                 - urgent
                               type: string
-                              x-struct:
-                              x-validate:
-                            - type: 'null'
+                            - type: "null"
                         status:
                           anyOf:
                             - enum:
@@ -2063,77 +2007,55 @@ paths:
                                 - done
                                 - rejected
                               type: string
-                              x-struct:
-                              x-validate:
-                            - type: 'null'
+                            - type: "null"
                         title:
                           anyOf:
                             - type: string
-                              x-struct:
-                              x-validate:
-                            - type: 'null'
+                            - type: "null"
                       type: object
-                      x-struct:
-                      x-validate:
                     id:
                       type: string
-                      x-struct:
-                      x-validate:
                     relationships:
                       additionalProperties: false
                       properties: {}
                       type: object
-                      x-struct:
-                      x-validate:
                     type:
                       enum:
                         - todo
-                      x-struct:
-                      x-validate:
                   required:
                     - id
                   type: object
-                  x-struct:
-                  x-validate:
               required:
                 - data
               type: object
-              x-struct:
-              x-validate:
         description: Request body for the /todos/:id operation on todo resource
         required: false
       responses:
-        '200':
+        "200":
           content:
             application/vnd.api+json:
               schema:
                 additionalProperties: false
                 properties:
                   data:
-                    $ref: '#/components/schemas/todo'
+                    $ref: "#/components/schemas/todo"
                   included:
                     items:
                       oneOf:
-                        - $ref: '#/components/schemas/board'
-                      x-struct:
-                      x-validate:
+                        - $ref: "#/components/schemas/board"
                     type: array
                     uniqueItems: true
-                    x-struct:
-                    x-validate:
                   meta:
                     additionalProperties: true
                     type: object
-                    x-struct:
-                    x-validate:
-                x-struct:
-                x-validate:
           description: Success
         default:
-          $ref: '#/components/responses/errors'
+          $ref: "#/components/responses/errors"
       tags:
         - todo
 security:
   - bearerAuth: []
-servers: []
+servers:
+  - url: http://localhost:4000
+    variables: {}
 tags: []

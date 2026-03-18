@@ -1,18 +1,22 @@
 import qs from "qs";
-import type { z } from "zod/v4";
+import { z } from "zod/v4";
 
 type QueryParamsInput = Record<string, unknown>;
+type AnyZodSchema = z.ZodTypeAny;
 
 type QueryParamsSchema<TQueryParams extends QueryParamsInput> =
   z.ZodType<TQueryParams>;
 
-function toQueryParamsInput(value: unknown): QueryParamsInput {
-  return isQueryParamsInput(value) ? value : {};
+function isQueryParamsInput(value: unknown): value is QueryParamsInput {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
 function parseRawQueryString(queryString: string): QueryParamsInput {
-  return qs.parse(queryString, {
+  const normalizedQueryString = queryString.replace(/%2C/gi, ",");
+
+  return qs.parse(normalizedQueryString, {
     ignoreQueryPrefix: true,
+    comma: true,
     depth: 20,
     parameterLimit: 1000,
     parseArrays: true,
@@ -21,8 +25,122 @@ function parseRawQueryString(queryString: string): QueryParamsInput {
   }) as QueryParamsInput;
 }
 
-function isQueryParamsInput(value: unknown): value is QueryParamsInput {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
+const WRAPPER_SCHEMA_TYPES = new Set([
+  "optional",
+  "nullable",
+  "default",
+  "prefault",
+  "nonoptional",
+  "success",
+  "catch",
+  "readonly",
+  "lazy",
+]);
+
+function unwrapSchema(schema: AnyZodSchema): AnyZodSchema {
+  let currentSchema = schema;
+
+  while (
+    WRAPPER_SCHEMA_TYPES.has(currentSchema._def.type) &&
+    typeof (currentSchema as unknown as { unwrap?: () => AnyZodSchema })
+      .unwrap === "function"
+  ) {
+    const nextSchema = (
+      currentSchema as unknown as { unwrap: () => AnyZodSchema }
+    ).unwrap();
+
+    if (nextSchema === currentSchema) {
+      break;
+    }
+
+    currentSchema = nextSchema;
+  }
+
+  return currentSchema;
+}
+
+function getSchemaType(schema: AnyZodSchema | undefined): string | undefined {
+  return schema
+    ? (unwrapSchema(schema)._def.type as string | undefined)
+    : undefined;
+}
+
+function getObjectShape(
+  schema: AnyZodSchema,
+): Record<string, AnyZodSchema> | undefined {
+  const unwrappedSchema = unwrapSchema(schema);
+
+  if (getSchemaType(unwrappedSchema) !== "object") {
+    return undefined;
+  }
+
+  return (
+    unwrappedSchema as AnyZodSchema & {
+      shape: Record<string, AnyZodSchema>;
+    }
+  ).shape;
+}
+
+function getObjectCatchall(schema: AnyZodSchema): AnyZodSchema | undefined {
+  const unwrappedSchema = unwrapSchema(schema);
+
+  if (getSchemaType(unwrappedSchema) !== "object") {
+    return undefined;
+  }
+
+  return (
+    unwrappedSchema as AnyZodSchema & {
+      _def: {
+        catchall?: AnyZodSchema;
+      };
+    }
+  )._def.catchall;
+}
+
+function normalizeParsedQueryValue(
+  value: unknown,
+  schema: AnyZodSchema | undefined,
+): unknown {
+  const schemaType = getSchemaType(schema);
+
+  if (schemaType === "array") {
+    if (value === undefined) {
+      return value;
+    }
+
+    return Array.isArray(value) ? value : [value];
+  }
+
+  if (schemaType === "object" && isQueryParamsInput(value)) {
+    const shape = getObjectShape(schema as AnyZodSchema) ?? {};
+    const catchall = getObjectCatchall(schema as AnyZodSchema);
+    const normalizedObject: QueryParamsInput = { ...value };
+
+    for (const [key, nestedValue] of Object.entries(value)) {
+      normalizedObject[key] = normalizeParsedQueryValue(
+        nestedValue,
+        shape[key] ?? catchall,
+      );
+    }
+
+    return normalizedObject;
+  }
+
+  if (!Array.isArray(value)) {
+    return value;
+  }
+
+  return value.join(",");
+}
+
+function normalizeJsonApiQueryParamsInput(
+  queryParams: QueryParamsInput,
+  queryParamsSchema: AnyZodSchema,
+): QueryParamsInput {
+  return normalizeParsedQueryValue(
+    queryParams,
+    queryParamsSchema,
+  ) as QueryParamsInput;
 }
 
 function mergeQueryParams(
@@ -77,12 +195,16 @@ function parseQueryString<TQueryParams extends QueryParamsInput>(
   queryString: string,
   queryParamsSchema: QueryParamsSchema<TQueryParams>,
 ): TQueryParams {
-  return queryParamsSchema.parse(parseRawQueryString(queryString));
+  const rawQueryParams = parseRawQueryString(queryString);
+
+  return queryParamsSchema.parse(
+    normalizeJsonApiQueryParamsInput(rawQueryParams, queryParamsSchema),
+  );
 }
 
 function stringifyQueryParamsInput(queryParams: QueryParamsInput): string {
   return qs.stringify(queryParams, {
-    arrayFormat: "indices",
+    arrayFormat: "comma",
     encodeValuesOnly: true,
     allowDots: false,
     skipNulls: true,
@@ -92,19 +214,22 @@ function stringifyQueryParamsInput(queryParams: QueryParamsInput): string {
 function toQueryString<
   TQueryParams extends QueryParamsInput = QueryParamsInput,
 >(queryParams: Partial<TQueryParams>): string {
-  return stringifyQueryParamsInput(toQueryParamsInput(queryParams));
+  return stringifyQueryParamsInput(queryParams);
 }
 
 function toHref<TQueryParams extends QueryParamsInput = QueryParamsInput>(
   href: string,
   params: Partial<TQueryParams>,
+  queryParamsSchema: QueryParamsSchema<TQueryParams>,
 ): string {
   const { base, query, hash } = splitHrefParts(href);
   const mergedParams = mergeQueryParams(
-    parseRawQueryString(query),
-    toQueryParamsInput(params),
+    normalizeJsonApiQueryParamsInput(
+      parseRawQueryString(query),
+      queryParamsSchema,
+    ),
+    params,
   );
-
   const serializedQuery = stringifyQueryParamsInput(mergedParams);
   const nextHref =
     serializedQuery.length > 0 ? `${base}?${serializedQuery}` : base;
@@ -123,7 +248,7 @@ export function createQueryCodec<TQueryParams extends QueryParamsInput>(
       return toQueryString(queryParams);
     },
     toHref(href: string, params: Partial<TQueryParams>): string {
-      return toHref(href, params);
+      return toHref(href, params, queryParamsSchema);
     },
   };
 }

@@ -37,7 +37,7 @@ export async function postTodos(
 
   const res = await request<
     PostTodosMutationResponse,
-    ResponseErrorConfig,
+    ResponseErrorConfig<Error>,
     PostTodosMutationRequest
   >({
     method: "POST",

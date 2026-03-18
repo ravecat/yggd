@@ -7,24 +7,78 @@ import type { Board } from "./Board";
 import type { Errors } from "./Errors";
 import type { Todo } from "./Todo";
 
+export const postTodosQueryParamsIncludeEnum = {
+  board: "board",
+} as const;
+
+export type PostTodosQueryParamsIncludeEnumKey =
+  (typeof postTodosQueryParamsIncludeEnum)[keyof typeof postTodosQueryParamsIncludeEnum];
+
+export const fieldsBoardEnum5 = {
+  id: "id",
+  visibility: "visibility",
+  created_at: "created_at",
+  updated_at: "updated_at",
+  owner_id: "owner_id",
+  owner: "owner",
+  todos: "todos",
+} as const;
+
+export type FieldsBoardEnum5Key =
+  (typeof fieldsBoardEnum5)[keyof typeof fieldsBoardEnum5];
+
+export const fieldsTodoEnum5 = {
+  id: "id",
+  title: "title",
+  content: "content",
+  status: "status",
+  priority: "priority",
+  created_at: "created_at",
+  updated_at: "updated_at",
+  board_id: "board_id",
+  board: "board",
+} as const;
+
+export type FieldsTodoEnum5Key =
+  (typeof fieldsTodoEnum5)[keyof typeof fieldsTodoEnum5];
+
+export const fieldsUserEnum5 = {
+  id: "id",
+  email: "email",
+  name: "name",
+  board: "board",
+  identities: "identities",
+} as const;
+
+export type FieldsUserEnum5Key =
+  (typeof fieldsUserEnum5)[keyof typeof fieldsUserEnum5];
+
 export type PostTodosQueryParams = {
   /**
    * @description Relationship paths to include in the response
-   * @pattern ^(board)(,(board))*$
-   * @type string | undefined
+   * @type array | undefined
    */
-  include?: string;
+  include?: PostTodosQueryParamsIncludeEnumKey[];
   /**
    * @description Limits the response fields to only those listed for each type
    * @type object | undefined
    */
   fields?: {
     /**
-     * @description Comma separated field names for todo
-     * @type string | undefined
+     * @description Field names for board
+     * @type array | undefined
      */
-    todo?: string;
-    [key: string]: unknown;
+    board?: FieldsBoardEnum5Key[];
+    /**
+     * @description Field names for todo
+     * @type array | undefined
+     */
+    todo?: FieldsTodoEnum5Key[];
+    /**
+     * @description Field names for user
+     * @type array | undefined
+     */
+    user?: FieldsUserEnum5Key[];
   };
 };
 

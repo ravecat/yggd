@@ -9,27 +9,17 @@
         "board_id": {
           "description": "Field included by default.",
           "format": "uuid",
-          "type": "string",
-          "x-struct": null,
-          "x-validate": null
+          "type": "string"
         },
         "content": {
           "description": "Field included by default.",
-          "type": "string",
-          "x-struct": null,
-          "x-validate": null
+          "type": "string"
         },
-        "created_at": {
-          "description": "Field included by default.",
-          "x-struct": null,
-          "x-validate": null
-        },
+        "created_at": { "description": "Field included by default." },
         "priority": {
           "description": "Field included by default.",
           "enum": ["low", "medium", "high", "urgent"],
-          "type": "string",
-          "x-struct": null,
-          "x-validate": null
+          "type": "string"
         },
         "status": {
           "description": "Field included by default.",
@@ -41,21 +31,13 @@
             "done",
             "rejected"
           ],
-          "type": "string",
-          "x-struct": null,
-          "x-validate": null
+          "type": "string"
         },
         "title": {
           "description": "Field included by default.",
-          "type": "string",
-          "x-struct": null,
-          "x-validate": null
+          "type": "string"
         },
-        "updated_at": {
-          "description": "Field included by default.",
-          "x-struct": null,
-          "x-validate": null
-        }
+        "updated_at": { "description": "Field included by default." }
       },
       "required": [
         "title",
@@ -66,9 +48,7 @@
         "updated_at",
         "board_id"
       ],
-      "type": "object",
-      "x-struct": null,
-      "x-validate": null
+      "type": "object"
     },
     "id": { "type": "string" },
     "relationships": {
@@ -82,42 +62,21 @@
               "description": "An identifier for board",
               "nullable": true,
               "properties": {
-                "id": {
-                  "type": "string",
-                  "x-struct": null,
-                  "x-validate": null
-                },
-                "meta": {
-                  "additionalProperties": true,
-                  "type": "object",
-                  "x-struct": null,
-                  "x-validate": null
-                },
-                "type": {
-                  "type": "string",
-                  "x-struct": null,
-                  "x-validate": null
-                }
+                "id": { "type": "string" },
+                "meta": { "additionalProperties": true, "type": "object" },
+                "type": { "type": "string" }
               },
               "required": ["type", "id"],
-              "type": "object",
-              "x-struct": null,
-              "x-validate": null
+              "type": "object"
             }
-          },
-          "x-struct": null,
-          "x-validate": null
+          }
         }
       },
-      "type": "object",
-      "x-struct": null,
-      "x-validate": null
+      "type": "object"
     },
-    "type": { "type": "string", "x-struct": null, "x-validate": null }
+    "type": { "type": "string" }
   },
   "required": ["type", "id"],
   "type": "object",
-  "x-struct": null,
-  "x-validate": null,
   "x-readme-ref-name": "todo"
 }

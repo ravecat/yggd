@@ -8,6 +8,74 @@ import type { Errors } from "./Errors";
 import type { Todo } from "./Todo";
 import type { TodoFilter } from "./TodoFilter";
 
+export const getTodosQueryParamsSortEnum = {
+  id: "id",
+  "-id": "-id",
+  title: "title",
+  "-title": "-title",
+  content: "content",
+  "-content": "-content",
+  status: "status",
+  "-status": "-status",
+  priority: "priority",
+  "-priority": "-priority",
+  created_at: "created_at",
+  "-created_at": "-created_at",
+  updated_at: "updated_at",
+  "-updated_at": "-updated_at",
+  board_id: "board_id",
+  "-board_id": "-board_id",
+} as const;
+
+export type GetTodosQueryParamsSortEnumKey =
+  (typeof getTodosQueryParamsSortEnum)[keyof typeof getTodosQueryParamsSortEnum];
+
+export const getTodosQueryParamsIncludeEnum = {
+  board: "board",
+} as const;
+
+export type GetTodosQueryParamsIncludeEnumKey =
+  (typeof getTodosQueryParamsIncludeEnum)[keyof typeof getTodosQueryParamsIncludeEnum];
+
+export const fieldsBoardEnum4 = {
+  id: "id",
+  visibility: "visibility",
+  created_at: "created_at",
+  updated_at: "updated_at",
+  owner_id: "owner_id",
+  owner: "owner",
+  todos: "todos",
+} as const;
+
+export type FieldsBoardEnum4Key =
+  (typeof fieldsBoardEnum4)[keyof typeof fieldsBoardEnum4];
+
+export const fieldsTodoEnum4 = {
+  id: "id",
+  title: "title",
+  content: "content",
+  status: "status",
+  priority: "priority",
+  created_at: "created_at",
+  updated_at: "updated_at",
+  board_id: "board_id",
+  board: "board",
+} as const;
+
+export type FieldsTodoEnum4Key =
+  (typeof fieldsTodoEnum4)[keyof typeof fieldsTodoEnum4];
+
+export const fieldsUserEnum4 = {
+  id: "id",
+  email: "email",
+  name: "name",
+  board: "board",
+  identities: "identities",
+} as const;
+
+export type FieldsUserEnum4Key =
+  (typeof fieldsUserEnum4)[keyof typeof fieldsUserEnum4];
+
 export type GetTodosQueryParams = {
   /**
    * @description Filters the query to results matching the given filter object
@@ -16,10 +84,9 @@ export type GetTodosQueryParams = {
   filter?: TodoFilter;
   /**
    * @description Sort order to apply to the results
-   * @pattern ^(id|-id|\+\+id|--id|title|-title|\+\+title|--title|content|-content|\+\+content|--content|status|-status|\+\+status|--status|priority|-priority|\+\+priority|--priority|created_at|-created_at|\+\+created_at|--created_at|updated_at|-updated_at|\+\+updated_at|--updated_at|board_id|-board_id|\+\+board_id|--board_id)(,(id|-id|\+\+id|--id|title|-title|\+\+title|--title|content|-content|\+\+content|--content|status|-status|\+\+status|--status|priority|-priority|\+\+priority|--priority|created_at|-created_at|\+\+created_at|--created_at|updated_at|-updated_at|\+\+updated_at|--updated_at|board_id|-board_id|\+\+board_id|--board_id))*$
-   * @type string | undefined
+   * @type array | undefined
    */
-  sort?: string;
+  sort?: GetTodosQueryParamsSortEnumKey[];
   /**
    * @description Paginates the response with the limit and offset or keyset pagination.
    * @type object | undefined
@@ -51,21 +118,29 @@ export type GetTodosQueryParams = {
   };
   /**
    * @description Relationship paths to include in the response
-   * @pattern ^(board)(,(board))*$
-   * @type string | undefined
+   * @type array | undefined
    */
-  include?: string;
+  include?: GetTodosQueryParamsIncludeEnumKey[];
   /**
    * @description Limits the response fields to only those listed for each type
    * @type object | undefined
    */
   fields?: {
     /**
-     * @description Comma separated field names for todo
-     * @type string | undefined
+     * @description Field names for board
+     * @type array | undefined
      */
-    todo?: string;
-    [key: string]: unknown;
+    board?: FieldsBoardEnum4Key[];
+    /**
+     * @description Field names for todo
+     * @type array | undefined
+     */
+    todo?: FieldsTodoEnum4Key[];
+    /**
+     * @description Field names for user
+     * @type array | undefined
+     */
+    user?: FieldsUserEnum4Key[];
   };
 };
 

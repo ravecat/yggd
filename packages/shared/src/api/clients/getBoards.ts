@@ -31,7 +31,7 @@ export async function getBoards(
 
   const res = await request<
     GetBoardsQueryResponse,
-    ResponseErrorConfig,
+    ResponseErrorConfig<Error>,
     unknown
   >({
     method: "GET",

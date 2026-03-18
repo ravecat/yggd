@@ -21,38 +21,60 @@ export type {
   DeleteTodosIdMutationResponse,
   DeleteTodosIdPathParams,
   DeleteTodosIdQueryParams,
+  DeleteTodosIdQueryParamsIncludeEnumKey,
+  FieldsBoardEnum6Key,
+  FieldsTodoEnum6Key,
+  FieldsUserEnum6Key,
 } from "./models/DeleteTodosId";
 export type { Error } from "./models/Error";
 export type { Errors } from "./models/Errors";
 export type {
+  FieldsBoardEnumKey,
+  FieldsTodoEnumKey,
+  FieldsUserEnumKey,
   GetBoards200,
   GetBoardsError,
   GetBoardsQuery,
   GetBoardsQueryParams,
+  GetBoardsQueryParamsIncludeEnumKey,
+  GetBoardsQueryParamsSortEnumKey,
   GetBoardsQueryResponse,
 } from "./models/GetBoards";
 export type {
+  FieldsBoardEnum2Key,
+  FieldsTodoEnum2Key,
+  FieldsUserEnum2Key,
   GetBoardsId200,
   GetBoardsIdError,
   GetBoardsIdPathParams,
   GetBoardsIdQuery,
   GetBoardsIdQueryParams,
+  GetBoardsIdQueryParamsIncludeEnumKey,
   GetBoardsIdQueryResponse,
 } from "./models/GetBoardsId";
 export type {
+  FieldsBoardEnum4Key,
+  FieldsTodoEnum4Key,
+  FieldsUserEnum4Key,
   GetTodos200,
   GetTodosError,
   GetTodosQuery,
   GetTodosQueryParams,
+  GetTodosQueryParamsIncludeEnumKey,
+  GetTodosQueryParamsSortEnumKey,
   GetTodosQueryResponse,
   MetaStatusesEnumKey,
 } from "./models/GetTodos";
 export type {
+  FieldsBoardEnum7Key,
+  FieldsTodoEnum7Key,
+  FieldsUserEnum7Key,
   GetTodosId200,
   GetTodosIdError,
   GetTodosIdPathParams,
   GetTodosIdQuery,
   GetTodosIdQueryParams,
+  GetTodosIdQueryParamsIncludeEnumKey,
   GetTodosIdQueryResponse,
 } from "./models/GetTodosId";
 export type { Link } from "./models/Link";
@@ -60,6 +82,9 @@ export type { Links } from "./models/Links";
 export type {
   AttributesVisibilityEnum2Key,
   DataTypeEnumKey,
+  FieldsBoardEnum3Key,
+  FieldsTodoEnum3Key,
+  FieldsUserEnum3Key,
   PatchBoardsId200,
   PatchBoardsIdError,
   PatchBoardsIdMutation,
@@ -67,11 +92,15 @@ export type {
   PatchBoardsIdMutationResponse,
   PatchBoardsIdPathParams,
   PatchBoardsIdQueryParams,
+  PatchBoardsIdQueryParamsIncludeEnumKey,
 } from "./models/PatchBoardsId";
 export type {
   AttributesPriorityEnum3Key,
   AttributesStatusEnum3Key,
   DataTypeEnum3Key,
+  FieldsBoardEnum8Key,
+  FieldsTodoEnum8Key,
+  FieldsUserEnum8Key,
   PatchTodosId200,
   PatchTodosIdError,
   PatchTodosIdMutation,
@@ -79,17 +108,22 @@ export type {
   PatchTodosIdMutationResponse,
   PatchTodosIdPathParams,
   PatchTodosIdQueryParams,
+  PatchTodosIdQueryParamsIncludeEnumKey,
 } from "./models/PatchTodosId";
 export type {
   AttributesPriorityEnum2Key,
   AttributesStatusEnum2Key,
   DataTypeEnum2Key,
+  FieldsBoardEnum5Key,
+  FieldsTodoEnum5Key,
+  FieldsUserEnum5Key,
   PostTodos201,
   PostTodosError,
   PostTodosMutation,
   PostTodosMutationRequest,
   PostTodosMutationResponse,
   PostTodosQueryParams,
+  PostTodosQueryParamsIncludeEnumKey,
 } from "./models/PostTodos";
 export type {
   AttributesPriorityEnumKey,
@@ -140,15 +174,49 @@ export { boardFilterVisibilityInEnum } from "./models/BoardFilterVisibility";
 export { boardFilterVisibilityLessThanEnum } from "./models/BoardFilterVisibility";
 export { boardFilterVisibilityLessThanOrEqualEnum } from "./models/BoardFilterVisibility";
 export { boardFilterVisibilityNotEqEnum } from "./models/BoardFilterVisibility";
+export { deleteTodosIdQueryParamsIncludeEnum } from "./models/DeleteTodosId";
+export { fieldsBoardEnum6 } from "./models/DeleteTodosId";
+export { fieldsTodoEnum6 } from "./models/DeleteTodosId";
+export { fieldsUserEnum6 } from "./models/DeleteTodosId";
+export { fieldsBoardEnum } from "./models/GetBoards";
+export { fieldsTodoEnum } from "./models/GetBoards";
+export { fieldsUserEnum } from "./models/GetBoards";
+export { getBoardsQueryParamsIncludeEnum } from "./models/GetBoards";
+export { getBoardsQueryParamsSortEnum } from "./models/GetBoards";
+export { fieldsBoardEnum2 } from "./models/GetBoardsId";
+export { fieldsTodoEnum2 } from "./models/GetBoardsId";
+export { fieldsUserEnum2 } from "./models/GetBoardsId";
+export { getBoardsIdQueryParamsIncludeEnum } from "./models/GetBoardsId";
+export { fieldsBoardEnum4 } from "./models/GetTodos";
+export { fieldsTodoEnum4 } from "./models/GetTodos";
+export { fieldsUserEnum4 } from "./models/GetTodos";
+export { getTodosQueryParamsIncludeEnum } from "./models/GetTodos";
+export { getTodosQueryParamsSortEnum } from "./models/GetTodos";
 export { metaStatusesEnum } from "./models/GetTodos";
+export { fieldsBoardEnum7 } from "./models/GetTodosId";
+export { fieldsTodoEnum7 } from "./models/GetTodosId";
+export { fieldsUserEnum7 } from "./models/GetTodosId";
+export { getTodosIdQueryParamsIncludeEnum } from "./models/GetTodosId";
 export { attributesVisibilityEnum2 } from "./models/PatchBoardsId";
 export { dataTypeEnum } from "./models/PatchBoardsId";
+export { fieldsBoardEnum3 } from "./models/PatchBoardsId";
+export { fieldsTodoEnum3 } from "./models/PatchBoardsId";
+export { fieldsUserEnum3 } from "./models/PatchBoardsId";
+export { patchBoardsIdQueryParamsIncludeEnum } from "./models/PatchBoardsId";
 export { attributesPriorityEnum3 } from "./models/PatchTodosId";
 export { attributesStatusEnum3 } from "./models/PatchTodosId";
 export { dataTypeEnum3 } from "./models/PatchTodosId";
+export { fieldsBoardEnum8 } from "./models/PatchTodosId";
+export { fieldsTodoEnum8 } from "./models/PatchTodosId";
+export { fieldsUserEnum8 } from "./models/PatchTodosId";
+export { patchTodosIdQueryParamsIncludeEnum } from "./models/PatchTodosId";
 export { attributesPriorityEnum2 } from "./models/PostTodos";
 export { attributesStatusEnum2 } from "./models/PostTodos";
 export { dataTypeEnum2 } from "./models/PostTodos";
+export { fieldsBoardEnum5 } from "./models/PostTodos";
+export { fieldsTodoEnum5 } from "./models/PostTodos";
+export { fieldsUserEnum5 } from "./models/PostTodos";
+export { postTodosQueryParamsIncludeEnum } from "./models/PostTodos";
 export { attributesPriorityEnum } from "./models/Todo";
 export { attributesStatusEnum } from "./models/Todo";
 export { todoFilterPriorityEqEnum } from "./models/TodoFilterPriority";

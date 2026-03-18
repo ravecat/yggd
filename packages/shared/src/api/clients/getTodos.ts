@@ -31,7 +31,7 @@ export async function getTodos(
 
   const res = await request<
     GetTodosQueryResponse,
-    ResponseErrorConfig,
+    ResponseErrorConfig<Error>,
     unknown
   >({
     method: "GET",

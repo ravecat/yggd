@@ -26,9 +26,25 @@ export const getTodosQueryParamsSchema = z
     },
     sort: z.optional(
       z
-        .string()
-        .regex(
-          /^(id|-id|\+\+id|--id|title|-title|\+\+title|--title|content|-content|\+\+content|--content|status|-status|\+\+status|--status|priority|-priority|\+\+priority|--priority|created_at|-created_at|\+\+created_at|--created_at|updated_at|-updated_at|\+\+updated_at|--updated_at|board_id|-board_id|\+\+board_id|--board_id)(,(id|-id|\+\+id|--id|title|-title|\+\+title|--title|content|-content|\+\+content|--content|status|-status|\+\+status|--status|priority|-priority|\+\+priority|--priority|created_at|-created_at|\+\+created_at|--created_at|updated_at|-updated_at|\+\+updated_at|--updated_at|board_id|-board_id|\+\+board_id|--board_id))*$/,
+        .array(
+          z.enum([
+            "id",
+            "-id",
+            "title",
+            "-title",
+            "content",
+            "-content",
+            "status",
+            "-status",
+            "priority",
+            "-priority",
+            "created_at",
+            "-created_at",
+            "updated_at",
+            "-updated_at",
+            "board_id",
+            "-board_id",
+          ]),
         )
         .describe("Sort order to apply to the results"),
     ),
@@ -47,18 +63,50 @@ export const getTodosQueryParamsSchema = z
     ),
     include: z.optional(
       z
-        .string()
-        .regex(/^(board)(,(board))*$/)
+        .array(z.enum(["board"]))
         .describe("Relationship paths to include in the response"),
     ),
     fields: z.optional(
       z
         .object({
+          board: z.optional(
+            z
+              .array(
+                z.enum([
+                  "id",
+                  "visibility",
+                  "created_at",
+                  "updated_at",
+                  "owner_id",
+                  "owner",
+                  "todos",
+                ]),
+              )
+              .describe("Field names for board"),
+          ),
           todo: z.optional(
-            z.string().describe("Comma separated field names for todo"),
+            z
+              .array(
+                z.enum([
+                  "id",
+                  "title",
+                  "content",
+                  "status",
+                  "priority",
+                  "created_at",
+                  "updated_at",
+                  "board_id",
+                  "board",
+                ]),
+              )
+              .describe("Field names for todo"),
+          ),
+          user: z.optional(
+            z
+              .array(z.enum(["id", "email", "name", "board", "identities"]))
+              .describe("Field names for user"),
           ),
         })
-        .catchall(z.any())
         .describe(
           "Limits the response fields to only those listed for each type",
         ),

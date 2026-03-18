@@ -14,24 +14,78 @@ export type PatchBoardsIdPathParams = {
   id: string;
 };
 
+export const patchBoardsIdQueryParamsIncludeEnum = {
+  owner: "owner",
+} as const;
+
+export type PatchBoardsIdQueryParamsIncludeEnumKey =
+  (typeof patchBoardsIdQueryParamsIncludeEnum)[keyof typeof patchBoardsIdQueryParamsIncludeEnum];
+
+export const fieldsBoardEnum3 = {
+  id: "id",
+  visibility: "visibility",
+  created_at: "created_at",
+  updated_at: "updated_at",
+  owner_id: "owner_id",
+  owner: "owner",
+  todos: "todos",
+} as const;
+
+export type FieldsBoardEnum3Key =
+  (typeof fieldsBoardEnum3)[keyof typeof fieldsBoardEnum3];
+
+export const fieldsTodoEnum3 = {
+  id: "id",
+  title: "title",
+  content: "content",
+  status: "status",
+  priority: "priority",
+  created_at: "created_at",
+  updated_at: "updated_at",
+  board_id: "board_id",
+  board: "board",
+} as const;
+
+export type FieldsTodoEnum3Key =
+  (typeof fieldsTodoEnum3)[keyof typeof fieldsTodoEnum3];
+
+export const fieldsUserEnum3 = {
+  id: "id",
+  email: "email",
+  name: "name",
+  board: "board",
+  identities: "identities",
+} as const;
+
+export type FieldsUserEnum3Key =
+  (typeof fieldsUserEnum3)[keyof typeof fieldsUserEnum3];
+
 export type PatchBoardsIdQueryParams = {
   /**
    * @description Relationship paths to include in the response
-   * @pattern ^(owner)(,(owner))*$
-   * @type string | undefined
+   * @type array | undefined
    */
-  include?: string;
+  include?: PatchBoardsIdQueryParamsIncludeEnumKey[];
   /**
    * @description Limits the response fields to only those listed for each type
    * @type object | undefined
    */
   fields?: {
     /**
-     * @description Comma separated field names for board
-     * @type string | undefined
+     * @description Field names for board
+     * @type array | undefined
      */
-    board?: string;
-    [key: string]: unknown;
+    board?: FieldsBoardEnum3Key[];
+    /**
+     * @description Field names for todo
+     * @type array | undefined
+     */
+    todo?: FieldsTodoEnum3Key[];
+    /**
+     * @description Field names for user
+     * @type array | undefined
+     */
+    user?: FieldsUserEnum3Key[];
   };
 };
 

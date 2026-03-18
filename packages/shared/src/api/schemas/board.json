@@ -6,35 +6,21 @@
       "additionalProperties": false,
       "description": "An attributes object for a board",
       "properties": {
-        "created_at": {
-          "description": "Field included by default.",
-          "x-struct": null,
-          "x-validate": null
-        },
+        "created_at": { "description": "Field included by default." },
         "owner_id": {
           "description": "Field included by default.",
           "format": "uuid",
-          "type": "string",
-          "x-struct": null,
-          "x-validate": null
+          "type": "string"
         },
-        "updated_at": {
-          "description": "Field included by default.",
-          "x-struct": null,
-          "x-validate": null
-        },
+        "updated_at": { "description": "Field included by default." },
         "visibility": {
           "description": "Field included by default.",
           "enum": ["private", "public"],
-          "type": "string",
-          "x-struct": null,
-          "x-validate": null
+          "type": "string"
         }
       },
       "required": ["visibility", "created_at", "updated_at", "owner_id"],
-      "type": "object",
-      "x-struct": null,
-      "x-validate": null
+      "type": "object"
     },
     "id": { "type": "string" },
     "relationships": {
@@ -48,31 +34,14 @@
               "description": "An identifier for owner",
               "nullable": true,
               "properties": {
-                "id": {
-                  "type": "string",
-                  "x-struct": null,
-                  "x-validate": null
-                },
-                "meta": {
-                  "additionalProperties": true,
-                  "type": "object",
-                  "x-struct": null,
-                  "x-validate": null
-                },
-                "type": {
-                  "type": "string",
-                  "x-struct": null,
-                  "x-validate": null
-                }
+                "id": { "type": "string" },
+                "meta": { "additionalProperties": true, "type": "object" },
+                "type": { "type": "string" }
               },
               "required": ["type", "id"],
-              "type": "object",
-              "x-struct": null,
-              "x-validate": null
+              "type": "object"
             }
-          },
-          "x-struct": null,
-          "x-validate": null
+          }
         },
         "todos": {
           "properties": {
@@ -82,45 +51,24 @@
                 "additionalProperties": false,
                 "description": "Resource identifiers for todos",
                 "properties": {
-                  "id": {
-                    "type": "string",
-                    "x-struct": null,
-                    "x-validate": null
-                  },
-                  "meta": {
-                    "additionalProperties": true,
-                    "type": "object",
-                    "x-struct": null,
-                    "x-validate": null
-                  },
-                  "type": {
-                    "type": "string",
-                    "x-struct": null,
-                    "x-validate": null
-                  }
+                  "id": { "type": "string" },
+                  "meta": { "additionalProperties": true, "type": "object" },
+                  "type": { "type": "string" }
                 },
                 "required": ["type", "id"],
                 "type": "object"
               },
               "type": "array",
-              "uniqueItems": true,
-              "x-struct": null,
-              "x-validate": null
+              "uniqueItems": true
             }
-          },
-          "x-struct": null,
-          "x-validate": null
+          }
         }
       },
-      "type": "object",
-      "x-struct": null,
-      "x-validate": null
+      "type": "object"
     },
-    "type": { "type": "string", "x-struct": null, "x-validate": null }
+    "type": { "type": "string" }
   },
   "required": ["type", "id"],
   "type": "object",
-  "x-struct": null,
-  "x-validate": null,
   "x-readme-ref-name": "board"
 }

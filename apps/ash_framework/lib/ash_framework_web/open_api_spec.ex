@@ -1,5 +1,6 @@
 defmodule AshFrameworkWeb.OpenApiSpec do
   @transformers [
+    AshFrameworkWeb.OpenApi.Transformers.JsonApi,
     AshFrameworkWeb.OpenApi.Transformers.Todo
   ]
 

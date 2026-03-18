@@ -1,67 +1,23 @@
 {
   "additionalProperties": false,
   "properties": {
-    "eq": {
-      "enum": ["private", "public"],
-      "type": "string",
-      "x-struct": null,
-      "x-validate": null
-    },
-    "greater_than": {
-      "enum": ["private", "public"],
-      "type": "string",
-      "x-struct": null,
-      "x-validate": null
-    },
+    "eq": { "enum": ["private", "public"], "type": "string" },
+    "greater_than": { "enum": ["private", "public"], "type": "string" },
     "greater_than_or_equal": {
       "enum": ["private", "public"],
-      "type": "string",
-      "x-struct": null,
-      "x-validate": null
+      "type": "string"
     },
     "in": {
-      "items": {
-        "enum": ["private", "public"],
-        "type": "string",
-        "x-struct": null,
-        "x-validate": null
-      },
-      "type": "array",
-      "x-struct": null,
-      "x-validate": null
+      "items": { "enum": ["private", "public"], "type": "string" },
+      "type": "array"
     },
-    "is_distinct_from": {
-      "type": "string",
-      "x-struct": null,
-      "x-validate": null
-    },
-    "is_nil": { "type": "boolean", "x-struct": null, "x-validate": null },
-    "is_not_distinct_from": {
-      "type": "string",
-      "x-struct": null,
-      "x-validate": null
-    },
-    "less_than": {
-      "enum": ["private", "public"],
-      "type": "string",
-      "x-struct": null,
-      "x-validate": null
-    },
-    "less_than_or_equal": {
-      "enum": ["private", "public"],
-      "type": "string",
-      "x-struct": null,
-      "x-validate": null
-    },
-    "not_eq": {
-      "enum": ["private", "public"],
-      "type": "string",
-      "x-struct": null,
-      "x-validate": null
-    }
+    "is_distinct_from": { "type": "string" },
+    "is_nil": { "type": "boolean" },
+    "is_not_distinct_from": { "type": "string" },
+    "less_than": { "enum": ["private", "public"], "type": "string" },
+    "less_than_or_equal": { "enum": ["private", "public"], "type": "string" },
+    "not_eq": { "enum": ["private", "public"], "type": "string" }
   },
   "type": "object",
-  "x-struct": null,
-  "x-validate": null,
   "x-readme-ref-name": "board-filter-visibility"
 }

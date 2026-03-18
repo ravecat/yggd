@@ -6,287 +6,116 @@
     "and": {
       "items": { "$ref": "#/components/schemas/board-filter" },
       "type": "array",
-      "uniqueItems": true,
-      "x-struct": null,
-      "x-validate": null
+      "uniqueItems": true
     },
     "created_at": {
       "additionalProperties": false,
       "properties": {
-        "eq": { "x-struct": null, "x-validate": null },
-        "greater_than": { "x-struct": null, "x-validate": null },
-        "greater_than_or_equal": { "x-struct": null, "x-validate": null },
-        "in": {
-          "items": { "x-struct": null, "x-validate": null },
-          "type": "array",
-          "x-struct": null,
-          "x-validate": null
-        },
-        "is_distinct_from": {
-          "type": "string",
-          "x-struct": null,
-          "x-validate": null
-        },
-        "is_nil": { "type": "boolean", "x-struct": null, "x-validate": null },
-        "is_not_distinct_from": {
-          "type": "string",
-          "x-struct": null,
-          "x-validate": null
-        },
-        "less_than": { "x-struct": null, "x-validate": null },
-        "less_than_or_equal": { "x-struct": null, "x-validate": null },
-        "not_eq": { "x-struct": null, "x-validate": null }
+        "eq": {},
+        "greater_than": {},
+        "greater_than_or_equal": {},
+        "in": { "items": {}, "type": "array" },
+        "is_distinct_from": { "type": "string" },
+        "is_nil": { "type": "boolean" },
+        "is_not_distinct_from": { "type": "string" },
+        "less_than": {},
+        "less_than_or_equal": {},
+        "not_eq": {}
       },
       "type": "object",
-      "x-struct": null,
-      "x-validate": null,
       "x-readme-ref-name": "board-filter-created_at"
     },
     "id": {
       "additionalProperties": false,
       "properties": {
-        "eq": {
-          "format": "uuid",
-          "type": "string",
-          "x-struct": null,
-          "x-validate": null
-        },
-        "greater_than": {
-          "format": "uuid",
-          "type": "string",
-          "x-struct": null,
-          "x-validate": null
-        },
-        "greater_than_or_equal": {
-          "format": "uuid",
-          "type": "string",
-          "x-struct": null,
-          "x-validate": null
-        },
+        "eq": { "format": "uuid", "type": "string" },
+        "greater_than": { "format": "uuid", "type": "string" },
+        "greater_than_or_equal": { "format": "uuid", "type": "string" },
         "in": {
-          "items": {
-            "format": "uuid",
-            "type": "string",
-            "x-struct": null,
-            "x-validate": null
-          },
-          "type": "array",
-          "x-struct": null,
-          "x-validate": null
+          "items": { "format": "uuid", "type": "string" },
+          "type": "array"
         },
-        "is_distinct_from": {
-          "type": "string",
-          "x-struct": null,
-          "x-validate": null
-        },
-        "is_nil": { "type": "boolean", "x-struct": null, "x-validate": null },
-        "is_not_distinct_from": {
-          "type": "string",
-          "x-struct": null,
-          "x-validate": null
-        },
-        "less_than": {
-          "format": "uuid",
-          "type": "string",
-          "x-struct": null,
-          "x-validate": null
-        },
-        "less_than_or_equal": {
-          "format": "uuid",
-          "type": "string",
-          "x-struct": null,
-          "x-validate": null
-        },
-        "not_eq": {
-          "format": "uuid",
-          "type": "string",
-          "x-struct": null,
-          "x-validate": null
-        }
+        "is_distinct_from": { "type": "string" },
+        "is_nil": { "type": "boolean" },
+        "is_not_distinct_from": { "type": "string" },
+        "less_than": { "format": "uuid", "type": "string" },
+        "less_than_or_equal": { "format": "uuid", "type": "string" },
+        "not_eq": { "format": "uuid", "type": "string" }
       },
       "type": "object",
-      "x-struct": null,
-      "x-validate": null,
       "x-readme-ref-name": "board-filter-id"
     },
     "not": { "$ref": "#/components/schemas/board-filter" },
     "or": {
       "items": { "$ref": "#/components/schemas/board-filter" },
       "type": "array",
-      "uniqueItems": true,
-      "x-struct": null,
-      "x-validate": null
+      "uniqueItems": true
     },
     "owner_id": {
       "additionalProperties": false,
       "properties": {
-        "eq": {
-          "format": "uuid",
-          "type": "string",
-          "x-struct": null,
-          "x-validate": null
-        },
-        "greater_than": {
-          "format": "uuid",
-          "type": "string",
-          "x-struct": null,
-          "x-validate": null
-        },
-        "greater_than_or_equal": {
-          "format": "uuid",
-          "type": "string",
-          "x-struct": null,
-          "x-validate": null
-        },
+        "eq": { "format": "uuid", "type": "string" },
+        "greater_than": { "format": "uuid", "type": "string" },
+        "greater_than_or_equal": { "format": "uuid", "type": "string" },
         "in": {
-          "items": {
-            "format": "uuid",
-            "type": "string",
-            "x-struct": null,
-            "x-validate": null
-          },
-          "type": "array",
-          "x-struct": null,
-          "x-validate": null
+          "items": { "format": "uuid", "type": "string" },
+          "type": "array"
         },
-        "is_distinct_from": {
-          "type": "string",
-          "x-struct": null,
-          "x-validate": null
-        },
-        "is_nil": { "type": "boolean", "x-struct": null, "x-validate": null },
-        "is_not_distinct_from": {
-          "type": "string",
-          "x-struct": null,
-          "x-validate": null
-        },
-        "less_than": {
-          "format": "uuid",
-          "type": "string",
-          "x-struct": null,
-          "x-validate": null
-        },
-        "less_than_or_equal": {
-          "format": "uuid",
-          "type": "string",
-          "x-struct": null,
-          "x-validate": null
-        },
-        "not_eq": {
-          "format": "uuid",
-          "type": "string",
-          "x-struct": null,
-          "x-validate": null
-        }
+        "is_distinct_from": { "type": "string" },
+        "is_nil": { "type": "boolean" },
+        "is_not_distinct_from": { "type": "string" },
+        "less_than": { "format": "uuid", "type": "string" },
+        "less_than_or_equal": { "format": "uuid", "type": "string" },
+        "not_eq": { "format": "uuid", "type": "string" }
       },
       "type": "object",
-      "x-struct": null,
-      "x-validate": null,
       "x-readme-ref-name": "board-filter-owner_id"
     },
     "todos": { "$ref": "#/components/schemas/todo-filter" },
     "updated_at": {
       "additionalProperties": false,
       "properties": {
-        "eq": { "x-struct": null, "x-validate": null },
-        "greater_than": { "x-struct": null, "x-validate": null },
-        "greater_than_or_equal": { "x-struct": null, "x-validate": null },
-        "in": {
-          "items": { "x-struct": null, "x-validate": null },
-          "type": "array",
-          "x-struct": null,
-          "x-validate": null
-        },
-        "is_distinct_from": {
-          "type": "string",
-          "x-struct": null,
-          "x-validate": null
-        },
-        "is_nil": { "type": "boolean", "x-struct": null, "x-validate": null },
-        "is_not_distinct_from": {
-          "type": "string",
-          "x-struct": null,
-          "x-validate": null
-        },
-        "less_than": { "x-struct": null, "x-validate": null },
-        "less_than_or_equal": { "x-struct": null, "x-validate": null },
-        "not_eq": { "x-struct": null, "x-validate": null }
+        "eq": {},
+        "greater_than": {},
+        "greater_than_or_equal": {},
+        "in": { "items": {}, "type": "array" },
+        "is_distinct_from": { "type": "string" },
+        "is_nil": { "type": "boolean" },
+        "is_not_distinct_from": { "type": "string" },
+        "less_than": {},
+        "less_than_or_equal": {},
+        "not_eq": {}
       },
       "type": "object",
-      "x-struct": null,
-      "x-validate": null,
       "x-readme-ref-name": "board-filter-updated_at"
     },
     "visibility": {
       "additionalProperties": false,
       "properties": {
-        "eq": {
-          "enum": ["private", "public"],
-          "type": "string",
-          "x-struct": null,
-          "x-validate": null
-        },
-        "greater_than": {
-          "enum": ["private", "public"],
-          "type": "string",
-          "x-struct": null,
-          "x-validate": null
-        },
+        "eq": { "enum": ["private", "public"], "type": "string" },
+        "greater_than": { "enum": ["private", "public"], "type": "string" },
         "greater_than_or_equal": {
           "enum": ["private", "public"],
-          "type": "string",
-          "x-struct": null,
-          "x-validate": null
+          "type": "string"
         },
         "in": {
-          "items": {
-            "enum": ["private", "public"],
-            "type": "string",
-            "x-struct": null,
-            "x-validate": null
-          },
-          "type": "array",
-          "x-struct": null,
-          "x-validate": null
+          "items": { "enum": ["private", "public"], "type": "string" },
+          "type": "array"
         },
-        "is_distinct_from": {
-          "type": "string",
-          "x-struct": null,
-          "x-validate": null
-        },
-        "is_nil": { "type": "boolean", "x-struct": null, "x-validate": null },
-        "is_not_distinct_from": {
-          "type": "string",
-          "x-struct": null,
-          "x-validate": null
-        },
-        "less_than": {
-          "enum": ["private", "public"],
-          "type": "string",
-          "x-struct": null,
-          "x-validate": null
-        },
+        "is_distinct_from": { "type": "string" },
+        "is_nil": { "type": "boolean" },
+        "is_not_distinct_from": { "type": "string" },
+        "less_than": { "enum": ["private", "public"], "type": "string" },
         "less_than_or_equal": {
           "enum": ["private", "public"],
-          "type": "string",
-          "x-struct": null,
-          "x-validate": null
+          "type": "string"
         },
-        "not_eq": {
-          "enum": ["private", "public"],
-          "type": "string",
-          "x-struct": null,
-          "x-validate": null
-        }
+        "not_eq": { "enum": ["private", "public"], "type": "string" }
       },
       "type": "object",
-      "x-struct": null,
-      "x-validate": null,
       "x-readme-ref-name": "board-filter-visibility"
     }
   },
   "type": "deepObject",
-  "x-struct": null,
-  "x-validate": null,
   "x-readme-ref-name": "board-filter"
 }

@@ -33,7 +33,7 @@ export async function deleteTodosId(
 
   const res = await request<
     DeleteTodosIdMutationResponse,
-    ResponseErrorConfig,
+    ResponseErrorConfig<Error>,
     unknown
   >({
     method: "DELETE",

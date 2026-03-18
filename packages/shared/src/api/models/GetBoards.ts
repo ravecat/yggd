@@ -8,6 +8,68 @@ import type { BoardFilter } from "./BoardFilter";
 import type { Errors } from "./Errors";
 import type { User } from "./User";
 
+export const getBoardsQueryParamsSortEnum = {
+  id: "id",
+  "-id": "-id",
+  visibility: "visibility",
+  "-visibility": "-visibility",
+  created_at: "created_at",
+  "-created_at": "-created_at",
+  updated_at: "updated_at",
+  "-updated_at": "-updated_at",
+  owner_id: "owner_id",
+  "-owner_id": "-owner_id",
+} as const;
+
+export type GetBoardsQueryParamsSortEnumKey =
+  (typeof getBoardsQueryParamsSortEnum)[keyof typeof getBoardsQueryParamsSortEnum];
+
+export const getBoardsQueryParamsIncludeEnum = {
+  owner: "owner",
+} as const;
+
+export type GetBoardsQueryParamsIncludeEnumKey =
+  (typeof getBoardsQueryParamsIncludeEnum)[keyof typeof getBoardsQueryParamsIncludeEnum];
+
+export const fieldsBoardEnum = {
+  id: "id",
+  visibility: "visibility",
+  created_at: "created_at",
+  updated_at: "updated_at",
+  owner_id: "owner_id",
+  owner: "owner",
+  todos: "todos",
+} as const;
+
+export type FieldsBoardEnumKey =
+  (typeof fieldsBoardEnum)[keyof typeof fieldsBoardEnum];
+
+export const fieldsTodoEnum = {
+  id: "id",
+  title: "title",
+  content: "content",
+  status: "status",
+  priority: "priority",
+  created_at: "created_at",
+  updated_at: "updated_at",
+  board_id: "board_id",
+  board: "board",
+} as const;
+
+export type FieldsTodoEnumKey =
+  (typeof fieldsTodoEnum)[keyof typeof fieldsTodoEnum];
+
+export const fieldsUserEnum = {
+  id: "id",
+  email: "email",
+  name: "name",
+  board: "board",
+  identities: "identities",
+} as const;
+
+export type FieldsUserEnumKey =
+  (typeof fieldsUserEnum)[keyof typeof fieldsUserEnum];
+
 export type GetBoardsQueryParams = {
   /**
    * @description Filters the query to results matching the given filter object
@@ -16,10 +78,9 @@ export type GetBoardsQueryParams = {
   filter?: BoardFilter;
   /**
    * @description Sort order to apply to the results
-   * @pattern ^(id|-id|\+\+id|--id|visibility|-visibility|\+\+visibility|--visibility|created_at|-created_at|\+\+created_at|--created_at|updated_at|-updated_at|\+\+updated_at|--updated_at|owner_id|-owner_id|\+\+owner_id|--owner_id)(,(id|-id|\+\+id|--id|visibility|-visibility|\+\+visibility|--visibility|created_at|-created_at|\+\+created_at|--created_at|updated_at|-updated_at|\+\+updated_at|--updated_at|owner_id|-owner_id|\+\+owner_id|--owner_id))*$
-   * @type string | undefined
+   * @type array | undefined
    */
-  sort?: string;
+  sort?: GetBoardsQueryParamsSortEnumKey[];
   /**
    * @description Paginates the response with the limit and offset or keyset pagination.
    * @type object | undefined
@@ -51,21 +112,29 @@ export type GetBoardsQueryParams = {
   };
   /**
    * @description Relationship paths to include in the response
-   * @pattern ^(owner)(,(owner))*$
-   * @type string | undefined
+   * @type array | undefined
    */
-  include?: string;
+  include?: GetBoardsQueryParamsIncludeEnumKey[];
   /**
    * @description Limits the response fields to only those listed for each type
    * @type object | undefined
    */
   fields?: {
     /**
-     * @description Comma separated field names for board
-     * @type string | undefined
+     * @description Field names for board
+     * @type array | undefined
      */
-    board?: string;
-    [key: string]: unknown;
+    board?: FieldsBoardEnumKey[];
+    /**
+     * @description Field names for todo
+     * @type array | undefined
+     */
+    todo?: FieldsTodoEnumKey[];
+    /**
+     * @description Field names for user
+     * @type array | undefined
+     */
+    user?: FieldsUserEnumKey[];
   };
 };
 
