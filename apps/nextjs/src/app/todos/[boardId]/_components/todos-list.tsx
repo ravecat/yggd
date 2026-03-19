@@ -1,39 +1,16 @@
-"use client";
-
 import { type Todo } from "@rvct/shared";
 import Link from "next/link";
 import { ChevronDownIcon } from "lucide-react";
-import type { ReactNode } from "react";
-import { useEffect, useState } from "react";
-import useSWR from "swr";
 import type { Todos } from "~/features/todos/query";
-import { Input } from "~/shared/ui/input";
 import { ScrollArea } from "~/shared/ui/scroll-area";
 
 type TodosListProps = {
-  boardId: string;
-  initialData: Todos;
-  children?: ReactNode;
+  data: Todos;
 };
 
-function TodosGrid({ data, error }: { data: Todos; error?: Error }) {
+export function TodosList({ data }: TodosListProps) {
   const { statuses, todos } = data;
   const hasTasks = todos.length > 0;
-
-  if (error) {
-    return (
-      <div className="flex min-h-80 flex-1 items-center justify-center rounded-lg border border-dashed border-destructive/40 bg-destructive/5 px-6 text-center">
-        <div className="space-y-2">
-          <p className="text-lg font-medium text-foreground">
-            Failed to load tasks
-          </p>
-          <p className="text-sm text-muted-foreground">
-            Please retry in a moment.
-          </p>
-        </div>
-      </div>
-    );
-  }
 
   if (!hasTasks) {
     return (
@@ -199,62 +176,6 @@ function TodosGrid({ data, error }: { data: Todos; error?: Error }) {
           </div>
         </ScrollArea>
       </div>
-    </div>
-  );
-}
-
-export function TodosList({ boardId, initialData, children }: TodosListProps) {
-  const [filterInput, setFilterInput] = useState("");
-  const [filter, setFilter] = useState("");
-
-  useEffect(() => {
-    const timeoutId = window.setTimeout(() => {
-      setFilter(filterInput);
-    }, 300);
-
-    return () => window.clearTimeout(timeoutId);
-  }, [filterInput]);
-
-  const { data, error } = useSWR<Todos>(
-    [boardId, filter] as const,
-    async ([boardId, filter]: readonly [string, string]) => {
-      const searchParams = new URLSearchParams({ boardId });
-
-      if (filter) {
-        searchParams.set("filter", filter);
-      }
-
-      const response = await fetch(`/api/todos?${searchParams.toString()}`);
-
-      if (!response.ok) {
-        throw new Error(`Request failed with status ${response.status}`);
-      }
-
-      return (await response.json()) as Todos;
-    },
-    {
-      fallbackData: initialData,
-      keepPreviousData: true,
-      revalidateOnFocus: false,
-      revalidateOnMount: false,
-    },
-  );
-
-  return (
-    <div className="flex min-h-0 flex-1 flex-col gap-2">
-      <div className="flex flex-wrap gap-2">
-        {children}
-        <div className="min-w-0 flex-1">
-          <Input
-            type="search"
-            value={filterInput}
-            onChange={(event) => setFilterInput(event.target.value)}
-            placeholder="Filter tasks"
-            aria-label="Filter tasks"
-          />
-        </div>
-      </div>
-      <TodosGrid data={data ?? initialData} error={error} />
     </div>
   );
 }

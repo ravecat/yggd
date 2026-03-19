@@ -3,13 +3,21 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PlusIcon } from "lucide-react";
 import { BoardVisibilityToggle } from "./_components/board-visibility-toggle";
+import { TodosFilterInput } from "./_components/todos-filter-input";
 import { TodosList, TodosListSkeleton } from "./_components/todos-list";
 import { fetchBoard } from "~/features/boards/query";
 import { fetchTodos } from "~/features/todos/query";
 import { assigns } from "~/shared/lib/session";
 import { Button } from "~/shared/ui/button";
 
-export type BoardPageProps = PageProps<"/todos/[boardId]">;
+type BoardPageProps = {
+  params: Promise<{
+    boardId: string;
+  }>;
+  searchParams: Promise<{
+    filter?: string | string[];
+  }>;
+};
 
 function BoardPageFallback() {
   return (
@@ -21,21 +29,34 @@ function BoardPageFallback() {
   );
 }
 
-async function BoardPageContent({
-  params,
-}: {
-  params: BoardPageProps["params"];
-}) {
-  const { boardId } = await params;
+async function BoardPageContent({ params, searchParams }: BoardPageProps) {
+  const [{ boardId }, currentSearchParams] = await Promise.all([
+    params,
+    searchParams,
+  ]);
   const board = await fetchBoard(boardId);
 
   if (!board) {
     notFound();
   }
 
-  const [{ userId }, initialData] = await Promise.all([
+  const filter =
+    typeof currentSearchParams.filter === "string"
+      ? currentSearchParams.filter
+      : "";
+
+  const [{ userId }, data] = await Promise.all([
     assigns(),
-    fetchTodos(board.id),
+    fetchTodos(
+      board.id,
+      filter
+        ? {
+            filter: {
+              title: { contains: filter },
+            },
+          }
+        : {},
+    ),
   ]);
 
   const isOwner = board.attributes?.owner_id === userId;
@@ -46,7 +67,7 @@ async function BoardPageContent({
         <p className="py-2 text-sm text-muted-foreground">
           Dynamic board grouped by status for daily task tracking (JSON:API)
         </p>
-        <TodosList boardId={board.id} initialData={initialData}>
+        <div className="flex flex-wrap gap-2">
           {isOwner ? (
             <Link
               href={`/todo/create?boardId=${encodeURIComponent(board.id)}`}
@@ -58,14 +79,17 @@ async function BoardPageContent({
               </Button>
             </Link>
           ) : null}
-
+          <div className="min-w-0 flex-1">
+            <TodosFilterInput key={filter} value={filter} />
+          </div>
           {isOwner && board.attributes?.visibility ? (
             <BoardVisibilityToggle
               id={board.id}
               visibility={board.attributes.visibility}
             />
           ) : null}
-        </TodosList>
+        </div>
+        <TodosList data={data} />
       </div>
     </div>
   );
