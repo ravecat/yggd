@@ -1,13 +1,14 @@
 "use client";
 
+import { Eye, EyeOff } from "lucide-react";
 import {
   type AttributesVisibilityEnum2Key,
   attributesVisibilityEnum2,
 } from "@rvct/shared";
 import { useRouter } from "next/navigation";
-import { useId, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { updateBoardVisibility } from "~/features/boards/mutations";
-import { Label } from "~/shared/ui/label";
+import { Button } from "~/shared/ui/button";
 
 type Props = {
   id: string;
@@ -19,10 +20,11 @@ export function BoardVisibilityToggle({
   visibility = attributesVisibilityEnum2.private,
 }: Props) {
   const router = useRouter();
-  const visibilityId = useId();
   const [currentVisibility, setCurrentVisibility] = useState(visibility);
   const [isPending, startTransition] = useTransition();
   const isPublic = currentVisibility === attributesVisibilityEnum2.public;
+  const Icon = isPublic ? Eye : EyeOff;
+  const label = isPublic ? "Public board" : "Private board";
 
   const handleVisibilityChange = (checked: boolean) => {
     const previousVisibility = currentVisibility;
@@ -47,22 +49,21 @@ export function BoardVisibilityToggle({
 
   return (
     <div className="w-full shrink-0 space-y-1 sm:w-auto">
-      <Label
-        htmlFor={visibilityId}
-        className="inline-flex h-9 w-full items-center gap-2 rounded-md border border-input bg-background px-3 whitespace-nowrap sm:w-auto"
+      <Button
+        type="button"
+        variant="outline"
+        size="sm"
+        className="w-full justify-start gap-2 sm:w-auto"
+        aria-label={label}
+        aria-pressed={isPublic}
+        disabled={isPending}
+        onClick={() => handleVisibilityChange(!isPublic)}
       >
-        <input
-          id={visibilityId}
-          type="checkbox"
-          className="size-4 rounded border-input accent-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-          checked={isPublic}
-          disabled={isPending}
-          onChange={(event) =>
-            handleVisibilityChange(event.currentTarget.checked)
-          }
-        />
-        Public
-      </Label>
+        <span className="inline-flex size-5 items-center justify-center rounded-full border border-current/15 bg-current/5">
+          <Icon aria-hidden="true" className="size-3.5" />
+        </span>
+        <span>{label}</span>
+      </Button>
     </div>
   );
 }

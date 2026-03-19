@@ -29,20 +29,24 @@ describe("BoardVisibilityToggle", () => {
 
     render(<BoardVisibilityToggle id="board-1" visibility="private" />);
 
-    const checkbox = screen.getByRole("checkbox", {
-      name: "Public",
-    }) as HTMLInputElement;
+    const button = screen.getByRole("button", {
+      name: "Private board",
+    });
 
-    expect(checkbox.checked).toBe(false);
+    expect(button.getAttribute("aria-pressed")).toBe("false");
 
     await act(async () => {
-      fireEvent.click(checkbox);
+      fireEvent.click(button);
       await Promise.resolve();
     });
 
     expect(updateBoardVisibilityMock).toHaveBeenCalledWith("board-1", "public");
     expect(refreshMock).toHaveBeenCalledTimes(1);
-    expect(checkbox.checked).toBe(true);
+    expect(
+      screen.getByRole("button", {
+        name: "Public board",
+      }),
+    ).toHaveProperty("ariaPressed", "true");
   });
 
   test("restores the previous visibility when the update fails", async () => {
@@ -57,14 +61,14 @@ describe("BoardVisibilityToggle", () => {
 
     render(<BoardVisibilityToggle id="board-1" visibility="public" />);
 
-    const checkbox = screen.getByRole("checkbox", {
-      name: "Public",
-    }) as HTMLInputElement;
+    const button = screen.getByRole("button", {
+      name: "Public board",
+    });
 
-    expect(checkbox.checked).toBe(true);
+    expect(button.getAttribute("aria-pressed")).toBe("true");
 
     await act(async () => {
-      fireEvent.click(checkbox);
+      fireEvent.click(button);
       await Promise.resolve();
     });
 
@@ -73,6 +77,10 @@ describe("BoardVisibilityToggle", () => {
       "private",
     );
     expect(refreshMock).not.toHaveBeenCalled();
-    expect(checkbox.checked).toBe(true);
+    expect(
+      screen.getByRole("button", {
+        name: "Public board",
+      }),
+    ).toHaveProperty("ariaPressed", "true");
   });
 });
