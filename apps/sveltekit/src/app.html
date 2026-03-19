@@ -3,6 +3,35 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (() => {
+        const root = document.documentElement;
+
+        const setTheme = (theme) => {
+          localStorage.setItem("moda:theme", theme);
+          root.setAttribute("data-theme", theme);
+        };
+
+        if (!root.hasAttribute("data-theme")) {
+          setTheme(
+            localStorage.getItem("moda:theme") === "dark" ? "dark" : "light",
+          );
+        }
+
+        window.addEventListener(
+          "storage",
+          (event) =>
+            event.key === "moda:theme" &&
+            setTheme(event.newValue === "dark" ? "dark" : "light"),
+        );
+
+        window.addEventListener("moda:set-theme", () => {
+          setTheme(
+            root.getAttribute("data-theme") === "dark" ? "light" : "dark",
+          );
+        });
+      })();
+    </script>
     %sveltekit.head%
   </head>
   <body data-sveltekit-preload-data="hover">

@@ -3,6 +3,7 @@
   import Navbar from "./navbar.svelte";
   import SignInButton from "./sign-in-button.svelte";
   import Switcher from "./switcher.svelte";
+  import ThemeToggle from "./theme-toggle.svelte";
 
   let { frameworks }: { frameworks: Framework[] } = $props();
 </script>
@@ -19,8 +20,9 @@
     >
       <Navbar />
     </div>
-    <div class="flex items-center justify-end">
+    <div class="flex items-center justify-end gap-2">
       <SignInButton />
+      <ThemeToggle />
     </div>
   </div>
 </header>

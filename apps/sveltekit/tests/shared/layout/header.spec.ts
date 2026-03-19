@@ -61,7 +61,7 @@ describe("src/shared/layout/header.svelte", () => {
     expect(canvasTab.getAttribute("aria-current")).toBeNull();
   });
 
-  it("renders the framework switcher and static sign-in button", () => {
+  it("renders the framework switcher, sign-in button, and theme toggle", async () => {
     page.url = new URL("http://localhost/todos");
     page.route.id = "/todos";
     render(Header, { frameworks: createFrameworks() });
@@ -70,5 +70,6 @@ describe("src/shared/layout/header.svelte", () => {
     expect(
       screen.getByRole("button", { name: /Sign in with Google/i }),
     ).toBeTruthy();
+    expect(await screen.findByRole("button", { name: /theme/i })).toBeTruthy();
   });
 });
