@@ -145,7 +145,7 @@ describe("fetchTodos", () => {
         title: { contains: "  roadmap  " },
         board_id: { eq: "board-1" },
       },
-      sort: "-updated_at",
+      sort: ["-updated_at"],
     };
 
     parseQueryMock.mockReturnValue(validatedQuery);
@@ -168,7 +168,7 @@ describe("fetchTodos", () => {
         title: { contains: "  roadmap  " },
         board_id: { eq: "board-1" },
       },
-      sort: "-updated_at",
+      sort: ["-updated_at"],
     });
     expect(getTodosMock).toHaveBeenCalledWith(validatedQuery, {
       headers: { Authorization: "Bearer token" },

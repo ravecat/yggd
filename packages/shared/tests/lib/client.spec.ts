@@ -63,4 +63,23 @@ describe("client transport", () => {
 
     throw new Error("Expected client to throw");
   });
+
+  test("serializes top-level arrays as comma-separated values", async () => {
+    const { serializeParams } = await import("~/lib/client");
+
+    expect(
+      decodeURIComponent(
+        serializeParams({
+          sort: ["-priority", "title"],
+          include: ["board"],
+          filter: {
+            status: { in: ["backlog", "review"] },
+            title: { contains: "roadmap" },
+          },
+        }),
+      ),
+    ).toBe(
+      "sort=-priority,title&include=board&filter[status][in][]=backlog&filter[status][in][]=review&filter[title][contains]=roadmap",
+    );
+  });
 });

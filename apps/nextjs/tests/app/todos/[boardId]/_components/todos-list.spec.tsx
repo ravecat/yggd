@@ -1,111 +1,106 @@
-import { act } from "react";
-import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import "@testing-library/jest-dom";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-
-const fetchMock = jest.fn();
-
-global.fetch = fetchMock;
+import { describe, expect, jest, test } from "@jest/globals";
+import { render, screen } from "@testing-library/react";
+import type { ReactNode } from "react";
 
 jest.mock("~/shared/ui/scroll-area", () => ({
-  ScrollArea: ({ children }: { children?: React.ReactNode }) => (
-    <div>{children}</div>
-  ),
+  ScrollArea: ({ children }: { children?: ReactNode }) => <div>{children}</div>,
 }));
 
-describe("TodosList", () => {
-  beforeEach(() => {
-    fetchMock.mockReset();
-    jest.useFakeTimers();
-  });
+function createTodo(
+  id: string,
+  overrides: Partial<{
+    title: string;
+    priority: "low" | "medium" | "high" | "urgent";
+    status:
+      | "blocked"
+      | "backlog"
+      | "in_progress"
+      | "review"
+      | "done"
+      | "rejected";
+    content: string;
+    created_at: string;
+    updated_at: string;
+  }> = {},
+) {
+  return {
+    id,
+    type: "todo",
+    attributes: {
+      board_id: "board-1",
+      content: overrides.content ?? "Task details",
+      created_at: overrides.created_at ?? "2026-03-18T10:00:00.000Z",
+      priority: overrides.priority ?? "medium",
+      status: overrides.status ?? "backlog",
+      title: overrides.title ?? `Task ${id}`,
+      updated_at: overrides.updated_at ?? "2026-03-19T10:00:00.000Z",
+    },
+  };
+}
 
+describe("TodosList", () => {
   test("renders initial data", async () => {
     const { TodosList } =
       await import("~/app/todos/[boardId]/_components/todos-list");
 
     render(
       <TodosList
-        boardId="board-1"
-        initialData={{
+        data={{
           statuses: ["backlog"],
           todos: [
-            {
-              id: "todo-1",
-              attributes: {
-                title: "Roadmap",
-                priority: "high",
-                status: "backlog",
-              },
-            },
-          ],
-        }}
-      >
-        <button type="button">Create task</button>
-      </TodosList>,
-    );
-
-    expect(screen.getByRole("button", { name: "Create task" })).toBeVisible();
-    expect(screen.getAllByText("Roadmap")).toHaveLength(2);
-    expect(screen.getAllByText("backlog")).toHaveLength(2);
-  });
-
-  test("refetches todos when the local filter changes", async () => {
-    fetchMock.mockResolvedValue({
-      ok: true,
-      json: async () => ({
-        statuses: ["backlog"],
-        todos: [
-          {
-            id: "todo-2",
-            attributes: {
-              title: "Filtered roadmap",
-              priority: "low",
+            createTodo("todo-1", {
+              title: "Roadmap",
+              priority: "high",
               status: "backlog",
-            },
-          },
-        ],
-      }),
-    });
-
-    const { TodosList } =
-      await import("~/app/todos/[boardId]/_components/todos-list");
-
-    render(
-      <TodosList
-        boardId="board-1"
-        initialData={{
-          statuses: ["backlog"],
-          todos: [
-            {
-              id: "todo-1",
-              attributes: {
-                title: "Roadmap",
-                priority: "high",
-                status: "backlog",
-              },
-            },
+            }),
           ],
         }}
       />,
     );
 
-    fireEvent.change(screen.getByRole("searchbox", { name: "Filter tasks" }), {
-      target: { value: "roadmap" },
-    });
+    expect(screen.getAllByText("Roadmap")).toHaveLength(2);
+    expect(screen.getAllByText("backlog")).toHaveLength(2);
+  });
 
-    await act(async () => {
-      jest.advanceTimersByTime(300);
-    });
+  test("preserves the order returned by the server inside a column", async () => {
+    const { TodosList } =
+      await import("~/app/todos/[boardId]/_components/todos-list");
 
-    await waitFor(() => {
-      expect(fetchMock).toHaveBeenCalledWith(
-        "/api/todos?boardId=board-1&filter=roadmap",
-      );
-    });
+    render(
+      <TodosList
+        data={{
+          statuses: ["backlog"],
+          todos: [
+            createTodo("todo-1", {
+              title: "Zulu planning",
+              priority: "high",
+            }),
+            createTodo("todo-2", {
+              title: "Urgent fix",
+              priority: "urgent",
+            }),
+            createTodo("todo-3", {
+              title: "Alpha planning",
+              priority: "high",
+            }),
+          ],
+        }}
+      />,
+    );
 
-    await waitFor(() => {
-      expect(screen.getAllByText("Filtered roadmap")).toHaveLength(2);
-    });
+    expect(
+      screen
+        .getAllByRole("heading", { level: 3 })
+        .map((item) => item.textContent),
+    ).toEqual([
+      "Zulu planning",
+      "Urgent fix",
+      "Alpha planning",
+      "Zulu planning",
+      "Urgent fix",
+      "Alpha planning",
+    ]);
   });
 
   test("renders the empty state when there are no todos", async () => {
@@ -114,8 +109,7 @@ describe("TodosList", () => {
 
     render(
       <TodosList
-        boardId="board-1"
-        initialData={{
+        data={{
           statuses: [],
           todos: [],
         }}

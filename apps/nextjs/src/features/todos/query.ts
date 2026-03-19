@@ -4,6 +4,7 @@ import {
   getTodos,
   getTodosId,
   getTodosQueryParamsSchema,
+  type GetTodosQueryParamsSortEnumKey,
   isApiError,
   type GetTodosQueryParams,
   type MetaStatusesEnumKey,
@@ -16,12 +17,25 @@ export type Todos = {
   todos: Todo[];
 };
 
+type FetchTodosQuery = Omit<GetTodosQueryParams, "sort"> & {
+  sort?: string | GetTodosQueryParamsSortEnumKey[];
+};
+
 export async function fetchTodos(
   boardId: string,
-  query: GetTodosQueryParams = {},
+  query: FetchTodosQuery = {},
 ): Promise<Todos> {
+  const sort =
+    typeof query.sort === "string"
+      ? query.sort
+          .split(",")
+          .map((value) => value.trim())
+          .filter(Boolean)
+      : query.sort;
+
   const validatedQuery = getTodosQueryParamsSchema.parse({
     ...query,
+    sort,
     filter: {
       ...query.filter,
       board_id: { eq: boardId },

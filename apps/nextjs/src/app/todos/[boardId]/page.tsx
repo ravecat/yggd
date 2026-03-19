@@ -5,6 +5,7 @@ import { PlusIcon } from "lucide-react";
 import { BoardVisibilityToggle } from "./_components/board-visibility-toggle";
 import { TodosFilterInput } from "./_components/todos-filter-input";
 import { TodosList, TodosListSkeleton } from "./_components/todos-list";
+import { TodosSortMenu } from "./_components/todos-sort-menu";
 import { fetchBoard } from "~/features/boards/query";
 import { fetchTodos } from "~/features/todos/query";
 import { assigns } from "~/shared/lib/session";
@@ -16,6 +17,7 @@ type BoardPageProps = {
   }>;
   searchParams: Promise<{
     filter?: string | string[];
+    sort?: string | string[];
   }>;
 };
 
@@ -44,22 +46,22 @@ async function BoardPageContent({ params, searchParams }: BoardPageProps) {
     typeof currentSearchParams.filter === "string"
       ? currentSearchParams.filter
       : "";
+  const sort = ([] as string[])
+    .concat(currentSearchParams.sort ?? [])
+    .join(",");
 
   const [{ userId }, data] = await Promise.all([
     assigns(),
-    fetchTodos(
-      board.id,
-      filter
-        ? {
-            filter: {
-              title: { contains: filter },
-            },
-          }
-        : {},
-    ),
+    fetchTodos(board.id, {
+      filter: {
+        title: { contains: filter },
+      },
+      sort,
+    }),
   ]);
 
   const isOwner = board.attributes?.owner_id === userId;
+  const visibility = board.attributes?.visibility;
 
   return (
     <div className="h-full overflow-hidden">
@@ -67,8 +69,8 @@ async function BoardPageContent({ params, searchParams }: BoardPageProps) {
         <p className="py-2 text-sm text-muted-foreground">
           Dynamic board grouped by status for daily task tracking (JSON:API)
         </p>
-        <div className="flex flex-wrap gap-2">
-          {isOwner ? (
+        {isOwner ? (
+          <div className="flex flex-wrap gap-2">
             <Link
               href={`/todo/create?boardId=${encodeURIComponent(board.id)}`}
               className="w-full shrink-0 sm:w-auto"
@@ -78,17 +80,15 @@ async function BoardPageContent({ params, searchParams }: BoardPageProps) {
                 Create task
               </Button>
             </Link>
-          ) : null}
-          <div className="min-w-0 flex-1">
-            <TodosFilterInput key={filter} value={filter} />
+            <div className="flex min-w-0 flex-1 flex-col gap-2 sm:flex-row">
+              <div className="min-w-0 flex-1">
+                <TodosFilterInput key={filter} value={filter} />
+              </div>
+              <TodosSortMenu value={sort} />
+            </div>
+            <BoardVisibilityToggle id={board.id} visibility={visibility} />
           </div>
-          {isOwner && board.attributes?.visibility ? (
-            <BoardVisibilityToggle
-              id={board.id}
-              visibility={board.attributes.visibility}
-            />
-          ) : null}
-        </div>
+        ) : null}
         <TodosList data={data} />
       </div>
     </div>
