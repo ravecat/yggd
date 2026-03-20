@@ -17,7 +17,7 @@ describe("Layout", () => {
     jest.resetModules();
   });
 
-  test("renders page content without runtime env script injection", async () => {
+  test("renders page content with the root theme controller script", async () => {
     const { default: Layout } = await import("~/app/layout");
     const element = await Layout({
       children: <div>Content</div>,
@@ -26,7 +26,9 @@ describe("Layout", () => {
     const html = renderToStaticMarkup(element);
 
     expect(html).not.toContain("window.__ENV__=");
-    expect(html).not.toContain("dangerouslySetInnerHTML");
     expect(html).toContain("Content");
+    expect(html).toContain("moda:theme");
+    expect(html).toContain("moda:set-theme");
+    expect(html).toContain("data-theme");
   });
 });
