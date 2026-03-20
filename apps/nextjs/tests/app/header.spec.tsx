@@ -14,13 +14,17 @@ jest.mock("~/app/_components/switcher", () => ({
   Switcher: () => switcherMock(),
 }));
 
+jest.mock("~/app/_components/theme-toggle", () => ({
+  ThemeToggle: () => <div>ThemeToggle</div>,
+}));
+
 jest.mock("~/components/sign-in", () => ({
   SignIn: () => <div>SignIn</div>,
   SignInFallback: () => <div>SignIn fallback</div>,
 }));
 
 describe("Header", () => {
-  test("renders switcher, navigation, and sign-in sections", async () => {
+  test("renders switcher, navigation, sign-in, and theme sections", async () => {
     const { Header } = await import("~/app/_components/header");
     const html = renderToStaticMarkup(<Header />);
 
@@ -28,5 +32,6 @@ describe("Header", () => {
     expect(html).toContain("Switcher");
     expect(html).toContain("Navbar");
     expect(html).toContain("SignIn");
+    expect(html).toContain("ThemeToggle");
   });
 });

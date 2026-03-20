@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { Navbar, NavbarFallback } from "./navbar";
 import { Switcher } from "./switcher";
+import { ThemeToggle } from "./theme-toggle";
 import { SignIn, SignInFallback } from "~/components/sign-in";
 
 function SwitcherFallback() {
@@ -21,10 +22,11 @@ export function Header() {
             <Navbar />
           </Suspense>
         </div>
-        <div className="flex items-center justify-end">
+        <div className="flex items-center justify-end gap-2">
           <Suspense fallback={<SignInFallback />}>
             <SignIn />
           </Suspense>
+          <ThemeToggle />
         </div>
       </div>
     </header>
