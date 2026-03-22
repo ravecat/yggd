@@ -1,4 +1,4 @@
-.PHONY: setup start serve test lint format format.check
+.PHONY: setup start serve test lint format format.check codegen codegen.asyncapi
 
 setup:
 	pnpm install --recursive
@@ -22,3 +22,8 @@ format:
 
 format.check:
 	npx nx run-many -t format.check --all --outputStyle=stream
+
+codegen: codegen.asyncapi
+
+codegen.asyncapi:
+	pnpx @rvct/asyncapi-codegen --input apps/ash_framework/priv/specs/asyncapi.yaml --out packages/shared/src/asyncapi

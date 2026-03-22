@@ -65,12 +65,6 @@
         "parallel": false
       },
       "outputs": ["{projectRoot}/src/api"]
-    },
-    "codegen:asyncapi": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "nx run asyncapi-codegen:codegen:run -- --input apps/ash_framework/priv/specs/asyncapi.yaml --out packages/shared/src/asyncapi"
-      }
     }
   },
   "tags": []
