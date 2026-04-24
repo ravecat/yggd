@@ -85,8 +85,8 @@ defmodule PhoenixFramework.MixProject do
   defp aliases do
     [
       setup: ["deps.get", "ecto.setup", "assets.setup", "assets.build"],
-      serve: ["setup", "phx.server"],
-      start: ["phx.server"],
+      serve: ["phx.server"],
+      start: ["serve"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],

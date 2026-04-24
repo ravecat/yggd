@@ -15,7 +15,7 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "mix serve",
+        "command": "iex --sname ${PHOENIX_FRAMEWORK_NODE_NAME:-phoenix_framework} --erl \"-proto_dist inet6_tcp\" -S mix serve",
         "cwd": "apps/phoenix_framework",
         "color": true
       },
@@ -24,7 +24,7 @@
     "start": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "mix start",
+        "command": "iex --sname ${PHOENIX_FRAMEWORK_NODE_NAME:-phoenix_framework} --erl \"-proto_dist inet6_tcp\" -S mix serve",
         "cwd": "apps/phoenix_framework",
         "color": true
       },

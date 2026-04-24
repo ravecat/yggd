@@ -25,6 +25,7 @@ project-graph.json
 context_portal/
 *.dump
 .plans
+.codex
 
 test-output
 
@@ -37,3 +38,4 @@ result-*
 
 # direnv
 .direnv/
+
