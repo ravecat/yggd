@@ -27,14 +27,7 @@ jest.mock("~/shared/ui/tabs", () => {
   return {
     Tabs: ({ children }: { children: ReactNode }) => <div>{children}</div>,
     TabsList: ({ children }: { children: ReactNode }) => <div>{children}</div>,
-    TabsTrigger: ({
-      asChild,
-      children,
-      ...props
-    }: {
-      asChild?: boolean;
-      children: ReactNode;
-    }) => {
+    TabsTrigger: ({ asChild, children, ...props }: { asChild?: boolean; children: ReactNode }) => {
       if (asChild && React.isValidElement(children)) {
         return React.cloneElement(children, props);
       }

@@ -4,11 +4,7 @@
  */
 
 import fetch from "../../lib/client";
-import type {
-  Client,
-  RequestConfig,
-  ResponseErrorConfig,
-} from "../../lib/client";
+import type { Client, RequestConfig, ResponseErrorConfig } from "../../lib/client";
 import type {
   PostTodosMutationRequest,
   PostTodosMutationResponse,

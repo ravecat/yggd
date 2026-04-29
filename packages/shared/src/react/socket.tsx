@@ -1,10 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useRef,
-  useEffect,
-  type ReactNode,
-} from "react";
+import { createContext, useContext, useRef, useEffect, type ReactNode } from "react";
 import { Socket as PhoenixSocket } from "phoenix";
 
 const SocketContext = createContext<PhoenixSocket | null>(null);
@@ -39,11 +33,7 @@ export interface SocketProps {
  * </Socket>
  * ```
  */
-export function Socket({
-  children,
-  url,
-  opts = { params: {} },
-}: SocketProps) {
+export function Socket({ children, url, opts = { params: {} } }: SocketProps) {
   const socketRef = useRef<PhoenixSocket>(null);
 
   if (!socketRef.current && typeof window !== "undefined") {
@@ -62,11 +52,7 @@ export function Socket({
     };
   }, []);
 
-  return (
-    <SocketContext.Provider value={socketRef.current}>
-      {children}
-    </SocketContext.Provider>
-  );
+  return <SocketContext.Provider value={socketRef.current}>{children}</SocketContext.Provider>;
 }
 
 /**

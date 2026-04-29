@@ -47,9 +47,7 @@ describe("ThemeToggle", () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(document.documentElement.getAttribute(THEME_ATTRIBUTE)).toBe(
-        "dark",
-      );
+      expect(document.documentElement.getAttribute(THEME_ATTRIBUTE)).toBe("dark");
     });
 
     expect(window.localStorage.getItem(THEME_STORAGE_KEY)).toBe("dark");

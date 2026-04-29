@@ -4,11 +4,7 @@
  */
 
 import fetch from "../../lib/client";
-import type {
-  Client,
-  RequestConfig,
-  ResponseErrorConfig,
-} from "../../lib/client";
+import type { Client, RequestConfig, ResponseErrorConfig } from "../../lib/client";
 import type {
   GetTodosIdQueryResponse,
   GetTodosIdPathParams,
@@ -31,11 +27,7 @@ export async function getTodosId(
 ) {
   const { client: request = fetch, ...requestConfig } = config;
 
-  const res = await request<
-    GetTodosIdQueryResponse,
-    ResponseErrorConfig<Error>,
-    unknown
-  >({
+  const res = await request<GetTodosIdQueryResponse, ResponseErrorConfig<Error>, unknown>({
     method: "GET",
     url: getGetTodosIdUrl(id).url.toString(),
     params,

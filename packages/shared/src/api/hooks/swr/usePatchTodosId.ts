@@ -4,11 +4,7 @@
  */
 
 import useSWRMutation from "swr/mutation";
-import type {
-  Client,
-  RequestConfig,
-  ResponseErrorConfig,
-} from "../../../lib/client";
+import type { Client, RequestConfig, ResponseErrorConfig } from "../../../lib/client";
 import type {
   PatchTodosIdMutationRequest,
   PatchTodosIdMutationResponse,
@@ -20,9 +16,7 @@ import { patchTodosId } from "../../clients/patchTodosId";
 
 export const patchTodosIdMutationKey = () => [{ url: "/todos/:id" }] as const;
 
-export type PatchTodosIdMutationKey = ReturnType<
-  typeof patchTodosIdMutationKey
->;
+export type PatchTodosIdMutationKey = ReturnType<typeof patchTodosIdMutationKey>;
 
 /**
  * @description /todos/:id operation on todo resource
@@ -44,11 +38,7 @@ export function usePatchTodosId(
     shouldFetch?: boolean;
   } = {},
 ) {
-  const {
-    mutation: mutationOptions,
-    client: config = {},
-    shouldFetch = true,
-  } = options ?? {};
+  const { mutation: mutationOptions, client: config = {}, shouldFetch = true } = options ?? {};
   const mutationKey = patchTodosIdMutationKey();
 
   return useSWRMutation<

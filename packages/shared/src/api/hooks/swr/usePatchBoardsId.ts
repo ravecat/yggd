@@ -4,11 +4,7 @@
  */
 
 import useSWRMutation from "swr/mutation";
-import type {
-  Client,
-  RequestConfig,
-  ResponseErrorConfig,
-} from "../../../lib/client";
+import type { Client, RequestConfig, ResponseErrorConfig } from "../../../lib/client";
 import type {
   PatchBoardsIdMutationRequest,
   PatchBoardsIdMutationResponse,
@@ -20,9 +16,7 @@ import { patchBoardsId } from "../../clients/patchBoardsId";
 
 export const patchBoardsIdMutationKey = () => [{ url: "/boards/:id" }] as const;
 
-export type PatchBoardsIdMutationKey = ReturnType<
-  typeof patchBoardsIdMutationKey
->;
+export type PatchBoardsIdMutationKey = ReturnType<typeof patchBoardsIdMutationKey>;
 
 /**
  * @description /boards/:id operation on board resource
@@ -44,11 +38,7 @@ export function usePatchBoardsId(
     shouldFetch?: boolean;
   } = {},
 ) {
-  const {
-    mutation: mutationOptions,
-    client: config = {},
-    shouldFetch = true,
-  } = options ?? {};
+  const { mutation: mutationOptions, client: config = {}, shouldFetch = true } = options ?? {};
   const mutationKey = patchBoardsIdMutationKey();
 
   return useSWRMutation<

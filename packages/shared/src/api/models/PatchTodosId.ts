@@ -31,8 +31,7 @@ export const fieldsBoardEnum8 = {
   todos: "todos",
 } as const;
 
-export type FieldsBoardEnum8Key =
-  (typeof fieldsBoardEnum8)[keyof typeof fieldsBoardEnum8];
+export type FieldsBoardEnum8Key = (typeof fieldsBoardEnum8)[keyof typeof fieldsBoardEnum8];
 
 export const fieldsTodoEnum8 = {
   id: "id",
@@ -46,8 +45,7 @@ export const fieldsTodoEnum8 = {
   board: "board",
 } as const;
 
-export type FieldsTodoEnum8Key =
-  (typeof fieldsTodoEnum8)[keyof typeof fieldsTodoEnum8];
+export type FieldsTodoEnum8Key = (typeof fieldsTodoEnum8)[keyof typeof fieldsTodoEnum8];
 
 export const fieldsUserEnum8 = {
   id: "id",
@@ -57,8 +55,7 @@ export const fieldsUserEnum8 = {
   identities: "identities",
 } as const;
 
-export type FieldsUserEnum8Key =
-  (typeof fieldsUserEnum8)[keyof typeof fieldsUserEnum8];
+export type FieldsUserEnum8Key = (typeof fieldsUserEnum8)[keyof typeof fieldsUserEnum8];
 
 export type PatchTodosIdQueryParams = {
   /**
@@ -141,8 +138,7 @@ export const dataTypeEnum3 = {
   todo: "todo",
 } as const;
 
-export type DataTypeEnum3Key =
-  (typeof dataTypeEnum3)[keyof typeof dataTypeEnum3];
+export type DataTypeEnum3Key = (typeof dataTypeEnum3)[keyof typeof dataTypeEnum3];
 
 /**
  * @description Request body for the /todos/:id operation on todo resource

@@ -47,8 +47,7 @@ export const fieldsBoardEnum4 = {
   todos: "todos",
 } as const;
 
-export type FieldsBoardEnum4Key =
-  (typeof fieldsBoardEnum4)[keyof typeof fieldsBoardEnum4];
+export type FieldsBoardEnum4Key = (typeof fieldsBoardEnum4)[keyof typeof fieldsBoardEnum4];
 
 export const fieldsTodoEnum4 = {
   id: "id",
@@ -62,8 +61,7 @@ export const fieldsTodoEnum4 = {
   board: "board",
 } as const;
 
-export type FieldsTodoEnum4Key =
-  (typeof fieldsTodoEnum4)[keyof typeof fieldsTodoEnum4];
+export type FieldsTodoEnum4Key = (typeof fieldsTodoEnum4)[keyof typeof fieldsTodoEnum4];
 
 export const fieldsUserEnum4 = {
   id: "id",
@@ -73,8 +71,7 @@ export const fieldsUserEnum4 = {
   identities: "identities",
 } as const;
 
-export type FieldsUserEnum4Key =
-  (typeof fieldsUserEnum4)[keyof typeof fieldsUserEnum4];
+export type FieldsUserEnum4Key = (typeof fieldsUserEnum4)[keyof typeof fieldsUserEnum4];
 
 export type GetTodosQueryParams = {
   /**
@@ -153,8 +150,7 @@ export const metaStatusesEnum = {
   rejected: "rejected",
 } as const;
 
-export type MetaStatusesEnumKey =
-  (typeof metaStatusesEnum)[keyof typeof metaStatusesEnum];
+export type MetaStatusesEnumKey = (typeof metaStatusesEnum)[keyof typeof metaStatusesEnum];
 
 /**
  * @description Success

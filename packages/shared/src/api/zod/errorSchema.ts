@@ -9,25 +9,13 @@ import { z } from "zod/v4";
 
 export const errorSchema = z.object({
   code: z.optional(
-    z
-      .string()
-      .describe(
-        "An application-specific error code, expressed as a string value.",
-      ),
+    z.string().describe("An application-specific error code, expressed as a string value."),
   ),
   detail: z.optional(
-    z
-      .string()
-      .describe(
-        "A human-readable explanation specific to this occurrence of the problem.",
-      ),
+    z.string().describe("A human-readable explanation specific to this occurrence of the problem."),
   ),
   id: z.optional(
-    z
-      .string()
-      .describe(
-        "A unique identifier for this particular occurrence of the problem.",
-      ),
+    z.string().describe("A unique identifier for this particular occurrence of the problem."),
   ),
   get links() {
     return linksSchema.optional();
@@ -35,11 +23,7 @@ export const errorSchema = z.object({
   source: z.optional(
     z.object({
       parameter: z.optional(
-        z
-          .string()
-          .describe(
-            "A string indicating which query parameter caused the error.",
-          ),
+        z.string().describe("A string indicating which query parameter caused the error."),
       ),
       pointer: z.optional(
         z
@@ -53,9 +37,7 @@ export const errorSchema = z.object({
   status: z.optional(
     z
       .string()
-      .describe(
-        "The HTTP status code applicable to this problem, expressed as a string value.",
-      ),
+      .describe("The HTTP status code applicable to this problem, expressed as a string value."),
   ),
   title: z.optional(
     z

@@ -21,14 +21,7 @@ export const todoSchema = z
             .enum(["low", "medium", "high", "urgent"])
             .describe("Field included by default."),
           status: z
-            .enum([
-              "blocked",
-              "backlog",
-              "in_progress",
-              "review",
-              "done",
-              "rejected",
-            ])
+            .enum(["blocked", "backlog", "in_progress", "review", "done", "rejected"])
             .describe("Field included by default."),
           title: z.string().describe("Field included by default."),
           updated_at: z.any().describe("Field included by default."),
@@ -56,6 +49,4 @@ export const todoSchema = z
     ),
     type: z.string(),
   })
-  .describe(
-    'A "Resource object" representing a todo',
-  ) as unknown as z.ZodType<Todo>;
+  .describe('A "Resource object" representing a todo') as unknown as z.ZodType<Todo>;

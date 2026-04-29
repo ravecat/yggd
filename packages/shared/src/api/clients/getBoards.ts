@@ -4,15 +4,8 @@
  */
 
 import fetch from "../../lib/client";
-import type {
-  Client,
-  RequestConfig,
-  ResponseErrorConfig,
-} from "../../lib/client";
-import type {
-  GetBoardsQueryResponse,
-  GetBoardsQueryParams,
-} from "../models/GetBoards";
+import type { Client, RequestConfig, ResponseErrorConfig } from "../../lib/client";
+import type { GetBoardsQueryResponse, GetBoardsQueryParams } from "../models/GetBoards";
 
 function getGetBoardsUrl() {
   const res = { method: "GET", url: `/boards` as const };
@@ -29,11 +22,7 @@ export async function getBoards(
 ) {
   const { client: request = fetch, ...requestConfig } = config;
 
-  const res = await request<
-    GetBoardsQueryResponse,
-    ResponseErrorConfig<Error>,
-    unknown
-  >({
+  const res = await request<GetBoardsQueryResponse, ResponseErrorConfig<Error>, unknown>({
     method: "GET",
     url: getGetBoardsUrl().url.toString(),
     params,

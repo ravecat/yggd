@@ -1,10 +1,6 @@
 import React, { useState } from "react";
 import { createRoot } from "react-dom/client";
-import {
-  QueryClient,
-  QueryClientProvider,
-  useQuery,
-} from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
 import { listUsers, getByEmail } from "./ash_generated";
 
 const queryClient = new QueryClient();
@@ -54,9 +50,7 @@ const UserList = () => {
         alert(`Found: ${result.data.email} (ID: ${result.data.id})`);
       } else {
         const errorMsg =
-          "errors" in result
-            ? result.errors[0]?.message || "User not found"
-            : "User not found";
+          "errors" in result ? result.errors[0]?.message || "User not found" : "User not found";
         console.error("Search failed:", errorMsg);
         alert(`Error: ${errorMsg}`);
       }
@@ -81,10 +75,7 @@ const UserList = () => {
           onChange={(e) => setSearchEmail(e.target.value)}
           className="border px-3 py-2 rounded"
         />
-        <button
-          onClick={handleSearch}
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-        >
+        <button onClick={handleSearch} className="bg-blue-500 text-white px-4 py-2 rounded">
           Search
         </button>
       </div>
@@ -115,9 +106,7 @@ const UsersPage = () => {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
         <div className="max-w-6xl mx-auto p-8">
           <div className="mb-8">
-            <h1 className="text-4xl font-bold text-slate-900 mb-2">
-              Users Management
-            </h1>
+            <h1 className="text-4xl font-bold text-slate-900 mb-2">Users Management</h1>
             <p className="text-lg text-slate-600">
               Browse and search users using type-safe RPC functions
             </p>
@@ -128,10 +117,7 @@ const UsersPage = () => {
           </div>
 
           <div className="mt-6 text-center">
-            <a
-              href="/"
-              className="text-blue-600 hover:text-blue-800 font-medium"
-            >
+            <a href="/" className="text-blue-600 hover:text-blue-800 font-medium">
               ← Back to Home
             </a>
           </div>

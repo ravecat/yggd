@@ -134,48 +134,20 @@
       "additionalProperties": false,
       "properties": {
         "eq": {
-          "enum": [
-            "blocked",
-            "backlog",
-            "in_progress",
-            "review",
-            "done",
-            "rejected"
-          ],
+          "enum": ["blocked", "backlog", "in_progress", "review", "done", "rejected"],
           "type": "string"
         },
         "greater_than": {
-          "enum": [
-            "blocked",
-            "backlog",
-            "in_progress",
-            "review",
-            "done",
-            "rejected"
-          ],
+          "enum": ["blocked", "backlog", "in_progress", "review", "done", "rejected"],
           "type": "string"
         },
         "greater_than_or_equal": {
-          "enum": [
-            "blocked",
-            "backlog",
-            "in_progress",
-            "review",
-            "done",
-            "rejected"
-          ],
+          "enum": ["blocked", "backlog", "in_progress", "review", "done", "rejected"],
           "type": "string"
         },
         "in": {
           "items": {
-            "enum": [
-              "blocked",
-              "backlog",
-              "in_progress",
-              "review",
-              "done",
-              "rejected"
-            ],
+            "enum": ["blocked", "backlog", "in_progress", "review", "done", "rejected"],
             "type": "string"
           },
           "type": "array"
@@ -184,36 +156,15 @@
         "is_nil": { "type": "boolean" },
         "is_not_distinct_from": { "type": "string" },
         "less_than": {
-          "enum": [
-            "blocked",
-            "backlog",
-            "in_progress",
-            "review",
-            "done",
-            "rejected"
-          ],
+          "enum": ["blocked", "backlog", "in_progress", "review", "done", "rejected"],
           "type": "string"
         },
         "less_than_or_equal": {
-          "enum": [
-            "blocked",
-            "backlog",
-            "in_progress",
-            "review",
-            "done",
-            "rejected"
-          ],
+          "enum": ["blocked", "backlog", "in_progress", "review", "done", "rejected"],
           "type": "string"
         },
         "not_eq": {
-          "enum": [
-            "blocked",
-            "backlog",
-            "in_progress",
-            "review",
-            "done",
-            "rejected"
-          ],
+          "enum": ["blocked", "backlog", "in_progress", "review", "done", "rejected"],
           "type": "string"
         }
       },

@@ -19,9 +19,7 @@ export const otelResourceMetrics = z.object({
                 doubleValue: z.number().optional(),
                 boolValue: z.boolean().optional(),
               })
-              .describe(
-                "Typed value (stringValue, intValue, doubleValue, boolValue)",
-              ),
+              .describe("Typed value (stringValue, intValue, doubleValue, boolValue)"),
           })
           .describe("OTel key-value attribute pair"),
       )
@@ -29,9 +27,7 @@ export const otelResourceMetrics = z.object({
   }),
   scopeMetrics: z.array(
     z.object({
-      scope: z
-        .object({ name: z.string().optional(), version: z.string().optional() })
-        .optional(),
+      scope: z.object({ name: z.string().optional(), version: z.string().optional() }).optional(),
       metrics: z
         .array(
           z
@@ -54,18 +50,11 @@ export const otelResourceMetrics = z.object({
                       .object({
                         timeUnixNano: z
                           .string()
-                          .describe(
-                            "Timestamp as nanoseconds since Unix epoch, encoded as string",
-                          ),
-                        asDouble: z
-                          .number()
-                          .describe("Floating-point metric value")
-                          .optional(),
+                          .describe("Timestamp as nanoseconds since Unix epoch, encoded as string"),
+                        asDouble: z.number().describe("Floating-point metric value").optional(),
                         asInt: z
                           .string()
-                          .describe(
-                            "Integer metric value, encoded as string per OTLP convention",
-                          )
+                          .describe("Integer metric value, encoded as string per OTLP convention")
                           .optional(),
                         attributes: z
                           .array(

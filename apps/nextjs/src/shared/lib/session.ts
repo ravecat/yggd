@@ -5,9 +5,7 @@ import { jwtVerify, type JWTPayload } from "jose";
 
 const SESSION_COOKIE_NAME = "token";
 
-const TOKEN_SIGNING_KEY = new TextEncoder().encode(
-  process.env.TOKEN_SIGNING_SECRET,
-);
+const TOKEN_SIGNING_KEY = new TextEncoder().encode(process.env.TOKEN_SIGNING_SECRET);
 
 export async function setSession(token: string) {
   const cookieStore = await cookies();
@@ -26,9 +24,7 @@ export async function clearSession() {
   cookieStore.delete(SESSION_COOKIE_NAME);
 }
 
-export async function verifyToken(
-  token: string | undefined = "",
-): Promise<JWTPayload | null> {
+export async function verifyToken(token: string | undefined = ""): Promise<JWTPayload | null> {
   if (!token) {
     return null;
   }

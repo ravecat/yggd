@@ -11,9 +11,7 @@ function GuestPage() {
           Dynamic board grouped by status for daily task tracking (JSON:API)
         </p>
         <div className="flex min-h-80 flex-1 items-center justify-center px-6 text-center">
-          <p className="text-sm font-medium text-foreground">
-            Sign in to manage tasks.
-          </p>
+          <p className="text-sm font-medium text-foreground">Sign in to manage tasks.</p>
         </div>
       </div>
     </div>

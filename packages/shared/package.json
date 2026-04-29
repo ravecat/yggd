@@ -3,9 +3,9 @@
   "version": "0.2.0",
   "type": "module",
   "scripts": {
-    "lint": "pnpm exec eslint .",
-    "format": "pnpm exec eslint --fix . && pnpm exec prettier --write .",
-    "format.check": "pnpm exec eslint . && pnpm exec prettier --check ."
+    "lint": "biome lint .",
+    "format": "biome check --write .",
+    "format.check": "biome ci ."
   },
   "main": "./dist/index.js",
   "module": "./dist/index.js",

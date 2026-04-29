@@ -38,9 +38,7 @@ type TypedSchema = {
 };
 
 // Utility type to convert union to intersection
-type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
-  k: infer I,
-) => void
+type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (k: infer I) => void
   ? I
   : never;
 
@@ -65,10 +63,7 @@ type InferUnionFieldValue<
                 }
                 ? UnionSchema[UnionKey]
                 : UnionSchema[UnionKey] extends TypedSchema
-                  ? InferResult<
-                      UnionSchema[UnionKey],
-                      FieldSelection[FieldIndex][UnionKey]
-                    >
+                  ? InferResult<UnionSchema[UnionKey], FieldSelection[FieldIndex][UnionKey]>
                   : never
               : never;
           }
@@ -160,10 +155,7 @@ type UnifiedFieldSelection<T extends TypedSchema> =
     ? LeafFieldSelection<T> // Base case: only primitives, no recursion
     : LeafFieldSelection<T> | ComplexFieldSelection<T>; // Recursive case
 
-type InferFieldValue<
-  T extends TypedSchema,
-  Field,
-> = Field extends T["__primitiveFields"]
+type InferFieldValue<T extends TypedSchema, Field> = Field extends T["__primitiveFields"]
   ? Field extends keyof T
     ? { [K in Field]: T[Field] }
     : never
@@ -187,10 +179,7 @@ type InferFieldValue<
                 }
               ? NonNullable<ReturnType> extends TypedSchema
                 ? null extends ReturnType
-                  ? InferResult<
-                      NonNullable<ReturnType>,
-                      Field[K]["fields"]
-                    > | null
+                  ? InferResult<NonNullable<ReturnType>, Field[K]["fields"]> | null
                   : InferResult<NonNullable<ReturnType>, Field[K]["fields"]>
                 : ReturnType
               : T[K] extends { __type: "Union"; __primitiveFields: any }
@@ -201,9 +190,7 @@ type InferFieldValue<
                         __primitiveFields: any;
                       }
                         ? Field[CurrentK] extends any[]
-                          ? Array<
-                              InferUnionFieldValue<T[CurrentK], Field[CurrentK]>
-                            > | null
+                          ? Array<InferUnionFieldValue<T[CurrentK], Field[CurrentK]>> | null
                           : never
                         : never;
                     }
@@ -213,10 +200,7 @@ type InferFieldValue<
                         __primitiveFields: any;
                       }
                         ? Field[CurrentK] extends any[]
-                          ? InferUnionFieldValue<
-                              T[CurrentK],
-                              Field[CurrentK]
-                            > | null
+                          ? InferUnionFieldValue<T[CurrentK], Field[CurrentK]> | null
                           : never
                         : never;
                     }
@@ -257,14 +241,13 @@ type InferPaginationType<Page> = Page extends { offset: any }
 
 // Returns either non-paginated (array) or paginated result based on page params
 // For single pagination type support (offset-only or keyset-only)
-// @ts-ignore
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-type ConditionalPaginatedResult<Page, RecordType, PaginatedType> =
-  Page extends undefined
-    ? RecordType
-    : HasPaginationParams<Page> extends true
-      ? PaginatedType
-      : RecordType;
+// @ts-expect-error
+// biome-ignore lint/correctness/noUnusedVariables: generated type keeps a stable generic signature.
+type ConditionalPaginatedResult<Page, RecordType, PaginatedType> = Page extends undefined
+  ? RecordType
+  : HasPaginationParams<Page> extends true
+    ? PaginatedType
+    : RecordType;
 
 // For actions supporting both offset and keyset pagination
 // Infers the specific pagination type based on which params were passed
@@ -279,8 +262,10 @@ type ConditionalPaginatedResultMixed<Page, RecordType, OffsetType, KeysetType> =
           : OffsetType | KeysetType // Fallback to union if can't determine
       : RecordType;
 
-export type SuccessDataFunc<T extends (...args: any[]) => Promise<any>> =
-  Extract<Awaited<ReturnType<T>>, { success: true }>["data"];
+export type SuccessDataFunc<T extends (...args: any[]) => Promise<any>> = Extract<
+  Awaited<ReturnType<T>>,
+  { success: true }
+>["data"];
 
 export type ErrorData<T extends (...args: any[]) => Promise<any>> = Extract<
   Awaited<ReturnType<T>>,
@@ -307,20 +292,14 @@ export type AshRpcError = {
  * Returns null if no CSRF token is found
  */
 export function getPhoenixCSRFToken(): string | null {
-  return (
-    document
-      ?.querySelector("meta[name='csrf-token']")
-      ?.getAttribute("content") || null
-  );
+  return document?.querySelector("meta[name='csrf-token']")?.getAttribute("content") || null;
 }
 
 /**
  * Builds headers object with CSRF token for Phoenix applications
  * Returns headers object with X-CSRF-Token (if available)
  */
-export function buildCSRFHeaders(
-  headers: Record<string, string> = {},
-): Record<string, string> {
+export function buildCSRFHeaders(headers: Record<string, string> = {}): Record<string, string> {
   const csrfToken = getPhoenixCSRFToken();
   if (csrfToken) {
     headers["X-CSRF-Token"] = csrfToken;
@@ -360,12 +339,9 @@ export async function getByEmail<Fields extends GetByEmailFields>(config: {
   fields: Fields;
   headers?: Record<string, string>;
   fetchOptions?: RequestInit;
-  customFetch?: (
-    input: RequestInfo | URL,
-    init?: RequestInit,
-  ) => Promise<Response>;
+  customFetch?: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
 }): Promise<GetByEmailResult<Fields>> {
-  let processedConfig = config;
+  const processedConfig = config;
 
   const payload = {
     action: "get_by_email",
@@ -379,8 +355,7 @@ export async function getByEmail<Fields extends GetByEmailFields>(config: {
     ...config.headers,
   };
 
-  const fetchFunction =
-    config.customFetch || processedConfig.customFetch || fetch;
+  const fetchFunction = config.customFetch || processedConfig.customFetch || fetch;
   const fetchOptions: RequestInit = {
     ...processedConfig.fetchOptions,
     ...config.fetchOptions,
@@ -420,12 +395,9 @@ export async function validateGetByEmail(config: {
   input: GetByEmailInput;
   headers?: Record<string, string>;
   fetchOptions?: RequestInit;
-  customFetch?: (
-    input: RequestInfo | URL,
-    init?: RequestInit,
-  ) => Promise<Response>;
+  customFetch?: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
 }): Promise<ValidateGetByEmailResult> {
-  let processedConfig = config;
+  const processedConfig = config;
 
   const payload = {
     action: "get_by_email",
@@ -438,8 +410,7 @@ export async function validateGetByEmail(config: {
     ...config.headers,
   };
 
-  const fetchFunction =
-    config.customFetch || processedConfig.customFetch || fetch;
+  const fetchFunction = config.customFetch || processedConfig.customFetch || fetch;
   const fetchOptions: RequestInit = {
     ...processedConfig.fetchOptions,
     ...config.fetchOptions,
@@ -508,10 +479,7 @@ export type ListUsersConfig = {
       };
   headers?: Record<string, string>;
   fetchOptions?: RequestInit;
-  customFetch?: (
-    input: RequestInfo | URL,
-    init?: RequestInit,
-  ) => Promise<Response>;
+  customFetch?: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
 };
 
 export type ListUsersResult<
@@ -529,13 +497,10 @@ export type ListUsersResult<
       }>;
     };
 
-export async function listUsers<
-  Fields extends ListUsersFields,
-  Config extends ListUsersConfig,
->(
+export async function listUsers<Fields extends ListUsersFields, Config extends ListUsersConfig>(
   config: Config & { fields: Fields },
 ): Promise<ListUsersResult<Fields, Config["page"]>> {
-  let processedConfig = config;
+  const processedConfig = config;
 
   const payload = {
     action: "list_users",
@@ -551,8 +516,7 @@ export async function listUsers<
     ...config.headers,
   };
 
-  const fetchFunction =
-    config.customFetch || processedConfig.customFetch || fetch;
+  const fetchFunction = config.customFetch || processedConfig.customFetch || fetch;
   const fetchOptions: RequestInit = {
     ...processedConfig.fetchOptions,
     ...config.fetchOptions,
@@ -591,12 +555,9 @@ export type ValidateListUsersResult =
 export async function validateListUsers(config: {
   headers?: Record<string, string>;
   fetchOptions?: RequestInit;
-  customFetch?: (
-    input: RequestInfo | URL,
-    init?: RequestInit,
-  ) => Promise<Response>;
+  customFetch?: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
 }): Promise<ValidateListUsersResult> {
-  let processedConfig = config;
+  const processedConfig = config;
 
   const payload = {
     action: "list_users",
@@ -608,8 +569,7 @@ export async function validateListUsers(config: {
     ...config.headers,
   };
 
-  const fetchFunction =
-    config.customFetch || processedConfig.customFetch || fetch;
+  const fetchFunction = config.customFetch || processedConfig.customFetch || fetch;
   const fetchOptions: RequestInit = {
     ...processedConfig.fetchOptions,
     ...config.fetchOptions,

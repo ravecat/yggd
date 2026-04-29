@@ -7,8 +7,7 @@
     "production": [
       "default",
       "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)",
-      "!{projectRoot}/**/?(*.)+(spec|test).svelte",
-      "!{projectRoot}/eslint.config.[jt]s"
+      "!{projectRoot}/**/?(*.)+(spec|test).svelte"
     ]
   },
   "targets": {

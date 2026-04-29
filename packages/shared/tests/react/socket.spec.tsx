@@ -93,11 +93,9 @@ describe("Socket Context", () => {
     expect(mockSocketInstances[mockSocketInstances.length - 1].url).toBe(
       process.env.PUBLIC_PHOENIX_URL,
     );
-    expect(mockSocketInstances[mockSocketInstances.length - 1].options).toEqual(
-      {
-        params: {},
-      },
-    );
+    expect(mockSocketInstances[mockSocketInstances.length - 1].options).toEqual({
+      params: {},
+    });
 
     unmount();
   });
@@ -110,9 +108,7 @@ describe("Socket Context", () => {
       </Socket>,
     );
 
-    expect(mockSocketInstances[mockSocketInstances.length - 1].url).toBe(
-      customUrl,
-    );
+    expect(mockSocketInstances[mockSocketInstances.length - 1].url).toBe(customUrl);
 
     unmount();
   });
@@ -125,9 +121,7 @@ describe("Socket Context", () => {
       </Socket>,
     );
 
-    expect(mockSocketInstances[mockSocketInstances.length - 1].options).toEqual(
-      customOpts,
-    );
+    expect(mockSocketInstances[mockSocketInstances.length - 1].options).toEqual(customOpts);
 
     unmount();
   });
@@ -141,12 +135,8 @@ describe("Socket Context", () => {
       </Socket>,
     );
 
-    expect(mockSocketInstances[mockSocketInstances.length - 1].url).toBe(
-      customUrl,
-    );
-    expect(mockSocketInstances[mockSocketInstances.length - 1].options).toEqual(
-      customOpts,
-    );
+    expect(mockSocketInstances[mockSocketInstances.length - 1].url).toBe(customUrl);
+    expect(mockSocketInstances[mockSocketInstances.length - 1].options).toEqual(customOpts);
 
     unmount();
   });
@@ -270,11 +260,7 @@ describe("Socket Context", () => {
   test("maintains same socket instance across re-renders", () => {
     const TestComponent = () => {
       const socket = useSocket();
-      return (
-        <div data-testid="socket-id">
-          {socket ? (socket as MockSocketInstance).url : ""}
-        </div>
-      );
+      return <div data-testid="socket-id">{socket ? (socket as MockSocketInstance).url : ""}</div>;
     };
 
     const { rerender } = render(
@@ -400,9 +386,7 @@ describe("Socket Context", () => {
   test("handles multiple Socket providers (nested)", () => {
     const TestComponent = () => {
       const socket = useSocket();
-      return (
-        <div data-testid="socket-present">{socket ? "present" : "absent"}</div>
-      );
+      return <div data-testid="socket-present">{socket ? "present" : "absent"}</div>;
     };
 
     render(
@@ -423,13 +407,9 @@ describe("Socket Context", () => {
 
       return (
         <div>
-          <div data-testid="socket-url">
-            {socket ? (socket as MockSocketInstance).url : ""}
-          </div>
+          <div data-testid="socket-url">{socket ? (socket as MockSocketInstance).url : ""}</div>
           <div data-testid="socket-params">
-            {socket
-              ? JSON.stringify((socket as MockSocketInstance).options.params)
-              : ""}
+            {socket ? JSON.stringify((socket as MockSocketInstance).options.params) : ""}
           </div>
         </div>
       );

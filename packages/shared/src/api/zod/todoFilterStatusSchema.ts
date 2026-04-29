@@ -7,9 +7,7 @@ import type { TodoFilterStatus } from "../models/TodoFilterStatus";
 import { z } from "zod/v4";
 
 export const todoFilterStatusSchema = z.object({
-  eq: z.optional(
-    z.enum(["blocked", "backlog", "in_progress", "review", "done", "rejected"]),
-  ),
+  eq: z.optional(z.enum(["blocked", "backlog", "in_progress", "review", "done", "rejected"])),
   greater_than: z.optional(
     z.enum(["blocked", "backlog", "in_progress", "review", "done", "rejected"]),
   ),
@@ -17,16 +15,7 @@ export const todoFilterStatusSchema = z.object({
     z.enum(["blocked", "backlog", "in_progress", "review", "done", "rejected"]),
   ),
   in: z.optional(
-    z.array(
-      z.enum([
-        "blocked",
-        "backlog",
-        "in_progress",
-        "review",
-        "done",
-        "rejected",
-      ]),
-    ),
+    z.array(z.enum(["blocked", "backlog", "in_progress", "review", "done", "rejected"])),
   ),
   is_distinct_from: z.optional(z.string()),
   is_nil: z.optional(z.boolean()),
@@ -37,7 +26,5 @@ export const todoFilterStatusSchema = z.object({
   less_than_or_equal: z.optional(
     z.enum(["blocked", "backlog", "in_progress", "review", "done", "rejected"]),
   ),
-  not_eq: z.optional(
-    z.enum(["blocked", "backlog", "in_progress", "review", "done", "rejected"]),
-  ),
+  not_eq: z.optional(z.enum(["blocked", "backlog", "in_progress", "review", "done", "rejected"])),
 }) as unknown as z.ZodType<TodoFilterStatus>;

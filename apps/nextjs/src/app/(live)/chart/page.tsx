@@ -52,8 +52,7 @@ export default function ChartPage() {
     <div className="h-full overflow-auto">
       <div className="mx-auto flex h-full w-full max-w-6xl flex-col gap-4 px-4 py-4">
         <p className="py-2 text-sm text-muted-foreground">
-          Real-time charts for streaming data (WebSocket streams, Phoenix
-          Channels)
+          Real-time charts for streaming data (WebSocket streams, Phoenix Channels)
         </p>
         {status === "disconnected" && (
           <div className="rounded-md border border-destructive/50 bg-destructive/10 px-4 py-2 text-sm text-destructive">

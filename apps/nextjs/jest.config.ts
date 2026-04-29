@@ -1,5 +1,4 @@
-const serverOnlyStub =
-  require.resolve("next/dist/compiled/server-only/empty.js");
+const serverOnlyStub = require.resolve("next/dist/compiled/server-only/empty.js");
 
 const config = {
   displayName: "nextjs",
@@ -31,10 +30,7 @@ const config = {
   moduleFileExtensions: ["ts", "tsx", "js", "jsx"],
   coverageDirectory: "../../coverage/apps/nextjs",
   testEnvironment: "jsdom",
-  testMatch: [
-    "<rootDir>/tests/**/*.spec.[jt]s?(x)",
-    "<rootDir>/tests/**/*.test.[jt]s?(x)",
-  ],
+  testMatch: ["<rootDir>/tests/**/*.spec.[jt]s?(x)", "<rootDir>/tests/**/*.test.[jt]s?(x)"],
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
   transformIgnorePatterns: ["node_modules/(?!(jose)/)"],
   moduleNameMapper: {

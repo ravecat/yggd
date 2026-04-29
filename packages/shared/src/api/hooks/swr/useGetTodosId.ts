@@ -4,11 +4,7 @@
  */
 
 import useSWR from "swr";
-import type {
-  Client,
-  RequestConfig,
-  ResponseErrorConfig,
-} from "../../../lib/client";
+import type { Client, RequestConfig, ResponseErrorConfig } from "../../../lib/client";
 import type {
   GetTodosIdQueryResponse,
   GetTodosIdPathParams,
@@ -19,11 +15,7 @@ import { getTodosId } from "../../clients/getTodosId";
 export const getTodosIdQueryKey = (
   id: GetTodosIdPathParams["id"],
   params?: GetTodosIdQueryParams,
-) =>
-  [
-    { url: "/todos/:id", params: { id: id } },
-    ...(params ? [params] : []),
-  ] as const;
+) => [{ url: "/todos/:id", params: { id: id } }, ...(params ? [params] : [])] as const;
 
 export type GetTodosIdQueryKey = ReturnType<typeof getTodosIdQueryKey>;
 
@@ -47,36 +39,28 @@ export function useGetTodosId(
   id: GetTodosIdPathParams["id"],
   params?: GetTodosIdQueryParams,
   options: {
-    query?: Parameters<
-      typeof useSWR<GetTodosIdQueryResponse, ResponseErrorConfig<Error>>
-    >[2];
+    query?: Parameters<typeof useSWR<GetTodosIdQueryResponse, ResponseErrorConfig<Error>>>[2];
     client?: Partial<RequestConfig> & { client?: Client };
     shouldFetch?: boolean;
     immutable?: boolean;
   } = {},
 ) {
-  const {
-    query: queryOptions,
-    client: config = {},
-    shouldFetch = true,
-    immutable,
-  } = options ?? {};
+  const { query: queryOptions, client: config = {}, shouldFetch = true, immutable } = options ?? {};
 
   const queryKey = getTodosIdQueryKey(id, params);
 
-  return useSWR<
-    GetTodosIdQueryResponse,
-    ResponseErrorConfig<Error>,
-    GetTodosIdQueryKey | null
-  >(shouldFetch ? queryKey : null, {
-    ...getTodosIdQueryOptions(id, params, config),
-    ...(immutable
-      ? {
-          revalidateIfStale: false,
-          revalidateOnFocus: false,
-          revalidateOnReconnect: false,
-        }
-      : {}),
-    ...queryOptions,
-  });
+  return useSWR<GetTodosIdQueryResponse, ResponseErrorConfig<Error>, GetTodosIdQueryKey | null>(
+    shouldFetch ? queryKey : null,
+    {
+      ...getTodosIdQueryOptions(id, params, config),
+      ...(immutable
+        ? {
+            revalidateIfStale: false,
+            revalidateOnFocus: false,
+            revalidateOnReconnect: false,
+          }
+        : {}),
+      ...queryOptions,
+    },
+  );
 }

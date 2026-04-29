@@ -46,8 +46,7 @@ describe("updateBoardVisibility", () => {
     });
     patchBoardsIdMock.mockResolvedValue({ data: { id: "board-1" } });
 
-    const { updateBoardVisibility } =
-      await import("~/features/boards/mutations");
+    const { updateBoardVisibility } = await import("~/features/boards/mutations");
     const result = await updateBoardVisibility("board-1", "public");
 
     expect(patchBoardsIdMock).toHaveBeenCalledWith(
@@ -74,8 +73,7 @@ describe("updateBoardVisibility", () => {
     assignsMock.mockResolvedValue({ userId: null });
     configMock.mockResolvedValue({});
 
-    const { updateBoardVisibility } =
-      await import("~/features/boards/mutations");
+    const { updateBoardVisibility } = await import("~/features/boards/mutations");
     const result = await updateBoardVisibility("board-1", "private");
 
     expect(patchBoardsIdMock).not.toHaveBeenCalled();
@@ -95,8 +93,7 @@ describe("updateBoardVisibility", () => {
       }),
     );
 
-    const { updateBoardVisibility } =
-      await import("~/features/boards/mutations");
+    const { updateBoardVisibility } = await import("~/features/boards/mutations");
     const result = await updateBoardVisibility("board-1", "public");
 
     expect(revalidatePathMock).not.toHaveBeenCalled();
@@ -112,8 +109,7 @@ describe("updateBoardVisibility", () => {
     configMock.mockResolvedValue({});
     patchBoardsIdMock.mockRejectedValue(new Error("socket hang up"));
 
-    const { updateBoardVisibility } =
-      await import("~/features/boards/mutations");
+    const { updateBoardVisibility } = await import("~/features/boards/mutations");
     const result = await updateBoardVisibility("board-1", "private");
 
     expect(result).toEqual({

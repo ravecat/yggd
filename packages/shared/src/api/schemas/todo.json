@@ -23,14 +23,7 @@
         },
         "status": {
           "description": "Field included by default.",
-          "enum": [
-            "blocked",
-            "backlog",
-            "in_progress",
-            "review",
-            "done",
-            "rejected"
-          ],
+          "enum": ["blocked", "backlog", "in_progress", "review", "done", "rejected"],
           "type": "string"
         },
         "title": {

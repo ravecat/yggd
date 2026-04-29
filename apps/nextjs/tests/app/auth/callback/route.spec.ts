@@ -30,15 +30,11 @@ describe("auth callback route", () => {
   test("redirects callback errors to NEXTJS_APP_URL", async () => {
     const { GET } = await import("~/app/auth/callback/route");
     const response = await GET({
-      nextUrl: new URL(
-        "http://localhost:3000/auth/callback?error=access_denied",
-      ),
+      nextUrl: new URL("http://localhost:3000/auth/callback?error=access_denied"),
     } as never);
 
     expect(exchangeCodeForTokenMock).not.toHaveBeenCalled();
     expect(response.status).toBe(307);
-    expect(response.headers.get("location")).toBe(
-      "http://localhost:3000/?error=access_denied",
-    );
+    expect(response.headers.get("location")).toBe("http://localhost:3000/?error=access_denied");
   });
 });

@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  useCallback,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
 import type uPlot from "uplot";
 
 export type ChartOptions = Omit<uPlot.Options, "width" | "height"> & {
@@ -106,9 +100,7 @@ export function TimeSeriesChart({ ref, options }: TimeSeriesChartProps) {
         range: createRangeFollowX(windowSize),
       },
     },
-    series: (options.series ?? [{}]).map((s, i) =>
-      i === 0 ? s : { ...SERIES_DEFAULTS, ...s },
-    ),
+    series: (options.series ?? [{}]).map((s, i) => (i === 0 ? s : { ...SERIES_DEFAULTS, ...s })),
   };
   const optsRef = useRef(opts);
   optsRef.current = opts;
@@ -204,13 +196,10 @@ export function TimeSeriesChart({ ref, options }: TimeSeriesChartProps) {
             buf.push(new Array(buf[0].length).fill(NaN));
           }
 
-          const chunkLen = (chunk[0] as ArrayLike<number | null | undefined>)
-            .length;
+          const chunkLen = (chunk[0] as ArrayLike<number | null | undefined>).length;
           for (let i = 0; i < chunkLen; i++) {
             for (let s = 0; s < buf.length; s++) {
-              buf[s].push(
-                (chunk[s] as ArrayLike<number | null | undefined>)?.[i] ?? NaN,
-              );
+              buf[s].push((chunk[s] as ArrayLike<number | null | undefined>)?.[i] ?? NaN);
             }
           }
         }
@@ -219,9 +208,7 @@ export function TimeSeriesChart({ ref, options }: TimeSeriesChartProps) {
         if (!hasData) setHasData(true);
 
         if (uplotRef.current) {
-          uplotRef.current.setData(
-            bufferRef.current as unknown as uPlot.AlignedData,
-          );
+          uplotRef.current.setData(bufferRef.current as unknown as uPlot.AlignedData);
         } else {
           tryCreateUPlot();
         }
@@ -232,11 +219,7 @@ export function TimeSeriesChart({ ref, options }: TimeSeriesChartProps) {
 
   return (
     <div className="flex h-full min-h-0 flex-col overflow-hidden rounded-lg border border-border bg-card p-3">
-      {opts.title && (
-        <div className="mb-2 text-sm font-medium text-foreground">
-          {opts.title}
-        </div>
-      )}
+      {opts.title && <div className="mb-2 text-sm font-medium text-foreground">{opts.title}</div>}
       <div className="relative flex-1 overflow-hidden">
         {!hasData && (
           <div className="absolute inset-0 flex items-center justify-center text-xs text-muted-foreground">

@@ -5,7 +5,7 @@
   import Switcher from "./switcher.svelte";
   import ThemeToggle from "./theme-toggle.svelte";
 
-  let { frameworks }: { frameworks: Framework[] } = $props();
+  const { frameworks }: { frameworks: Framework[] } = $props();
 </script>
 
 <header class="border-border bg-background">
@@ -15,9 +15,7 @@
     <div class="flex items-center">
       <Switcher {frameworks} />
     </div>
-    <div
-      class="order-last flex w-full items-center justify-center sm:order-0 sm:w-auto"
-    >
+    <div class="order-last flex w-full items-center justify-center sm:order-0 sm:w-auto">
       <Navbar />
     </div>
     <div class="flex items-center justify-end gap-2">

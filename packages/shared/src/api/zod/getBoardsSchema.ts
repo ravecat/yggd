@@ -19,9 +19,7 @@ export const getBoardsQueryParamsSchema = z
   .object({
     get filter() {
       return boardFilterSchema
-        .describe(
-          "Filters the query to results matching the given filter object",
-        )
+        .describe("Filters the query to results matching the given filter object")
         .optional();
     },
     sort: z.optional(
@@ -51,14 +49,10 @@ export const getBoardsQueryParamsSchema = z
           limit: z.optional(z.coerce.number().int().min(1)),
           offset: z.optional(z.coerce.number().int().min(0)),
         })
-        .describe(
-          "Paginates the response with the limit and offset or keyset pagination.",
-        ),
+        .describe("Paginates the response with the limit and offset or keyset pagination."),
     ),
     include: z.optional(
-      z
-        .array(z.enum(["owner"]))
-        .describe("Relationship paths to include in the response"),
+      z.array(z.enum(["owner"])).describe("Relationship paths to include in the response"),
     ),
     fields: z.optional(
       z
@@ -101,9 +95,7 @@ export const getBoardsQueryParamsSchema = z
               .describe("Field names for user"),
           ),
         })
-        .describe(
-          "Limits the response fields to only those listed for each type",
-        ),
+        .describe("Limits the response fields to only those listed for each type"),
     ),
   })
   .optional() as unknown as z.ZodType<GetBoardsQueryParams>;

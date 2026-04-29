@@ -92,19 +92,12 @@
           </span>
           <span>{metric.label}</span>
         </div>
-        <div class="stats-panel__value">
-          {metric.value}
-        </div>
-        <div class="stats-panel__sub">
-          {metric.detail}
-        </div>
+        <div class="stats-panel__value">{metric.value}</div>
+        <div class="stats-panel__sub">{metric.detail}</div>
       </article>
     {/each}
 
-    <aside
-      class="stats-panel__cell stats-panel__cell--wide"
-      aria-label="Last update"
-    >
+    <aside class="stats-panel__cell stats-panel__cell--wide" aria-label="Last update">
       <div class="stats-panel__label">
         <span class="stats-panel__icon">
           <DatabaseIcon size="0.875rem" aria-hidden="true" />
@@ -113,9 +106,7 @@
         <span class="stats-panel__live-dot stats-panel__live-dot--stale"></span>
         <span>{lastUpdate.state}</span>
       </div>
-      <div class="stats-panel__last-update-value">
-        {lastUpdate.time}
-      </div>
+      <div class="stats-panel__last-update-value">{lastUpdate.time}</div>
     </aside>
   </div>
 </section>
@@ -128,8 +119,7 @@
     --stats-panel-faint: hsl(var(--border));
 
     color: var(--stats-panel-ink);
-    font-family:
-      ui-monospace, "SF Mono", "Cascadia Mono", "Consolas", monospace;
+    font-family: ui-monospace, "SF Mono", "Cascadia Mono", "Consolas", monospace;
   }
 
   .stats-panel__grid {

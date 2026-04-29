@@ -19,9 +19,7 @@ export const getTodosQueryParamsSchema = z
   .object({
     get filter() {
       return todoFilterSchema
-        .describe(
-          "Filters the query to results matching the given filter object",
-        )
+        .describe("Filters the query to results matching the given filter object")
         .optional();
     },
     sort: z.optional(
@@ -57,14 +55,10 @@ export const getTodosQueryParamsSchema = z
           limit: z.optional(z.coerce.number().int().min(1)),
           offset: z.optional(z.coerce.number().int().min(0)),
         })
-        .describe(
-          "Paginates the response with the limit and offset or keyset pagination.",
-        ),
+        .describe("Paginates the response with the limit and offset or keyset pagination."),
     ),
     include: z.optional(
-      z
-        .array(z.enum(["board"]))
-        .describe("Relationship paths to include in the response"),
+      z.array(z.enum(["board"])).describe("Relationship paths to include in the response"),
     ),
     fields: z.optional(
       z
@@ -107,9 +101,7 @@ export const getTodosQueryParamsSchema = z
               .describe("Field names for user"),
           ),
         })
-        .describe(
-          "Limits the response fields to only those listed for each type",
-        ),
+        .describe("Limits the response fields to only those listed for each type"),
     ),
   })
   .optional() as unknown as z.ZodType<GetTodosQueryParams>;
@@ -139,16 +131,7 @@ export const getTodos200Schema = z.object({
     z
       .object({
         statuses: z.optional(
-          z.array(
-            z.enum([
-              "blocked",
-              "backlog",
-              "in_progress",
-              "review",
-              "done",
-              "rejected",
-            ]),
-          ),
+          z.array(z.enum(["blocked", "backlog", "in_progress", "review", "done", "rejected"])),
         ),
       })
       .catchall(z.any()),

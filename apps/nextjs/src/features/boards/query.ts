@@ -29,18 +29,16 @@ export const fetchCurrentBoard = cache(async (): Promise<Board | null> => {
   return response.data?.[0] ?? null;
 });
 
-export const fetchBoard = cache(
-  async (boardId: string): Promise<Board | null> => {
-    try {
-      const response = await getBoardsId(boardId, undefined, await config());
+export const fetchBoard = cache(async (boardId: string): Promise<Board | null> => {
+  try {
+    const response = await getBoardsId(boardId, undefined, await config());
 
-      return response.data ?? null;
-    } catch (error) {
-      if (isApiError(error) && error.hasStatus(400, 403, 404, 422)) {
-        return null;
-      }
-
-      throw error;
+    return response.data ?? null;
+  } catch (error) {
+    if (isApiError(error) && error.hasStatus(400, 403, 404, 422)) {
+      return null;
     }
-  },
-);
+
+    throw error;
+  }
+});

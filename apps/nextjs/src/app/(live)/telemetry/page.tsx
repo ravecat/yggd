@@ -70,8 +70,8 @@ export default function TelemetryPage() {
     <div className="h-full overflow-hidden">
       <div className="mx-auto flex h-full w-full max-w-6xl flex-col gap-2 px-4">
         <p className="py-2 text-sm text-muted-foreground">
-          Live runtime metrics dashboard for BEAM and host signals
-          (OpenTelemetry OTLP, Erlang :telemetry, :os_mon, Phoenix Channels)
+          Live runtime metrics dashboard for BEAM and host signals (OpenTelemetry OTLP, Erlang
+          :telemetry, :os_mon, Phoenix Channels)
         </p>
         <ScrollArea className="h-0 flex-1">
           <div className="grid min-h-full auto-rows-[20rem] gap-2 pb-4 sm:grid-cols-2 lg:auto-rows-[22rem]">

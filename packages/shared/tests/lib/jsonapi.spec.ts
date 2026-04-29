@@ -30,10 +30,7 @@ describe("jsonapi utilities", () => {
   test("ApiError derives the first error message", () => {
     expect(
       new ApiError({
-        errors: [
-          { detail: "Board not found", status: "404" },
-          { title: "Ignored" },
-        ],
+        errors: [{ detail: "Board not found", status: "404" }, { title: "Ignored" }],
       }).message,
     ).toBe("Board not found");
   });
@@ -86,10 +83,7 @@ describe("jsonapi utilities", () => {
     ]);
     expect(error.errors).toEqual({
       firstName: ["First name must contain at least two characters."],
-      password: [
-        "Missing punctuation character.",
-        "Password confirmation does not match.",
-      ],
+      password: ["Missing punctuation character.", "Password confirmation does not match."],
       boardId: ["Board query parameter is invalid."],
       general: ["unknown_error"],
     });

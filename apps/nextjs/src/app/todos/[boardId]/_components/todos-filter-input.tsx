@@ -14,26 +14,23 @@ export function TodosFilterInput({ value }: TodosFilterInputProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
-  const updateFilter = useDebouncedCallback(
-    (nextValue: string, currentQuery: string) => {
-      const nextParams = new URLSearchParams(currentQuery);
+  const updateFilter = useDebouncedCallback((nextValue: string, currentQuery: string) => {
+    const nextParams = new URLSearchParams(currentQuery);
 
-      if (nextValue) {
-        nextParams.set("filter", nextValue);
-      } else {
-        nextParams.delete("filter");
-      }
+    if (nextValue) {
+      nextParams.set("filter", nextValue);
+    } else {
+      nextParams.delete("filter");
+    }
 
-      const query = nextParams.toString();
+    const query = nextParams.toString();
 
-      startTransition(() => {
-        router.replace(query ? `${pathname}?${query}` : pathname, {
-          scroll: false,
-        });
+    startTransition(() => {
+      router.replace(query ? `${pathname}?${query}` : pathname, {
+        scroll: false,
       });
-    },
-    300,
-  );
+    });
+  }, 300);
 
   useEffect(() => {
     return () => {

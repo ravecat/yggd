@@ -1,14 +1,7 @@
 import { Suspense } from "react";
-import {
-  TodoModalContent,
-  TodoModalFallback,
-} from "./_components/todo-modal-content";
+import { TodoModalContent, TodoModalFallback } from "./_components/todo-modal-content";
 
-export default function TodoModal({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default function TodoModal({ params }: { params: Promise<{ id: string }> }) {
   return (
     <Suspense fallback={<TodoModalFallback />}>
       <TodoModalContent params={params} />

@@ -8,17 +8,14 @@ import { useSocket } from "@rvct/shared/react";
 import { ExcalidrawBinding } from "y-excalidraw";
 import "@excalidraw/excalidraw/index.css";
 
-const Excalidraw = dynamic(
-  async () => (await import("@excalidraw/excalidraw")).Excalidraw,
-  {
-    ssr: false,
-    loading: () => (
-      <div className="h-full w-full flex items-center justify-center">
-        <div className="text-gray-400">Loading canvas...</div>
-      </div>
-    ),
-  },
-);
+const Excalidraw = dynamic(async () => (await import("@excalidraw/excalidraw")).Excalidraw, {
+  ssr: false,
+  loading: () => (
+    <div className="h-full w-full flex items-center justify-center">
+      <div className="text-gray-400">Loading canvas...</div>
+    </div>
+  ),
+});
 
 export function ExcalidrawCanvas() {
   const socket = useSocket();
@@ -37,9 +34,9 @@ export function ExcalidrawCanvas() {
       const { ydoc, provider } = await getExcalidrawDocument(socket);
 
       currentBinding = new ExcalidrawBinding(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- y-excalidraw requires Y.Array<Y.Map<any>>
+        // biome-ignore lint/suspicious/noExplicitAny: y-excalidraw requires Y.Array<Y.Map<any>>.
         ydoc.getArray<any>("elements"),
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- y-excalidraw requires Y.Map<any>
+        // biome-ignore lint/suspicious/noExplicitAny: y-excalidraw requires Y.Map<any>.
         ydoc.getMap<any>("assets"),
         api,
         provider.awareness,

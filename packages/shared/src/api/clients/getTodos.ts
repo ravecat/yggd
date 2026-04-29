@@ -4,15 +4,8 @@
  */
 
 import fetch from "../../lib/client";
-import type {
-  Client,
-  RequestConfig,
-  ResponseErrorConfig,
-} from "../../lib/client";
-import type {
-  GetTodosQueryResponse,
-  GetTodosQueryParams,
-} from "../models/GetTodos";
+import type { Client, RequestConfig, ResponseErrorConfig } from "../../lib/client";
+import type { GetTodosQueryResponse, GetTodosQueryParams } from "../models/GetTodos";
 
 function getGetTodosUrl() {
   const res = { method: "GET", url: `/todos` as const };
@@ -29,11 +22,7 @@ export async function getTodos(
 ) {
   const { client: request = fetch, ...requestConfig } = config;
 
-  const res = await request<
-    GetTodosQueryResponse,
-    ResponseErrorConfig<Error>,
-    unknown
-  >({
+  const res = await request<GetTodosQueryResponse, ResponseErrorConfig<Error>, unknown>({
     method: "GET",
     url: getGetTodosUrl().url.toString(),
     params,

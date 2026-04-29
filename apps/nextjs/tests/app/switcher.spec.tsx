@@ -3,9 +3,7 @@
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import { renderToStaticMarkup } from "react-dom/server";
 
-const headersMock = jest.fn(
-  async () => new Headers({ host: "localhost:3000" }),
-);
+const headersMock = jest.fn(async () => new Headers({ host: "localhost:3000" }));
 
 jest.mock("next/headers", () => ({
   headers: headersMock,
@@ -23,18 +21,10 @@ jest.mock("~/shared/ui/button", () => ({
 }));
 
 jest.mock("~/shared/ui/dropdown-menu", () => ({
-  DropdownMenu: ({ children }: { children: React.ReactNode }) => (
-    <div>{children}</div>
-  ),
-  DropdownMenuTrigger: ({ children }: { children: React.ReactNode }) => (
-    <div>{children}</div>
-  ),
-  DropdownMenuContent: ({ children }: { children: React.ReactNode }) => (
-    <div>{children}</div>
-  ),
-  DropdownMenuItem: ({ children }: { children: React.ReactNode }) => (
-    <div>{children}</div>
-  ),
+  DropdownMenu: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  DropdownMenuTrigger: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  DropdownMenuContent: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  DropdownMenuItem: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
 }));
 
 describe("Switcher", () => {
@@ -50,9 +40,7 @@ describe("Switcher", () => {
     process.env.NEXTJS_APP_URL = "https://nextjs.example.com";
     process.env.SVELTEKIT_APP_URL = "https://sveltekit.example.com";
     process.env.PREACT_APP_URL = "https://preact.example.com";
-    headersMock.mockResolvedValue(
-      new Headers({ host: "sveltekit.example.com" }),
-    );
+    headersMock.mockResolvedValue(new Headers({ host: "sveltekit.example.com" }));
 
     const { Switcher } = await import("~/app/_components/switcher");
     const html = renderToStaticMarkup(await Switcher());

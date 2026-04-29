@@ -11,13 +11,9 @@ jest.mock("next/server", () => ({
 }));
 
 jest.mock("~/app/(live)/_components/live-socket-provider", () => ({
-  LiveSocketProvider: ({
-    children,
-    url,
-  }: {
-    children: React.ReactNode;
-    url: string;
-  }) => <div data-socket-url={url}>{children}</div>,
+  LiveSocketProvider: ({ children, url }: { children: React.ReactNode; url: string }) => (
+    <div data-socket-url={url}>{children}</div>
+  ),
 }));
 
 describe("LiveLayout", () => {
@@ -44,9 +40,7 @@ describe("LiveLayout", () => {
     const html = renderToStaticMarkup(element);
 
     expect(connectionMock).toHaveBeenCalledTimes(1);
-    expect(html).toContain(
-      'data-socket-url="wss://channel.example.com/socket"',
-    );
+    expect(html).toContain('data-socket-url="wss://channel.example.com/socket"');
     expect(html).toContain("Content");
   });
 });

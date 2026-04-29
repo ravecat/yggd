@@ -15,11 +15,7 @@ export const userSchema = z
       z
         .object({
           email: z.string().describe("Field included by default."),
-          name: z.optional(
-            z
-              .union([z.string(), z.null()])
-              .describe("Field included by default."),
-          ),
+          name: z.optional(z.union([z.string(), z.null()]).describe("Field included by default.")),
         })
         .describe("An attributes object for a user"),
     ),
@@ -44,6 +40,4 @@ export const userSchema = z
     ),
     type: z.string(),
   })
-  .describe(
-    'A "Resource object" representing a user',
-  ) as unknown as z.ZodType<User>;
+  .describe('A "Resource object" representing a user') as unknown as z.ZodType<User>;

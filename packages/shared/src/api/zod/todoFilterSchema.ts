@@ -34,9 +34,7 @@ export const todoFilterSchema = z
     },
     get board() {
       return boardFilterSchema
-        .describe(
-          "Filters the query to results matching the given filter object",
-        )
+        .describe("Filters the query to results matching the given filter object")
         .optional();
     },
     get board_id() {
@@ -53,9 +51,7 @@ export const todoFilterSchema = z
     },
     get not() {
       return todoFilterSchema
-        .describe(
-          "Filters the query to results matching the given filter object",
-        )
+        .describe("Filters the query to results matching the given filter object")
         .optional();
     },
     get or() {

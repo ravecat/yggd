@@ -9,22 +9,11 @@ import {
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useActionState, useState } from "react";
 import { createTodo } from "~/features/todos/mutations";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "~/shared/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "~/shared/ui/dialog";
 import { Button } from "~/shared/ui/button";
 import { Input } from "~/shared/ui/input";
 import { Label } from "~/shared/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/shared/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/shared/ui/select";
 import { Textarea } from "~/shared/ui/textarea";
 
 function CreateTodoModalFallback() {
@@ -79,9 +68,7 @@ function CreateTodoModalContent() {
   const [priority, setPriority] = useState<AttributesPriorityEnum2Key>(
     attributesPriorityEnum2.medium,
   );
-  const [status, setStatus] = useState<AttributesStatusEnum2Key>(
-    attributesStatusEnum2.backlog,
-  );
+  const [status, setStatus] = useState<AttributesStatusEnum2Key>(attributesStatusEnum2.backlog);
 
   return (
     <Dialog open onOpenChange={(open) => !open && router.back()}>
@@ -123,9 +110,7 @@ function CreateTodoModalContent() {
               className="min-h-[200px]"
               disabled={pending}
               placeholder="Describe your todo..."
-              aria-describedby={
-                state.errors?.content ? "content-error" : undefined
-              }
+              aria-describedby={state.errors?.content ? "content-error" : undefined}
             />
             {state.errors?.content && (
               <p id="content-error" className="mt-1 text-sm text-red-600">
@@ -141,29 +126,23 @@ function CreateTodoModalContent() {
               </Label>
               <Select
                 value={priority}
-                onValueChange={(value) =>
-                  setPriority(value as AttributesPriorityEnum2Key)
-                }
+                onValueChange={(value) => setPriority(value as AttributesPriorityEnum2Key)}
                 disabled={pending}
               >
                 <SelectTrigger
                   id="priority"
-                  aria-describedby={
-                    state.errors?.priority ? "priority-error" : undefined
-                  }
+                  aria-describedby={state.errors?.priority ? "priority-error" : undefined}
                 >
                   <SelectValue placeholder="Select priority" />
                 </SelectTrigger>
                 <SelectContent>
-                  {(
-                    Object.values(
-                      attributesPriorityEnum2,
-                    ) as AttributesPriorityEnum2Key[]
-                  ).map((value) => (
-                    <SelectItem key={value} value={value}>
-                      {value}
-                    </SelectItem>
-                  ))}
+                  {(Object.values(attributesPriorityEnum2) as AttributesPriorityEnum2Key[]).map(
+                    (value) => (
+                      <SelectItem key={value} value={value}>
+                        {value}
+                      </SelectItem>
+                    ),
+                  )}
                 </SelectContent>
               </Select>
               {state.errors?.priority && (
@@ -179,29 +158,23 @@ function CreateTodoModalContent() {
               </Label>
               <Select
                 value={status}
-                onValueChange={(value) =>
-                  setStatus(value as AttributesStatusEnum2Key)
-                }
+                onValueChange={(value) => setStatus(value as AttributesStatusEnum2Key)}
                 disabled={pending}
               >
                 <SelectTrigger
                   id="status"
-                  aria-describedby={
-                    state.errors?.status ? "status-error" : undefined
-                  }
+                  aria-describedby={state.errors?.status ? "status-error" : undefined}
                 >
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>
                 <SelectContent>
-                  {(
-                    Object.values(
-                      attributesStatusEnum2,
-                    ) as AttributesStatusEnum2Key[]
-                  ).map((value) => (
-                    <SelectItem key={value} value={value}>
-                      {value}
-                    </SelectItem>
-                  ))}
+                  {(Object.values(attributesStatusEnum2) as AttributesStatusEnum2Key[]).map(
+                    (value) => (
+                      <SelectItem key={value} value={value}>
+                        {value}
+                      </SelectItem>
+                    ),
+                  )}
                 </SelectContent>
               </Select>
               {state.errors?.status && (

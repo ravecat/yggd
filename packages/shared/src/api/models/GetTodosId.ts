@@ -31,8 +31,7 @@ export const fieldsBoardEnum7 = {
   todos: "todos",
 } as const;
 
-export type FieldsBoardEnum7Key =
-  (typeof fieldsBoardEnum7)[keyof typeof fieldsBoardEnum7];
+export type FieldsBoardEnum7Key = (typeof fieldsBoardEnum7)[keyof typeof fieldsBoardEnum7];
 
 export const fieldsTodoEnum7 = {
   id: "id",
@@ -46,8 +45,7 @@ export const fieldsTodoEnum7 = {
   board: "board",
 } as const;
 
-export type FieldsTodoEnum7Key =
-  (typeof fieldsTodoEnum7)[keyof typeof fieldsTodoEnum7];
+export type FieldsTodoEnum7Key = (typeof fieldsTodoEnum7)[keyof typeof fieldsTodoEnum7];
 
 export const fieldsUserEnum7 = {
   id: "id",
@@ -57,8 +55,7 @@ export const fieldsUserEnum7 = {
   identities: "identities",
 } as const;
 
-export type FieldsUserEnum7Key =
-  (typeof fieldsUserEnum7)[keyof typeof fieldsUserEnum7];
+export type FieldsUserEnum7Key = (typeof fieldsUserEnum7)[keyof typeof fieldsUserEnum7];
 
 export type GetTodosIdQueryParams = {
   /**

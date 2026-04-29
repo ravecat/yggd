@@ -9,14 +9,10 @@ export default function Error({
 }) {
   return (
     <div style={{ padding: "2rem", maxWidth: "1200px", margin: "0 auto" }}>
-      <h1
-        style={{ fontSize: "2.5rem", marginBottom: "2rem", color: "#dc2626" }}
-      >
+      <h1 style={{ fontSize: "2.5rem", marginBottom: "2rem", color: "#dc2626" }}>
         Error Loading Todos
       </h1>
-      <p style={{ fontSize: "1.1rem", color: "#666", marginBottom: "1rem" }}>
-        {error.message}
-      </p>
+      <p style={{ fontSize: "1.1rem", color: "#666", marginBottom: "1rem" }}>{error.message}</p>
       <button
         onClick={() => reset()}
         style={{

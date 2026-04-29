@@ -25,18 +25,11 @@ export const otelMetric = z
             .object({
               timeUnixNano: z
                 .string()
-                .describe(
-                  "Timestamp as nanoseconds since Unix epoch, encoded as string",
-                ),
-              asDouble: z
-                .number()
-                .describe("Floating-point metric value")
-                .optional(),
+                .describe("Timestamp as nanoseconds since Unix epoch, encoded as string"),
+              asDouble: z.number().describe("Floating-point metric value").optional(),
               asInt: z
                 .string()
-                .describe(
-                  "Integer metric value, encoded as string per OTLP convention",
-                )
+                .describe("Integer metric value, encoded as string per OTLP convention")
                 .optional(),
               attributes: z
                 .array(
@@ -50,9 +43,7 @@ export const otelMetric = z
                           doubleValue: z.number().optional(),
                           boolValue: z.boolean().optional(),
                         })
-                        .describe(
-                          "Typed value (stringValue, intValue, doubleValue, boolValue)",
-                        ),
+                        .describe("Typed value (stringValue, intValue, doubleValue, boolValue)"),
                     })
                     .describe("OTel key-value attribute pair"),
                 )

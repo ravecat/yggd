@@ -10,10 +10,7 @@
   },
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "global"],
-    "global": [
-      "{workspaceRoot}/jest.preset.js",
-      "{workspaceRoot}/eslint.config.mjs"
-    ]
+    "global": ["{workspaceRoot}/jest.preset.js", "{workspaceRoot}/biome.json"]
   },
   "plugins": [
     {
@@ -48,12 +45,6 @@
       }
     },
     {
-      "plugin": "@nx/eslint/plugin",
-      "options": {
-        "targetName": "lint"
-      }
-    },
-    {
       "plugin": "@nx/docker",
       "options": {
         "buildTarget": { "name": "package" }
@@ -67,6 +58,12 @@
     "test": {
       "cache": true,
       "dependsOn": ["^build"]
+    },
+    "lint": {
+      "cache": true
+    },
+    "format.check": {
+      "cache": true
     },
     "package": {
       "cache": true,
@@ -83,7 +80,7 @@
     "@nx/next": {
       "application": {
         "style": "css",
-        "linter": "eslint"
+        "linter": "none"
       }
     }
   },

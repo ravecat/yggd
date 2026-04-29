@@ -1,4 +1,4 @@
-import { type Todo } from "@rvct/shared";
+import type { Todo } from "@rvct/shared";
 import Link from "next/link";
 import { ChevronDownIcon } from "lucide-react";
 import type { Todos } from "~/features/todos/query";
@@ -17,9 +17,7 @@ export function TodosList({ data }: TodosListProps) {
       <div className="flex min-h-80 flex-1 items-center justify-center rounded-lg border border-dashed border-border bg-muted/20 px-6 text-center">
         <div className="space-y-2">
           <p className="text-lg font-medium text-foreground">No tasks yet</p>
-          <p className="text-sm text-muted-foreground">
-            This board does not have any tasks yet.
-          </p>
+          <p className="text-sm text-muted-foreground">This board does not have any tasks yet.</p>
         </div>
       </div>
     );
@@ -64,9 +62,7 @@ export function TodosList({ data }: TodosListProps) {
                 </span>
 
                 <span className="flex items-center gap-2 text-muted-foreground">
-                  <span className="text-[11px] font-medium">
-                    {column.todos.length}
-                  </span>
+                  <span className="text-[11px] font-medium">{column.todos.length}</span>
                   <ChevronDownIcon className="size-4 text-muted-foreground transition-transform group-open:rotate-180" />
                 </span>
               </summary>
@@ -95,9 +91,7 @@ export function TodosList({ data }: TodosListProps) {
 
                     {todo.attributes?.created_at && (
                       <time className="block text-[11px] text-muted-foreground">
-                        {new Date(
-                          todo.attributes.created_at,
-                        ).toLocaleDateString("en-US", {
+                        {new Date(todo.attributes.created_at).toLocaleDateString("en-US", {
                           month: "short",
                           day: "numeric",
                         })}
@@ -118,9 +112,7 @@ export function TodosList({ data }: TodosListProps) {
               key={column.key}
               className="flex items-center justify-between border-b border-border py-2"
             >
-              <span className="text-sm font-semibold leading-5 text-foreground">
-                {column.key}
-              </span>
+              <span className="text-sm font-semibold leading-5 text-foreground">{column.key}</span>
 
               <span className="text-[11px] font-medium text-muted-foreground">
                 {column.todos.length}
@@ -132,10 +124,7 @@ export function TodosList({ data }: TodosListProps) {
         <ScrollArea className="h-0 flex-1">
           <div className="grid min-h-full auto-cols-fr grid-flow-col gap-4">
             {tasks.map((column) => (
-              <section
-                key={column.key}
-                className="flex h-full min-h-full flex-col"
-              >
+              <section key={column.key} className="flex h-full min-h-full flex-col">
                 <div className="flex flex-1 flex-col gap-2.5">
                   {column.todos.map((todo) => (
                     <Link
@@ -160,9 +149,7 @@ export function TodosList({ data }: TodosListProps) {
 
                       {todo.attributes?.created_at && (
                         <time className="block text-[11px] text-muted-foreground">
-                          {new Date(
-                            todo.attributes.created_at,
-                          ).toLocaleDateString("en-US", {
+                          {new Date(todo.attributes.created_at).toLocaleDateString("en-US", {
                             month: "short",
                             day: "numeric",
                           })}

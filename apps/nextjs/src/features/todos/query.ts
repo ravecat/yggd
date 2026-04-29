@@ -21,10 +21,7 @@ type FetchTodosQuery = Omit<GetTodosQueryParams, "sort"> & {
   sort?: string | GetTodosQueryParamsSortEnumKey[];
 };
 
-export async function fetchTodos(
-  boardId: string,
-  query: FetchTodosQuery = {},
-): Promise<Todos> {
+export async function fetchTodos(boardId: string, query: FetchTodosQuery = {}): Promise<Todos> {
   const sort =
     typeof query.sort === "string"
       ? query.sort

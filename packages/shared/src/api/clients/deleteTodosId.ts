@@ -4,11 +4,7 @@
  */
 
 import fetch from "../../lib/client";
-import type {
-  Client,
-  RequestConfig,
-  ResponseErrorConfig,
-} from "../../lib/client";
+import type { Client, RequestConfig, ResponseErrorConfig } from "../../lib/client";
 import type {
   DeleteTodosIdMutationResponse,
   DeleteTodosIdPathParams,
@@ -31,11 +27,7 @@ export async function deleteTodosId(
 ) {
   const { client: request = fetch, ...requestConfig } = config;
 
-  const res = await request<
-    DeleteTodosIdMutationResponse,
-    ResponseErrorConfig<Error>,
-    unknown
-  >({
+  const res = await request<DeleteTodosIdMutationResponse, ResponseErrorConfig<Error>, unknown>({
     method: "DELETE",
     url: getDeleteTodosIdUrl(id).url.toString(),
     params,

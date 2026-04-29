@@ -2,11 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { fetchTodo } from "~/features/todos/query";
 
-export async function TodoView({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export async function TodoView({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const todo = await fetchTodo(id);
 
@@ -25,9 +21,7 @@ export async function TodoView({
         </Link>
       ) : null}
 
-      <h1 className="mb-6 text-4xl font-bold">
-        {todo.attributes?.title || "Untitled"}
-      </h1>
+      <h1 className="mb-6 text-4xl font-bold">{todo.attributes?.title || "Untitled"}</h1>
 
       {todo.attributes?.created_at && (
         <div className="mb-8 flex items-center gap-2 text-sm text-gray-600">
@@ -39,9 +33,7 @@ export async function TodoView({
             })}
           </time>
           <span>-</span>
-          <span className="capitalize">
-            {todo.attributes?.priority || "medium"} priority
-          </span>
+          <span className="capitalize">{todo.attributes?.priority || "medium"} priority</span>
         </div>
       )}
 

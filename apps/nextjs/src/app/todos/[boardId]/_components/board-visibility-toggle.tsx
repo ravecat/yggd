@@ -1,10 +1,7 @@
 "use client";
 
 import { Eye, EyeOff } from "lucide-react";
-import {
-  type AttributesVisibilityEnum2Key,
-  attributesVisibilityEnum2,
-} from "@rvct/shared";
+import { type AttributesVisibilityEnum2Key, attributesVisibilityEnum2 } from "@rvct/shared";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { updateBoardVisibility } from "~/features/boards/mutations";

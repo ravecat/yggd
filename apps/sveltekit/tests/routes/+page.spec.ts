@@ -13,9 +13,7 @@ describe("src/routes/+page.svelte", () => {
     expect(screen.getByText("Error Rate")).toBeTruthy();
     expect(screen.getByText("Bandwidth")).toBeTruthy();
     expect(screen.queryByText("Heat Index")).toBeNull();
-    expect(
-      screen.getByRole("complementary", { name: "Last update" }),
-    ).toBeTruthy();
+    expect(screen.getByRole("complementary", { name: "Last update" })).toBeTruthy();
     expect(screen.getByText("mock data")).toBeTruthy();
   });
 });

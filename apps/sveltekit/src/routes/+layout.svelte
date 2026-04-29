@@ -5,7 +5,7 @@
   import favicon from "../assets/favicon.svg";
   import type { LayoutProps } from "./$types";
 
-  let { children }: LayoutProps = $props();
+  const { children }: LayoutProps = $props();
 
   const headerLinks = [
     { href: "/canvas", label: "Canvas" },
@@ -18,7 +18,7 @@
 </script>
 
 <svelte:head>
-  <link rel="icon" href={favicon} />
+  <link rel="icon" href={favicon}>
 </svelte:head>
 
 <div class="app-layout">
@@ -27,19 +27,13 @@
     <nav class="app-header__nav" aria-label="Primary">
       <ul class="app-header__nav-list">
         {#each headerLinks as link (link.href)}
-          <li>
-            <a class="app-header__nav-link" href={resolve(link.href)}>
-              {link.label}
-            </a>
-          </li>
+          <li><a class="app-header__nav-link" href={resolve(link.href)}> {link.label} </a></li>
         {/each}
       </ul>
     </nav>
   </header>
 
-  <main class="app-layout__main">
-    {@render children()}
-  </main>
+  <main class="app-layout__main">{@render children()}</main>
 
   <footer class="app-layout__footer">
     <a
@@ -95,8 +89,7 @@
     gap: 1rem;
     row-gap: 0.625rem;
     flex-wrap: wrap;
-    font-family:
-      ui-monospace, "SF Mono", "Cascadia Mono", "Consolas", monospace;
+    font-family: ui-monospace, "SF Mono", "Cascadia Mono", "Consolas", monospace;
   }
 
   .app-header__site-name {
@@ -145,8 +138,7 @@
     flex-wrap: wrap;
     border-top: 0.0625rem solid hsl(var(--border));
     color: hsl(var(--muted-foreground));
-    font-family:
-      ui-monospace, "SF Mono", "Cascadia Mono", "Consolas", monospace;
+    font-family: ui-monospace, "SF Mono", "Cascadia Mono", "Consolas", monospace;
     font-size: 0.6875rem;
   }
 

@@ -4,11 +4,7 @@
  */
 
 import fetch from "../../lib/client";
-import type {
-  Client,
-  RequestConfig,
-  ResponseErrorConfig,
-} from "../../lib/client";
+import type { Client, RequestConfig, ResponseErrorConfig } from "../../lib/client";
 import type {
   GetBoardsIdQueryResponse,
   GetBoardsIdPathParams,
@@ -31,11 +27,7 @@ export async function getBoardsId(
 ) {
   const { client: request = fetch, ...requestConfig } = config;
 
-  const res = await request<
-    GetBoardsIdQueryResponse,
-    ResponseErrorConfig<Error>,
-    unknown
-  >({
+  const res = await request<GetBoardsIdQueryResponse, ResponseErrorConfig<Error>, unknown>({
     method: "GET",
     url: getGetBoardsIdUrl(id).url.toString(),
     params,

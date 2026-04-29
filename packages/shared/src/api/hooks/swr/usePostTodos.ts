@@ -4,11 +4,7 @@
  */
 
 import useSWRMutation from "swr/mutation";
-import type {
-  Client,
-  RequestConfig,
-  ResponseErrorConfig,
-} from "../../../lib/client";
+import type { Client, RequestConfig, ResponseErrorConfig } from "../../../lib/client";
 import type {
   PostTodosMutationRequest,
   PostTodosMutationResponse,
@@ -40,11 +36,7 @@ export function usePostTodos(
     shouldFetch?: boolean;
   } = {},
 ) {
-  const {
-    mutation: mutationOptions,
-    client: config = {},
-    shouldFetch = true,
-  } = options ?? {};
+  const { mutation: mutationOptions, client: config = {}, shouldFetch = true } = options ?? {};
   const mutationKey = postTodosMutationKey();
 
   return useSWRMutation<

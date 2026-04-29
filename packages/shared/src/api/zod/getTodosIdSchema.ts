@@ -22,9 +22,7 @@ export const getTodosIdPathParamsSchema = z.object({
 export const getTodosIdQueryParamsSchema = z
   .object({
     include: z.optional(
-      z
-        .array(z.enum(["board"]))
-        .describe("Relationship paths to include in the response"),
+      z.array(z.enum(["board"])).describe("Relationship paths to include in the response"),
     ),
     fields: z.optional(
       z
@@ -67,9 +65,7 @@ export const getTodosIdQueryParamsSchema = z
               .describe("Field names for user"),
           ),
         })
-        .describe(
-          "Limits the response fields to only those listed for each type",
-        ),
+        .describe("Limits the response fields to only those listed for each type"),
     ),
   })
   .optional() as unknown as z.ZodType<GetTodosIdQueryParams>;
@@ -79,9 +75,7 @@ export const getTodosIdQueryParamsSchema = z
  */
 export const getTodosId200Schema = z.object({
   get data() {
-    return todoSchema
-      .describe('A "Resource object" representing a todo')
-      .optional();
+    return todoSchema.describe('A "Resource object" representing a todo').optional();
   },
   get included() {
     return z

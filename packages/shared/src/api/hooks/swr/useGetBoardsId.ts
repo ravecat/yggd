@@ -4,11 +4,7 @@
  */
 
 import useSWR from "swr";
-import type {
-  Client,
-  RequestConfig,
-  ResponseErrorConfig,
-} from "../../../lib/client";
+import type { Client, RequestConfig, ResponseErrorConfig } from "../../../lib/client";
 import type {
   GetBoardsIdQueryResponse,
   GetBoardsIdPathParams,
@@ -19,11 +15,7 @@ import { getBoardsId } from "../../clients/getBoardsId";
 export const getBoardsIdQueryKey = (
   id: GetBoardsIdPathParams["id"],
   params?: GetBoardsIdQueryParams,
-) =>
-  [
-    { url: "/boards/:id", params: { id: id } },
-    ...(params ? [params] : []),
-  ] as const;
+) => [{ url: "/boards/:id", params: { id: id } }, ...(params ? [params] : [])] as const;
 
 export type GetBoardsIdQueryKey = ReturnType<typeof getBoardsIdQueryKey>;
 
@@ -47,36 +39,28 @@ export function useGetBoardsId(
   id: GetBoardsIdPathParams["id"],
   params?: GetBoardsIdQueryParams,
   options: {
-    query?: Parameters<
-      typeof useSWR<GetBoardsIdQueryResponse, ResponseErrorConfig<Error>>
-    >[2];
+    query?: Parameters<typeof useSWR<GetBoardsIdQueryResponse, ResponseErrorConfig<Error>>>[2];
     client?: Partial<RequestConfig> & { client?: Client };
     shouldFetch?: boolean;
     immutable?: boolean;
   } = {},
 ) {
-  const {
-    query: queryOptions,
-    client: config = {},
-    shouldFetch = true,
-    immutable,
-  } = options ?? {};
+  const { query: queryOptions, client: config = {}, shouldFetch = true, immutable } = options ?? {};
 
   const queryKey = getBoardsIdQueryKey(id, params);
 
-  return useSWR<
-    GetBoardsIdQueryResponse,
-    ResponseErrorConfig<Error>,
-    GetBoardsIdQueryKey | null
-  >(shouldFetch ? queryKey : null, {
-    ...getBoardsIdQueryOptions(id, params, config),
-    ...(immutable
-      ? {
-          revalidateIfStale: false,
-          revalidateOnFocus: false,
-          revalidateOnReconnect: false,
-        }
-      : {}),
-    ...queryOptions,
-  });
+  return useSWR<GetBoardsIdQueryResponse, ResponseErrorConfig<Error>, GetBoardsIdQueryKey | null>(
+    shouldFetch ? queryKey : null,
+    {
+      ...getBoardsIdQueryOptions(id, params, config),
+      ...(immutable
+        ? {
+            revalidateIfStale: false,
+            revalidateOnFocus: false,
+            revalidateOnReconnect: false,
+          }
+        : {}),
+      ...queryOptions,
+    },
+  );
 }

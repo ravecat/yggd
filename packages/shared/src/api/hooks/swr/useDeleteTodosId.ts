@@ -4,11 +4,7 @@
  */
 
 import useSWRMutation from "swr/mutation";
-import type {
-  Client,
-  RequestConfig,
-  ResponseErrorConfig,
-} from "../../../lib/client";
+import type { Client, RequestConfig, ResponseErrorConfig } from "../../../lib/client";
 import type {
   DeleteTodosIdMutationResponse,
   DeleteTodosIdPathParams,
@@ -19,9 +15,7 @@ import { deleteTodosId } from "../../clients/deleteTodosId";
 
 export const deleteTodosIdMutationKey = () => [{ url: "/todos/:id" }] as const;
 
-export type DeleteTodosIdMutationKey = ReturnType<
-  typeof deleteTodosIdMutationKey
->;
+export type DeleteTodosIdMutationKey = ReturnType<typeof deleteTodosIdMutationKey>;
 
 /**
  * @description /todos/:id operation on todo resource
@@ -41,11 +35,7 @@ export function useDeleteTodosId(
     shouldFetch?: boolean;
   } = {},
 ) {
-  const {
-    mutation: mutationOptions,
-    client: config = {},
-    shouldFetch = true,
-  } = options ?? {};
+  const { mutation: mutationOptions, client: config = {}, shouldFetch = true } = options ?? {};
   const mutationKey = deleteTodosIdMutationKey();
 
   return useSWRMutation<

@@ -1,11 +1,7 @@
-import * as React from "react";
+import type * as React from "react";
 import { cn } from "~/shared/lib/component";
 
-function Input({
-  className,
-  type = "text",
-  ...props
-}: React.ComponentProps<"input">) {
+function Input({ className, type = "text", ...props }: React.ComponentProps<"input">) {
   return (
     <input
       data-slot="input"

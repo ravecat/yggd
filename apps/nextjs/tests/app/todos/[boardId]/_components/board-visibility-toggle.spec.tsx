@@ -24,8 +24,9 @@ describe("BoardVisibilityToggle", () => {
   test("updates the board visibility", async () => {
     updateBoardVisibilityMock.mockResolvedValue({ visibility: "public" });
 
-    const { BoardVisibilityToggle } =
-      await import("~/app/todos/[boardId]/_components/board-visibility-toggle");
+    const { BoardVisibilityToggle } = await import(
+      "~/app/todos/[boardId]/_components/board-visibility-toggle"
+    );
 
     render(<BoardVisibilityToggle id="board-1" visibility="private" />);
 
@@ -56,8 +57,9 @@ describe("BoardVisibilityToggle", () => {
       },
     });
 
-    const { BoardVisibilityToggle } =
-      await import("~/app/todos/[boardId]/_components/board-visibility-toggle");
+    const { BoardVisibilityToggle } = await import(
+      "~/app/todos/[boardId]/_components/board-visibility-toggle"
+    );
 
     render(<BoardVisibilityToggle id="board-1" visibility="public" />);
 
@@ -72,10 +74,7 @@ describe("BoardVisibilityToggle", () => {
       await Promise.resolve();
     });
 
-    expect(updateBoardVisibilityMock).toHaveBeenCalledWith(
-      "board-1",
-      "private",
-    );
+    expect(updateBoardVisibilityMock).toHaveBeenCalledWith("board-1", "private");
     expect(refreshMock).not.toHaveBeenCalled();
     expect(
       screen.getByRole("button", {

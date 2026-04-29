@@ -13,9 +13,7 @@ export const joinReply = z.union([
   z.object({
     status: z.literal("error"),
     response: z.object({
-      reason: z
-        .string()
-        .describe('Error reason (e.g. "failed to initialize document")'),
+      reason: z.string().describe('Error reason (e.g. "failed to initialize document")'),
     }),
   }),
 ]);

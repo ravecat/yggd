@@ -1,8 +1,8 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <script>
       (() => {
         const root = document.documentElement;
@@ -13,22 +13,17 @@
         };
 
         if (!root.hasAttribute("data-theme")) {
-          setTheme(
-            localStorage.getItem("moda:theme") === "dark" ? "dark" : "light",
-          );
+          setTheme(localStorage.getItem("moda:theme") === "dark" ? "dark" : "light");
         }
 
         window.addEventListener(
           "storage",
           (event) =>
-            event.key === "moda:theme" &&
-            setTheme(event.newValue === "dark" ? "dark" : "light"),
+            event.key === "moda:theme" && setTheme(event.newValue === "dark" ? "dark" : "light"),
         );
 
         window.addEventListener("moda:set-theme", () => {
-          setTheme(
-            root.getAttribute("data-theme") === "dark" ? "light" : "dark",
-          );
+          setTheme(root.getAttribute("data-theme") === "dark" ? "light" : "dark");
         });
       })();
     </script>

@@ -1,11 +1,6 @@
 import type { GetTodosQueryParamsSortEnumKey } from "@rvct/shared";
 
-export const todoSortFields = [
-  "priority",
-  "updated_at",
-  "created_at",
-  "title",
-] as const;
+export const todoSortFields = ["priority", "updated_at", "created_at", "title"] as const;
 
 export type TodoSortField = (typeof todoSortFields)[number];
 export type TodoSortDirection = "asc" | "desc";
@@ -65,9 +60,7 @@ export function parseTodoSortRules(
     });
 }
 
-export function encodeTodoSortRule(
-  rule: TodoSortRule,
-): GetTodosQueryParamsSortEnumKey {
+export function encodeTodoSortRule(rule: TodoSortRule): GetTodosQueryParamsSortEnumKey {
   return `${rule.direction === "desc" ? "-" : ""}${rule.field}` as GetTodosQueryParamsSortEnumKey;
 }
 
@@ -75,12 +68,9 @@ export function encodeTodoSortRules(rules: TodoSortRule[]): string {
   return rules.map(encodeTodoSortRule).join(",");
 }
 
-export function getDefaultTodoSortRule(
-  selectedFields: TodoSortField[] = [],
-): TodoSortRule {
+export function getDefaultTodoSortRule(selectedFields: TodoSortField[] = []): TodoSortRule {
   const field =
-    todoSortFields.find((candidate) => !selectedFields.includes(candidate)) ??
-    todoSortFields[0];
+    todoSortFields.find((candidate) => !selectedFields.includes(candidate)) ?? todoSortFields[0];
 
   return {
     field,

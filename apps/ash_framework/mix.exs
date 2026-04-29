@@ -100,8 +100,11 @@ defmodule AshFramework.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ash.setup --quiet", "test"],
-      format: ["format", "bun assets run format"],
-      "format.check": ["format --check-formatted", "bun assets run format.check"],
+      "format.check": ["format --check-formatted"],
+      "assets.format": ["bun assets run format"],
+      "assets.format.check": ["bun assets run format.check"],
+      "assets.lint": ["bun assets run lint"],
+      "assets.check": ["bun assets run check"],
       "assets.setup": [
         "tailwind.install --if-missing",
         "esbuild.install --if-missing",

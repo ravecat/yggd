@@ -16,18 +16,8 @@ import {
 import { cn } from "~/shared/lib/component";
 import { Badge } from "~/shared/ui/badge";
 import { Button } from "~/shared/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "~/shared/ui/dropdown-menu";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/shared/ui/select";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "~/shared/ui/dropdown-menu";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/shared/ui/select";
 
 type TodosSortMenuProps = {
   value: string;
@@ -67,17 +57,12 @@ export function TodosSortMenu({ value }: TodosSortMenuProps) {
 
   function updateRule(index: number, changes: Partial<TodoSortRule>) {
     replaceSort(
-      rules.map((rule, ruleIndex) =>
-        ruleIndex === index ? { ...rule, ...changes } : rule,
-      ),
+      rules.map((rule, ruleIndex) => (ruleIndex === index ? { ...rule, ...changes } : rule)),
     );
   }
 
   function addRule() {
-    replaceSort([
-      ...rules,
-      getDefaultTodoSortRule(rules.map((rule) => rule.field)),
-    ]);
+    replaceSort([...rules, getDefaultTodoSortRule(rules.map((rule) => rule.field))]);
   }
 
   function removeRule(index: number) {
@@ -124,9 +109,7 @@ export function TodosSortMenu({ value }: TodosSortMenuProps) {
             >
               <Select
                 value={rule.field}
-                onValueChange={(value) =>
-                  updateRule(index, { field: value as TodoSortField })
-                }
+                onValueChange={(value) => updateRule(index, { field: value as TodoSortField })}
               >
                 <SelectTrigger className="h-9 rounded-md border-border/70 bg-background">
                   <SelectValue placeholder="Field" />

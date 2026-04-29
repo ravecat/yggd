@@ -68,17 +68,26 @@
     "format": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "mix format",
+        "command": "mix format && mix assets.format",
         "cwd": "apps/ash_framework"
       }
     },
     "format.check": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "mix format.check",
+        "command": "mix format.check && mix assets.format.check",
         "cwd": "apps/ash_framework"
       },
       "cache": true
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "mix assets.lint",
+        "cwd": "apps/ash_framework"
+      },
+      "cache": true,
+      "inputs": ["{projectRoot}/assets/**/*", "!{projectRoot}/assets/node_modules/**/*"]
     },
     "codegen:ash": {
       "executor": "nx:run-commands",
@@ -135,10 +144,7 @@
         "cwd": "apps/ash_framework"
       },
       "cache": true,
-      "inputs": [
-        "{projectRoot}/assets/**/*",
-        "!{projectRoot}/assets/node_modules/**/*"
-      ],
+      "inputs": ["{projectRoot}/assets/**/*", "!{projectRoot}/assets/node_modules/**/*"],
       "outputs": ["{projectRoot}/priv/static"]
     }
   },

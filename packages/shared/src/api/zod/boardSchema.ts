@@ -17,9 +17,7 @@ export const boardSchema = z
           created_at: z.any().describe("Field included by default."),
           owner_id: z.uuid().describe("Field included by default."),
           updated_at: z.any().describe("Field included by default."),
-          visibility: z
-            .enum(["private", "public"])
-            .describe("Field included by default."),
+          visibility: z.enum(["private", "public"]).describe("Field included by default."),
         })
         .describe("An attributes object for a board"),
     ),
@@ -64,6 +62,4 @@ export const boardSchema = z
     ),
     type: z.string(),
   })
-  .describe(
-    'A "Resource object" representing a board',
-  ) as unknown as z.ZodType<Board>;
+  .describe('A "Resource object" representing a board') as unknown as z.ZodType<Board>;

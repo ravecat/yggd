@@ -31,8 +31,7 @@ export const fieldsBoardEnum2 = {
   todos: "todos",
 } as const;
 
-export type FieldsBoardEnum2Key =
-  (typeof fieldsBoardEnum2)[keyof typeof fieldsBoardEnum2];
+export type FieldsBoardEnum2Key = (typeof fieldsBoardEnum2)[keyof typeof fieldsBoardEnum2];
 
 export const fieldsTodoEnum2 = {
   id: "id",
@@ -46,8 +45,7 @@ export const fieldsTodoEnum2 = {
   board: "board",
 } as const;
 
-export type FieldsTodoEnum2Key =
-  (typeof fieldsTodoEnum2)[keyof typeof fieldsTodoEnum2];
+export type FieldsTodoEnum2Key = (typeof fieldsTodoEnum2)[keyof typeof fieldsTodoEnum2];
 
 export const fieldsUserEnum2 = {
   id: "id",
@@ -57,8 +55,7 @@ export const fieldsUserEnum2 = {
   identities: "identities",
 } as const;
 
-export type FieldsUserEnum2Key =
-  (typeof fieldsUserEnum2)[keyof typeof fieldsUserEnum2];
+export type FieldsUserEnum2Key = (typeof fieldsUserEnum2)[keyof typeof fieldsUserEnum2];
 
 export type GetBoardsIdQueryParams = {
   /**

@@ -9,9 +9,7 @@ import { z } from "zod/v4";
 export const todoFilterPrioritySchema = z.object({
   eq: z.optional(z.enum(["low", "medium", "high", "urgent"])),
   greater_than: z.optional(z.enum(["low", "medium", "high", "urgent"])),
-  greater_than_or_equal: z.optional(
-    z.enum(["low", "medium", "high", "urgent"]),
-  ),
+  greater_than_or_equal: z.optional(z.enum(["low", "medium", "high", "urgent"])),
   in: z.optional(z.array(z.enum(["low", "medium", "high", "urgent"]))),
   is_distinct_from: z.optional(z.string()),
   is_nil: z.optional(z.boolean()),

@@ -26,9 +26,7 @@ const AshTypescriptGuide = () => {
             className="w-20 h-20"
           />
           <div>
-            <h1 className="text-5xl font-bold text-slate-900 mb-2">
-              AshTypescript
-            </h1>
+            <h1 className="text-5xl font-bold text-slate-900 mb-2">AshTypescript</h1>
             <p className="text-xl text-slate-600 font-medium">
               Type-safe TypeScript bindings for Ash Framework
             </p>
@@ -41,13 +39,10 @@ const AshTypescriptGuide = () => {
               <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center text-white font-bold text-lg">
                 1
               </div>
-              <h2 className="text-2xl font-bold text-slate-900">
-                Configure RPC in Your Domain
-              </h2>
+              <h2 className="text-2xl font-bold text-slate-900">Configure RPC in Your Domain</h2>
             </div>
             <p className="text-slate-700 mb-6 text-lg leading-relaxed">
-              Add the AshTypescript.Rpc extension to your domain and configure
-              RPC actions:
+              Add the AshTypescript.Rpc extension to your domain and configure RPC actions:
             </p>
             <pre className="rounded-lg overflow-x-auto text-sm border">
               <code className="language-elixir">
@@ -75,25 +70,19 @@ end`}
               <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center text-white font-bold text-lg">
                 2
               </div>
-              <h2 className="text-2xl font-bold text-slate-900">
-                TypeScript Auto-Generation
-              </h2>
+              <h2 className="text-2xl font-bold text-slate-900">TypeScript Auto-Generation</h2>
             </div>
             <p className="text-slate-700 mb-6 text-lg leading-relaxed">
-              When running the dev server, TypeScript types are automatically
-              generated for you:
+              When running the dev server, TypeScript types are automatically generated for you:
             </p>
             <pre className="rounded-lg text-sm border mb-6">
               <code className="language-bash">mix phx.server</code>
             </pre>
             <div className="bg-orange-50 border border-orange-200 rounded-lg p-6 mb-6">
               <p className="text-slate-700 text-lg leading-relaxed">
-                <strong className="text-orange-700">
-                  ✨ Automatic regeneration:
-                </strong>{" "}
-                TypeScript files are automatically regenerated whenever you make
-                changes to your resources or expose new RPC actions. No manual
-                codegen step required during development!
+                <strong className="text-orange-700">✨ Automatic regeneration:</strong> TypeScript
+                files are automatically regenerated whenever you make changes to your resources or
+                expose new RPC actions. No manual codegen step required during development!
               </p>
             </div>
             <p className="text-slate-600 mb-4">
@@ -156,9 +145,7 @@ const fetchUsers = async () => {
           </section>
 
           <section className="bg-white rounded-xl shadow-sm border border-slate-200 p-8">
-            <h2 className="text-2xl font-bold text-slate-900 mb-8">
-              Learn More & Examples
-            </h2>
+            <h2 className="text-2xl font-bold text-slate-900 mb-8">Learn More & Examples</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <a
                 href="https://hexdocs.pm/ash_typescript"
@@ -173,9 +160,7 @@ const fetchUsers = async () => {
                   <h3 className="font-bold text-slate-900 text-lg mb-2 group-hover:text-orange-600 transition-colors">
                     Documentation
                   </h3>
-                  <p className="text-slate-600">
-                    Complete API reference and guides on HexDocs
-                  </p>
+                  <p className="text-slate-600">Complete API reference and guides on HexDocs</p>
                 </div>
               </a>
 
@@ -214,9 +199,7 @@ const fetchUsers = async () => {
                   <p className="text-slate-600">
                     See AshTypescript with TanStack Query & Table in action
                   </p>
-                  <p className="text-slate-500 text-sm mt-1">
-                    by ChristianAlexander
-                  </p>
+                  <p className="text-slate-500 text-sm mt-1">by ChristianAlexander</p>
                 </div>
               </a>
             </div>
@@ -228,12 +211,10 @@ const fetchUsers = async () => {
                 <span className="text-orange-600 font-bold text-xl">🚀</span>
               </div>
             </div>
-            <h3 className="text-2xl font-bold text-white mb-3">
-              Ready to Get Started?
-            </h3>
+            <h3 className="text-2xl font-bold text-white mb-3">Ready to Get Started?</h3>
             <p className="text-orange-100 text-lg leading-relaxed max-w-2xl mx-auto">
-              Check your generated RPC functions and start building type-safe
-              interactions between your frontend and Ash resources!
+              Check your generated RPC functions and start building type-safe interactions between
+              your frontend and Ash resources!
             </p>
           </div>
         </div>

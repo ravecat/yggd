@@ -20,9 +20,7 @@ export const deleteTodosIdPathParamsSchema = z.object({
 export const deleteTodosIdQueryParamsSchema = z
   .object({
     include: z.optional(
-      z
-        .array(z.enum(["board"]))
-        .describe("Relationship paths to include in the response"),
+      z.array(z.enum(["board"])).describe("Relationship paths to include in the response"),
     ),
     fields: z.optional(
       z
@@ -65,9 +63,7 @@ export const deleteTodosIdQueryParamsSchema = z
               .describe("Field names for user"),
           ),
         })
-        .describe(
-          "Limits the response fields to only those listed for each type",
-        ),
+        .describe("Limits the response fields to only those listed for each type"),
     ),
   })
   .optional() as unknown as z.ZodType<DeleteTodosIdQueryParams>;
@@ -75,8 +71,7 @@ export const deleteTodosIdQueryParamsSchema = z
 /**
  * @description Deleted successfully
  */
-export const deleteTodosId200Schema =
-  z.any() as unknown as z.ZodType<DeleteTodosId200>;
+export const deleteTodosId200Schema = z.any() as unknown as z.ZodType<DeleteTodosId200>;
 
 /**
  * @description General Error

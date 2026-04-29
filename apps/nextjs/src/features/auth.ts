@@ -42,14 +42,11 @@ export async function exchangeCodeForToken(code: string): Promise<string> {
     throw new Error("PKCE verifier not found in cookie");
   }
 
-  const response = await fetch(
-    `${process.env.AUTH_SERVICE_URL}/auth/exchange`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code, code_verifier: verifier }),
-    },
-  );
+  const response = await fetch(`${process.env.AUTH_SERVICE_URL}/auth/exchange`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ code, code_verifier: verifier }),
+  });
 
   if (!response.ok) {
     const error = await response.text();

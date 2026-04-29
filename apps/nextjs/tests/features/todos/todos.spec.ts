@@ -27,9 +27,7 @@ const mockApiError = class ApiError extends Error {
   }>;
   readonly errors: Partial<Record<string, string[]>>;
 
-  private static getErrorKey(error: {
-    source?: { parameter?: string; pointer?: string };
-  }): string {
+  private static getErrorKey(error: { source?: { parameter?: string; pointer?: string } }): string {
     const pointer = error.source?.pointer;
 
     if (pointer) {
@@ -54,11 +52,7 @@ const mockApiError = class ApiError extends Error {
     return "general";
   }
 
-  private static getErrorText(error: {
-    detail?: string;
-    title?: string;
-    code?: string;
-  }): string {
+  private static getErrorText(error: { detail?: string; title?: string; code?: string }): string {
     return error.detail || error.title || error.code || "An error occurred";
   }
 

@@ -23,9 +23,7 @@ export const patchBoardsIdPathParamsSchema = z.object({
 export const patchBoardsIdQueryParamsSchema = z
   .object({
     include: z.optional(
-      z
-        .array(z.enum(["owner"]))
-        .describe("Relationship paths to include in the response"),
+      z.array(z.enum(["owner"])).describe("Relationship paths to include in the response"),
     ),
     fields: z.optional(
       z
@@ -68,9 +66,7 @@ export const patchBoardsIdQueryParamsSchema = z
               .describe("Field names for user"),
           ),
         })
-        .describe(
-          "Limits the response fields to only those listed for each type",
-        ),
+        .describe("Limits the response fields to only those listed for each type"),
     ),
   })
   .optional() as unknown as z.ZodType<PatchBoardsIdQueryParams>;
@@ -80,9 +76,7 @@ export const patchBoardsIdQueryParamsSchema = z
  */
 export const patchBoardsId200Schema = z.object({
   get data() {
-    return boardSchema
-      .describe('A "Resource object" representing a board')
-      .optional();
+    return boardSchema.describe('A "Resource object" representing a board').optional();
   },
   get included() {
     return z
@@ -109,9 +103,7 @@ export const patchBoardsIdMutationRequestSchema = z.object({
   data: z.object({
     attributes: z.optional(
       z.object({
-        visibility: z.optional(
-          z.union([z.enum(["private", "public"]), z.null()]),
-        ),
+        visibility: z.optional(z.union([z.enum(["private", "public"]), z.null()])),
       }),
     ),
     id: z.string(),

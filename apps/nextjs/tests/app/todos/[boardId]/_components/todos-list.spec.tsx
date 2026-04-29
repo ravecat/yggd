@@ -12,13 +12,7 @@ function createTodo(
   overrides: Partial<{
     title: string;
     priority: "low" | "medium" | "high" | "urgent";
-    status:
-      | "blocked"
-      | "backlog"
-      | "in_progress"
-      | "review"
-      | "done"
-      | "rejected";
+    status: "blocked" | "backlog" | "in_progress" | "review" | "done" | "rejected";
     content: string;
     created_at: string;
     updated_at: string;
@@ -41,8 +35,7 @@ function createTodo(
 
 describe("TodosList", () => {
   test("renders initial data", async () => {
-    const { TodosList } =
-      await import("~/app/todos/[boardId]/_components/todos-list");
+    const { TodosList } = await import("~/app/todos/[boardId]/_components/todos-list");
 
     render(
       <TodosList
@@ -64,8 +57,7 @@ describe("TodosList", () => {
   });
 
   test("preserves the order returned by the server inside a column", async () => {
-    const { TodosList } =
-      await import("~/app/todos/[boardId]/_components/todos-list");
+    const { TodosList } = await import("~/app/todos/[boardId]/_components/todos-list");
 
     render(
       <TodosList
@@ -89,11 +81,7 @@ describe("TodosList", () => {
       />,
     );
 
-    expect(
-      screen
-        .getAllByRole("heading", { level: 3 })
-        .map((item) => item.textContent),
-    ).toEqual([
+    expect(screen.getAllByRole("heading", { level: 3 }).map((item) => item.textContent)).toEqual([
       "Zulu planning",
       "Urgent fix",
       "Alpha planning",
@@ -104,8 +92,7 @@ describe("TodosList", () => {
   });
 
   test("renders the empty state when there are no todos", async () => {
-    const { TodosList } =
-      await import("~/app/todos/[boardId]/_components/todos-list");
+    const { TodosList } = await import("~/app/todos/[boardId]/_components/todos-list");
 
     render(
       <TodosList
@@ -117,8 +104,6 @@ describe("TodosList", () => {
     );
 
     expect(screen.getByText("No tasks yet")).toBeInTheDocument();
-    expect(
-      screen.getByText("This board does not have any tasks yet."),
-    ).toBeInTheDocument();
+    expect(screen.getByText("This board does not have any tasks yet.")).toBeInTheDocument();
   });
 });

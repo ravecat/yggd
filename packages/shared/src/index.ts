@@ -1,8 +1,8 @@
 export * from "./api/index.js";
-export {
-  type Client,
-  type RequestConfig,
-  type ResponseConfig,
+export type {
+  Client,
+  RequestConfig,
+  ResponseConfig,
 } from "./lib/client.js";
 export * from "./lib/jsonapi.js";
 export * from "./asyncapi/index.js";

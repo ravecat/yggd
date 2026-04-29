@@ -4,15 +4,8 @@
  */
 
 import useSWR from "swr";
-import type {
-  Client,
-  RequestConfig,
-  ResponseErrorConfig,
-} from "../../../lib/client";
-import type {
-  GetBoardsQueryResponse,
-  GetBoardsQueryParams,
-} from "../../models/GetBoards";
+import type { Client, RequestConfig, ResponseErrorConfig } from "../../../lib/client";
+import type { GetBoardsQueryResponse, GetBoardsQueryParams } from "../../models/GetBoards";
 import { getBoards } from "../../clients/getBoards";
 
 export const getBoardsQueryKey = (params?: GetBoardsQueryParams) =>
@@ -38,36 +31,28 @@ export function getBoardsQueryOptions(
 export function useGetBoards(
   params?: GetBoardsQueryParams,
   options: {
-    query?: Parameters<
-      typeof useSWR<GetBoardsQueryResponse, ResponseErrorConfig<Error>>
-    >[2];
+    query?: Parameters<typeof useSWR<GetBoardsQueryResponse, ResponseErrorConfig<Error>>>[2];
     client?: Partial<RequestConfig> & { client?: Client };
     shouldFetch?: boolean;
     immutable?: boolean;
   } = {},
 ) {
-  const {
-    query: queryOptions,
-    client: config = {},
-    shouldFetch = true,
-    immutable,
-  } = options ?? {};
+  const { query: queryOptions, client: config = {}, shouldFetch = true, immutable } = options ?? {};
 
   const queryKey = getBoardsQueryKey(params);
 
-  return useSWR<
-    GetBoardsQueryResponse,
-    ResponseErrorConfig<Error>,
-    GetBoardsQueryKey | null
-  >(shouldFetch ? queryKey : null, {
-    ...getBoardsQueryOptions(params, config),
-    ...(immutable
-      ? {
-          revalidateIfStale: false,
-          revalidateOnFocus: false,
-          revalidateOnReconnect: false,
-        }
-      : {}),
-    ...queryOptions,
-  });
+  return useSWR<GetBoardsQueryResponse, ResponseErrorConfig<Error>, GetBoardsQueryKey | null>(
+    shouldFetch ? queryKey : null,
+    {
+      ...getBoardsQueryOptions(params, config),
+      ...(immutable
+        ? {
+            revalidateIfStale: false,
+            revalidateOnFocus: false,
+            revalidateOnReconnect: false,
+          }
+        : {}),
+      ...queryOptions,
+    },
+  );
 }

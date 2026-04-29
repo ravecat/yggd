@@ -18,9 +18,7 @@ import { z } from "zod/v4";
 export const postTodosQueryParamsSchema = z
   .object({
     include: z.optional(
-      z
-        .array(z.enum(["board"]))
-        .describe("Relationship paths to include in the response"),
+      z.array(z.enum(["board"])).describe("Relationship paths to include in the response"),
     ),
     fields: z.optional(
       z
@@ -63,9 +61,7 @@ export const postTodosQueryParamsSchema = z
               .describe("Field names for user"),
           ),
         })
-        .describe(
-          "Limits the response fields to only those listed for each type",
-        ),
+        .describe("Limits the response fields to only those listed for each type"),
     ),
   })
   .optional() as unknown as z.ZodType<PostTodosQueryParams>;
@@ -75,9 +71,7 @@ export const postTodosQueryParamsSchema = z
  */
 export const postTodos201Schema = z.object({
   get data() {
-    return todoSchema
-      .describe('A "Resource object" representing a todo')
-      .optional();
+    return todoSchema.describe('A "Resource object" representing a todo').optional();
   },
   get included() {
     return z
@@ -106,19 +100,10 @@ export const postTodosMutationRequestSchema = z.object({
       z.object({
         board_id: z.uuid(),
         content: z.string(),
-        priority: z.optional(
-          z.union([z.enum(["low", "medium", "high", "urgent"]), z.null()]),
-        ),
+        priority: z.optional(z.union([z.enum(["low", "medium", "high", "urgent"]), z.null()])),
         status: z.optional(
           z.union([
-            z.enum([
-              "blocked",
-              "backlog",
-              "in_progress",
-              "review",
-              "done",
-              "rejected",
-            ]),
+            z.enum(["blocked", "backlog", "in_progress", "review", "done", "rejected"]),
             z.null(),
           ]),
         ),

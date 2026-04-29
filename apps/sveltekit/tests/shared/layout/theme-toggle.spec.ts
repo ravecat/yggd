@@ -6,10 +6,9 @@ import ThemeToggle from "../../../src/shared/layout/theme-toggle.svelte";
 
 const THEME_STORAGE_KEY = "moda:theme";
 const THEME_ATTRIBUTE = "data-theme";
-const THEME_CONTROLLER_SCRIPT = readFileSync(
-  resolve(process.cwd(), "src/app.html"),
-  "utf8",
-).match(/<script>\s*([\s\S]*?)\s*<\/script>/)?.[1];
+const THEME_CONTROLLER_SCRIPT = readFileSync(resolve(process.cwd(), "src/app.html"), "utf8").match(
+  /<script>\s*([\s\S]*?)\s*<\/script>/,
+)?.[1];
 
 if (!THEME_CONTROLLER_SCRIPT) {
   throw new Error("Theme controller script not found in src/app.html");
@@ -30,9 +29,7 @@ describe("src/shared/layout/theme-toggle.svelte", () => {
     await fireEvent.click(button);
 
     await waitFor(() => {
-      expect(document.documentElement.getAttribute(THEME_ATTRIBUTE)).toBe(
-        "dark",
-      );
+      expect(document.documentElement.getAttribute(THEME_ATTRIBUTE)).toBe("dark");
     });
 
     expect(window.localStorage.getItem(THEME_STORAGE_KEY)).toBe("dark");

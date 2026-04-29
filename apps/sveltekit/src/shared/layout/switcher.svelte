@@ -6,7 +6,7 @@
   import { Button } from "$shared/ui/button";
   import * as DropdownMenu from "$shared/ui/dropdown-menu";
 
-  let { frameworks }: { frameworks: Framework[] } = $props();
+  const { frameworks }: { frameworks: Framework[] } = $props();
 
   const currentFrameworkId = "sveltekit";
 
@@ -22,12 +22,7 @@
 <DropdownMenu.Root>
   <DropdownMenu.Trigger>
     {#snippet child({ props })}
-      <Button
-        {...props}
-        variant="outline"
-        size="sm"
-        class="min-w-[7.75rem] justify-between"
-      >
+      <Button {...props} variant="outline" size="sm" class="min-w-[7.75rem] justify-between">
         SvelteKit
         <ChevronsUpDownIcon class="size-3.5 opacity-50" />
       </Button>

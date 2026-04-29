@@ -13,11 +13,7 @@ function getActiveValue(pathname: string) {
   ) {
     return "tasks";
   }
-  if (
-    pathname === "/" ||
-    pathname === "/canvas" ||
-    pathname.startsWith("/canvas/")
-  ) {
+  if (pathname === "/" || pathname === "/canvas" || pathname.startsWith("/canvas/")) {
     return "canvas";
   }
   if (pathname === "/telemetry" || pathname.startsWith("/telemetry/")) {

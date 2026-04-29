@@ -31,8 +31,7 @@ export const fieldsBoardEnum3 = {
   todos: "todos",
 } as const;
 
-export type FieldsBoardEnum3Key =
-  (typeof fieldsBoardEnum3)[keyof typeof fieldsBoardEnum3];
+export type FieldsBoardEnum3Key = (typeof fieldsBoardEnum3)[keyof typeof fieldsBoardEnum3];
 
 export const fieldsTodoEnum3 = {
   id: "id",
@@ -46,8 +45,7 @@ export const fieldsTodoEnum3 = {
   board: "board",
 } as const;
 
-export type FieldsTodoEnum3Key =
-  (typeof fieldsTodoEnum3)[keyof typeof fieldsTodoEnum3];
+export type FieldsTodoEnum3Key = (typeof fieldsTodoEnum3)[keyof typeof fieldsTodoEnum3];
 
 export const fieldsUserEnum3 = {
   id: "id",
@@ -57,8 +55,7 @@ export const fieldsUserEnum3 = {
   identities: "identities",
 } as const;
 
-export type FieldsUserEnum3Key =
-  (typeof fieldsUserEnum3)[keyof typeof fieldsUserEnum3];
+export type FieldsUserEnum3Key = (typeof fieldsUserEnum3)[keyof typeof fieldsUserEnum3];
 
 export type PatchBoardsIdQueryParams = {
   /**

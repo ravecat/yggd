@@ -22,9 +22,7 @@ export const otelExportMetricsServiceRequest = z
                       doubleValue: z.number().optional(),
                       boolValue: z.boolean().optional(),
                     })
-                    .describe(
-                      "Typed value (stringValue, intValue, doubleValue, boolValue)",
-                    ),
+                    .describe("Typed value (stringValue, intValue, doubleValue, boolValue)"),
                 })
                 .describe("OTel key-value attribute pair"),
             )

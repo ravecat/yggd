@@ -5,7 +5,7 @@
  * after successful Google OAuth authentication.
  */
 
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { exchangeCodeForToken } from "~/features/auth";
 
 export async function GET(request: NextRequest) {
@@ -17,9 +17,7 @@ export async function GET(request: NextRequest) {
 
   if (error) {
     console.error("OAuth error:", error);
-    return NextResponse.redirect(
-      new URL(`/?error=${encodeURIComponent(error)}`, appUrl),
-    );
+    return NextResponse.redirect(new URL(`/?error=${encodeURIComponent(error)}`, appUrl));
   }
 
   // Validate authorization code presence

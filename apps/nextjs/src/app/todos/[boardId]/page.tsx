@@ -32,23 +32,15 @@ function BoardPageFallback() {
 }
 
 async function BoardPageContent({ params, searchParams }: BoardPageProps) {
-  const [{ boardId }, currentSearchParams] = await Promise.all([
-    params,
-    searchParams,
-  ]);
+  const [{ boardId }, currentSearchParams] = await Promise.all([params, searchParams]);
   const board = await fetchBoard(boardId);
 
   if (!board) {
     notFound();
   }
 
-  const filter =
-    typeof currentSearchParams.filter === "string"
-      ? currentSearchParams.filter
-      : "";
-  const sort = ([] as string[])
-    .concat(currentSearchParams.sort ?? [])
-    .join(",");
+  const filter = typeof currentSearchParams.filter === "string" ? currentSearchParams.filter : "";
+  const sort = ([] as string[]).concat(currentSearchParams.sort ?? []).join(",");
 
   const [{ userId }, data] = await Promise.all([
     assigns(),

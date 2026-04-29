@@ -23,9 +23,7 @@ export const patchTodosIdPathParamsSchema = z.object({
 export const patchTodosIdQueryParamsSchema = z
   .object({
     include: z.optional(
-      z
-        .array(z.enum(["board"]))
-        .describe("Relationship paths to include in the response"),
+      z.array(z.enum(["board"])).describe("Relationship paths to include in the response"),
     ),
     fields: z.optional(
       z
@@ -68,9 +66,7 @@ export const patchTodosIdQueryParamsSchema = z
               .describe("Field names for user"),
           ),
         })
-        .describe(
-          "Limits the response fields to only those listed for each type",
-        ),
+        .describe("Limits the response fields to only those listed for each type"),
     ),
   })
   .optional() as unknown as z.ZodType<PatchTodosIdQueryParams>;
@@ -80,9 +76,7 @@ export const patchTodosIdQueryParamsSchema = z
  */
 export const patchTodosId200Schema = z.object({
   get data() {
-    return todoSchema
-      .describe('A "Resource object" representing a todo')
-      .optional();
+    return todoSchema.describe('A "Resource object" representing a todo').optional();
   },
   get included() {
     return z
@@ -110,19 +104,10 @@ export const patchTodosIdMutationRequestSchema = z.object({
     attributes: z.optional(
       z.object({
         content: z.optional(z.union([z.string(), z.null()])),
-        priority: z.optional(
-          z.union([z.enum(["low", "medium", "high", "urgent"]), z.null()]),
-        ),
+        priority: z.optional(z.union([z.enum(["low", "medium", "high", "urgent"]), z.null()])),
         status: z.optional(
           z.union([
-            z.enum([
-              "blocked",
-              "backlog",
-              "in_progress",
-              "review",
-              "done",
-              "rejected",
-            ]),
+            z.enum(["blocked", "backlog", "in_progress", "review", "done", "rejected"]),
             z.null(),
           ]),
         ),

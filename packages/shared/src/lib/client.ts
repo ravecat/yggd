@@ -6,11 +6,7 @@ export type RequestConfig<TData = unknown> = AxiosRequestConfig<TData>;
 export type ResponseConfig<TData = unknown> = AxiosResponse<TData>;
 export type { ResponseErrorConfig } from "./jsonapi";
 
-function appendSearchParam(
-  searchParams: URLSearchParams,
-  path: string[],
-  value: unknown,
-) {
+function appendSearchParam(searchParams: URLSearchParams, path: string[], value: unknown) {
   if (value === undefined || value === null) {
     return;
   }

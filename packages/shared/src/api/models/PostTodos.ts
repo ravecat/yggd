@@ -24,8 +24,7 @@ export const fieldsBoardEnum5 = {
   todos: "todos",
 } as const;
 
-export type FieldsBoardEnum5Key =
-  (typeof fieldsBoardEnum5)[keyof typeof fieldsBoardEnum5];
+export type FieldsBoardEnum5Key = (typeof fieldsBoardEnum5)[keyof typeof fieldsBoardEnum5];
 
 export const fieldsTodoEnum5 = {
   id: "id",
@@ -39,8 +38,7 @@ export const fieldsTodoEnum5 = {
   board: "board",
 } as const;
 
-export type FieldsTodoEnum5Key =
-  (typeof fieldsTodoEnum5)[keyof typeof fieldsTodoEnum5];
+export type FieldsTodoEnum5Key = (typeof fieldsTodoEnum5)[keyof typeof fieldsTodoEnum5];
 
 export const fieldsUserEnum5 = {
   id: "id",
@@ -50,8 +48,7 @@ export const fieldsUserEnum5 = {
   identities: "identities",
 } as const;
 
-export type FieldsUserEnum5Key =
-  (typeof fieldsUserEnum5)[keyof typeof fieldsUserEnum5];
+export type FieldsUserEnum5Key = (typeof fieldsUserEnum5)[keyof typeof fieldsUserEnum5];
 
 export type PostTodosQueryParams = {
   /**
@@ -134,8 +131,7 @@ export const dataTypeEnum2 = {
   todo: "todo",
 } as const;
 
-export type DataTypeEnum2Key =
-  (typeof dataTypeEnum2)[keyof typeof dataTypeEnum2];
+export type DataTypeEnum2Key = (typeof dataTypeEnum2)[keyof typeof dataTypeEnum2];
 
 /**
  * @description Request body for the /todos operation on todo resource

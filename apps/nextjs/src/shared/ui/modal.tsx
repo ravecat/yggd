@@ -1,13 +1,8 @@
 "use client";
 
-import React from "react";
+import type React from "react";
 import { useRouter } from "next/navigation";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "~/shared/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "~/shared/ui/dialog";
 
 export type ModalProps = {
   children: React.ReactNode;

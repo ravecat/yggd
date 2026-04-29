@@ -17,11 +17,7 @@ export function TodoModalFallback() {
   );
 }
 
-export async function TodoModalContent({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export async function TodoModalContent({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const todo = await fetchTodo(id);
 

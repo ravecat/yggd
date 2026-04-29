@@ -67,9 +67,7 @@ describe("src/shared/layout/header.svelte", () => {
     render(Header, { frameworks: createFrameworks() });
 
     expect(screen.getByRole("button", { name: "SvelteKit" })).toBeTruthy();
-    expect(
-      screen.getByRole("button", { name: /Sign in with Google/i }),
-    ).toBeTruthy();
+    expect(screen.getByRole("button", { name: /Sign in with Google/i })).toBeTruthy();
     expect(await screen.findByRole("button", { name: /theme/i })).toBeTruthy();
   });
 });
