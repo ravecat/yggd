@@ -125,7 +125,7 @@
         }
       },
       "apps": {
-        "projects": ["apps/nextjs", "apps/sveltekit"],
+        "projects": ["apps/*"],
         "projectsRelationship": "independent",
         "version": {
           "fallbackCurrentVersionResolver": "disk"
