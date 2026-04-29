@@ -23,20 +23,24 @@
             pkgs.postgresql_17
             pkgs.git
             pkgs.glibcLocales
+            pkgs.jq
           ];
 
           shellHook = ''
             export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
-            export PGDATA="$PWD/.pg_data"
-            export PGHOST="$PGDATA"
 
-            if [ ! -d "$PGDATA" ]; then
-              initdb --no-locale --encoding=UTF8
-              echo "unix_socket_directories = '$PGDATA'" >> "$PGDATA/postgresql.conf"
-              pg_ctl start -l "$PGDATA/log" -s
-              createuser -s postgres
-            else
-              pg_ctl status -s || pg_ctl start -l "$PGDATA/log" -s
+            if [ "''${CI:-}" != "true" ]; then
+              export PGDATA="$PWD/.pg_data"
+              export PGHOST="$PGDATA"
+
+              if [ ! -d "$PGDATA" ]; then
+                initdb --no-locale --encoding=UTF8
+                echo "unix_socket_directories = '$PGDATA'" >> "$PGDATA/postgresql.conf"
+                pg_ctl start -l "$PGDATA/log" -s
+                createuser -s postgres
+              else
+                pg_ctl status -s || pg_ctl start -l "$PGDATA/log" -s
+              fi
             fi
           '';
         };
